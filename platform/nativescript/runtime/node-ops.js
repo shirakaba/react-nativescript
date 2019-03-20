@@ -1,0 +1,75 @@
+import { default as document } from '../renderer/DocumentNode'
+import { trace } from '../util'
+
+export const namespaceMap = {}
+
+export function createElement(tagName, vnode) {
+  trace(`CreateElement(${tagName})`)
+  return document.createElement(tagName)
+}
+
+export function createElementNS(namespace, tagName) {
+  trace(`CreateElementNS(${namespace}#${tagName})`)
+  return document.createElementNS(namespace, tagName)
+}
+
+export function createTextNode(text) {
+  trace(`CreateTextNode(${text})`)
+  return document.createTextNode(text)
+}
+
+export function createComment(text) {
+  trace(`CreateComment(${text})`)
+
+  return document.createComment(text)
+}
+
+export function insertBefore(parentNode, newNode, referenceNode) {
+  trace(`InsertBefore(${parentNode}, ${newNode}, ${referenceNode})`)
+  return parentNode.insertBefore(newNode, referenceNode)
+}
+
+export function removeChild(node, child) {
+  trace(`RemoveChild(${node}, ${child})`)
+  return node.removeChild(child)
+}
+
+export function appendChild(node, child) {
+  trace(`AppendChild(${node}, ${child})`)
+
+  return node.appendChild(child)
+}
+
+export function parentNode(node) {
+  trace(`ParentNode(${node}) -> ${node.parentNode}`)
+
+  return node.parentNode
+}
+
+export function nextSibling(node) {
+  trace(`NextSibling(${node}) -> ${node.nextSibling}`)
+
+  return node.nextSibling
+}
+
+export function tagName(elementNode) {
+  trace(`TagName(${elementNode}) -> ${elementNode.tagName}`)
+
+  return elementNode.tagName
+}
+
+export function setTextContent(node, text) {
+  trace(`SetTextContent(${node}, ${text})`)
+
+  node.setText(text)
+}
+
+export function setAttribute(node, key, val) {
+  trace(`SetAttribute(${node}, ${key}, ${val})`)
+
+  node.setAttribute(key, val)
+}
+
+export function setStyleScope(node, scopeId) {
+  node.setAttribute(scopeId, '')
+}

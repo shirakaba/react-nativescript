@@ -1,0 +1,148 @@
+{
+  "name": "nativescript-vue",
+  "version": "2.2.0",
+  "description": "NativeScript and Vue integration",
+  "main": "dist/index.js",
+  "files": [
+    "dist/index.js",
+    "index.d.ts",
+    "dist/hooks/**",
+    "postinstall.js",
+    "preuninstall.js"
+  ],
+  "typings": "index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "tdd": "jest --watch",
+    "samples": "node build/sample-runner.js",
+    "dev": "rollup -c build/config.js -w --o samples/app/nativescript-vue.js --environment TARGET:nativescript-vue",
+    "dev:dist": "rollup -c build/config.js -w --o dist/index.js --environment TARGET:nativescript-vue",
+    "build": "node build/build.js",
+    "build:docs": "cd docs && npm run build",
+    "prettier": "prettier --no-semi --single-quote --write \"{{platform,__test__}/**/*.js,samples/app/*.js}\"",
+    "release": "node build/releaser.js",
+    "release:notes": "node build/gen-release-notes.js",
+    "changelog": "conventional-changelog --release-count 0 --outfile CHANGELOG.md --preset angular",
+    "commit": "git-cz",
+    "postinstall": "node postinstall.js",
+    "preuninstall": "node preuninstall.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nativescript-vue/nativescript-vue.git"
+  },
+  "keywords": [
+    "vuejs",
+    "nativescript",
+    "integration"
+  ],
+  "author": "Igor Randjelovic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rigor789/nativescript-vue/issues"
+  },
+  "homepage": "https://github.com/rigor789/nativescript-vue#readme",
+  "nativescript": {
+    "platforms": {
+      "android": "4.2.0",
+      "ios": "4.2.0"
+    },
+    "plugin": {
+      "vue": "true",
+      "pan": "false",
+      "core3": "true",
+      "category": "Developer"
+    },
+    "hooks": [
+      {
+        "type": "before-checkForChanges",
+        "script": "dist/hooks/before-checkForChanges.js",
+        "inject": true
+      },
+      {
+        "type": "before-watch",
+        "script": "dist/hooks/before-watch.js",
+        "inject": true
+      }
+    ]
+  },
+  "dependencies": {
+    "nativescript-hook": "0.2.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^6.1.0",
+    "@commitlint/config-conventional": "^6.1.0",
+    "babel-jest": "^22.1.0",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "chalk": "^2.3.0",
+    "commitizen": "^2.10.1",
+    "conventional-changelog-cli": "^1.3.14",
+    "cz-conventional-changelog": "^2.1.0",
+    "husky": "^0.15.0-rc.3",
+    "inquirer": "^5.0.1",
+    "jest": "^23.6.0",
+    "jest-junit": "^3.5.0",
+    "lint-staged": "^6.1.0",
+    "prettier": "^1.10.2",
+    "rollup": "^0.62.0",
+    "rollup-plugin-alias": "^1.4.0",
+    "rollup-plugin-buble": "^0.19.2",
+    "rollup-plugin-commonjs": "^9.1.3",
+    "rollup-plugin-flow-no-whitespace": "^1.0.0",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-resolve-aliases": "^0.2.0",
+    "rollup-watch": "^4.3.1",
+    "semver": "^5.5.0",
+    "set-value": "^2.0.0",
+    "tns-core-modules": "4.2.0",
+    "util-inspect": "^0.1.8",
+    "vue": "^2.5.17"
+  },
+  "jest": {
+    "verbose": true,
+    "modulePaths": [
+      "<rootDir>/platform/nativescript"
+    ],
+    "collectCoverageFrom": [
+      "platform/**/*.js",
+      "!**/node_modules/**"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/samples"
+    ],
+    "collectCoverage": true,
+    "testURL": "http://localhost"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -e $GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "linters": {
+      "{{platform,__test__}/**/*.js,samples/app/*.js}": [
+        "prettier --write",
+        "git add"
+      ],
+      "docs/src/**/*.js": [
+        "npm run build:docs",
+        "git add"
+      ]
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
