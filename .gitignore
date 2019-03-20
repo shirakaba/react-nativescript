@@ -1,1 +1,14 @@
+.vscode
+.idea
+coverage
+junit.xml
+npm-debug.log
 node_modules
+samples/package-lock.json
+samples/platforms
+samples/app/nativescript-vue.js
+samples/app/nativescript-vue.js.map
+dist/
+packages/nativescript-vue-template-compiler/index.js
+!docs/dist/
+RELEASE_NOTES*.md

@@ -1,0 +1,9 @@
+{
+  "presets": ["env"],
+  "env": {
+    "test": {
+      "presets": ["env"],
+      "plugins": ["transform-flow-strip-types"]
+    }
+  }
+}
