@@ -67,7 +67,8 @@
     ]
   },
   "dependencies": {
-    "nativescript-hook": "0.2.4"
+    "nativescript-hook": "0.2.4",
+    "react": "^16.8.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^6.1.0",
