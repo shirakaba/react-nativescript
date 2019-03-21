@@ -5,6 +5,7 @@ purpose of the file is to pass control to the app’s first module.
 */
 
 import * as application from "tns-core-modules/application";
+const React = require('react-nativescript');
 
 application.run({ moduleName: "app-root" });
 
