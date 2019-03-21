@@ -13,3 +13,8 @@ I added this line to the `package.json` of the sample app:
 ```
 "nativescript-react": "file:../dist",
 ```
+
+TODO:
+* See React-DOM https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOM.js
+* See https://overreacted.io/react-as-a-ui-runtime/
+* https://github.com/facebook/react/blob/master/packages/react-reconciler/README.md
