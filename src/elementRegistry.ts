@@ -42,10 +42,18 @@ import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
 import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
 
-export const elementMap: Record<string, any> = {
+// type AnyConcreteView = ConcreteView<any>;
+// type ConcreteView<T extends View> = T;
+
+// https://stackoverflow.com/questions/36886082/abstract-constructor-type-in-typescript
+export type ConcreteViewConstructor = new (...args: any[]) => View;
+
+export type TNSElements = keyof typeof elementMap;
+// export const elementMap: Record<string, typeof View> = {
+export const elementMap: Record<string, ConcreteViewConstructor> = {
     "ActionBar": ActionBar,
     "ActivityIndicator": ActivityIndicator,
-    "Animation": Animation,
+    // "Animation": Animation,
     // Border
     // Builder,
     "Button": Button,
@@ -55,7 +63,7 @@ export const elementMap: Record<string, any> = {
     "EditableTextBase": EditableTextBase,
     "HtmlView": HtmlView,
     "Image": Image,
-    "Cache": Cache, // WARNING: Observable.observable, but doesn't extend View.
+    // "Cache": Cache, // Observable.observable, but doesn't extend View.
     "Label": Label,
     "LayoutBase": LayoutBase,
     "AbsoluteLayout": AbsoluteLayout,
@@ -79,13 +87,13 @@ export const elementMap: Record<string, any> = {
     "TextBase": TextBase,
     "TextField": TextField,
     "TimePicker": TimePicker,
-    "Transition": Transition,
-    "FadeTransition": FadeTransition,
-    "FlipTransition": FlipTransition,
-    "SlideTransition": SlideTransition,
+    // "Transition": Transition,
+    // "FadeTransition": FadeTransition,
+    // "FlipTransition": FlipTransition,
+    // "SlideTransition": SlideTransition,
     "WebView": WebView,
     // There's a whole "styling" folder, but nothing is a component.
     "Frame": Frame,
-    "View": View,
+    // "View": View,
     "Page": Page
 };

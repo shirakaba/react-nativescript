@@ -1,10 +1,14 @@
 import ReactReconciler from 'react-reconciler';
+import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegistry';
+// TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
+import { View } from 'tns-core-modules/ui/core/view/view';
+import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
 
-type Type = any;
-type Props = any;
+type Type = TNSElements;
+type Props = Record<string, any>;
 type Container = any;
-type Instance = any;
-type TextInstance = any;
+type Instance = View; // We may extend this to Observable in future, to allow the tree to contain non-visual components.
+type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
 type HostContext = any;
@@ -40,7 +44,19 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): Instance {
+        const viewConstructor: ConcreteViewConstructor = elementMap[type];
+        if(!viewConstructor){
+            throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
+        }
 
+        const view: View = new viewConstructor();
+        Object.keys(props).forEach((prop: string) => {
+            const value: any = props[prop];
+            // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
+            view.set(prop, value);
+        });
+
+        return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
 
