@@ -14,6 +14,8 @@ type TimeoutHandle = any;
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
 
+
+
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout> = {
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -134,10 +136,10 @@ export default {
         domElement: Container, // document.getElementById('root')
         callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
     ) => {
-        console.log(arguments);
+        // console.log(arguments);
         // Create a root Container if it doesnt exist
         if (!domElement._rootContainer) {
-        domElement._rootContainer = ReactReconcilerInst.createContainer(domElement, false, false);
+            domElement._rootContainer = ReactReconcilerInst.createContainer(domElement, false, false);
         }
 
         // update the root Container
