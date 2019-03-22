@@ -6,7 +6,7 @@ import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
 
 type Type = TNSElements;
 type Props = Record<string, any>;
-type Container = any;
+type Container = View;
 type Instance = View; // We may extend this to Observable in future, to allow the tree to contain non-visual components.
 type TextInstance = TextBase;
 type HydratableInstance = any;
@@ -14,28 +14,26 @@ type PublicInstance = any;
 type HostContext = any;
 type UpdatePayload = any;
 type ChildSet = any;
-type TimeoutHandle = any;
+type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
-
-
 
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout> = {
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
-
+        // TODO
     },
     getRootHostContext(rootContainerInstance: Container): HostContext {
-
+        // TODO
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
-
+        // TODO
     },
     prepareForCommit(containerInfo: Container): void {
-
+        // TODO
     },
     resetAfterCommit(containerInfo: Container): void {
-
+        // TODO
     },
     createInstance(
         type: Type,
@@ -59,7 +57,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
-
+        parentInstance._addView(child);
     },
     finalizeInitialChildren(
         parentInstance: Instance,
@@ -68,7 +66,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): boolean {
-
+        // TODO
     },
     prepareUpdate(
         instance: Instance,
@@ -78,13 +76,13 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): null | UpdatePayload {
-
+        // TODO
     },
     shouldSetTextContent(type: Type, props: Props): boolean {
-
+        // TODO
     },
     shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
-
+        // TODO
     },
     createTextInstance(
         text: string,
@@ -92,22 +90,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): TextInstance {
-
+        // TODO
     },
     scheduleDeferredCallback(
         callback: () => any,
         options?: { timeout: number },
     ): any {
-
+        // TODO. Likely just setTimeout again.
     },
     cancelDeferredCallback(callbackID: any): void {
-
+        // TODO
     },
     setTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
-
+        setTimeout(handler, timeout);
     },
     clearTimeout(handle: TimeoutHandle | NoTimeout): void {
-
+        clearTimeout(handle);
     },
     noTimeout: noTimeoutValue,
     now: Date.now,
@@ -117,15 +115,27 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     supportsHydration: false,
 
     /* Mutation (optional) */
-    appendChild(parentInstance: Instance, child: Instance | TextInstance): void {},
-    appendChildToContainer(container: Container, child: Instance | TextInstance): void {},
-    commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {},
+    appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        parentInstance._addView(child);
+        // TODO: check whether a property/event change should be fired.
+    },
+    appendChildToContainer(container: Container, child: Instance | TextInstance): void {
+        container._addView(child);
+        // TODO: check whether a property/event change should be fired.
+    },
+    commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
+        textInstance.text = newText;
+        // e.g.: https://github.com/NativeScript/NativeScript/blob/master/tns-core-modules/data/observable/observable.ts#L53
+        textInstance.notifyPropertyChange("text", newText, oldText);
+    },
     commitMount(
         instance: Instance,
         type: Type,
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
-    ): void {},
+    ): void {
+        // TODO
+    },
     commitUpdate(
         instance: Instance,
         updatePayload: UpdatePayload,
@@ -133,16 +143,35 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         oldProps: Props,
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
-    ): void {},
-    insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {},
+    ): void {
+        // TODO
+    },
+    insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
+        // TODO
+    },
     insertInContainerBefore(
         container: Container,
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance,
-    ): void {},
-    removeChild(parentInstance: Instance, child: Instance | TextInstance): void {},
-    removeChildFromContainer(container: Container, child: Instance | TextInstance): void {},
-    resetTextContent(instance: Instance): void {},
+    ): void {
+        // TODO
+    },
+    removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        parentInstance._removeView(child);
+        // TODO: check whether a property/event change should be fired.
+    },
+    removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
+        container._removeView(child);
+        // TODO: check whether a property/event change should be fired.
+    },
+    resetTextContent(instance: Instance): void {
+        if(instance instanceof TextBase){
+            instance.text = "";
+            instance.notifyPropertyChange("text", "newText");
+        } else {
+            console.warn(`resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase.`);
+        }
+    },
 }
 const ReactReconcilerInst = ReactReconciler<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout>(hostConfig);
 
