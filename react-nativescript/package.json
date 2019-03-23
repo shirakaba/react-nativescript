@@ -25,10 +25,14 @@
     "url": "https://github.com/shirakaba/react-nativescript/issues"
   },
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
+  "peerDependencies": {
+    "react": "^16.8.5",
+    "tns-core-modules": "^5.2.0"
+  },
   "dependencies": {
     "react": "^16.8.5",
-    "react-reconciler": "^0.20.2",
-    "tns-core-modules": "5.2.0"
+    "tns-core-modules": "next",
+    "react-reconciler": "^0.20.2"
   },
   "devDependencies": {
     "@types/react": "^16.8.8",

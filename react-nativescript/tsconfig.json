@@ -2,14 +2,16 @@
     "compilerOptions": {
         "target": "es5",
         "module": "commonjs",
+        "moduleResolution": "node",
         "declaration": true,
         "outDir": "dist",
-        "removeComments": true,
+        "removeComments": false,
         "noLib": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "skipLibCheck": true,
         "lib": ["es6", "dom"],
+        "baseUrl": ".",
         "sourceMap": true,
         "pretty": true,
         "allowUnreachableCode": false,
@@ -24,7 +26,6 @@
     },
     "exclude": [
         "node_modules",
-        "sample",
         "dist"
     ],
     "compileOnSave": false

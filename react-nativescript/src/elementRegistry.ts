@@ -50,6 +50,7 @@ export type ConcreteViewConstructor = new (...args: any[]) => View;
 
 export type TNSElements = keyof typeof elementMap;
 // export const elementMap: Record<string, typeof View> = {
+// TODO: see Angular implementation: https://github.com/NativeScript/nativescript-angular/blob/master/nativescript-angular/element-registry.ts#L179
 export const elementMap: Record<string, ConcreteViewConstructor> = {
     "ActionBar": ActionBar,
     "ActivityIndicator": ActivityIndicator,

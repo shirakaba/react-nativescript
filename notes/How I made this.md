@@ -55,6 +55,7 @@ npm install --save file:../.
 
 ```sh
 cd sample
+npm install
 tns run ios --bundle
 ```
 

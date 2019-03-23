@@ -1,6 +1,6 @@
 {
   "nativescript": {
-    "id": "org.nativescript.sample",
+    "id": "uk.co.birchlabs.react-nativescript-sample",
     "tns-android": {
       "version": "5.2.1"
     },
@@ -13,6 +13,7 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "react-nativescript": "file:../react-nativescript",
     "nativescript-theme-core": "~1.0.4",
     "tns-core-modules": "^5.2.0"
   },
