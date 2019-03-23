@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "React plugin for NativeScript (under construction)",
   "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "types": "dist",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
@@ -25,7 +28,7 @@
   "dependencies": {
     "react": "^16.8.5",
     "react-reconciler": "^0.20.2",
-    "tns-core-modules": "^5.2.0"
+    "tns-core-modules": "5.2.0"
   },
   "devDependencies": {
     "@types/react": "^16.8.8",

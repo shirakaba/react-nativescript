@@ -15,7 +15,7 @@
   "dependencies": {
     "nativescript-theme-core": "~1.0.4",
     "react-nativescript": "file:..",
-    "tns-core-modules": "~5.2.0"
+    "tns-core-modules": "^5.2.0"
   },
   "devDependencies": {
     "nativescript-dev-typescript": "~0.8.0",
