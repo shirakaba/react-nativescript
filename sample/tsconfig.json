@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noEmitHelpers": true,
+        "noEmitOnError": true,
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "~/*": [
+                "app/*"
+            ]
+        }
+    },
+    "exclude": [
+        "node_modules",
+        "../node_modules",
+        "platforms"
+    ]
+}

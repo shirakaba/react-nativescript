@@ -1,0 +1,29 @@
+{
+  "nativescript": {
+    "id": "uk.co.birchlabs.rnssample",
+    "tns-android": {
+      "version": "5.2.1"
+    },
+    "tns-ios": {
+      "version": "5.2.0"
+    }
+  },
+  "main": "app.js",
+  "scripts": {
+    "tsc": "tsc --project ./tsconfig.tns.json"
+  },
+  "description": "NativeScript Application",
+  "license": "SEE LICENSE IN <your-license-filename>",
+  "repository": "<fill-your-repository-here>",
+  "dependencies": {
+    "react-nativescript": "file:../react-nativescript",
+    "nativescript-theme-core": "~1.0.4",
+    "tns-core-modules": "5.2.2"
+  },
+  "devDependencies": {
+    "nativescript-dev-typescript": "~0.8.0",
+    "nativescript-dev-webpack": "~0.20.0"
+  },
+  "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
+  "readme": "NativeScript Application"
+}
