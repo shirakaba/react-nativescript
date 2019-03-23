@@ -1,4 +1,40 @@
-# Making the sample app
+# Setting up the library repo:
+
+## Setup as a node module
+
+I configured the `package.json` for the `react-nativescript` repo as follows:
+
+```js
+{
+    // ...
+    "name": "react-nativescript",
+    "main": "dist/index.js",
+    "types": "dist",
+    // ...
+    "peerDependencies": {
+        "react": "",
+        "tns-core-modules": "" 
+    }
+}
+```
+
+## Installation of library's dependencies
+
+Now I must manually install react and tns-core-modules:
+
+```sh
+npm install react tns-core-modules
+```
+
+## Building the TypeScript source
+
+```sh
+npm run build
+```
+
+# Setting up the sample app
+
+## Creating the app
 
 I used the standard TypeScript Hello World template.
 
@@ -6,12 +42,20 @@ I used the standard TypeScript Hello World template.
 tns create sample --tsc
 ```
 
-## Taking the repo's build as a dependency
+## Installing the library
 
-I added this line to the `package.json` of the sample app:
+... I installed it as a local dependency of the sample app:
 
+```sh
+cd sample
+npm install --save file:../.
 ```
-"nativescript-react": "file:../dist",
+
+## Running the sample app
+
+```sh
+cd sample
+tns run ios --bundle
 ```
 
 TODO:
