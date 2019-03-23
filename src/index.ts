@@ -9,7 +9,7 @@ import { Frame } from 'tns-core-modules/ui/frame/frame';
 
 type Type = TNSElements;
 type Props = Record<string, any>;
-type Container = Frame; // The root node of the app.
+type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
 type Instance = View; // We may extend this to Observable in future, to allow the tree to contain non-visual components.
 type TextInstance = TextBase;
 type HydratableInstance = any;
@@ -65,6 +65,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
         }
 
+        // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
         const view: View = new viewConstructor();
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
@@ -286,24 +287,21 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         }
     },
 }
-const ReactReconcilerInst = ReactReconciler<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout>(hostConfig);
+const reactReconcilerInst = ReactReconciler<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout>(hostConfig);
 
+// https://blog.atulr.com/react-custom-renderer-1/
 export default {
     render: (
         reactElement: ReactReconciler.ReactNodeList, // <App />
         domElement: Container, // document.getElementById('root')
         callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
     ) => {
-        // console.log(arguments);
-        // Create a root Container if it doesnt exist
-        if (!domElement._rootContainer) {
-            domElement._rootContainer = ReactReconcilerInst.createContainer(domElement, false, false);
-        }
+        const container = reactReconcilerInst.createContainer(domElement, false, false);
 
         // update the root Container
-        return ReactReconcilerInst.updateContainer(
+        return reactReconcilerInst.updateContainer(
             reactElement,
-            domElement._rootContainer,
+            container,
             null,
             callback
         );
