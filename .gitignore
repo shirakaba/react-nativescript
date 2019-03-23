@@ -2,3 +2,4 @@ node_modules
 src/*.js*
 src/*.d.ts
 sample/**/*.d.ts
+dist
