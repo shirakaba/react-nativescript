@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es5",
+        "target": "es2015",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
         "lib": [
-            "es6",
-            "dom"
+            "es6"
         ],
         "baseUrl": ".",
         "paths": {
@@ -19,6 +18,7 @@
     },
     "exclude": [
         "node_modules",
+        "../node_modules",
         "platforms"
     ]
 }

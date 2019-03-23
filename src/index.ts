@@ -233,6 +233,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         })
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
+        // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
         let beforeChildIndex: number = 0;
         parentInstance.eachChild((viewBase: ViewBase) => {
             if(viewBase === beforeChild){
