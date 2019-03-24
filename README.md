@@ -25,7 +25,7 @@ I can't get the sample app to build currently (see my issue filing): https://git
 
 However, I think the renderer itself is a good start.
 
-I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
+I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project. If this gets unexpected traction, I could look into setting up a dedicated Gitter.
 
 ## Why not just use React Native?
 
