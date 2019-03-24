@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noEmitHelpers": true,
+        "noEmitOnError": true,
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [
+                "./node_modules/*"
+            ],
+            "~/*": [
+                "app/*"
+            ]
+        }
+    },
+    "include": [
+        "../react-nativescript",
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "../react-nativescript/node_modules",
+        "platforms"
+    ]
+}
