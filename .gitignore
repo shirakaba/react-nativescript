@@ -3,3 +3,4 @@ src/*.js*
 src/*.d.ts
 sample/**/*.d.ts
 dist
+react-nativescript/src/*.js

@@ -13,14 +13,21 @@
         ],
         "baseUrl": ".",
         "paths": {
+            "*": [
+                "./node_modules/*"
+            ],
             "~/*": [
                 "app/*"
             ]
         }
     },
+    "include": [
+        "../react-nativescript",
+        "**/*"
+    ],
     "exclude": [
         "node_modules",
-        "../node_modules",
+        "../react-nativescript/node_modules",
         "platforms"
     ]
 }
