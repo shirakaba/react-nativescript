@@ -32,7 +32,7 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 There are great benefits to being able to use React as a renderer for NativeScript, rather than React Native.
 
 * NativeScript runs on the main thread, so you avoid a lot of async dances and message-pasting between threads for achieving certain things (see particularly the next point)
-* NativeScript has complete bindings to the native APIs, so you never need to write a plugin every time you just want to access/set a property on a native view; also you
+* NativeScript has complete bindings to the native APIs, so you never need to write a plugin every time you just want to access/set a property on a native view
 * NativeScript projects simply build and install much more quickly than a React Native project because the codebase is leaner
 * The NativeScript codebase is far more approachable to contributors
 * This repo is written in TypeScript from the ground up (just like NativeScript), so typings will always be in sync and correct.
