@@ -66,15 +66,33 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         if(!viewConstructor){
             throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
         }
-
+        console.log(`[createInstance() 1a] type: ${type}. props:`, props);
+        console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
+        // FIXME: https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized
+        // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
         // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
         const view: View = new viewConstructor();
+        console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
+
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
-            view.set(prop, value);
+            if(prop === "children"){
+                if(typeof prop === "string" || typeof prop === "number"){
+                    console.warn(`No support for setting textContent of a view yet.`);
+                } else {
+                    console.warn(`No support for nesting children yet.`);
+                }
+            } else if(prop === "className"){
+                console.warn(`remapping 'className' to 'class'; might be undesired behaviour.`);
+                view.set("class", value);
+            } else {
+                view.set(prop, value);
+            }
+
             // TODO: should probably notify of property change, too.
         });
+        console.log(`[createInstance() 1d] type: ${type}. returning:`, view);
 
         // TODO: also merge in the hostContext (whatever that is).
 
@@ -182,6 +200,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // TODO: check whether a property/event change should be fired.
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
+        console.log(`[appendChildToContainer() 1a] container:`, container);
+        console.log(`[appendChildToContainer() 1b] child:`, child);
         container._addView(child);
         // TODO: check whether a property/event change should be fired.
     },
@@ -300,6 +320,9 @@ export default {
         callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
     ) => {
         const container = reactReconcilerInst.createContainer(domElement, false, false);
+
+        // console.log("[render() 1a] Created container", container);
+        // console.log("[render() 1b] Created container", container._root);
 
         // update the root Container
         return reactReconcilerInst.updateContainer(
