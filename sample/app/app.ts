@@ -18,20 +18,44 @@ import { Page } from "tns-core-modules/ui/page/page";
 // textBase.text = "Hello, world!";
 // contentView._addView(textBase);
 
-// https://github.com/NativeScript/NativeScript/issues/5073#issuecomment-344703902
-const frame = new Frame();
-/* If you don't navigate the frame to a page, a blank UINavigationBar will be inserted. */
-const page = new Page();
-frame.navigate({ create: () => page });
-// https://github.com/NativeScript/NativeScript/blob/9d7f0e5315be0da6574ef1febc80ddb1f5deef32/tns-core-modules/ui/frame/frame.android.ts#L926
-// frame.navigate(getMainEntry());
-
 on(launchEvent, (data: any) => {
     console.log("[launchEvent 1a] Got launch event. Data:", data);
+
+    // https://github.com/NativeScript/NativeScript/issues/5073#issuecomment-344703902
+    const frame = new Frame();
+    /* If you don't navigate the frame to a page, a blank UINavigationBar will be inserted. */
+    const page = new Page();
+    page.backgroundColor = "green";
+    frame.navigate({ create: () => page });
+    // https://github.com/NativeScript/NativeScript/blob/9d7f0e5315be0da6574ef1febc80ddb1f5deef32/tns-core-modules/ui/frame/frame.android.ts#L926
+    // frame.navigate(getMainEntry());
+
     data.root = frame;
 
     // application.getRootView() and data._window still undefined at this point.
+
+    const myTextBase = React.createElement(MyTextBase, { toWhat: 'World' }, null);
+
+    console.log("myTextBase as React element:", myTextBase);
+    // console.log("myTextBase type:", myTextBase.type);
+
+    // https://reactjs.org/docs/react-without-jsx.html
+    ReactNativeScript.render(
+        React.createElement(MyTextBase, { toWhat: 'World' }, null),
+        page, // I think this is more appropriate than passing frame.
+        //@ts-ignore
+        // React.createElement(MyRootView, {}, null),
+        () => {
+            console.log(`Container updated!`);
+        }
+    );
 });
+
+class MyContentView extends React.Component<{}, {}> {
+    render(){
+        return React.createElement('ContentView', null, { style: { backgroundColor: "purple" } });
+    }
+}
 
 class MyTextBase extends React.Component<{ toWhat: string }, {}> {
     render(){
@@ -45,20 +69,6 @@ class MyRootView extends React.Component<{}, {}> {
         return React.createElement('Frame', null);
     }
 }
-
-console.log("application root view:", application.getRootView()); // undefined at this point
-
-// https://reactjs.org/docs/react-without-jsx.html
-ReactNativeScript.render(
-    React.createElement(MyTextBase, { toWhat: 'World' }, null),
-    // application.getRootView(),
-    frame,
-    //@ts-ignore
-    // React.createElement(MyRootView, {}, null),
-    () => {
-        console.log(`Component rendered!`);
-    }
-);
 
 run();
 
