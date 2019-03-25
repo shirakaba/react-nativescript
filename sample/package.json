@@ -22,6 +22,7 @@
     "tns-core-modules": "^5.2.2"
   },
   "devDependencies": {
+    "@types/react": "^16.8.8",
     "nativescript-dev-typescript": "~0.8.0",
     "nativescript-dev-webpack": "~0.20.0"
   },
