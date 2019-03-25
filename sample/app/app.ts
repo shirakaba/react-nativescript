@@ -30,7 +30,7 @@ on(launchEvent, (data: any) => {
     // https://github.com/NativeScript/NativeScript/blob/9d7f0e5315be0da6574ef1febc80ddb1f5deef32/tns-core-modules/ui/frame/frame.android.ts#L926
     // frame.navigate(getMainEntry());
 
-    data.root = frame;
+    data.root = frame; // Should this be the frame or the page?
 
     // application.getRootView() and data._window still undefined at this point.
 
@@ -41,7 +41,7 @@ on(launchEvent, (data: any) => {
 
     // https://reactjs.org/docs/react-without-jsx.html
     ReactNativeScript.render(
-        React.createElement(MyContentView, { flaggy: true }, null),
+        React.createElement(MyFlexboxLayout, { flaggy: true }, null),
         page, // I think this is more appropriate than passing frame.
         //@ts-ignore
         // React.createElement(MyRootView, {}, null),
@@ -50,6 +50,12 @@ on(launchEvent, (data: any) => {
         }
     );
 });
+
+class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
+    render(){
+        return React.createElement('FlexboxLayout', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
+    }
+}
 
 class MyContentView extends React.Component<{ flaggy: boolean }, {}> {
     render(){
