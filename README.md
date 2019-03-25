@@ -21,9 +21,7 @@ React plugin for NativeScript (*very* under construction; expect swathing refact
     </a>
 </p>
 
-I can't get the sample app to build currently (see my issue filing): https://github.com/NativeScript/nativescript-cli/issues/4469
-
-However, I think the renderer itself is a good start.
+Status: I've written a minimum-working-example renderer, and now I'm trying to get the sample app to make use of it.
 
 I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project. If this gets unexpected traction, I could look into setting up a dedicated Gitter.
 
@@ -39,8 +37,7 @@ There are great benefits to being able to use React as a renderer for NativeScri
 
 ## Contributing
 
-* The first thing I need help with is simply building the demo app.
-* Ideally get in contact via the Slack channel before starting any PRs.
+Ideally get in contact via the Slack channel before starting any PRs.
 
 I want to keep complex tooling down to a minimum to encourage easy on-boarding to contributors – at least until the project is stable.
 
