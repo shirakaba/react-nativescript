@@ -4,8 +4,11 @@ import * as ReactReconciler from 'react-reconciler';
 import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegistry';
 // TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
 import { View } from 'tns-core-modules/ui/core/view/view';
+import { Color } from 'tns-core-modules/color/color';
 import { ViewBase } from 'tns-core-modules/ui/core/view-base/view-base';
+import { ContentView } from "tns-core-modules/ui/content-view";
 import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
+import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 // import { Page } from 'tns-core-modules/ui/page/page';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 
@@ -72,9 +75,18 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
         // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
         const view: View = new viewConstructor();
-        view.height = 100;
-        view.width = 100;
-        view.backgroundColor = "orange";
+
+        // view.height = 100;
+        // view.width = 100;
+        // (view as FlexboxLayout).style.width = 100;
+        // (view as FlexboxLayout).style.height = 100;
+        // (view as FlexboxLayout).style.backgroundColor = new Color(100, 255, 255, 0);
+        // const aChild = new ContentView();
+        // aChild.style.width = 100;
+        // aChild.style.height = 100;
+        // aChild.style.backgroundColor = new Color(100, 0, 255, 255);
+        // view._addView(aChild);
+
         console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
