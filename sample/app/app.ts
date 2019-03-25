@@ -41,7 +41,7 @@ on(launchEvent, (data: any) => {
 
     // https://reactjs.org/docs/react-without-jsx.html
     ReactNativeScript.render(
-        React.createElement(MyTextBase, { toWhat: 'World' }, null),
+        React.createElement(MyContentView, { flaggy: true }, null),
         page, // I think this is more appropriate than passing frame.
         //@ts-ignore
         // React.createElement(MyRootView, {}, null),
@@ -51,9 +51,9 @@ on(launchEvent, (data: any) => {
     );
 });
 
-class MyContentView extends React.Component<{}, {}> {
+class MyContentView extends React.Component<{ flaggy: boolean }, {}> {
     render(){
-        return React.createElement('ContentView', null, { style: { backgroundColor: "purple" } });
+        return React.createElement('ContentView', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
     }
 }
 

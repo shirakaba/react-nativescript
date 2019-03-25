@@ -72,6 +72,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
         // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
         const view: View = new viewConstructor();
+        view.height = 100;
+        view.width = 100;
+        view.backgroundColor = "orange";
         console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
@@ -79,26 +82,39 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
             if(prop === "children"){
                 if(typeof prop === "string" || typeof prop === "number"){
-                    console.warn(`No support for setting textContent of a view yet.`);
+                    if(view instanceof TextBase){
+                        // WARNING: unsure that this is how you're supposed to use HostConfig.
+                        hostConfig.commitTextUpdate(view, "", value);
+                        console.log(`[createInstance() 1d] type: ${type}. after commitTextUpdate():`, view.text);
+                    } else {
+                        console.warn(`No support for setting textContent of a non-TextBase view yet.`);
+                    }
                 } else {
                     console.warn(`No support for nesting children yet.`);
                 }
             } else if(prop === "className"){
                 console.warn(`remapping 'className' to 'class'; might be undesired behaviour.`);
                 view.set("class", value);
+            } else if(prop === "style"){
+                console.warn(`Support for setting styles is experimental.`);
+                Object.keys(value).forEach((styleName: string) => {
+                    const styleValue: any = value[styleName];
+                    view.set(styleName, styleValue);
+                });
             } else {
                 view.set(prop, value);
             }
 
             // TODO: should probably notify of property change, too.
         });
-        console.log(`[createInstance() 1d] type: ${type}. returning:`, view);
+        console.log(`[createInstance() 1e] type: ${type}. returning:`, view);
 
         // TODO: also merge in the hostContext (whatever that is).
 
         return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        console.log(`[appendInitialChild()]`);
         parentInstance._addView(child);
     },
     /**
@@ -196,6 +212,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        console.log(`[appendChild()]`, child);
         parentInstance._addView(child);
         // TODO: check whether a property/event change should be fired.
     },
@@ -206,6 +223,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // TODO: check whether a property/event change should be fired.
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
+        console.log(`[commitTextUpdate()]`, textInstance);
         textInstance.text = newText;
         // e.g.: https://github.com/NativeScript/NativeScript/blob/master/tns-core-modules/data/observable/observable.ts#L53
         textInstance.notifyPropertyChange("text", newText, oldText);
