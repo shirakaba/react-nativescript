@@ -356,7 +356,7 @@ export default {
         domElement: Container, // document.getElementById('root')
         callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
     ) => {
-        console.log("[render() 1a] Creating container", domElement);
+        console.log("[render() 1a] Creating container from domElement", domElement);
         const container = reactReconcilerInst.createContainer(domElement, false, false);
 
         console.log("[render() 1b] Created container", container);
