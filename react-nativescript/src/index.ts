@@ -104,9 +104,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             } else if(prop === "style"){
                 console.warn(`Support for setting styles is experimental.`);
                 Object.keys(value).forEach((styleName: string) => {
+                    console.log(`Setting style:`, styleName);
                     const styleValue: any = value[styleName];
                     view.set(styleName, styleValue);
                 });
+                // console.log(`Width now:`, view.width);
+                // console.log(`Height now:`, view.height);
             } else {
                 view.set(prop, value);
             }
@@ -359,7 +362,7 @@ export default {
         console.log("[render() 1a] Creating container from domElement", domElement);
         const container = reactReconcilerInst.createContainer(domElement, false, false);
 
-        console.log("[render() 1b] Created container", container);
+        // console.log("[render() 1b] Created container", container);
         // console.log("[render() 1c] Created container", container._root);
 
         // update the root Container
