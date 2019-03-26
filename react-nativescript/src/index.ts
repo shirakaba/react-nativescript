@@ -96,7 +96,17 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                         hostConfig.appendChild(view, tv);
                     }
                 } else {
-                    console.warn(`No support for nesting children yet.`);
+                    console.warn(`Support for nesting children is experimental.`);
+                    // console.log(`value:`, value);
+                    const prospectiveChild = value as React.ReactElement<any, string>;
+                    const instanceFromChild: View|TextBase = hostConfig.createInstance(
+                        prospectiveChild.type,
+                        prospectiveChild.props,
+                        rootContainerInstance,
+                        hostContext,
+                        internalInstanceHandle
+                    );
+                    hostConfig.appendChild(view, instanceFromChild);
                 }
             } else if(prop === "className"){
                 console.warn(`remapping 'className' to 'class'; might be undesired behaviour.`);

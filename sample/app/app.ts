@@ -22,9 +22,30 @@ class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     }
 }
 
-class MyContentView extends React.Component<{ flaggy: boolean }, {}> {
+class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
     render(){
-        return React.createElement('ContentView', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow", width: 100, height: 100 } });
+        return React.createElement(
+            'ContentView',
+            {
+                flaggy: this.props.flaggy,
+                style: {
+                    backgroundColor: "yellow",
+                    width: "75%",
+                    height: "75%"
+                }
+            },
+            React.createElement(
+                'ContentView',
+                {
+                    flaggy: !this.props.flaggy,
+                    style: {
+                        backgroundColor: "orange",
+                        width: "50%",
+                        height: "50%"
+                    }
+                }
+            )
+        );
     }
 }
 
@@ -51,10 +72,8 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
-                    React.createElement(MyContentView, { flaggy: true }, null),
+                    React.createElement(NestedContentView, { flaggy: true }, null),
                     page, // I think this is more appropriate than passing frame.
-                    //@ts-ignore
-                    // React.createElement(MyRootView, {}, null),
                     () => {
                         console.log(`Container updated!`);
                     }
