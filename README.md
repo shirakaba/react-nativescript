@@ -41,6 +41,25 @@ Ideally get in contact via the Slack channel before starting any PRs.
 
 I want to keep complex tooling down to a minimum to encourage easy on-boarding to contributors – at least until the project is stable.
 
+## Current state
+
+This checklist is expanded upon in the roadmap below.
+
+Note that 'basic support' may mean "seen to work in very specific favourable circumstances".
+
+* [x] Basic child-nesting support
+* [x] Basic text component support
+* [x] Basic styles support (if it exists on View)
+* [] Handling of props other than by `Observer.setValue()`
+* [] Support for custom components (currently only support those from `tns-core-modules`)
+* [] Support for multiple children inside an instance (might work, but untested)
+* [] Support for non-visual components
+* [] Mapping event-handler props to event handlers
+* [] Mapping flexbox styles to FlexboxLayout components
+* [] Mapping React refs to native components
+* [] JSX/TSX
+* [] Tests
+
 ## Roadmap
 
 We'll need:
