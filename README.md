@@ -54,7 +54,7 @@ Note that 'basic support' may mean "seen to work in very specific favourable cir
 * [] Support for custom components (currently only support those from `tns-core-modules`)
 * [] Support for multiple children inside an instance (might work, but untested)
 * [] Support for non-visual components
-* [] Mapping event-handler props to event handlers
+* [x] Mapping event-handler props to event handlers (e.g. `onTap` prop maps to `on("tap")` for Button component)
 * [] Mapping flexbox styles to FlexboxLayout components
 * [] Mapping React refs to native components
 * [] JSX/TSX
