@@ -111,13 +111,13 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     hostConfig.appendChild(view, instanceFromChild);
                 }
             } else if(prop.startsWith("on") && prop.length > "on".length){
-                console.warn(`Support for event listeners is experimental.`);
+                console.warn(`Support for event listeners is experimental - based on removing the 'on' from the start of the listener name.`);
 
                 const eventName: string = prop["on".length].toLowerCase() + prop.slice("on".length + 1);
                 view.on(eventName, value);
             } else if(prop === "className"){
-                console.warn(`remapping 'className' to 'class'; might be undesired behaviour.`);
-                view.set("class", value);
+                console.warn(`Note that 'className' is intentionally not remapped to 'class'.`);
+                view.set(prop, value);
             } else if(prop === "style"){
                 console.warn(`Support for setting styles is experimental.`);
                 Object.keys(value).forEach((styleName: string) => {

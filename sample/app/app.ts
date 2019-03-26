@@ -11,11 +11,12 @@ import { default as ReactNativeScript } from "react-nativescript/dist/index";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { EventData } from "tns-core-modules/data/observable/observable";
-import { TextBase } from "tns-core-modules/ui/text-base/text-base";
+import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { Button } from "tns-core-modules/ui/button/button";
 
 class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     render(){
@@ -51,16 +52,16 @@ class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
     }
 }
 
-class MyButton extends React.Component<{ onTap: (args: EventData) => void }, {}> {
+class MyButton extends React.Component<ViewBaseProp<Button> | { onTap: (args: EventData) => void }, {}> {
     render(){
         return React.createElement(
                 'Button',
                 {
                     ...this.props,
                     style: {
-                        backgroundColor: "orange",
-                        width: "50%",
-                        height: "50%"
+                        // backgroundColor: "orange",
+                        // width: "50%",
+                        // height: "50%"
                     }
                 }
             );
@@ -80,6 +81,10 @@ class MyRootView extends React.Component<{}, {}> {
     }
 }
 
+type ViewBaseProp<T extends ViewBase> = {
+    [P in keyof T]: T[P]
+};
+
 run({
     create: () => {
         const frame = new Frame();
@@ -90,7 +95,15 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
-                    React.createElement(MyButton, { onTap: (args: EventData) => console.log("Tapped!", args) }, null),
+                    React.createElement(
+                        MyButton,
+                        {
+                            onTap: (args: EventData) => console.log("Tapped!", args),
+                            text: "Tap me!",
+                            className: "btn btn-primary btn-active"
+                        },
+                        null
+                    ),
                     page, // I think this is more appropriate than passing frame.
                     () => {
                         console.log(`Container updated!`);
