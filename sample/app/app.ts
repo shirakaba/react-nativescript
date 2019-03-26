@@ -54,17 +54,6 @@ run({
                 const page = new Page();
                 page.backgroundColor = "green";
 
-                const contentView = new ContentView();
-
-                const textField = new TextField();
-                contentView.height = 100;
-                contentView.width = 100;
-                contentView.backgroundColor = "purple";
-                textField.text = "Hello, world!";
-
-                contentView.content = textField;
-                // page.content = contentView;
-
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(MyContentView, { flaggy: true }, null),
