@@ -16,11 +16,6 @@ import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
-// const contentView = new ContentView();
-// const textBase = new TextBase();
-// textBase.text = "Hello, world!";
-// contentView._addView(textBase);
-
 class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     render(){
         return React.createElement('FlexboxLayout', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
