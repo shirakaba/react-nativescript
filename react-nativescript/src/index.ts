@@ -313,17 +313,21 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance,
     ): void {
-        let beforeChildIndex: number = 0;
-        container.eachChild((viewBase: ViewBase) => {
-            if(viewBase === beforeChild){
-                return false;
-            } else {
-                beforeChildIndex++;
-                return true;
-            }
-        });
-        // NOTE: Untested. Potentially has an off-by-one error.
-        container._addView(child, beforeChildIndex);
+        if(container instanceof Page || container instanceof ContentView){
+            console.warn(`[insertInContainerBefore] not supported because Page/ContentView only support a single child.`);
+        } else {
+            let beforeChildIndex: number = 0;
+            container.eachChild((viewBase: ViewBase) => {
+                if(viewBase === beforeChild){
+                    return false;
+                } else {
+                    beforeChildIndex++;
+                    return true;
+                }
+            });
+            // NOTE: Untested. Potentially has an off-by-one error.
+            container._addView(child, beforeChildIndex);
+        }
     },
     removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
         parentInstance._removeView(child);
@@ -352,10 +356,11 @@ export default {
         domElement: Container, // document.getElementById('root')
         callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
     ) => {
+        console.log("[render() 1a] Creating container", domElement);
         const container = reactReconcilerInst.createContainer(domElement, false, false);
 
-        // console.log("[render() 1a] Created container", container);
-        // console.log("[render() 1b] Created container", container._root);
+        console.log("[render() 1b] Created container", container);
+        // console.log("[render() 1c] Created container", container._root);
 
         // update the root Container
         return reactReconcilerInst.updateContainer(
