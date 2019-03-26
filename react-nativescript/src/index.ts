@@ -5,6 +5,7 @@ import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegis
 // TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
 import { View } from 'tns-core-modules/ui/core/view/view';
 import { Color } from 'tns-core-modules/color/color';
+import { Button } from "tns-core-modules/ui/button/button";
 import { ViewBase } from 'tns-core-modules/ui/core/view-base/view-base';
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
@@ -83,7 +84,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             const value: any = props[prop];
 
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
-            if(prop === "children"){
+            if(prop === "children" && value !== null){
                 if(hostConfig.shouldSetTextContent(type, props)){
                     if(view instanceof TextBase){
                         // WARNING: unsure that this is how you're supposed to use HostConfig.
@@ -96,7 +97,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                         hostConfig.appendChild(view, tv);
                     }
                 } else {
-                    console.warn(`Support for nesting children is experimental.`);
+                    console.warn(`Support for nesting children is experimental. children value:`, value);
+
                     // console.log(`value:`, value);
                     const prospectiveChild = value as React.ReactElement<any, string>;
                     const instanceFromChild: View|TextBase = hostConfig.createInstance(
@@ -108,6 +110,11 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     );
                     hostConfig.appendChild(view, instanceFromChild);
                 }
+            } else if(prop.startsWith("on") && prop.length > "on".length){
+                console.warn(`Support for event listeners is experimental.`);
+
+                const eventName: string = prop["on".length].toLowerCase() + prop.slice("on".length + 1);
+                view.on(eventName, value);
             } else if(prop === "className"){
                 console.warn(`remapping 'className' to 'class'; might be undesired behaviour.`);
                 view.set("class", value);
