@@ -10,6 +10,7 @@ import { on, run, launchEvent, getMainEntry, getRootView, LaunchEventData } from
 import { default as ReactNativeScript } from "react-nativescript/dist/index";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
+import { EventData } from "tns-core-modules/data/observable/observable";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
@@ -50,6 +51,22 @@ class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
     }
 }
 
+class MyButton extends React.Component<{ onTap: (args: EventData) => void }, {}> {
+    render(){
+        return React.createElement(
+                'Button',
+                {
+                    ...this.props,
+                    style: {
+                        backgroundColor: "orange",
+                        width: "50%",
+                        height: "50%"
+                    }
+                }
+            );
+    }
+}
+
 class MyTextField extends React.Component<{ toWhat: string }, {}> {
     render(){
         return React.createElement('TextField', null, `Hello ${this.props.toWhat}`);
@@ -73,7 +90,7 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
-                    React.createElement(NestedContentView, { flaggy: true }, null),
+                    React.createElement(MyButton, { onTap: (args: EventData) => console.log("Tapped!", args) }, null),
                     page, // I think this is more appropriate than passing frame.
                     () => {
                         console.log(`Container updated!`);
