@@ -8,6 +8,8 @@ import { Color } from 'tns-core-modules/color/color';
 import { ViewBase } from 'tns-core-modules/ui/core/view-base/view-base';
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
+import { TextView } from 'tns-core-modules/ui/text-view/text-view';
+import { Page } from "tns-core-modules/ui/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 // import { Page } from 'tns-core-modules/ui/page/page';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
@@ -93,13 +95,16 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
             if(prop === "children"){
-                if(typeof prop === "string" || typeof prop === "number"){
+                if(hostConfig.shouldSetTextContent(type, props)){
                     if(view instanceof TextBase){
                         // WARNING: unsure that this is how you're supposed to use HostConfig.
                         hostConfig.commitTextUpdate(view, "", value);
                         console.log(`[createInstance() 1d] type: ${type}. after commitTextUpdate():`, view.text);
                     } else {
-                        console.warn(`No support for setting textContent of a non-TextBase view yet.`);
+                        const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
+
+                        console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
+                        hostConfig.appendChild(view, tv);
                     }
                 } else {
                     console.warn(`No support for nesting children yet.`);
@@ -188,14 +193,16 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     ): TextInstance {
         // See createInstance().
 
-        // Is TextBase the most appropriate here? Medium tutorial uses: document.createTextNode(text);
-        const textBase: TextBase = new TextBase();
-        textBase.text = text;
+        /* Is TextView the most appropriate here?
+         * Alternative is TextField. TextBase just a base class.
+         * Medium tutorial uses: document.createTextNode(text); */
+        const textView: TextView = new TextView();
+        textView.text = text;
 
         // TODO: maybe inherit the style information from container..?
         // TODO: also merge in the hostContext (whatever that is).
 
-        return textBase;
+        return textView;
     },
     scheduleDeferredCallback(
         callback: () => any,
@@ -224,14 +231,20 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendChild()]`, child);
-        parentInstance._addView(child);
+        console.log(`[appendChild()]`, parentInstance, child);
+        
+        if(parentInstance instanceof Page || parentInstance instanceof ContentView){
+            /* These elements were originally designed to hold one element only:
+             * https://stackoverflow.com/a/55351086/5951226 */
+            parentInstance.content = child;
+        } else {
+            parentInstance._addView(child);
+        }
         // TODO: check whether a property/event change should be fired.
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-        console.log(`[appendChildToContainer() 1a] container:`, container);
-        console.log(`[appendChildToContainer() 1b] child:`, child);
-        container._addView(child);
+        console.log(`[appendChildToContainer()] deferring to appendChild()`, container, child);
+        hostConfig.appendChild(container, child);
         // TODO: check whether a property/event change should be fired.
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
@@ -296,6 +309,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             }
         });
         // NOTE: Untested. Potentially has an off-by-one error.
+        // TODO: fire child._parentChanged()?
         parentInstance._addView(child, beforeChildIndex);
     },
     /**
