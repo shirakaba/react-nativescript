@@ -46,6 +46,7 @@ I want to keep complex tooling down to a minimum to encourage easy on-boarding t
 We'll need:
 
 * JSX/TSX support ([Nick Iliev](https://github.com/NickIliev) recommends studying `nativescript-tsx`: [GitHub repo](https://github.com/PanayotCankov/nativescript-tsx); [npm package](https://www.npmjs.com/package/nativescript-tsx))
+* Flex-box support. NativeScript uses `FlexboxLayout` components [based on Google's FlexboxLayout repo](https://github.com/google/flexbox-layout) to wrap flex children rather than achieving flex layouts implicitly from cascading styles (which DOM and React Native manage to do). Aggravatingly, it does not conform to the [CSS Flexible Box Layout](https://www.w3.org/TR/css-flexbox-1/) specification.
 * Support for custom components (this currently only supports those from `tns-core-modules`).
 * Support for non-visual components (e.g. in case you want a `<GameLoop>` component to simply pass down a run loop callback as a context).
 * Intelligent props assignment (e.g. if the key of the prop is `onclick`, we'll need to set the value on a corresponding event handler; same goes for styles). I'd be surprised if props (and certainly styles) even work at the moment.
