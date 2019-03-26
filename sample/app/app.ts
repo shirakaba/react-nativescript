@@ -22,6 +22,7 @@ class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     }
 }
 
+// https://babeljs.io/repl/#?babili=false&browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG4B8JpitAzgA4CGYFgAkMWRAHc4ZdPQCEtAPS8BbUosasA3EQC-RIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.4.2
 class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
     render(){
         return React.createElement(
