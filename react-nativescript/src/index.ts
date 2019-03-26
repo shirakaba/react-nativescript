@@ -78,17 +78,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
         const view: View = new viewConstructor();
 
-        // view.height = 100;
-        // view.width = 100;
-        // (view as FlexboxLayout).style.width = 100;
-        // (view as FlexboxLayout).style.height = 100;
-        // (view as FlexboxLayout).style.backgroundColor = new Color(100, 255, 255, 0);
-        // const aChild = new ContentView();
-        // aChild.style.width = 100;
-        // aChild.style.height = 100;
-        // aChild.style.backgroundColor = new Color(100, 0, 255, 255);
-        // view._addView(aChild);
-
         console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
