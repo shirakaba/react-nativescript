@@ -12,6 +12,7 @@ import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
@@ -19,6 +20,31 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 // const textBase = new TextBase();
 // textBase.text = "Hello, world!";
 // contentView._addView(textBase);
+
+class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
+    render(){
+        return React.createElement('FlexboxLayout', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
+    }
+}
+
+class MyContentView extends React.Component<{ flaggy: boolean }, {}> {
+    render(){
+        return React.createElement('ContentView', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow", width: 100, height: 100 } });
+    }
+}
+
+class MyTextField extends React.Component<{ toWhat: string }, {}> {
+    render(){
+        return React.createElement('TextField', null, `Hello ${this.props.toWhat}`);
+        // { type: "TextField", props: { toWhat: string, children: string } }
+    }
+}
+
+class MyRootView extends React.Component<{}, {}> {
+    render(){
+        return React.createElement('Frame', null);
+    }
+}
 
 run({
     create: () => {
@@ -37,18 +63,18 @@ run({
                 textField.text = "Hello, world!";
 
                 contentView.content = textField;
-                page.content = contentView;
+                // page.content = contentView;
 
-                // // https://reactjs.org/docs/react-without-jsx.html
-                // ReactNativeScript.render(
-                //     React.createElement(MyFlexboxLayout, { flaggy: true }, null),
-                //     page, // I think this is more appropriate than passing frame.
-                //     //@ts-ignore
-                //     // React.createElement(MyRootView, {}, null),
-                //     () => {
-                //         console.log(`Container updated!`);
-                //     }
-                // );
+                // https://reactjs.org/docs/react-without-jsx.html
+                ReactNativeScript.render(
+                    React.createElement(MyContentView, { flaggy: true }, null),
+                    page, // I think this is more appropriate than passing frame.
+                    //@ts-ignore
+                    // React.createElement(MyRootView, {}, null),
+                    () => {
+                        console.log(`Container updated!`);
+                    }
+                );
 
                 return page;
             }
@@ -56,31 +82,6 @@ run({
         return frame;
     }
 });
-
-class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
-    render(){
-        return React.createElement('FlexboxLayout', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
-    }
-}
-
-class MyContentView extends React.Component<{ flaggy: boolean }, {}> {
-    render(){
-        return React.createElement('ContentView', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
-    }
-}
-
-class MyTextBase extends React.Component<{ toWhat: string }, {}> {
-    render(){
-        return React.createElement('TextBase', null, `Hello ${this.props.toWhat}`);
-        // { type: "TextBase", props: { toWhat: string, children: string } }
-    }
-}
-
-class MyRootView extends React.Component<{}, {}> {
-    render(){
-        return React.createElement('Frame', null);
-    }
-}
 
 run();
 
