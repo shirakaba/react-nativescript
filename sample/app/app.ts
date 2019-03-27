@@ -17,6 +17,7 @@ import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { Button } from "tns-core-modules/ui/button/button";
+import { Button as ReactButton } from "react-nativescript/dist/components/Button";
 
 class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     render(){
@@ -95,12 +96,22 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
+                    // React.createElement(
+                    //     MyButton,
+                    //     {
+                    //         onTap: (args: EventData) => console.log("Tapped!", args),
+                    //         text: "Tap me!",
+                    //         className: "btn btn-primary btn-active"
+                    //     },
+                    //     null
+                    // ),
+
                     React.createElement(
-                        MyButton,
+                        ReactButton,
                         {
-                            onTap: (args: EventData) => console.log("Tapped!", args),
-                            text: "Tap me!",
-                            className: "btn btn-primary btn-active"
+                            onPress: (args: EventData) => console.log("Tapped!", args),
+                            title: "Tap me!",
+                            // className: "btn btn-primary btn-active"
                         },
                         null
                     ),
