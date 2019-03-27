@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ViewBaseProp } from "./NativeScriptComponentTypings";
+import { ViewBaseProps, TextBaseProps } from "./NativeScriptComponentTypings";
 import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
@@ -30,7 +30,7 @@ interface Props {
  */
 /* I can't figure out a friendly typing for the IntrinsicAttributes (we need a non-hacky DeepPartial type, really) */
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
-export class Button extends React.Component<Props & any, {}> {
+export class Button extends React.Component<Props & Partial<TextBaseProps>, {}> {
     private onPressListener: (args: EventData) => void;
 
     componentDidMount(){
