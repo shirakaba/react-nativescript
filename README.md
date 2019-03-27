@@ -10,12 +10,12 @@ React plugin for NativeScript (*very* under construction; expect swathing refact
     <a href="https://github.com/shirakaba/nside/fork">
         <img src="http://githubbadges.com/fork.svg?user=shirakaba&repo=react-nativescript&style=flat">
     </a>
-    <a href="https://github.com/ellerbrock/open-source-badge/">
-        <img src="https://badges.frapsoft.com/os/gpl/gpl.svg?v=102">
+    <a href="https://opensource.org/licenses/mit-license.php">
+        <img src="https://badges.frapsoft.com/os/mit/mit.png?v=103">
     </a>
-    <a href="http://makeapullrequest.com">
+    <!-- <a href="http://makeapullrequest.com">
         <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat">
-    </a>
+    </a> -->
     <a href="https://twitter.com/intent/follow?screen_name=LinguaBrowse">
         <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter">
     </a>
