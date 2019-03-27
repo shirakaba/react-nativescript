@@ -24,13 +24,15 @@ interface Props {
     testID?: string;
 }
 
+type ButtonProps = Props & Partial<TextBaseProps>;
+
 /**
  * A React wrapper around the NativeScript Button component.
  * https://facebook.github.io/react-native/docs/button#color
  */
 /* I can't figure out a friendly typing for the IntrinsicAttributes (we need a non-hacky DeepPartial type, really) */
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
-export class Button extends React.Component<Props & Partial<TextBaseProps>, {}> {
+export class Button extends React.Component<ButtonProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptButton> = React.createRef<NativeScriptButton>();
 
     /* Called before render():
@@ -42,6 +44,21 @@ export class Button extends React.Component<Props & Partial<TextBaseProps>, {}> 
     componentDidMount(){
         const node: NativeScriptButton|null = this.myRef.current;
         if(node) node.on("tap", this.props.onPress);
+    }
+
+    shouldComponentUpdate(nextProps: ButtonProps, nextState: {}): boolean {
+        // TODO: check whether this is the ideal lifecycle function to do this in.
+        if(nextProps.onPress !== this.props.onPress){
+            const node: NativeScriptButton|null = this.myRef.current;
+            if(node){
+                // Need to check where this lifecycle method is in relation to render().
+                node.off("tap", this.props.onPress);
+                node.on("tap", nextProps.onPress);
+            } else {
+                console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
+            }
+        }
+        return true;
     }
 
     componentWillUnmount(){
