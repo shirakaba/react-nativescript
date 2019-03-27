@@ -31,14 +31,26 @@ interface Props {
 /* I can't figure out a friendly typing for the IntrinsicAttributes (we need a non-hacky DeepPartial type, really) */
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
 export class Button extends React.Component<Props & Partial<TextBaseProps>, {}> {
-    private onPressListener: (args: EventData) => void;
+    private readonly myRef: React.RefObject<NativeScriptButton> = React.createRef<NativeScriptButton>();
 
+    /* Called before render():
+     * http://busypeoples.github.io/post/react-component-lifecycle/
+     * Ref gets assigned only after this:
+     * https://stackoverflow.com/questions/28662624/reactjs-componentdidmount-render 
+     * Docs:
+     * https://reactjs.org/docs/refs-and-the-dom.html#creating-refs */
     componentDidMount(){
-
+        const node: NativeScriptButton|null = this.myRef.current;
+        if(node) node.on("tap", this.props.onPress);
     }
 
     componentWillUnmount(){
-
+        const node: NativeScriptButton|null = this.myRef.current;
+        if(node){
+            node.off("tap", this.props.onPress);
+        } else {
+            console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
+        }
     }
 
     render(){
@@ -50,22 +62,12 @@ export class Button extends React.Component<Props & Partial<TextBaseProps>, {}> 
                     ...rest,
                     [isIOS ? "color" : "backgroundColor"]: color, // Should this be done inside style instead?
                     text: title, // From TextBase
-                    isEnabled: !!disabled,
-                    /** 
-                     * Under consideration. We'll have to make sure that we don't lose reference to previous onPress
-                     * callback upon any props changes. Ideally, attaching and removing should be done by the
-                     * component, not the renderer, in any case...
-                     */
-                    _attachEventListeners: (button: NativeScriptButton) => {
-                        button.on(NativeScriptButton.tapEvent as "tap", onPress);
-                    },
-                    _removeEventListeners: (button: NativeScriptButton) => {
-                        button.removeEventListener(NativeScriptButton.tapEvent as "tap", onPress);
-                    },
+                    isEnabled: !!!disabled,
                     className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     style: {
 
-                    }
+                    },
+                    ref: this.myRef
                 }
             );
     }
