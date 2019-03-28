@@ -66,7 +66,7 @@ export class Button extends React.Component<ButtonProps, {}> {
     }
 
     render(){
-        const { title, disabled, color, onPress, style, ...rest } = this.props;
+        const { title, disabled, color, onPress, style, children, ...rest } = this.props;
 
         return React.createElement(
                 'Button',
@@ -78,7 +78,8 @@ export class Button extends React.Component<ButtonProps, {}> {
                     className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     style,
                     ref: this.myRef
-                }
+                },
+                children // Weird that a button may contain children, but what do I know.
             );
     }
 }
