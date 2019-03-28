@@ -98,7 +98,7 @@ export class View extends React.Component<ViewProps, {}> {
         const { onLayout, onShowingModally, onShownModally, children, ...rest } = this.props;
 
         return React.createElement(
-                'View',
+                'ContentView',
                 {
                     ...rest,
                     ref: this.myRef
