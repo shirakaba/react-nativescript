@@ -1,4 +1,4 @@
-# react-nativescript
+# React NativeScript
 ## About
 
 React plugin for NativeScript (*very* under construction; expect swathing refactors)
