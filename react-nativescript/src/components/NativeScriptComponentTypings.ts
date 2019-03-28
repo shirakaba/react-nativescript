@@ -63,10 +63,11 @@ export type ViewBaseProps = Pick<
     "_cssState"|
     "cssClasses"|
     "cssPseudoClasses"|
-    "_context"
+    "_context"|
+    "style" // Note: the only read-only prop I've added (because I assume it's not deep read-only).
 >
 
-export type ViewProps = Pick<View,
+export type ViewProps = ViewBaseProps & Pick<View,
     "android"|
     "ios"|
     "bindingContext"|
@@ -119,7 +120,7 @@ export type ViewProps = Pick<View,
     "cssClasses"|
     "cssPseudoClasses"|
     "modal"
->
+>;
 
 export type TextBaseProps = ViewProps & Pick<
     TextBase,
