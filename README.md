@@ -50,15 +50,15 @@ Note that 'basic support' may mean "seen to work in very specific favourable cir
 * [x] Basic child-nesting support
 * [x] Basic text component support
 * [x] Basic styles support (if it exists on View)
-* [] Handling of props other than by `Observer.setValue()`
-* [] Support for custom components (currently only support those from `tns-core-modules`)
-* [] Support for multiple children inside an instance (might work, but untested)
-* [] Support for non-visual components
+* [ ] Handling of props other than by `Observer.setValue()`
+* [ ] Support for custom components (currently only support those from `tns-core-modules`)
+* [ ] Support for multiple children inside an instance (might work, but untested)
+* [ ] Support for non-visual components
 * [x] Mapping event-handler props to event handlers (e.g. `onTap` prop maps to `on("tap")` for Button component)
-* [] Mapping flexbox styles to FlexboxLayout components
-* [] Mapping React refs to native components
-* [] JSX/TSX
-* [] Tests
+* [ ] Mapping flexbox styles to FlexboxLayout components
+* [ ] Mapping React refs to native components
+* [ ] JSX/TSX
+* [ ] Tests
 
 ## Roadmap
 
