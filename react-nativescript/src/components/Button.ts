@@ -15,13 +15,7 @@ interface Props {
      * Colour of the text (iOS) or background colour (Android)
      */
     color?: string | Color;
-    accessibilityLabel?: string; // FIXME: Does accessibility even exist in NativeScript?
     disabled?: boolean;
-
-    /**
-     * Used to locate this button in end-to-end tests.
-     */
-    testID?: string;
 }
 
 type ButtonProps = Props & Partial<TextBaseProps>;
@@ -30,7 +24,6 @@ type ButtonProps = Props & Partial<TextBaseProps>;
  * A React wrapper around the NativeScript Button component.
  * https://facebook.github.io/react-native/docs/button#color
  */
-/* I can't figure out a friendly typing for the IntrinsicAttributes (we need a non-hacky DeepPartial type, really) */
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
 export class Button extends React.Component<ButtonProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptButton> = React.createRef<NativeScriptButton>();
@@ -43,7 +36,9 @@ export class Button extends React.Component<ButtonProps, {}> {
      * https://reactjs.org/docs/refs-and-the-dom.html#creating-refs */
     componentDidMount(){
         const node: NativeScriptButton|null = this.myRef.current;
-        if(node) node.on("tap", this.props.onPress);
+        if(node){
+            node.on("tap", this.props.onPress);
+        }
     }
 
     shouldComponentUpdate(nextProps: ButtonProps, nextState: {}): boolean {
@@ -66,12 +61,12 @@ export class Button extends React.Component<ButtonProps, {}> {
         if(node){
             node.off("tap", this.props.onPress);
         } else {
-            console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
+            console.warn(`React ref to NativeScript Button lost, so unable to update event listeners.`);
         }
     }
 
     render(){
-        const { title, disabled, color, onPress, ...rest } = this.props;
+        const { title, disabled, color, onPress, style, ...rest } = this.props;
 
         return React.createElement(
                 'Button',
@@ -81,9 +76,7 @@ export class Button extends React.Component<ButtonProps, {}> {
                     text: title, // From TextBase
                     isEnabled: !!!disabled,
                     className: "btn btn-primary btn-active", // NativeScript defaults from documentation
-                    style: {
-
-                    },
+                    style,
                     ref: this.myRef
                 }
             );
