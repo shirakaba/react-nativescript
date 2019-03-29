@@ -32,12 +32,11 @@ class NestedContentView extends React.Component<{}, {}> {
         return React.createElement(
             ReactView,
             {
-                // @ts-ignore
                 style: {
-                    // backgroundColor: new Color("yellow"),
-                    backgroundColor: "yellow",
-                    width: "75%",
-                    height: "75%"
+                    backgroundColor: new Color("yellow"),
+                    // backgroundColor: "yellow",
+                    width: 75,
+                    height: 75
                 }
             },
             React.createElement(
