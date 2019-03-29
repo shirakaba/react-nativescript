@@ -2,6 +2,7 @@ import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { View, ContainerView } from "tns-core-modules/ui/core/view/view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { Observable } from "tns-core-modules/data/observable";
+import { Style } from "tns-core-modules/ui/styling/style/style";
 
 /* Emits unreadable typings */
 // export type DeepPartial<T> = {
@@ -12,10 +13,17 @@ import { Observable } from "tns-core-modules/data/observable";
 //                 : DeepPartial<T[P]>
 // };
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
+interface PartialStyleProp {
+    style: Partial<StylePropContents>
+    // bile: number
+}
+
 /**
  * This is very naive: I just picked all the public properties that weren't readonly.
  */
-export type ViewBaseProps = Pick<
+export type ViewBaseProps = PartialStyleProp & Pick<
     ViewBase,
     "left"|
     "top"|
@@ -63,8 +71,7 @@ export type ViewBaseProps = Pick<
     "_cssState"|
     "cssClasses"|
     "cssPseudoClasses"|
-    "_context"|
-    "style" // Note: the only read-only prop I've added (because I assume it's not deep read-only).
+    "_context"
 >
 
 export type ViewProps = ViewBaseProps & Pick<View,
