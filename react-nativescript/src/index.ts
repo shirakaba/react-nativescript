@@ -80,16 +80,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         const view: View = new viewConstructor();
 
         console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
+
+        console.log(`[createInstance() 1d] type: ${type}. iterating props:`, props);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
 
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
-            if(prop === "children" && value !== null){
+            if(prop === "children"){
+                if(value === null){
+                    // No children specified.
+                    return;
+                }
                 if(hostConfig.shouldSetTextContent(type, props)){
                     if(view instanceof TextBase){
                         // WARNING: unsure that this is how you're supposed to use HostConfig.
                         hostConfig.commitTextUpdate(view, "", value);
-                        console.log(`[createInstance() 1d] type: ${type}. after commitTextUpdate():`, view.text);
+                        console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
                     } else {
                         const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
 
@@ -119,7 +125,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 console.warn(`Note that 'className' is intentionally not remapped to 'class'.`);
                 view.set(prop, value);
             } else if(prop === "style"){
+                if(typeof value === "undefined"){
+                    console.warn(`'style' prop was specified, but value was undefined.`);
+                    return;
+                }
                 console.warn(`Support for setting styles is experimental.`);
+                console.log(`[createInstance()] type: ${type}. iterating style:`, value);
                 Object.keys(value).forEach((styleName: string) => {
                     console.log(`Setting style:`, styleName);
                     const styleValue: any = value[styleName];

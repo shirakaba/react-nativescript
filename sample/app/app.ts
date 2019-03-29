@@ -15,9 +15,11 @@ import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
+import { Color } from "tns-core-modules/color";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { Button } from "tns-core-modules/ui/button/button";
 import { Button as ReactButton } from "react-nativescript/dist/components/Button";
+import { View as ReactView } from "react-nativescript/dist/components/View";
 
 class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     render(){
@@ -25,14 +27,14 @@ class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
     }
 }
 
-// https://babeljs.io/repl/#?babili=false&browsers=&build=&builtIns=false&spec=false&loose=false&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG4B8JpitAzgA4CGYFgAkMWRAHc4ZdPQCEtAPS8BbUosasA3EQC-RIA&debug=false&forceAllTransforms=false&shippedProposals=false&circleciRepo=&evaluate=false&fileSize=false&timeTravel=false&sourceType=module&lineWrap=true&presets=react&prettier=false&targets=&version=7.4.2
-class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
+class NestedContentView extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            'ContentView',
+            ReactView,
             {
-                flaggy: this.props.flaggy,
+                // @ts-ignore
                 style: {
+                    // backgroundColor: new Color("yellow"),
                     backgroundColor: "yellow",
                     width: "75%",
                     height: "75%"
@@ -41,7 +43,6 @@ class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
             React.createElement(
                 'ContentView',
                 {
-                    flaggy: !this.props.flaggy,
                     style: {
                         backgroundColor: "orange",
                         width: "50%",
@@ -50,22 +51,6 @@ class NestedContentView extends React.Component<{ flaggy: boolean }, {}> {
                 }
             )
         );
-    }
-}
-
-class MyButton extends React.Component<ViewBaseProp<Button> | { onTap: (args: EventData) => void }, {}> {
-    render(){
-        return React.createElement(
-                'Button',
-                {
-                    ...this.props,
-                    style: {
-                        // backgroundColor: "orange",
-                        // width: "50%",
-                        // height: "50%"
-                    }
-                }
-            );
     }
 }
 
@@ -106,13 +91,19 @@ run({
                     //     null
                     // ),
 
+                    // React.createElement(
+                    //     ReactButton,
+                    //     {
+                    //         onPress: (args: EventData) => console.log("Tapped!", args),
+                    //         title: "Tap me!",
+                    //         // className: "btn btn-primary btn-active"
+                    //     },
+                    //     null
+                    // ),
+
                     React.createElement(
-                        ReactButton,
-                        {
-                            onPress: (args: EventData) => console.log("Tapped!", args),
-                            title: "Tap me!",
-                            // className: "btn btn-primary btn-active"
-                        },
+                        NestedContentView,
+                        {},
                         null
                     ),
                     page, // I think this is more appropriate than passing frame.
