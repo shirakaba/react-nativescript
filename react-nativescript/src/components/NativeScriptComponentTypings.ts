@@ -1,8 +1,21 @@
 import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { View, ContainerView } from "tns-core-modules/ui/core/view/view";
+import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { Observable } from "tns-core-modules/data/observable";
 import { Style } from "tns-core-modules/ui/styling/style/style";
+import { elementMap, TNSElements } from "../elementRegistry";
+import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode } from "react";
+import { ViewComponentProps } from "./View";
+
+declare namespace React {
+
+    function createElement(
+        type: 'ContentView',
+        props?: ViewComponentProps & ClassAttributes<ContentView> | null,
+        ...children: ReactNode[]
+    ): FunctionComponentElement<ViewProps>;
+}
 
 /* Emits unreadable typings */
 // export type DeepPartial<T> = {
