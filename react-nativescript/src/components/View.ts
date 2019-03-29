@@ -14,14 +14,14 @@ interface Props {
     onShownModally?: (args: ShownModallyData) => void;
 }
 
-type ViewProps = Props & Partial<ViewBaseProps>;
+export type ViewComponentProps = Props & Partial<ViewBaseProps>;
 
 /**
  * A React wrapper around the NativeScript View component.
  * https://facebook.github.io/react-native/docs/View#color
  */
 // export class View extends React.Component<Props & ViewBaseProp<NativeScriptView>, {}> {
-export class View extends React.Component<ViewProps, {}> {
+export class View extends React.Component<ViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptView> = React.createRef<NativeScriptView>();
 
     /* Called before render():
@@ -46,7 +46,7 @@ export class View extends React.Component<ViewProps, {}> {
         
     }
 
-    shouldComponentUpdate(nextProps: ViewProps, nextState: {}): boolean {
+    shouldComponentUpdate(nextProps: ViewComponentProps, nextState: {}): boolean {
         // TODO: check whether this is the ideal lifecycle function to do this in.
         if(nextProps.onLayout !== this.props.onLayout){
             const node: NativeScriptView|null = this.myRef.current;
