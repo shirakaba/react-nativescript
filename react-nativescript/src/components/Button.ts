@@ -19,14 +19,14 @@ interface Props {
     disabled?: boolean;
 }
 
-type ButtonProps = Props & Partial<TextBaseProps>;
+type ButtonComponentProps = Props & Partial<TextBaseProps>;
 
 /**
  * A React wrapper around the NativeScript Button component.
  * https://facebook.github.io/react-native/docs/button#color
  */
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
-export class Button extends React.Component<ButtonProps, {}> {
+export class Button extends React.Component<ButtonComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptButton> = React.createRef<NativeScriptButton>();
 
     /* Called before render():
@@ -44,7 +44,7 @@ export class Button extends React.Component<ButtonProps, {}> {
         }
     }
 
-    shouldComponentUpdate(nextProps: ButtonProps, nextState: {}): boolean {
+    shouldComponentUpdate(nextProps: ButtonComponentProps, nextState: {}): boolean {
         // TODO: check whether this is the ideal lifecycle function to do this in.
         if(nextProps.onPress !== this.props.onPress){
             const node: NativeScriptButton|null = this.myRef.current;
