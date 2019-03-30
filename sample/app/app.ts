@@ -11,7 +11,7 @@ import { default as ReactNativeScript } from "react-nativescript/dist/index";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1 } from "./testComponents/testComponents";
 
 run({
     create: () => {
@@ -24,7 +24,7 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        NestedContentView,
+                        FlexboxLayoutTest1,
                         {},
                         null
                     ),
