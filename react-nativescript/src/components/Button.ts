@@ -4,6 +4,7 @@ import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button"
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
+import { ListenerEventsMap, attachListeners, updateListeners } from "./eventHandling";
 
 /**
  * From React Native's 'ButtonProps' interface.
@@ -27,6 +28,15 @@ type ButtonProps = Props & Partial<TextBaseProps>;
 // export class Button extends React.Component<Props & ViewBaseProp<NativeScriptButton>, {}> {
 export class Button extends React.Component<ButtonProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptButton> = React.createRef<NativeScriptButton>();
+    private eventsMap: ListenerEventsMap;
+
+    constructor(props: ButtonProps){
+        super(props);
+
+        this.eventsMap = {
+            tap: props.onPress,
+        };
+    }
 
     /* Called before render():
      * http://busypeoples.github.io/post/react-component-lifecycle/
@@ -37,7 +47,7 @@ export class Button extends React.Component<ButtonProps, {}> {
     componentDidMount(){
         const node: NativeScriptButton|null = this.myRef.current;
         if(node){
-            node.on("tap", this.props.onPress);
+            attachListeners(node, this.eventsMap);
         }
     }
 
@@ -46,9 +56,11 @@ export class Button extends React.Component<ButtonProps, {}> {
         if(nextProps.onPress !== this.props.onPress){
             const node: NativeScriptButton|null = this.myRef.current;
             if(node){
-                // Need to check where this lifecycle method is in relation to render().
-                node.off("tap", this.props.onPress);
-                node.on("tap", nextProps.onPress);
+                const eventsMap = {
+                    tap: nextProps.onPress,
+                };
+
+                updateListeners(node, this.eventsMap, eventsMap);
             } else {
                 console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
             }
@@ -59,7 +71,7 @@ export class Button extends React.Component<ButtonProps, {}> {
     componentWillUnmount(){
         const node: NativeScriptButton|null = this.myRef.current;
         if(node){
-            node.off("tap", this.props.onPress);
+            attachListeners(node, this.eventsMap);
         } else {
             console.warn(`React ref to NativeScript Button lost, so unable to update event listeners.`);
         }
