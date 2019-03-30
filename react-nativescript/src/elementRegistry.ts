@@ -49,9 +49,13 @@ import { WebView } from "tns-core-modules/ui/web-view/web-view";
 export type ConcreteViewConstructor = new (...args: any[]) => View;
 
 export type TNSElements = keyof typeof elementMap;
+// const el: TNSElements =  "h9";
 // export const elementMap: Record<string, typeof View> = {
 // TODO: see Angular implementation: https://github.com/NativeScript/nativescript-angular/blob/master/nativescript-angular/element-registry.ts#L179
-export const elementMap: Record<string, ConcreteViewConstructor> = {
+
+// FIXME: provide list of keys (TNSElements) without losing type-safety of Record<string, ConcreteViewConstructor>.
+// export const elementMap: Record<string, ConcreteViewConstructor> = {
+export const elementMap = {
     "ActionBar": ActionBar,
     "ActivityIndicator": ActivityIndicator,
     // "Animation": Animation,
