@@ -10,7 +10,8 @@ import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
 import { Color } from "tns-core-modules/color";
-import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { FlexboxLayout as NativeScriptFlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
 import { Button } from "tns-core-modules/ui/button/button";
 import { Button as ReactButton } from "react-nativescript/dist/components/Button";
 import { View as ReactView } from "react-nativescript/dist/components/View";
@@ -30,12 +31,6 @@ class MyTextField extends React.Component<{ toWhat: string }, {}> {
 class MyRootView extends React.Component<{}, {}> {
     render(){
         return React.createElement('Frame', null);
-    }
-}
-
-export class MyFlexboxLayout extends React.Component<{ flaggy: boolean }, {}> {
-    render(){
-        return React.createElement('FlexboxLayout', { flaggy: this.props.flaggy, style: { backgroundColor: "yellow" } });
     }
 }
 
@@ -64,6 +59,92 @@ export class NestedContentView extends React.Component<{}, {}> {
                     },
                 }
             )
+        );
+    }
+}
+
+export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            FlexboxLayout,
+            {
+                style: {
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                },
+            },
+            React.createElement(
+                'ContentView',
+                {
+                    backgroundColor: new Color("blue"),
+                    width: 75,
+                    height: 100
+                }
+            ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("red"),
+            //         width: 75,
+            //         height: 80
+            //     }
+            // ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("yellow"),
+            //         width: 75,
+            //         height: 140
+            //     }
+            // ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("green"),
+            //         width: 75,
+            //         height: 70
+            //     }
+            // ),
+            // React.createElement(
+            //     ReactView,
+            //     {
+            //         style: {
+            //             backgroundColor: new Color("blue"),
+            //             width: 75,
+            //             height: 100
+            //         },
+            //     }
+            // ),
+            // React.createElement(
+            //     ReactView,
+            //     {
+            //         style: {
+            //             backgroundColor: new Color("red"),
+            //             width: 75,
+            //             height: 80
+            //         },
+            //     }
+            // ),
+            // React.createElement(
+            //     ReactView,
+            //     {
+            //         style: {
+            //             backgroundColor: new Color("yellow"),
+            //             width: 75,
+            //             height: 140
+            //         },
+            //     }
+            // ),
+            // React.createElement(
+            //     ReactView,
+            //     {
+            //         style: {
+            //             backgroundColor: new Color("green"),
+            //             width: 75,
+            //             height: 70
+            //         },
+            //     }
+            // ),
         );
     }
 }

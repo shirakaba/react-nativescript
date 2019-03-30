@@ -14,6 +14,7 @@ import { Page } from "tns-core-modules/ui/page";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 // import { Page } from 'tns-core-modules/ui/page/page';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
+import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 
 type Type = TNSElements;
 type Props = Record<string, any>;
@@ -104,9 +105,19 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     }
                 } else {
                     console.warn(`Support for nesting children is experimental. children value:`, value);
+                    if(!value){
+                        console.warn(`'children' prop's value was ${value}, so skipping.`);
+                        return;
+                    }
 
                     // console.log(`value:`, value);
                     const prospectiveChild = value as React.ReactElement<any, string>;
+
+                    if(!prospectiveChild.type){
+                        console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
+                        return;
+                    }
+
                     const instanceFromChild: View|TextBase = hostConfig.createInstance(
                         prospectiveChild.type as TNSElements,
                         prospectiveChild.props,
@@ -257,6 +268,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
             parentInstance.content = child;
+        } else if(parentInstance instanceof LayoutBase){
+            parentInstance.addChild(child);
         } else {
             parentInstance._addView(child);
         }
