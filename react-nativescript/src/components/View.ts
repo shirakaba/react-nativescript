@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ViewBaseProps, TextBaseProps } from "./NativeScriptComponentTypings";
+import { ViewProps, TextBaseProps } from "./NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
@@ -14,7 +14,7 @@ interface Props {
     onShownModally?: (args: ShownModallyData) => void;
 }
 
-export type ViewComponentProps = Props & Partial<ViewBaseProps>;
+export type ViewComponentProps = Props & Partial<ViewProps>;
 
 /**
  * A React wrapper around the NativeScript View component.

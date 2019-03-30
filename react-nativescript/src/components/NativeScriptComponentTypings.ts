@@ -6,7 +6,7 @@ import { Observable } from "tns-core-modules/data/observable";
 import { Style } from "tns-core-modules/ui/styling/style/style";
 import { elementMap, TNSElements, ConcreteViewConstructor } from "../elementRegistry";
 import { View as ReactView } from "../components/View";
-import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode } from "react";
+import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode, Component } from "react";
 import { ViewComponentProps } from "./View";
 
 declare namespace React {
@@ -32,40 +32,46 @@ declare namespace React {
     //     ...children: ReactNode[]
     // ): FunctionComponentElement<ViewProps>;
 
-    function createElement(
-        type: ReactView,
-        props?: ViewComponentProps & ClassAttributes<ReactView> | null,
-        ...children: ReactNode[]
-    ): FunctionComponentElement<ViewComponentProps>;
+    // function createElement<P extends Partial<ViewProps>, T extends Component<P, {}>>(
+    //     type: T,
+    //     props?: P & ClassAttributes<T> | null,
+    //     ...children: ReactNode[]
+    // ): FunctionComponentElement<P>;
 
     function createElement(
         type: TNSElements,
         props?: ViewProps & ClassAttributes<View> | null,
         ...children: ReactNode[]
     ): FunctionComponentElement<ViewProps>;
+
+    function createElement<T = ReactView>(
+        type: T,
+        props?: ViewComponentProps & ClassAttributes<ReactView> | null,
+        ...children: ReactNode[]
+    ): FunctionComponentElement<ViewComponentProps>;
 }
 
-React.createElement(
-    ReactView,
-    {
-        style: {
-            // backgroundColor: new Color("yellow"),
-            // backgroundColor: "yellow",
-            width: "75%",
-            height: "75%"
-        },
-    },
-    React.createElement(
-        'ContentView',
-        {
-            style: {
-                backgroundColor: "orange",
-                width: "50%",
-                height: "50%"
-            },
-        }
-    )
-);
+// React.createElement(
+//     ReactView,
+//     {
+//         style: {
+//             // backgroundColor: new Color("yellow"),
+//             // backgroundColor: "yellow",
+//             width: "75%",
+//             height: "75%"
+//         },
+//     },
+//     React.createElement(
+//         'ContentView',
+//         {
+//             style: {
+//                 backgroundColor: "orange",
+//                 width: "50%",
+//                 height: "50%"
+//             },
+//         }
+//     )
+// );
 
 /* Emits unreadable typings */
 // export type DeepPartial<T> = {
