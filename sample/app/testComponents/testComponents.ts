@@ -81,30 +81,30 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
                     height: 100
                 }
             ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("red"),
-            //         width: 75,
-            //         height: 80
-            //     }
-            // ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("yellow"),
-            //         width: 75,
-            //         height: 140
-            //     }
-            // ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("green"),
-            //         width: 75,
-            //         height: 70
-            //     }
-            // ),
+            React.createElement(
+                'ContentView',
+                {
+                    backgroundColor: new Color("red"),
+                    width: 75,
+                    height: 80
+                }
+            ),
+            React.createElement(
+                'ContentView',
+                {
+                    backgroundColor: new Color("yellow"),
+                    width: 75,
+                    height: 140
+                }
+            ),
+            React.createElement(
+                'ContentView',
+                {
+                    backgroundColor: new Color("lightgreen"),
+                    width: 75,
+                    height: 70
+                }
+            ),
             // React.createElement(
             //     ReactView,
             //     {

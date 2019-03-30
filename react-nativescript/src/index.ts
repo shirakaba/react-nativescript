@@ -33,6 +33,76 @@ const noTimeoutValue: NoTimeout = undefined;
 const rootHostContext: HostContext = {};
 const childHostContext: HostContext = {};
 
+function handleChild(
+    type: Type,
+    props: Props,
+    rootContainerInstance: Container,
+    hostContext: HostContext,
+    internalInstanceHandle: ReactReconciler.OpaqueHandle,
+    view: View,
+    value: any,
+){
+    
+}
+
+function handleChildrenProp(
+    type: Type,
+    props: Props,
+    rootContainerInstance: Container,
+    hostContext: HostContext,
+    internalInstanceHandle: ReactReconciler.OpaqueHandle,
+    view: View,
+    value: any,
+){
+    if(value === null){
+        // No children specified.
+        return;
+    }
+    if(Array.isArray(value)){
+        console.warn(`'children' value was array; support is experimental!`);
+    }
+
+    const valueArray: any[] = Array.isArray(value) ? value : [value];
+
+    valueArray.forEach((value: any) => {
+        if(hostConfig.shouldSetTextContent(type, props)){
+            if(view instanceof TextBase){
+                // WARNING: unsure that this is how you're supposed to use HostConfig.
+                hostConfig.commitTextUpdate(view, "", value);
+                console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
+            } else {
+                const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
+    
+                console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
+                hostConfig.appendChild(view, tv);
+            }
+        } else {
+            console.warn(`Support for nesting children is experimental. children value:`, value);
+            if(!value){
+                console.warn(`'children' prop's value was ${value}, so skipping.`);
+                return;
+            }
+    
+            // console.log(`value:`, value);
+            const prospectiveChild = value as React.ReactElement<any, string>;
+    
+            if(!prospectiveChild.type){
+                console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
+                return;
+            }
+    
+            const instanceFromChild: View|TextBase = hostConfig.createInstance(
+                prospectiveChild.type as TNSElements,
+                prospectiveChild.props,
+                rootContainerInstance,
+                hostContext,
+                internalInstanceHandle
+            );
+            hostConfig.appendChild(view, instanceFromChild);
+        }
+    });
+}
+
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout> = {
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
@@ -88,50 +158,15 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
             if(prop === "children"){
-                if(value === null){
-                    // No children specified.
-                    return;
-                }
-                if(hostConfig.shouldSetTextContent(type, props)){
-                    if(view instanceof TextBase){
-                        // WARNING: unsure that this is how you're supposed to use HostConfig.
-                        hostConfig.commitTextUpdate(view, "", value);
-                        console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
-                    } else {
-                        const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
-
-                        console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
-                        hostConfig.appendChild(view, tv);
-                    }
-                } else {
-                    console.warn(`Support for nesting children is experimental. children value:`, value);
-                    if(!value){
-                        console.warn(`'children' prop's value was ${value}, so skipping.`);
-                        return;
-                    }
-
-                    // console.log(`value:`, value);
-                    const prospectiveChild = value as React.ReactElement<any, string>;
-
-                    if(!prospectiveChild.type){
-                        console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
-                        return;
-                    }
-
-                    const instanceFromChild: View|TextBase = hostConfig.createInstance(
-                        prospectiveChild.type as TNSElements,
-                        prospectiveChild.props,
-                        rootContainerInstance,
-                        hostContext,
-                        internalInstanceHandle
-                    );
-                    hostConfig.appendChild(view, instanceFromChild);
-                }
-            // } else if(prop.startsWith("on") && prop.length > "on".length){
-                // console.warn(`Support for event listeners is experimental - based on removing the 'on' from the start of the listener name.`);
-
-                // const eventName: string = prop["on".length].toLowerCase() + prop.slice("on".length + 1);
-                // view.on(eventName, value);
+                return handleChildrenProp(
+                    type,
+                    props,
+                    rootContainerInstance,
+                    hostContext,
+                    internalInstanceHandle,
+                    view,
+                    value
+                );
             } else if(prop === "className"){
                 console.warn(`Note that 'className' is intentionally not remapped to 'class'.`);
                 view.set(prop, value);
