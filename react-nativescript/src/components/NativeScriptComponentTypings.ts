@@ -4,18 +4,68 @@ import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { Observable } from "tns-core-modules/data/observable";
 import { Style } from "tns-core-modules/ui/styling/style/style";
-import { elementMap, TNSElements } from "../elementRegistry";
+import { elementMap, TNSElements, ConcreteViewConstructor } from "../elementRegistry";
+import { View as ReactView } from "../components/View";
 import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode } from "react";
 import { ViewComponentProps } from "./View";
 
 declare namespace React {
+    // function createElement<P extends ViewBaseProps, T extends ViewBase>(
+    //     type: TNSElements,
+    //     props?: P | null,
+    //     ...children: ReactNode[]
+    // ): DetailedReactHTMLElement<P, T>;
+
+    // function createElement<P extends ViewProps, T extends View>(
+    //     type: 'ContentView',
+    //     props?: P | null,
+    //     ...children: ReactNode[]
+    // ): DetailedReactHTMLElement<P, T>;
+
+    // interface ReactContentViewElement extends DOMElement<ViewComponentProps, Observable> {
+    //     type: "ContentView";
+    // }
+
+    // function createElement(
+    //     type: 'ContentView',
+    //     props?: ViewComponentProps & ClassAttributes<ContentView> | null,
+    //     ...children: ReactNode[]
+    // ): FunctionComponentElement<ViewProps>;
 
     function createElement(
-        type: 'ContentView',
-        props?: ViewComponentProps & ClassAttributes<ContentView> | null,
+        type: ReactView,
+        props?: ViewComponentProps & ClassAttributes<ReactView> | null,
+        ...children: ReactNode[]
+    ): FunctionComponentElement<ViewComponentProps>;
+
+    function createElement(
+        type: TNSElements,
+        props?: ViewProps & ClassAttributes<View> | null,
         ...children: ReactNode[]
     ): FunctionComponentElement<ViewProps>;
 }
+
+React.createElement(
+    ReactView,
+    {
+        style: {
+            // backgroundColor: new Color("yellow"),
+            // backgroundColor: "yellow",
+            width: "75%",
+            height: "75%"
+        },
+    },
+    React.createElement(
+        'ContentView',
+        {
+            style: {
+                backgroundColor: "orange",
+                width: "50%",
+                height: "50%"
+            },
+        }
+    )
+);
 
 /* Emits unreadable typings */
 // export type DeepPartial<T> = {
@@ -30,7 +80,6 @@ type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
 interface PartialStyleProp {
     style: Partial<StylePropContents>
-    // bile: number
 }
 
 /**
