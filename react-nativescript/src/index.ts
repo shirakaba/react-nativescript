@@ -108,7 +108,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     // console.log(`value:`, value);
                     const prospectiveChild = value as React.ReactElement<any, string>;
                     const instanceFromChild: View|TextBase = hostConfig.createInstance(
-                        prospectiveChild.type,
+                        prospectiveChild.type as TNSElements,
                         prospectiveChild.props,
                         rootContainerInstance,
                         hostContext,
