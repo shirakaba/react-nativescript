@@ -50,8 +50,8 @@ export class NestedContentView extends React.Component<{}, {}> {
                     width: { unit: "%", value: 75 },
                     height: { unit: "%", value: 75 }
                 },
-                backgroundColor: "yellow",
-                width: 75,
+                // backgroundColor: "yellow",
+                // width: 75,
             },
             React.createElement(
                 'ContentView',

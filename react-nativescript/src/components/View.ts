@@ -4,12 +4,13 @@ import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
+import { updateListeners, detachListeners, attachListeners, ListenerEventsMap } from "./eventHandling";
 
 /**
  * From React Native's 'ViewProps' interface.
  */
 interface Props {
-    onLayout?: (args: any) => void;
+    onLayout?: (...args: any[]) => void;
     onShowingModally?: (args: ShownModallyData) => void;
     onShownModally?: (args: ShownModallyData) => void;
 }
@@ -23,6 +24,19 @@ export type ViewComponentProps = Props & Partial<ViewProps>;
 // export class View extends React.Component<Props & ViewBaseProp<NativeScriptView>, {}> {
 export class View extends React.Component<ViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptView> = React.createRef<NativeScriptView>();
+    private eventsMap: ListenerEventsMap;
+
+    constructor(props: ViewComponentProps){
+        super(props);
+
+        const { onLayout, onShowingModally, onShownModally } = this.props;
+
+        this.eventsMap = {
+            [NativeScriptView.layoutChangedEvent]: onLayout,
+            [NativeScriptView.showingModallyEvent]: onShowingModally,
+            [NativeScriptView.shownModallyEvent]: onShownModally
+        };
+    }
 
     /* Called before render():
      * http://busypeoples.github.io/post/react-component-lifecycle/
@@ -33,17 +47,10 @@ export class View extends React.Component<ViewComponentProps, {}> {
     componentDidMount(){
         const node: NativeScriptView|null = this.myRef.current;
         if(node){
-            if(this.props.onLayout){
-                node.on(NativeScriptView.layoutChangedEvent, this.props.onLayout);
-            }
-            if(this.props.onShowingModally){
-                node.on(NativeScriptView.showingModallyEvent, this.props.onShowingModally);
-            }
-            if(this.props.onShownModally){
-                node.on(NativeScriptView.shownModallyEvent, this.props.onShownModally);
-            }
+            attachListeners(node, this.eventsMap);
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
         }
-        
     }
 
     shouldComponentUpdate(nextProps: ViewComponentProps, nextState: {}): boolean {
@@ -51,25 +58,18 @@ export class View extends React.Component<ViewComponentProps, {}> {
         if(nextProps.onLayout !== this.props.onLayout){
             const node: NativeScriptView|null = this.myRef.current;
             if(node){
-                // Need to check where this lifecycle method is in relation to render().
-                if(this.props.onLayout){
-                    node.off(NativeScriptView.layoutChangedEvent, this.props.onLayout);
-                }
-                if(this.props.onShowingModally){
-                    node.off(NativeScriptView.showingModallyEvent, this.props.onShowingModally);
-                }
-                if(this.props.onShownModally){
-                    node.off(NativeScriptView.shownModallyEvent, this.props.onShownModally);
-                }
-                if(nextProps.onLayout){
-                    node.on(NativeScriptView.layoutChangedEvent, nextProps.onLayout);
-                }
-                if(nextProps.onShowingModally){
-                    node.on(NativeScriptView.showingModallyEvent, nextProps.onShowingModally);
-                }
-                if(nextProps.onShownModally){
-                    node.on(NativeScriptView.shownModallyEvent, this.props.onShownModally);
-                }
+                const { onLayout, onShowingModally, onShownModally } = nextProps;
+
+                // TODO: find a more efficient way to do this (i.e. don't create a new object).
+                const eventsMap = {
+                    [NativeScriptView.layoutChangedEvent]: onLayout,
+                    [NativeScriptView.showingModallyEvent]: onShowingModally,
+                    [NativeScriptView.shownModallyEvent]: onShownModally,
+                };
+
+                updateListeners(node, this.eventsMap, eventsMap);
+
+                this.eventsMap = eventsMap;
             } else {
                 console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             }
@@ -80,15 +80,7 @@ export class View extends React.Component<ViewComponentProps, {}> {
     componentWillUnmount(){
         const node: NativeScriptView|null = this.myRef.current;
         if(node){
-            if(this.props.onLayout){
-                node.off(NativeScriptView.layoutChangedEvent, this.props.onLayout);
-            }
-            if(this.props.onShowingModally){
-                node.off(NativeScriptView.showingModallyEvent, this.props.onShowingModally);
-            }
-            if(this.props.onShownModally){
-                node.off(NativeScriptView.shownModallyEvent, this.props.onShownModally);
-            }
+            detachListeners(node, this.eventsMap);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to clean up event listeners.`);
         }
