@@ -7,6 +7,8 @@ import { Style } from "tns-core-modules/ui/styling/style/style";
 import { elementMap, TNSElements, ConcreteViewConstructor } from "../elementRegistry";
 import { View as ReactView } from "../components/View";
 import { ViewComponentProps } from "./View";
+import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -145,6 +147,28 @@ export type ContainerViewProps = ViewProps & Pick<
     ContainerView,
     "iosOverflowSafeArea"
 >
+
+export type CustomLayoutViewProps = ContainerViewProps;
+
+export type LayoutBaseProps = CustomLayoutViewProps & Pick<
+    LayoutBase,
+    "padding"|
+    "paddingBottom"|
+    "paddingLeft"|
+    "paddingRight"|
+    "paddingTop"|
+    "clipToBounds"|
+    "isPassThroughParentEnabled"    
+>;
+
+export type FlexboxLayoutProps = LayoutBaseProps & Pick<
+    FlexboxLayout,
+    "flexDirection"|
+    "flexWrap"|
+    "justifyContent"|
+    "alignItems"|
+    "alignContent"
+>;
 
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
