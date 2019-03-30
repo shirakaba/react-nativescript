@@ -42,9 +42,6 @@ class NestedContentView extends React.Component<{}, {}> {
                 },
                 backgroundColor: "yellow",
                 width: 75,
-                // height: "75%",
-                // formNoValidate: true, // Worrying that it's picking up InputHTMLAttributes<>
-                // onChange: () => void;
             },
             React.createElement(
                 'ContentView',
