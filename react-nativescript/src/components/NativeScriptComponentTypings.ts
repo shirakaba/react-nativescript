@@ -6,7 +6,7 @@ import { Observable } from "tns-core-modules/data/observable";
 import { Style } from "tns-core-modules/ui/styling/style/style";
 import { elementMap, TNSElements, ConcreteViewConstructor } from "../elementRegistry";
 import { View as ReactView } from "../components/View";
-import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode, Component } from "react";
+import { ClassAttributes, DOMElement, SVGAttributes, FunctionComponentElement, ReactNode, Component, FunctionComponent, ComponentClass, Attributes, ReactElement } from "react";
 import { ViewComponentProps } from "./View";
 
 declare namespace React {
@@ -38,17 +38,28 @@ declare namespace React {
     //     ...children: ReactNode[]
     // ): FunctionComponentElement<P>;
 
-    function createElement(
-        type: TNSElements,
-        props?: ViewProps & ClassAttributes<View> | null,
-        ...children: ReactNode[]
-    ): FunctionComponentElement<ViewProps>;
+    // function createElement(
+    //     type: TNSElements,
+    //     props?: ViewProps & ClassAttributes<View> | null,
+    //     ...children: ReactNode[]
+    // ): FunctionComponentElement<ViewProps>;
 
-    function createElement<T = ReactView>(
-        type: T,
-        props?: ViewComponentProps & ClassAttributes<ReactView> | null,
-        ...children: ReactNode[]
-    ): FunctionComponentElement<ViewComponentProps>;
+    // function createElement<T = ReactView>(
+    //     type: T,
+    //     props?: ViewComponentProps & ClassAttributes<ReactView> | null,
+    //     ...children: ReactNode[]
+    // ): FunctionComponentElement<ViewComponentProps>;
+
+    // function createElement<T = ReactView>(
+    //     type: T,
+    //     props?: ViewComponentProps & ClassAttributes<ReactView> | null,
+    //     ...children: ReactNode[]
+    // ): ReactNode;
+
+    // function createElement<P extends {}>(
+    //     type: FunctionComponent<P> | ComponentClass<P> | string,
+    //     props?: Attributes & P | null,
+    //     ...children: ReactNode[]): ReactElement<P>;
 }
 
 // React.createElement(
