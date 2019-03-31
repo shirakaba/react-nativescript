@@ -11,6 +11,7 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
+import { TextField } from "tns-core-modules/ui/text-field/text-field";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -158,6 +159,7 @@ EditableTextBase,
 >;
 
 export type TextViewProps = EditableTextBaseProps & Pick<TextView, "android"|"ios">
+export type TextFieldProps = EditableTextBaseProps & Pick<TextField, "android"|"ios"|"secure">
 
 export type ContainerViewProps = ViewProps & Pick<
     ContainerView,
