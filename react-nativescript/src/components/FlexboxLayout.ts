@@ -1,6 +1,6 @@
 import * as React from "react";
 import { FlexboxLayoutProps } from "./NativeScriptComponentTypings";
-import { View as NativeScriptView } from "tns-core-modules/ui/core/view/view";
+import { FlexboxLayout as NativeScriptFlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
 interface Props {
     // No mandatory props.
@@ -13,7 +13,7 @@ export type FlexboxLayoutComponentProps = Props & Partial<FlexboxLayoutProps>;
  * See: ui/layouts/flexbox-layout
  */
 export class FlexboxLayout extends React.Component<FlexboxLayoutComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptView> = React.createRef<NativeScriptView>();
+    private readonly myRef: React.RefObject<NativeScriptFlexboxLayout> = React.createRef<NativeScriptFlexboxLayout>();
 
     render(){
         const { children, ...rest } = this.props;
