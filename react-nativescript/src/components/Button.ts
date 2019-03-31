@@ -72,11 +72,11 @@ export class Button extends React.Component<ButtonComponentProps, {}> {
         return React.createElement(
                 'Button',
                 {
+                    className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     ...rest,
                     [isIOS ? "color" : "backgroundColor"]: color, // Should this be done inside style instead?
                     text: title, // From TextBase
                     isEnabled: !!!disabled,
-                    className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     style,
                     ref: this.myRef
                 },
