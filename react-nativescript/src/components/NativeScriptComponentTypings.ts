@@ -14,6 +14,7 @@ import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editabl
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
 import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
+import { ListView } from "tns-core-modules/ui/list-view/list-view";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -190,6 +191,19 @@ export type FlexboxLayoutProps = LayoutBaseProps & Pick<
     "alignContent"
 >;
 
+export type ListViewProps = ViewProps & Pick<
+    ListView,
+    "android"|
+    "ios"|
+    "items"|
+    "itemTemplate"|
+    "itemTemplates"|
+    "itemTemplateSelector"|
+    "itemIdGenerator"|
+    "separatorColor"|
+    "rowHeight"|
+    "iosEstimatedRowHeight"
+>;
 
 export type HtmlViewProps = LayoutBaseProps & Pick<
     HtmlView,
