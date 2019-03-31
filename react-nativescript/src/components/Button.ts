@@ -46,13 +46,11 @@ export class Button extends React.Component<ButtonComponentProps, {}> {
 
     shouldComponentUpdate(nextProps: ButtonComponentProps, nextState: {}): boolean {
         // TODO: check whether this is the ideal lifecycle function to do this in.
-        if(nextProps.onPress !== this.props.onPress){
-            const node: NativeScriptButton|null = this.myRef.current;
-            if(node){
-                updateListener(node, "tap", this.props.onPress, nextProps.onPress);
-            } else {
-                console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
-            }
+        const node: NativeScriptButton|null = this.myRef.current;
+        if(node){
+            updateListener(node, "tap", this.props.onPress, nextProps.onPress);
+        } else {
+            console.warn(`React ref to NativeScript Button lost, so unable to clean up event listeners.`);
         }
         return true;
     }
