@@ -53,6 +53,7 @@ export class View extends React.Component<ViewComponentProps, {}> {
 
     shouldComponentUpdate(nextProps: ViewComponentProps, nextState: {}): boolean {
         // TODO: check whether this is the ideal lifecycle function to do this in.
+        // http://busypeoples.github.io/post/react-component-lifecycle/
         if(nextProps.onLayout !== this.props.onLayout){
             const node: NativeScriptView|null = this.myRef.current;
             if(node){
@@ -86,7 +87,13 @@ export class View extends React.Component<ViewComponentProps, {}> {
     }
 
     render(){
-        const { onLayout, onShowingModally, onShownModally, children, ...rest } = this.props;
+        const {
+            onLayout,
+            onShowingModally,
+            onShownModally,
+            children,
+            ...rest
+        } = this.props;
 
         return React.createElement(
             'ContentView',

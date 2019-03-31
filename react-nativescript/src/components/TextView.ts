@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextViewProps } from "./NativeScriptComponentTypings";
-import { View as NativeScriptView } from "tns-core-modules/ui/core/view/view";
+import { TextView as NativeScriptTextView } from "tns-core-modules/ui/text-view/text-view";
 
 interface Props {
     // No mandatory props.
@@ -13,7 +13,7 @@ export type TextViewComponentProps = Props & Partial<TextViewProps>;
  * See: ui/layouts/flexbox-layout
  */
 export class TextView extends React.Component<TextViewComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptView> = React.createRef<NativeScriptView>();
+    private readonly myRef: React.RefObject<NativeScriptTextView> = React.createRef<NativeScriptTextView>();
 
     render(){
         const { children, ...rest } = this.props;
