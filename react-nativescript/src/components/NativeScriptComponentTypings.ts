@@ -9,6 +9,8 @@ import { View as ReactView } from "../components/View";
 import { ViewComponentProps } from "./View";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { TextView } from "tns-core-modules/ui/text-view/text-view";
+import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -142,6 +144,20 @@ export type TextBaseProps = ViewProps & Pick<
     "paddingRight"|
     "paddingTop"
 >
+
+export type EditableTextBaseProps = TextBaseProps & Pick<
+EditableTextBase,
+    "keyboardType"|
+    "returnKeyType"|
+    "updateTextTrigger"|
+    "autocapitalizationType"|
+    "editable"|
+    "autocorrect"|
+    "hint"|
+    "maxLength"
+>;
+
+export type TextViewProps = EditableTextBaseProps & Pick<TextView, "android"|"ios">
 
 export type ContainerViewProps = ViewProps & Pick<
     ContainerView,

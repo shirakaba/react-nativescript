@@ -7,11 +7,14 @@ purpose of the file is to pass control to the app’s first module.
 import * as application from "tns-core-modules/application";
 import { run } from "tns-core-modules/application";
 import * as React from "react";
-import { default as ReactNativeScript } from "react-nativescript/dist/index";
-import { Frame } from "tns-core-modules/ui/frame/frame";
+import { default as ReactNativeScript } from "react-nativescript/dist/index"
+import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";;
+import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
 import { ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
 import { NestedContentView, FlexboxLayoutTest1 } from "./testComponents/testComponents";
+import { View as ReactView } from "react-nativescript/dist/components/View";
+
 
 run({
     create: () => {
@@ -24,9 +27,9 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        FlexboxLayoutTest1,
-                        {},
-                        null
+                        ReactTextView,
+                        null,
+                        "world"
                     ),
                     page,
                     () => {
