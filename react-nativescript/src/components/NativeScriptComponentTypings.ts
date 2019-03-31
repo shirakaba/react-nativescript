@@ -12,6 +12,7 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { WebView } from "tns-core-modules/ui/web-view/web-view";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -186,6 +187,15 @@ export type FlexboxLayoutProps = LayoutBaseProps & Pick<
     "justifyContent"|
     "alignItems"|
     "alignContent"
+>;
+
+export type WebViewProps = LayoutBaseProps & Pick<
+    WebView,
+    "android"|
+    "ios"|
+    "src"|
+    "canGoBack"|
+    "canGoForward"
 >;
 
 // export type TextBaseProp<T extends TextBase> = {
