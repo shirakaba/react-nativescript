@@ -87,14 +87,16 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 {
                     className: "list-group-item"
                 },
-                React.createElement(
-                    "Label",
-                    {
-                        text: "one-item test",
-                        textWrap: true,
-                        class: "title"
-                    }
-                )
+                ...[this.props.items].map((item) => {
+                    return React.createElement(
+                        "Label",
+                        {
+                            text: "one-item test",
+                            textWrap: true,
+                            class: "title"
+                        }
+                    )
+                })
             )
         );
     }
