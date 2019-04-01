@@ -1,8 +1,9 @@
 import * as React from "react";
 import { ListViewProps } from "./NativeScriptComponentTypings";
 import { ListView as NativeScriptListView, ItemEventData, knownTemplates } from "tns-core-modules/ui/list-view/list-view";
-import { EventData } from "tns-core-modules/ui/core/view/view";
+import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "./eventHandling";
+import { Label } from "tns-core-modules/ui/label/label";
 
 interface Props {
     items: ListViewProps["items"],
@@ -10,6 +11,10 @@ interface Props {
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
     // TODO: support all the inherited props from the View component, i.e. listeners!
+}
+
+interface State {
+    onItemLoading: (args: ItemEventData) => void;
 }
 
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
@@ -20,16 +25,35 @@ export type ListViewComponentProps = Props & Partial<ListViewProps>;
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
  * See: ui/list-view/list-view
  */
-export class ListView extends React.Component<ListViewComponentProps, {}> {
+export class ListView extends React.Component<ListViewComponentProps, State> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
+
+    private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
+        console.log(`[defaultOnItemLoading] Called! Args: `, args);
+        let view: View = args.view;
+        if(!view) {
+            view = new Label();
+            args.view = view;
+        }
+        (view as Label).text = "Item number: " + args.index;
+    }
+
+    constructor(props: ListViewComponentProps){
+        super(props);
+
+        this.state = {
+            onItemLoading: this.props.onItemLoading || this.defaultOnItemLoading
+        }
+    }
 
     componentDidMount(){
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
-            if(onItemLoading){
-                node.on(NativeScriptListView.itemLoadingEvent, onItemLoading);
-            }
+            // if(onItemLoading){
+            //     node.on(NativeScriptListView.itemLoadingEvent, onItemLoading);
+            // }
+            node.on(NativeScriptListView.itemLoadingEvent, this.state.onItemLoading);
             if(onItemTap){
                 node.on(NativeScriptListView.itemTapEvent, onItemTap);
             }
@@ -54,6 +78,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
 
     componentWillUnmount(){
         const node: NativeScriptListView|null = this.myRef.current;
+        
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
             if(onItemLoading){
@@ -80,6 +105,16 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 className: "list-group",
                 /* Maybe we need to supply a template to map each item to a NativeScript View? */
                 // itemTemplate: knownTemplates.itemTemplate,
+                _defaultTemplate: {
+                    key: 'default',
+                    createView: () => {
+                        console.log(`I GOT CALLED`);
+                        // if (this.itemTemplate) {
+                        //     return parse(this.itemTemplate, this);
+                        // }
+                        return undefined;
+                    }
+                },
                 ...rest,
                 /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
                  * Will have to figure out  */
