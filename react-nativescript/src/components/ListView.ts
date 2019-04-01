@@ -50,10 +50,10 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
-            // if(onItemLoading){
-            //     node.on(NativeScriptListView.itemLoadingEvent, onItemLoading);
-            // }
-            node.on(NativeScriptListView.itemLoadingEvent, this.state.onItemLoading);
+            if(onItemLoading){
+                node.on(NativeScriptListView.itemLoadingEvent, onItemLoading);
+            }
+            // node.on(NativeScriptListView.itemLoadingEvent, this.state.onItemLoading);
             if(onItemTap){
                 node.on(NativeScriptListView.itemTapEvent, onItemTap);
             }
@@ -105,16 +105,18 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 className: "list-group",
                 /* Maybe we need to supply a template to map each item to a NativeScript View? */
                 // itemTemplate: knownTemplates.itemTemplate,
-                _defaultTemplate: {
+                _itemTemplatesInternal: [{
                     key: 'default',
-                    createView: () => {
-                        console.log(`I GOT CALLED`);
+                    createView: (args: any) => {
+                        console.log(`I GOT CALLED. args:`, args);
                         // if (this.itemTemplate) {
                         //     return parse(this.itemTemplate, this);
                         // }
-                        return undefined;
+                        const label = new Label();
+                        label.text = "test";
+                        return label;
                     }
-                },
+                }],
                 ...rest,
                 /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
                  * Will have to figure out  */
