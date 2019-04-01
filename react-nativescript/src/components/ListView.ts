@@ -4,6 +4,8 @@ import { ListView as NativeScriptListView, ItemEventData, knownTemplates } from 
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "./eventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
+import { default as ReactNativeScript } from "../index"
+import { ContentView } from "tns-core-modules/ui/page/page";
 
 interface Props {
     items: ListViewProps["items"],
@@ -25,21 +27,39 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
-        console.log(`[defaultOnItemLoading] Called! Args: `, args);
+        // console.log(`[defaultOnItemLoading] Called! Args: `, args);
         let view: View = args.view;
-        if(!view) {
-            view = new Label();
-            args.view = view;
+        if(!view){
+            const contentView = new ContentView();
+            contentView.backgroundColor = "orange";
+
+            ReactNativeScript.render(
+                React.createElement(
+                    "Label",
+                    {
+                        text: `[React] Item: ${this.props.items[args.index]}`
+                    },
+                    null
+                ),
+                contentView,
+                () => {
+                    console.log(`[ListView cell] Container #${args.index} updated!`);
+                }
+            );
+            args.view = contentView;
+        } else {
+            console.log(`Not sure how to pass props into unreferenced React tree...`);
         }
-        (view as Label).text = "Item number: " + args.index;
+        // (view as ContentView).text = "Item number: " + args.index;
     }
 
     componentDidMount(){
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
-            node.on(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
             
+            node.on(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
+
             if(onItemTap){
                 node.on(NativeScriptListView.itemTapEvent, onItemTap);
             }
