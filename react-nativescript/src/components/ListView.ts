@@ -5,8 +5,7 @@ import { EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "./eventHandling";
 
 interface Props {
-    // items: ListViewProps["items"],
-    items: any[], // For simplicity, we don't support ItemSource just yet.
+    items: ListViewProps["items"],
     onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
@@ -70,8 +69,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
     }
 
     render(){
-        const { children, items, ...rest } = this.props;
-        // console.log(`[ListView] got items:`, items);
+        const { children, ...rest } = this.props;
         console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
@@ -89,20 +87,14 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 {
                     className: "list-group-item"
                 },
-                (items as any[]).map((item: any, i: number) => {
-                    // console.log(`Mapping item:`, item);
-
-                    return React.createElement(
-                        "Label",
-                        {
-                            key: i, // required by React
-                            text: `Text: ${item.text}`,
-                            textWrap: true,
-                            className: "title"
-                        },
-                        // null
-                    )
-                })
+                React.createElement(
+                    "Label",
+                    {
+                        text: "one-item test",
+                        textWrap: true,
+                        class: "title"
+                    }
+                )
             )
         );
     }
