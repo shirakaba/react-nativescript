@@ -13,10 +13,6 @@ interface Props {
     // TODO: support all the inherited props from the View component, i.e. listeners!
 }
 
-interface State {
-    onItemLoading: (args: ItemEventData) => void;
-}
-
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
 
 /**
@@ -25,7 +21,7 @@ export type ListViewComponentProps = Props & Partial<ListViewProps>;
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
  * See: ui/list-view/list-view
  */
-export class ListView extends React.Component<ListViewComponentProps, State> {
+export class ListView extends React.Component<ListViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
@@ -38,22 +34,12 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         (view as Label).text = "Item number: " + args.index;
     }
 
-    constructor(props: ListViewComponentProps){
-        super(props);
-
-        this.state = {
-            onItemLoading: this.props.onItemLoading || this.defaultOnItemLoading
-        }
-    }
-
     componentDidMount(){
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
-            if(onItemLoading){
-                node.on(NativeScriptListView.itemLoadingEvent, onItemLoading);
-            }
-            // node.on(NativeScriptListView.itemLoadingEvent, this.state.onItemLoading);
+            node.on(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
+            
             if(onItemTap){
                 node.on(NativeScriptListView.itemTapEvent, onItemTap);
             }
@@ -67,7 +53,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
-            updateListener(node, NativeScriptListView.itemLoadingEvent, this.props.onItemLoading, nextProps.onItemLoading);
+            updateListener(node, NativeScriptListView.itemLoadingEvent, this.props.onItemLoading || this.defaultOnItemLoading, nextProps.onItemLoading);
             updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
             updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
         } else {
@@ -82,7 +68,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
             if(onItemLoading){
-                node.off(NativeScriptListView.itemLoadingEvent, onItemLoading);
+                node.off(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
             }
             if(onItemTap){
                 node.off(NativeScriptListView.itemTapEvent, onItemTap);
@@ -105,18 +91,17 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 className: "list-group",
                 /* Maybe we need to supply a template to map each item to a NativeScript View? */
                 // itemTemplate: knownTemplates.itemTemplate,
-                _itemTemplatesInternal: [{
-                    key: 'default',
-                    createView: (args: any) => {
-                        console.log(`I GOT CALLED. args:`, args);
-                        // if (this.itemTemplate) {
-                        //     return parse(this.itemTemplate, this);
-                        // }
-                        const label = new Label();
-                        label.text = "test";
-                        return label;
-                    }
-                }],
+
+                /* This seems to make the initial template; not too useful as it receives no args with which to customise it */
+                // _itemTemplatesInternal: [{
+                //     key: 'default',
+                //     createView: (args: undefined) => {
+                //         const label = new Label();
+                //         label.text = "test";
+                //         return label;
+                //     }
+                // }],
+
                 ...rest,
                 /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
                  * Will have to figure out  */
