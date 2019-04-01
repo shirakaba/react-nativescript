@@ -69,7 +69,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
     }
 
     render(){
-        const { children, ...rest } = this.props;
+        const { children, items, ...rest } = this.props;
         console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
@@ -91,7 +91,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                     return React.createElement(
                         "Label",
                         {
-                            text: `${item.text}`,
+                            text: `Text: ${item.text}`,
                             textWrap: true,
                             class: "title"
                         }
