@@ -1,5 +1,6 @@
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
+import * as React from 'react';
 
 import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegistry';
 // TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
@@ -77,20 +78,32 @@ function handleChildrenProp(
                 hostConfig.appendChild(view, tv);
             }
         } else {
-            console.warn(`Support for nesting children is experimental. children value:`, value);
             if(!value){
                 console.warn(`'children' prop's value was ${value}, so skipping.`);
                 return;
             }
-    
+
             // console.log(`value:`, value);
             const prospectiveChild = value as React.ReactElement<any, string>;
+
+            (()=>{
+                const { children, ...rest } = prospectiveChild.props;
+                console.warn(`Support for nesting children is experimental. child type: ${prospectiveChild.type}. props:`, { ...rest });
+            })();
     
             if(!prospectiveChild.type){
                 console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
                 return;
             }
     
+            // FIXME: works only when value has a type listed in the element registry. Custom elements, e.g. ContentView, have the following type:
+            /*
+                function View() {
+                    var _this = _super !== null && _super.apply(this, arguments) || this;
+                    _this.myRef = React.createRef();
+                    return _this;
+                }
+            */
             const instanceFromChild: View|TextBase = hostConfig.createInstance(
                 prospectiveChild.type as TNSElements,
                 prospectiveChild.props,
@@ -99,6 +112,8 @@ function handleChildrenProp(
                 internalInstanceHandle
             );
             hostConfig.appendChild(view, instanceFromChild);
+            
+            // hostConfig.appendChild(view, value);
         }
     });
 }
@@ -139,20 +154,45 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): Instance {
-        const viewConstructor: ConcreteViewConstructor = elementMap[type];
-        if(!viewConstructor){
-            throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
+        (()=>{
+            const { children, ...rest } = props;
+            console.log(`[createInstance() 1a] type: ${type}. props:`, { ...rest });
+        })();
+        // console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
+
+        let view: View;
+        const viewConstructor: ConcreteViewConstructor|null = typeof type === "string" ? elementMap[type] : null;
+        if(viewConstructor){
+            view = new viewConstructor();
+        } else {
+            // console.log(`Warning: type ${type} not found in element registry.`);
+            // view = (type as any)();
+
+            const experiment = new (type as any)(props);
+
+            console.log(`Warning: type ${type} not found in element registry, so experimenting:`, experiment);
+
+            // view = experiment;
+
+            // const created = React.createElement(
+            //     type,
+            //     {},
+            //     null
+            // );
+
+            // console.log(`Warning: type ${type} not found in element registry, so returning blank ContentView. However, can create element:`, created);
+            // console.log(`Created element had type:`, created.type);
+
+            return new ContentView();
+
+            // throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
+
+            // view = new elementMap[props.type]();
         }
-        console.log(`[createInstance() 1a] type: ${type}. props:`, props);
-        console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
         // FIXME: https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized
         // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
-        // TODO: at the moment, I only support components from tns-core-modules. Ultimately we want to support any registered component.
-        const view: View = new viewConstructor();
 
-        console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
-
-        console.log(`[createInstance() 1d] type: ${type}. iterating props:`, props);
+        // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
 
@@ -167,9 +207,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     view,
                     value
                 );
-            } else if(prop === "className"){
-                console.warn(`Note that 'className' is intentionally not remapped to 'class'.`);
-                view.set(prop, value);
+            } else if(prop === "class"){
+                console.warn(`Note that 'class' is remapped to 'className'.`);
+                view.set("className", value);
             } else if(prop === "style"){
                 if(typeof value === "undefined"){
                     console.warn(`'style' prop was specified, but value was undefined.`);
@@ -190,7 +230,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
             // TODO: should probably notify of property change, too.
         });
-        console.log(`[createInstance() 1e] type: ${type}. returning:`, view);
+        // console.log(`[createInstance() 1e] type: ${type}. returning:`, view);
 
         // TODO: also merge in the hostContext (whatever that is).
 
@@ -297,15 +337,18 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendChild()]`, parentInstance, child);
+        console.log(`[appendChild()] ${parentInstance} >`, child);
         
         if(parentInstance instanceof Page || parentInstance instanceof ContentView){
+            console.log(`[appendChild()] instance of single-child container.`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
             parentInstance.content = child;
         } else if(parentInstance instanceof LayoutBase){
+            console.log(`[appendChild()] instance of LayoutBase.`);
             parentInstance.addChild(child);
         } else {
+            console.log(`[appendChild()] default clause.`);
             parentInstance._addView(child);
         }
         // TODO: check whether a property/event change should be fired.
@@ -346,6 +389,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): void {
+        console.log(`commitUpdate() with type: ${type}`, instance);
         Object.keys(newProps).forEach((prop: string) => {
             const value: any = newProps[prop];
             if(prop === "children"){
@@ -357,6 +401,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     } else {
                         console.warn(`commitUpdate() called with text as a prop upon a non-TextBase View. Text-setting is only implemented for instances extending TextBase.`);
                     }
+                } else {
+                    console.warn(`commitUpdate() called with a non-textual 'children' value; ignoring.`);
                 }
             } else {
                 instance.set(prop, value);
