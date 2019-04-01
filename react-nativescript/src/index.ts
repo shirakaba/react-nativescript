@@ -1,6 +1,5 @@
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
-import * as React from 'react';
 
 import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegistry';
 // TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
@@ -33,18 +32,6 @@ const noTimeoutValue: NoTimeout = undefined;
 
 const rootHostContext: HostContext = {};
 const childHostContext: HostContext = {};
-
-function handleChild(
-    type: Type,
-    props: Props,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
-    internalInstanceHandle: ReactReconciler.OpaqueHandle,
-    view: View,
-    value: any,
-){
-    
-}
 
 function handleChildrenProp(
     type: Type,
