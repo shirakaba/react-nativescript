@@ -78,8 +78,12 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             'ListView',
             {
                 className: "list-group",
-                itemTemplate: knownTemplates.itemTemplate,
+                /* Maybe we need to supply a template to map each item to a NativeScript View? */
+                // itemTemplate: knownTemplates.itemTemplate,
                 ...rest,
+                /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
+                 * Will have to figure out  */
+                items,
                 ref: this.myRef
             },
             React.createElement(
@@ -87,16 +91,26 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 {
                     className: "list-group-item"
                 },
-                ...[this.props.items].map((item: any) => {
-                    return React.createElement(
-                        "Label",
-                        {
-                            text: `Text: ${item.text}`,
-                            textWrap: true,
-                            class: "title"
-                        }
-                    )
-                })
+                /* So far, I've only found that these labels are ignored completely. */
+                // ...(items as any).map((item: any) => {
+                //     return React.createElement(
+                //         "Label",
+                //         {
+                //             text: `Text: ${item.text}`,
+                //             textWrap: true,
+                //             class: "title"
+                //         }
+                //     )
+                // })
+                // React.createElement(
+                //     "Label",
+                //     {
+                //         // text: `Text: ${item.text}`,
+                //         text: `Testing`,
+                //         textWrap: true,
+                //         class: "title"
+                //     }
+                // )
             )
         );
     }
