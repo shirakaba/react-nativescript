@@ -1,11 +1,12 @@
 import * as React from "react";
 import { ListViewProps } from "./NativeScriptComponentTypings";
-import { ListView as NativeScriptListView, ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ListView as NativeScriptListView, ItemEventData, knownTemplates } from "tns-core-modules/ui/list-view/list-view";
 import { EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "./eventHandling";
 
 interface Props {
-    items: ListViewProps["items"],
+    // items: ListViewProps["items"],
+    items: any[], // For simplicity, we don't support ItemSource just yet.
     onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
@@ -69,7 +70,8 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
     }
 
     render(){
-        const { children, ...rest } = this.props;
+        const { children, items, ...rest } = this.props;
+        // console.log(`[ListView] got items:`, items);
         console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
@@ -78,10 +80,30 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             'ListView',
             {
                 className: "list-group",
+                itemTemplate: knownTemplates.itemTemplate,
                 ...rest,
                 ref: this.myRef
             },
-            null
+            React.createElement(
+                "StackLayout",
+                {
+                    className: "list-group-item"
+                },
+                (items as any[]).map((item: any, i: number) => {
+                    // console.log(`Mapping item:`, item);
+
+                    return React.createElement(
+                        "Label",
+                        {
+                            key: i, // required by React
+                            text: `Text: ${item.text}`,
+                            textWrap: true,
+                            className: "title"
+                        },
+                        // null
+                    )
+                })
+            )
         );
     }
 }

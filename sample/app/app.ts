@@ -14,7 +14,7 @@ import { ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
 import { NestedContentView, FlexboxLayoutTest1 } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
-
+import { ListView } from "react-nativescript/dist/components/ListView";
 
 run({
     create: () => {
@@ -27,9 +27,21 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        ReactTextView,
-                        null,
-                        "world"
+                        ListView,
+                        {
+                            items: [
+                                {
+                                    text: "first"
+                                },
+                                {
+                                    text: "second"
+                                },
+                                {
+                                    text: "third"
+                                },
+                            ]
+                        },
+                        null
                     ),
                     page,
                     () => {

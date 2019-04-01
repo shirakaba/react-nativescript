@@ -15,6 +15,7 @@ import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout"
 import { Button } from "tns-core-modules/ui/button/button";
 import { Button as ReactButton } from "react-nativescript/dist/components/Button";
 import { View as ReactView } from "react-nativescript/dist/components/View";
+import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
 import { ViewProps } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -24,6 +25,13 @@ type ViewBaseProp<T extends ViewBase> = {
 class MyTextField extends React.Component<{ toWhat: string }, {}> {
     render(){
         return React.createElement('TextField', null, `Hello ${this.props.toWhat}`);
+        // { type: "TextField", props: { toWhat: string, children: string } }
+    }
+}
+
+export class MyTextView extends React.Component<{ toWhat: string }, {}> {
+    render(){
+        return React.createElement(ReactTextView, null, `Hello ${this.props.toWhat}`);
         // { type: "TextField", props: { toWhat: string, children: string } }
     }
 }
@@ -49,13 +57,13 @@ export class NestedContentView extends React.Component<{}, {}> {
                 // width: 75,
             },
             React.createElement(
-                'ContentView',
+                ReactView,
                 {
                     /* Seems that these props are totally untyped (deep 'any'). */
                     style: {
-                        backgroundColor: "orange",
-                        width: "50%",
-                        height: "50%"
+                        backgroundColor: new Color("orange"),
+                        width: 50,
+                        height: 50
                     },
                 }
             )
@@ -73,48 +81,48 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
                     justifyContent: "space-between",
                 },
             },
-            React.createElement(
-                'ContentView',
-                {
-                    backgroundColor: new Color("blue"),
-                    width: 75,
-                    height: 100
-                }
-            ),
-            React.createElement(
-                'ContentView',
-                {
-                    backgroundColor: new Color("red"),
-                    width: 75,
-                    height: 80
-                }
-            ),
-            React.createElement(
-                'ContentView',
-                {
-                    backgroundColor: new Color("yellow"),
-                    width: 75,
-                    height: 140
-                }
-            ),
-            React.createElement(
-                'ContentView',
-                {
-                    backgroundColor: new Color("lightgreen"),
-                    width: 75,
-                    height: 70
-                }
-            ),
             // React.createElement(
-            //     ReactView,
+            //     'ContentView',
             //     {
-            //         style: {
-            //             backgroundColor: new Color("blue"),
-            //             width: 75,
-            //             height: 100
-            //         },
+            //         backgroundColor: new Color("blue"),
+            //         width: 75,
+            //         height: 100
             //     }
             // ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("red"),
+            //         width: 75,
+            //         height: 80
+            //     }
+            // ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("yellow"),
+            //         width: 75,
+            //         height: 140
+            //     }
+            // ),
+            // React.createElement(
+            //     'ContentView',
+            //     {
+            //         backgroundColor: new Color("lightgreen"),
+            //         width: 75,
+            //         height: 70
+            //     }
+            // ),
+            React.createElement(
+                ReactView,
+                {
+                    style: {
+                        backgroundColor: new Color("blue"),
+                        width: 75,
+                        height: 100
+                    },
+                }
+            ),
             // React.createElement(
             //     ReactView,
             //     {
@@ -139,7 +147,7 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
             //     ReactView,
             //     {
             //         style: {
-            //             backgroundColor: new Color("green"),
+            //             backgroundColor: new Color("lightgreen"),
             //             width: 75,
             //             height: 70
             //         },
