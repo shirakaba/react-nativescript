@@ -80,10 +80,10 @@ export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instanc
   // throw new Error('getNodeFromInstance: Invalid argument.');
 }
 
-export function getFiberCurrentPropsFromNode(node) {
+export function getFiberCurrentPropsFromNode(node: Instance): object|null {
   return node[internalEventHandlersKey] || null;
 }
 
-export function updateFiberProps(node, props) {
+export function updateFiberProps(node: Instance, props: object): void {
   node[internalEventHandlersKey] = props;
 }

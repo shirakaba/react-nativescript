@@ -1,3 +1,13 @@
+/**
+ * Refer to:
+ * 
+ * https://github.com/facebook/react/blob/6a1e6b2f78da3a56aa497902951c6e9ce654eafc/packages/react-dom/src/client/ReactDOMHostConfig.js
+ * 
+ * https://github.com/facebook/react/blob/6a1e6b2f78da3a56aa497902951c6e9ce654eafc/packages/react-native-renderer/src/ReactNativeHostConfig.js
+ * 
+ * Searching for the term 'precacheFiberNode()' is a good way to orientate oneself.
+ */
+
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
 
@@ -15,7 +25,7 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 // import { Page } from 'tns-core-modules/ui/page/page';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
-import { precacheFiberNode } from './ComponentTree';
+import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 
 type Type = TNSElements;
 type Props = Record<string, any>;
@@ -153,6 +163,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         if(viewConstructor){
             view = new viewConstructor();
             precacheFiberNode(internalInstanceHandle, view);
+            updateFiberProps(view, props);
         } else {
             // console.log(`Warning: type ${type} not found in element registry.`);
             // view = (type as any)();
@@ -293,6 +304,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
          * Medium tutorial uses: document.createTextNode(text); */
         const textView: TextView = new TextView();
         textView.text = text;
+        precacheFiberNode(internalInstanceHandle, textView);
 
         // TODO: maybe inherit the style information from container..?
         // TODO: also merge in the hostContext (whatever that is).
@@ -340,7 +352,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`[appendChild()] default clause.`);
             parentInstance._addView(child);
         }
-        // TODO: check whether a property/event change should be fired.
+        // TODO: check whether a property/event change should be fired. 
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
         console.log(`[appendChildToContainer()] deferring to appendChild()`, container, child);
