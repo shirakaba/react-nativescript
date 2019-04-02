@@ -4,7 +4,7 @@ import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button"
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
-import { updateListener } from "./eventHandling";
+import { updateListener } from "../client/EventHandling";
 
 /**
  * From React Native's 'ButtonProps' interface.

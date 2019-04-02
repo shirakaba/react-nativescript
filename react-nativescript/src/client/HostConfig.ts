@@ -1,7 +1,7 @@
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
 
-import { TNSElements, elementMap, ConcreteViewConstructor } from './elementRegistry';
+import { TNSElements, elementMap, ConcreteViewConstructor } from './ElementRegistry';
 // TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
 import { View } from 'tns-core-modules/ui/core/view/view';
 import { Color } from 'tns-core-modules/color/color';
