@@ -48,7 +48,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
     private readonly reactRoots: Record<number, number> = {};
-
+    /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         // console.log(`[defaultOnItemLoading] Called! Args: `, args);
         let view: View = args.view;
