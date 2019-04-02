@@ -100,6 +100,12 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 if(firstChild){
                     const internalInstance = getInstanceFromNode(firstChild);
                     console.log(`Got firstChild internalInstance:`, internalInstance);
+
+                    // const stateNode: React.Component<{}, {}> = internalInstance._debugOwner
+                    // ? internalInstance._debugOwner.stateNode
+                    // : internalInstance.return.stateNode;
+                    // console.log(`Got firstChild stateNode:`, stateNode);
+                    // console.log(`Got firstChild stateNode.setState():`, stateNode.setState);
                 }
             }
 
