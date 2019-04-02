@@ -15,6 +15,7 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 // import { Page } from 'tns-core-modules/ui/page/page';
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
+import { precacheFiberNode } from './ComponentTree';
 
 type Type = TNSElements;
 type Props = Record<string, any>;
@@ -151,6 +152,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         const viewConstructor: ConcreteViewConstructor|null = typeof type === "string" ? elementMap[type] : null;
         if(viewConstructor){
             view = new viewConstructor();
+            precacheFiberNode(internalInstanceHandle, view);
         } else {
             // console.log(`Warning: type ${type} not found in element registry.`);
             // view = (type as any)();
