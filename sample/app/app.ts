@@ -30,15 +30,18 @@ run({
                         ListView,
                         {
                             items: [
-                                {
-                                    text: "first"
-                                },
-                                {
-                                    text: "second"
-                                },
-                                {
-                                    text: "third"
-                                },
+                                "first",
+                                "second",
+                                "third",
+                                // {
+                                //     text: "first"
+                                // },
+                                // {
+                                //     text: "second"
+                                // },
+                                // {
+                                //     text: "third"
+                                // },
                             ]
                         },
                         null
