@@ -19,27 +19,6 @@ interface Props {
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
 
 /**
- * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
- * @param nativeScriptElement 
- */
-function findReactRoot(nativeScriptElement: View): React.Component<{}, {}>|null {
-    const key: string|undefined = Object.keys(nativeScriptElement).find(key => key.startsWith("__reactInternalInstance$"));
-    if(!key) return null;
-    const internalInstance: React.Component<{}, {}>|null = nativeScriptElement[key];
-    if (internalInstance == null) return null;
-
-    if ((internalInstance as any).return) {
-        // react 16+
-        return (internalInstance as any)._debugOwner
-            ? (internalInstance as any)._debugOwner.stateNode
-            : (internalInstance as any).return.stateNode;
-    } else {
-        // react <16
-        return (internalInstance as any)._currentElement._owner._instance;
-    }
-}
-
-/**
  * A React wrapper around the NativeScript ListView component.
  * Still under construction; needs to take React components as children.
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
@@ -90,6 +69,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             const internalInstance = getInstanceFromNode(view);
             console.log(`Got internalInstance:`, internalInstance);
             console.log(`And view was:`, view);
+            /* Seems that we can't get a React reference to the root component because it's not a typical component (and thus hasn't had precacheFiberNode() run upon it); a hack around this is shown here: https://stackoverflow.com/a/37230133/5951226 */
             if(!internalInstance){
                 let firstChild;
                 view.eachChild((child) => {
@@ -101,6 +81,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                     const internalInstance = getInstanceFromNode(firstChild);
                     console.log(`Got firstChild internalInstance:`, internalInstance);
 
+                    /* Not understanding what this stateNode stuff is useful for... */
                     // const stateNode: React.Component<{}, {}> = internalInstance._debugOwner
                     // ? internalInstance._debugOwner.stateNode
                     // : internalInstance.return.stateNode;
@@ -109,9 +90,22 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 }
             }
 
-            // import ReactTestUtils from 'react-dom/test-utils';
-            // ReactTestUtils.findAllInRenderedTree(window.searchRoot, function() { return true; });
-            console.log(`Not sure how to pass props into unreferenced React tree...`);
+            console.log(`Not sure how to pass props into unreferenced React tree... recreating it instead.`);
+
+            /* Note: if we do this, new Labels are clearly created (rather than altering props on the existing ones in the tree). I don't know whether the previous render tree fights with this one, either. */
+            ReactNativeScript.render(
+                React.createElement(
+                    "Label",
+                    {
+                        text: `[React] UPDATED Item: ${this.props.items[args.index]}`
+                    },
+                    null
+                ),
+                args.view,
+                () => {
+                    console.log(`[ListView cell] Container #${args.index} updated!`);
+                }
+            );
         }
         // (view as ContentView).text = "Item number: " + args.index;
     }
