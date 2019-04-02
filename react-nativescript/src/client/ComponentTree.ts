@@ -4,6 +4,7 @@
  *
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
+import * as ReactReconciler from 'react-reconciler';
 import { Instance } from "./HostConfig";
 
 const randomKey = Math.random()
@@ -12,7 +13,7 @@ const randomKey = Math.random()
 const internalInstanceKey = '__reactInternalInstance$' + randomKey;
 const internalEventHandlersKey = '__reactEventHandlers$' + randomKey;
 
-export function precacheFiberNode(hostInst: React.Component<{}, {}>, node: Instance): void {
+export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance): void {
   node[internalInstanceKey] = hostInst;
 }
 
@@ -20,7 +21,7 @@ export function precacheFiberNode(hostInst: React.Component<{}, {}>, node: Insta
  * Given a DOM node, return the closest ReactDOMComponent or
  * ReactDOMTextComponent instance ancestor.
  */
-export function getClosestInstanceFromNode(node: Instance): React.Component<{}, {}> { {
+export function getClosestInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
   if (node[internalInstanceKey]) {
     return node[internalInstanceKey];
   }
@@ -41,14 +42,14 @@ export function getClosestInstanceFromNode(node: Instance): React.Component<{}, 
     return inst;
   // }
 
-  return null;
+  // return null;
 }
 
 /**
  * Given a DOM node, return the ReactDOMComponent or ReactDOMTextComponent
  * instance, or null if the node was not rendered by this React.
  */
-export function getInstanceFromNode(node: Instance): React.Component<{}, {}> {
+export function getInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
   const inst = node[internalInstanceKey];
   if (inst) {
     return inst;
@@ -65,7 +66,7 @@ export function getInstanceFromNode(node: Instance): React.Component<{}, {}> {
  * Given a ReactDOMComponent or ReactDOMTextComponent, return the corresponding
  * DOM node.
  */
-export function getNodeFromInstance(inst: React.Component<{}, {}>): Instance {
+export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instance {
   // if (inst.tag === HostComponent || inst.tag === HostText) {
   //   // In Fiber this, is just the state node right now. We assume it will be
   //   // a host component or host text.
