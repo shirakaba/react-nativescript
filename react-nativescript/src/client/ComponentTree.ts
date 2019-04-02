@@ -7,14 +7,13 @@
 import * as ReactReconciler from 'react-reconciler';
 import { Instance } from "./HostConfig";
 
-const randomKey = Math.random()
-  .toString(36)
-  .slice(2);
-const internalInstanceKey = '__reactInternalInstance$' + randomKey;
-const internalEventHandlersKey = '__reactEventHandlers$' + randomKey;
+const randomKey: string = Math.random().toString(36).slice(2);
+const internalInstanceKey: string = '__reactInternalInstance$' + randomKey;
+const internalEventHandlersKey: string = '__reactEventHandlers$' + randomKey;
 
 export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance): void {
-  node[internalInstanceKey] = hostInst;
+  node.set(internalInstanceKey, hostInst);
+  // node[internalInstanceKey] = hostInst;
 }
 
 /**
@@ -22,12 +21,12 @@ export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: 
  * ReactDOMTextComponent instance ancestor.
  */
 export function getClosestInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-  if (node[internalInstanceKey]) {
-    return node[internalInstanceKey];
+  if (node.get(internalInstanceKey)) {
+    return node.get(internalInstanceKey);
   }
 
-  while (!node[internalInstanceKey]) {
-    if (node.parentNode) {
+  while (!node.get(internalInstanceKey)) {
+    if (node.parent) {
       node = node.parent;
     } else {
       // Top of the tree. This node must not be part of a React tree (or is
@@ -36,7 +35,7 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
     }
   }
 
-  const inst = node[internalInstanceKey];
+  const inst = node.get(internalInstanceKey);
   // if (inst.tag === HostComponent || inst.tag === HostText) {
     // In Fiber, this will always be the deepest root.
     return inst;
@@ -50,7 +49,7 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
  * instance, or null if the node was not rendered by this React.
  */
 export function getInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-  const inst = node[internalInstanceKey];
+  const inst = node.get(internalInstanceKey);
   if (inst) {
     return inst;
     // if (inst.tag === HostComponent || inst.tag === HostText) {
@@ -81,9 +80,11 @@ export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instanc
 }
 
 export function getFiberCurrentPropsFromNode(node: Instance): object|null {
-  return node[internalEventHandlersKey] || null;
+  return node.get(internalEventHandlersKey) || null;
+  // return node[internalEventHandlersKey] || null;
 }
 
 export function updateFiberProps(node: Instance, props: object): void {
-  node[internalEventHandlersKey] = props;
+  node.set(internalEventHandlersKey, props);
+  // node[internalEventHandlersKey] = props;
 }

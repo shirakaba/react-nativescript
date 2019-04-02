@@ -6,6 +6,7 @@ import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
 import { default as ReactNativeScript } from "../index"
 import { ContentView } from "tns-core-modules/ui/page/page";
+import { getInstanceFromNode } from "../client/ComponentTree";
 
 interface Props {
     items: ListViewProps["items"],
@@ -79,14 +80,29 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
              * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
              * */
             // const searchRoot: React.Component<{}, {}>|null = this.reactRoots[args.index];
-            const searchRoot: React.Component<{}, {}>|null = findReactRoot(view);
-            
-            if(!searchRoot){
-                console.warn(`Failed to find searchRoot.`);
-                return;
+            // const searchRoot: React.Component<{}, {}>|null = findReactRoot(view);
+            // if(!searchRoot){
+            //     console.warn(`Failed to find searchRoot.`);
+            //     return;
+            // }
+            // console.log(`Got searchRoot`, searchRoot);
+
+            const internalInstance = getInstanceFromNode(view);
+            console.log(`Got internalInstance:`, internalInstance);
+            console.log(`And view was:`, view);
+            if(!internalInstance){
+                let firstChild;
+                view.eachChild((child) => {
+                    firstChild = child;
+                    return false;
+                });
+                console.log(`Got firstChild:`, firstChild);
+                if(firstChild){
+                    const internalInstance = getInstanceFromNode(firstChild);
+                    console.log(`Got firstChild internalInstance:`, internalInstance);
+                }
             }
 
-            console.log(`Got searchRoot`, searchRoot);
             // import ReactTestUtils from 'react-dom/test-utils';
             // ReactTestUtils.findAllInRenderedTree(window.searchRoot, function() { return true; });
             console.log(`Not sure how to pass props into unreferenced React tree...`);
