@@ -4,7 +4,7 @@ import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { Observable } from "tns-core-modules/data/observable";
 import { Style } from "tns-core-modules/ui/styling/style/style";
-import { elementMap, TNSElements, ConcreteViewConstructor } from "../elementRegistry";
+import { elementMap, TNSElements, ConcreteViewConstructor } from "../client/elementRegistry";
 import { View as ReactView } from "../components/View";
 import { ViewComponentProps } from "./View";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";

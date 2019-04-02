@@ -21,7 +21,7 @@ export type ListViewComponentProps = Props & Partial<ListViewProps>;
  * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
  * @param nativeScriptElement 
  */
-function findReactRoot(nativeScriptElement: View): React.Component<{}, {}> {
+function findReactRoot(nativeScriptElement: View): React.Component<{}, {}>|null {
     const key: string|undefined = Object.keys(nativeScriptElement).find(key => key.startsWith("__reactInternalInstance$"));
     if(!key) return null;
     const internalInstance: React.Component<{}, {}>|null = nativeScriptElement[key];
@@ -47,7 +47,7 @@ function findReactRoot(nativeScriptElement: View): React.Component<{}, {}> {
 export class ListView extends React.Component<ListViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
-    private readonly reactRoots: Record<number, number> = {};
+    private readonly reactRoots: Record<number, React.Component<{}, {}>|null> = {};
 
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         // console.log(`[defaultOnItemLoading] Called! Args: `, args);
@@ -56,7 +56,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             const contentView = new ContentView();
             contentView.backgroundColor = "orange";
 
-            this.reactRoots[args.index] = ReactNativeScript.render(
+            /* this.reactRoots[args.index] = */ ReactNativeScript.render(
                 React.createElement(
                     "Label",
                     {
@@ -78,8 +78,15 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
              * Actual solutions:
              * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
              * */
-            const searchRoot = this.reactRoots[args.index];
-            if(!searchRoot) return;
+            // const searchRoot: React.Component<{}, {}>|null = this.reactRoots[args.index];
+            const searchRoot: React.Component<{}, {}>|null = findReactRoot(view);
+            
+            if(!searchRoot){
+                console.warn(`Failed to find searchRoot.`);
+                return;
+            }
+
+            console.log(`Got searchRoot`, searchRoot);
             // import ReactTestUtils from 'react-dom/test-utils';
             // ReactTestUtils.findAllInRenderedTree(window.searchRoot, function() { return true; });
             console.log(`Not sure how to pass props into unreferenced React tree...`);
