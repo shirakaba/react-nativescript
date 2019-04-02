@@ -13,7 +13,6 @@ const internalEventHandlersKey: string = '__reactEventHandlers$' + randomKey;
 
 export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance): void {
   node.set(internalInstanceKey, hostInst);
-  // node[internalInstanceKey] = hostInst;
 }
 
 /**
@@ -27,6 +26,9 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
 
   while (!node.get(internalInstanceKey)) {
     if (node.parent) {
+      // if(!node.parent){
+      //   console.warn(`node.parent was null; meanwhile, node.parentNode was:`, node.parentNode);
+      // }
       node = node.parent;
     } else {
       // Top of the tree. This node must not be part of a React tree (or is
@@ -81,10 +83,8 @@ export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instanc
 
 export function getFiberCurrentPropsFromNode(node: Instance): object|null {
   return node.get(internalEventHandlersKey) || null;
-  // return node[internalEventHandlersKey] || null;
 }
 
 export function updateFiberProps(node: Instance, props: object): void {
   node.set(internalEventHandlersKey, props);
-  // node[internalEventHandlersKey] = props;
 }
