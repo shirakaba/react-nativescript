@@ -18,6 +18,27 @@ interface Props {
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
 
 /**
+ * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
+ * @param nativeScriptElement 
+ */
+function findReactRoot(nativeScriptElement: View): React.Component<{}, {}> {
+    const key: string|undefined = Object.keys(nativeScriptElement).find(key => key.startsWith("__reactInternalInstance$"));
+    if(!key) return null;
+    const internalInstance: React.Component<{}, {}>|null = nativeScriptElement[key];
+    if (internalInstance == null) return null;
+
+    if ((internalInstance as any).return) {
+        // react 16+
+        return (internalInstance as any)._debugOwner
+            ? (internalInstance as any)._debugOwner.stateNode
+            : (internalInstance as any).return.stateNode;
+    } else {
+        // react <16
+        return (internalInstance as any)._currentElement._owner._instance;
+    }
+}
+
+/**
  * A React wrapper around the NativeScript ListView component.
  * Still under construction; needs to take React components as children.
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
@@ -26,6 +47,8 @@ export type ListViewComponentProps = Props & Partial<ListViewProps>;
 export class ListView extends React.Component<ListViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
+    private readonly reactRoots: Record<number, number> = {};
+
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         // console.log(`[defaultOnItemLoading] Called! Args: `, args);
         let view: View = args.view;
@@ -33,7 +56,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             const contentView = new ContentView();
             contentView.backgroundColor = "orange";
 
-            ReactNativeScript.render(
+            this.reactRoots[args.index] = ReactNativeScript.render(
                 React.createElement(
                     "Label",
                     {
@@ -48,6 +71,17 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             );
             args.view = contentView;
         } else {
+            /* Some discussion here:
+             * https://stackoverflow.com/questions/24462679/react-get-react-component-from-a-child-dom-element
+             * Passing in an event listener brings its own difficulties (memory management).
+             * 
+             * Actual solutions:
+             * https://stackoverflow.com/questions/29321742/react-getting-a-component-from-a-dom-element-for-debugging
+             * */
+            const searchRoot = this.reactRoots[args.index];
+            if(!searchRoot) return;
+            // import ReactTestUtils from 'react-dom/test-utils';
+            // ReactTestUtils.findAllInRenderedTree(window.searchRoot, function() { return true; });
             console.log(`Not sure how to pass props into unreferenced React tree...`);
         }
         // (view as ContentView).text = "Item number: " + args.index;
