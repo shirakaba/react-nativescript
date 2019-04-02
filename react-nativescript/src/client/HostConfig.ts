@@ -19,7 +19,7 @@ import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 type Type = TNSElements;
 type Props = Record<string, any>;
 export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
-type Instance = View; // We may extend this to Observable in future, to allow the tree to contain non-visual components.
+export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
 type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
@@ -91,7 +91,7 @@ function handleChildrenProp(
                     return _this;
                 }
             */
-            const instanceFromChild: View|TextBase = hostConfig.createInstance(
+            const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
                 prospectiveChild.type as TNSElements,
                 prospectiveChild.props,
                 rootContainerInstance,
@@ -330,10 +330,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`[appendChild()] instance of single-child container.`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
-            parentInstance.content = child;
+            parentInstance = child as View;
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] instance of LayoutBase.`);
-            parentInstance.addChild(child);
+            parentInstance.addChild(child as View);
         } else {
             console.log(`[appendChild()] default clause.`);
             parentInstance._addView(child);
@@ -366,7 +366,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): void {
-        instance.focus();
+        (instance as View).focus();
     },
     commitUpdate(
         instance: Instance,
