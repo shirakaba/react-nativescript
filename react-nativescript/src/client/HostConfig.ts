@@ -332,7 +332,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`[appendChild()] instance of single-child container.`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
-            parentInstance = child as View;
+            parentInstance.content = child as View;
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] instance of LayoutBase.`);
             parentInstance.addChild(child as View);
