@@ -165,40 +165,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
-            // console.log(`Warning: type ${type} not found in element registry.`);
-            // view = (type as any)();
-
-            console.warn(`Warning: type ${type} not found in element registry, so experimenting.`);
-
-            /*
-            type: 
-            function View() {
-                var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this.myRef = React.createRef();
-                return _this;
-            }
-            
-            props: {
-                "style": {
-                "backgroundColor": {
-                    "_name": "orange",
-                    "_argb": 4294944000
-                },
-                    "width": 50,
-                    "height": 50
-                }
-            }
-
-            */
-
+            console.log(`Type not found in element registry, so must be custom instance; recursing until we get a type in the element registry.`);
             const componentFunction: React.Component<Props, {}> = new (type as any)(props);
-
-            console.warn(`Made componentFunction from type "${type}":`, componentFunction);
-
-            console.warn(`componentFunction has render():`, componentFunction.render);
-
-            console.warn(`componentFunction's render() result:`, componentFunction.render());
-
             const createdElement = componentFunction.render() as React.ReactElement<Props, React.JSXElementConstructor<any> | TNSElements>;
 
             return hostConfig.createInstance(
