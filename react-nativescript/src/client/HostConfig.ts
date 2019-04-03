@@ -165,6 +165,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
+            if(typeof type === "undefined"){
+                throw new Error(`HostConfig received undefined type in createInstance.`);
+            }
             console.log(`Type not found in element registry, so must be custom instance; recursing until we get a type in the element registry.`);
             const componentFunction: React.Component<Props, {}> = new (type as any)(props);
             const createdElement = componentFunction.render() as React.ReactElement<Props, React.JSXElementConstructor<any> | TNSElements>;
