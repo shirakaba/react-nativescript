@@ -176,23 +176,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 hostContext,
                 internalInstanceHandle
             );
-
-            // view = experiment;
-
-            // const created = React.createElement(
-            //     type,
-            //     {},
-            //     null
-            // );
-
-            // console.log(`Warning: type ${type} not found in element registry, so returning blank ContentView. However, can create element:`, created);
-            // console.log(`Created element had type:`, created.type);
-
-            // return new ContentView();
-
-            // throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
-
-            // view = new elementMap[props.type]();
         }
         // FIXME: https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized
         // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
