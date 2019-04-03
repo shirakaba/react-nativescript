@@ -27,22 +27,9 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        ListView,
+                        NestedContentView,
                         {
-                            items: [
-                                "first",
-                                "second",
-                                "third",
-                                // {
-                                //     text: "first"
-                                // },
-                                // {
-                                //     text: "second"
-                                // },
-                                // {
-                                //     text: "third"
-                                // },
-                            ]
+                            
                         },
                         null
                     ),
