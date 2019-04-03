@@ -19,7 +19,7 @@ export class FlexboxLayout extends React.Component<FlexboxLayoutComponentProps, 
         const { children, ...rest } = this.props;
 
         return React.createElement(
-            'FlexboxLayout',
+            'flexboxLayout',
             {
                 ...rest,
                 ref: this.myRef

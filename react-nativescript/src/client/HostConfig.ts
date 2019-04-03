@@ -94,14 +94,6 @@ function handleChildrenProp(
                 return;
             }
     
-            // FIXME: works only when value has a type listed in the element registry. Custom elements, e.g. ContentView, have the following type:
-            /*
-                function View() {
-                    var _this = _super !== null && _super.apply(this, arguments) || this;
-                    _this.myRef = React.createRef();
-                    return _this;
-                }
-            */
             const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
                 prospectiveChild.type as TNSElements,
                 prospectiveChild.props,
@@ -180,8 +172,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 internalInstanceHandle
             );
         }
-        // FIXME: https://reactjs.org/docs/jsx-in-depth.html#user-defined-components-must-be-capitalized
-        // Summarised in: https://medium.com/@agent_hunt/introduction-to-react-native-renderers-aka-react-native-is-the-java-and-react-native-renderers-are-828a0022f433
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
         Object.keys(props).forEach((prop: string) => {

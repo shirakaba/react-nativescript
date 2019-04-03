@@ -38,7 +38,7 @@ export class MyTextView extends React.Component<{ toWhat: string }, {}> {
 
 class MyRootView extends React.Component<{}, {}> {
     render(){
-        return React.createElement('Frame', null);
+        return React.createElement('frame', null);
     }
 }
 

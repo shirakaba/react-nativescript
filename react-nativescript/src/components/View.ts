@@ -94,7 +94,7 @@ export class View extends React.Component<ViewComponentProps, {}> {
         } = this.props;
 
         return React.createElement(
-            'ContentView',
+            'contentView',
             {
                 ...rest,
                 ref: this.myRef

@@ -70,7 +70,7 @@ export class Button extends React.Component<ButtonComponentProps, {}> {
         const { title, disabled, color, onPress, style, children, ...rest } = this.props;
 
         return React.createElement(
-                'Button',
+                'button',
                 {
                     className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     ...rest,

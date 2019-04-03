@@ -21,7 +21,7 @@ export class WebView extends React.Component<WebViewComponentProps, {}> {
             console.warn("Ignoring 'children' prop on WebView; not permitted");
         }
         return React.createElement(
-            'WebView',
+            'webView',
             {
                 ...rest,
                 ref: this.myRef

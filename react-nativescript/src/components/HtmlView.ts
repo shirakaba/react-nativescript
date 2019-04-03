@@ -21,7 +21,7 @@ export class HtmlView extends React.Component<HtmlViewComponentProps, {}> {
             console.warn("Ignoring 'children' prop on HtmlView; not permitted");
         }
         return React.createElement(
-            'HtmlView',
+            'htmlView',
             {
                 ...rest,
                 ref: this.myRef
