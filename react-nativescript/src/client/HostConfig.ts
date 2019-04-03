@@ -168,9 +168,46 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             // console.log(`Warning: type ${type} not found in element registry.`);
             // view = (type as any)();
 
-            const experiment = new (type as any)(props);
+            console.warn(`Warning: type ${type} not found in element registry, so experimenting.`);
 
-            console.log(`Warning: type ${type} not found in element registry, so experimenting:`, experiment);
+            /*
+            type: 
+            function View() {
+                var _this = _super !== null && _super.apply(this, arguments) || this;
+                _this.myRef = React.createRef();
+                return _this;
+            }
+            
+            props: {
+                "style": {
+                "backgroundColor": {
+                    "_name": "orange",
+                    "_argb": 4294944000
+                },
+                    "width": 50,
+                    "height": 50
+                }
+            }
+
+            */
+
+            const componentFunction: React.Component<Props, {}> = new (type as any)(props);
+
+            console.warn(`Made componentFunction from type "${type}":`, componentFunction);
+
+            console.warn(`componentFunction has render():`, componentFunction.render);
+
+            console.warn(`componentFunction's render() result:`, componentFunction.render());
+
+            const createdElement = componentFunction.render() as React.ReactElement<Props, React.JSXElementConstructor<any> | TNSElements>;
+
+            return hostConfig.createInstance(
+                createdElement.type as TNSElements,
+                createdElement.props,
+                rootContainerInstance,
+                hostContext,
+                internalInstanceHandle
+            );
 
             // view = experiment;
 
@@ -183,7 +220,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             // console.log(`Warning: type ${type} not found in element registry, so returning blank ContentView. However, can create element:`, created);
             // console.log(`Created element had type:`, created.type);
 
-            return new ContentView();
+            // return new ContentView();
 
             // throw new Error(`Unrecognised type, "${type}", not found in element registry.`);
 
