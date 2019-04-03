@@ -19,7 +19,7 @@ export class TextView extends React.Component<TextViewComponentProps, {}> {
         const { children, ...rest } = this.props;
 
         return React.createElement(
-            'TextView',
+            'textView',
             {
                 ...rest,
                 ref: this.myRef

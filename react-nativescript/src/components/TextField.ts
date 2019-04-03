@@ -19,7 +19,7 @@ export class TextField extends React.Component<TextFieldComponentProps, {}> {
         const { children, ...rest } = this.props;
 
         return React.createElement(
-            'TextField',
+            'textField',
             {
                 ...rest,
                 ref: this.myRef

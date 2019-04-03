@@ -38,7 +38,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
 
             /* this.reactRoots[args.index] = */ ReactNativeScript.render(
                 React.createElement(
-                    "Label",
+                    "label",
                     {
                         text: `[React] Item: ${this.props.items[args.index]}`
                     },
@@ -95,7 +95,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             /* Note: if we do this, new Labels are clearly created (rather than altering props on the existing ones in the tree). I don't know whether the previous render tree fights with this one, either. */
             ReactNativeScript.render(
                 React.createElement(
-                    "Label",
+                    "label",
                     {
                         text: `[React] UPDATED Item: ${this.props.items[args.index]}`
                     },
@@ -163,7 +163,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
         }
         return React.createElement(
-            'ListView',
+            'listView',
             {
                 className: "list-group",
                 /* Maybe we need to supply a template to map each item to a NativeScript View? */
@@ -186,14 +186,14 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 ref: this.myRef
             },
             React.createElement(
-                "StackLayout",
+                "stackLayout",
                 {
                     className: "list-group-item"
                 },
                 /* So far, I've only found that these labels are ignored completely. */
                 // ...(items as any).map((item: any) => {
                 //     return React.createElement(
-                //         "Label",
+                //         "label",
                 //         {
                 //             text: `Text: ${item.text}`,
                 //             textWrap: true,
@@ -202,7 +202,7 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 //     )
                 // })
                 // React.createElement(
-                //     "Label",
+                //     "label",
                 //     {
                 //         // text: `Text: ${item.text}`,
                 //         text: `Testing`,
