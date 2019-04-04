@@ -43,10 +43,13 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
-        // console.log(`[defaultOnItemLoading] Called! Args: `, args);
+        console.log(`[defaultOnItemLoading] Called! Index:`, args.index);
         let view: View = args.view;
         if(!view){
             const contentView = new ContentView();
+            contentView.backgroundColor = "orange";
+            args.view = contentView;
+
             this.setState((prev: State) => {
                 return {
                     ...prev,
@@ -55,8 +58,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                         [args.index]: contentView
                     }
                 };
+            }, () => {
+                console.log(`setState() completed for index ${args.index}`);
             });
-            contentView.backgroundColor = "orange";
 
             // /* this.reactRoots[args.index] = */ ReactNativeScript.render(
             //     React.createElement(
@@ -71,7 +75,6 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             //         console.log(`[ListView cell] Container #${args.index} updated!`);
             //     }
             // );
-            args.view = contentView;
         } else {
             console.warn(`'onItemLoading' for already-existing view.`);
             /* Some discussion here:
@@ -150,10 +153,12 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     }
 
     shouldComponentUpdate(nextProps: ListViewComponentProps, nextState: {}): boolean {
+        console.log(`[ListView] shouldComponentUpdate!`);
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
-            updateListener(node, NativeScriptListView.itemLoadingEvent, this.props.onItemLoading || this.defaultOnItemLoading, nextProps.onItemLoading);
+            /* FIXME: evidently updateListener() isn't working as intended - it removes onItemTap even when it's no different to this.defaultOnItemLoading. */
+            // updateListener(node, NativeScriptListView.itemLoadingEvent, this.props.onItemLoading || this.defaultOnItemLoading, nextProps.onItemLoading);
             updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
             updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
         } else {
@@ -164,6 +169,8 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     componentWillUnmount(){
         const node: NativeScriptListView|null = this.myRef.current;
+
+        console.log(`[ListView] componentWillUnmount!`);
         
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
@@ -208,12 +215,26 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 items,
                 ref: this.myRef
             },
-            // React.createElement(
-            //     "stackLayout",
-            //     {
-            //         className: "list-group-item"
-            //     }
-            // )
+            React.createElement(
+                "stackLayout",
+                {
+                    className: "list-group-item"
+                },
+                ...Object.keys(this.state.nativeCells).map((index: string) => {
+                    const nativeCell: ContentView = this.state.nativeCells[index];
+                    return ReactNativeScript.createPortal(
+                        React.createElement(
+                            "label",
+                            {
+                                text: `Text: ${(items as any[])[index].text}`,
+                                textWrap: true,
+                                class: "title"
+                            }
+                        ),
+                        nativeCell
+                    );
+                })
+            )
             // ReactNativeScript.createPortal(
             //     React.createElement(
             //         "label",
@@ -225,20 +246,6 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             //     ),
             //     this.state.nativeCells[0]
             // )
-            ...Object.keys(this.state.nativeCells).map((index: string) => {
-                const nativeCell: ContentView = this.state.nativeCells[index];
-                return ReactNativeScript.createPortal(
-                    React.createElement(
-                        "label",
-                        {
-                            text: `Text: ${(items as any[])[index].text}`,
-                            textWrap: true,
-                            class: "title"
-                        }
-                    ),
-                    nativeCell
-                );
-            })
         );
     }
 }
