@@ -219,7 +219,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
         console.log(`[appendInitialChild()]`);
-        parentInstance._addView(child);
+        hostConfig.appendChild(parentInstance, child);
     },
     /**
      * Docs from: https://blog.atulr.com/react-custom-renderer-2/
