@@ -182,6 +182,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             const value: any = props[prop];
 
             // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
+            /*
+                Note that in this situation, only <span>One</span> will be shown. Probably handled before it reaches the Host Config though:
+                  <div children={[<span>Two</span>, <span>Three</span>]}>
+                    <span>One</span>
+                </div>
+            */
             if(prop === "children"){
                 return handleChildrenProp(
                     type,
@@ -201,7 +207,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     return;
                 }
                 console.warn(`Support for setting styles is experimental.`);
-                console.log(`[createInstance()] type: ${type}. iterating style:`, value);
+                // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
                 Object.keys(value).forEach((styleName: string) => {
                     console.log(`Setting style:`, styleName);
                     const styleValue: any = value[styleName];
