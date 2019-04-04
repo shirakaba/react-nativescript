@@ -325,7 +325,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
         console.log(`[appendChild()] ${parentInstance} >`, child);
         
-        if(parentInstance instanceof Page || parentInstance instanceof ContentView){
+        if(isASingleChildContainer(parentInstance)){
             console.log(`[appendChild()] instance of single-child container.`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
@@ -445,7 +445,18 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // TODO: check whether a property/event change should be fired.
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        container._removeView(child);
+        if(isASingleChildContainer(container)){
+            console.log(`[appendChild()] instance of single-child container.`);
+            /* These elements were originally designed to hold one element only:
+             * https://stackoverflow.com/a/55351086/5951226 */
+            container.content = null;
+        } else if(container instanceof LayoutBase){
+            console.log(`[appendChild()] instance of LayoutBase.`);
+            container.removeChild(child as View);
+        } else {
+            console.log(`[appendChild()] default clause.`);
+            container._removeView(child);
+        }
         // TODO: check whether a property/event change should be fired.
     },
     resetTextContent(instance: Instance): void {
