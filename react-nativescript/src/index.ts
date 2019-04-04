@@ -27,7 +27,9 @@ export default {
         //   'Target container is not a DOM element.',
         // );
         // TODO (from Facebook): pass ReactDOM portal implementation as third argument
-        return createPortal(children, container, null, key);
+        const portal = createPortal(children, container, null, key);
+        console.log(`Created portal:`, portal);
+        return portal;
     },
 
     render: (
