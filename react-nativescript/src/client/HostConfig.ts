@@ -446,15 +446,16 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
         if(isASingleChildContainer(container)){
-            console.log(`[appendChild()] instance of single-child container.`);
+            console.log(`[removeChild()] instance of single-child container.`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
+             console.warn(`[removeChild()] TODO: Check whether "container.content = null" will indeed remove the content.`);
             container.content = null;
         } else if(container instanceof LayoutBase){
-            console.log(`[appendChild()] instance of LayoutBase.`);
+            console.log(`[removeChild()] instance of LayoutBase.`);
             container.removeChild(child as View);
         } else {
-            console.log(`[appendChild()] default clause.`);
+            console.log(`[removeChild()] default clause.`);
             container._removeView(child);
         }
         // TODO: check whether a property/event change should be fired.
