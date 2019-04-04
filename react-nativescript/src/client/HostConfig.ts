@@ -27,7 +27,7 @@ import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 
-type Type = TNSElements;
+type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = Record<string, any>;
 export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
 export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
@@ -95,7 +95,7 @@ function handleChildrenProp(
             }
     
             const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
-                prospectiveChild.type as TNSElements,
+                prospectiveChild.type as Type,
                 prospectiveChild.props,
                 rootContainerInstance,
                 hostContext,
@@ -165,7 +165,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             const createdElement = componentFunction.render() as React.ReactElement<Props, React.JSXElementConstructor<any> | TNSElements>;
 
             return hostConfig.createInstance(
-                createdElement.type as TNSElements,
+                createdElement.type,
                 createdElement.props,
                 rootContainerInstance,
                 hostContext,
