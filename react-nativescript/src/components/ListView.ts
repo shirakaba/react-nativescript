@@ -16,6 +16,10 @@ interface Props {
     // TODO: support all the inherited props from the View component, i.e. listeners!
 }
 
+interface State {
+    nativeCells: Record<number, ContentView>;
+}
+
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
 
 /**
@@ -24,33 +28,52 @@ export type ListViewComponentProps = Props & Partial<ListViewProps>;
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
  * See: ui/list-view/list-view
  */
-export class ListView extends React.Component<ListViewComponentProps, {}> {
+export class ListView extends React.Component<ListViewComponentProps, State> {
     private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
 
     private readonly reactRoots: Record<number, React.Component<{}, {}>|null> = {};
+
+    constructor(props: ListViewComponentProps){
+        super(props);
+
+        this.state = {
+            nativeCells: {}
+        };
+    }
+
     /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         // console.log(`[defaultOnItemLoading] Called! Args: `, args);
         let view: View = args.view;
         if(!view){
             const contentView = new ContentView();
+            this.setState((prev: State) => {
+                return {
+                    ...prev,
+                    nativeCells: {
+                        ...prev.nativeCells,
+                        [args.index]: contentView
+                    }
+                };
+            });
             contentView.backgroundColor = "orange";
 
-            /* this.reactRoots[args.index] = */ ReactNativeScript.render(
-                React.createElement(
-                    "label",
-                    {
-                        text: `[React] Item: ${this.props.items[args.index]}`
-                    },
-                    null
-                ),
-                contentView,
-                () => {
-                    console.log(`[ListView cell] Container #${args.index} updated!`);
-                }
-            );
+            // /* this.reactRoots[args.index] = */ ReactNativeScript.render(
+            //     React.createElement(
+            //         "label",
+            //         {
+            //             text: `[React] Item: ${this.props.items[args.index]}`
+            //         },
+            //         null
+            //     ),
+            //     contentView,
+            //     () => {
+            //         console.log(`[ListView cell] Container #${args.index} updated!`);
+            //     }
+            // );
             args.view = contentView;
         } else {
+            console.warn(`'onItemLoading' for already-existing view.`);
             /* Some discussion here:
              * https://stackoverflow.com/questions/24462679/react-get-react-component-from-a-child-dom-element
              * Passing in an event listener brings its own difficulties (memory management).
@@ -66,46 +89,46 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
             // }
             // console.log(`Got searchRoot`, searchRoot);
 
-            const internalInstance = getInstanceFromNode(view);
-            console.log(`Got internalInstance:`, internalInstance);
-            console.log(`And view was:`, view);
-            /* Seems that we can't get a React reference to the root component because it's not a typical component (and thus hasn't had precacheFiberNode() run upon it); a hack around this is shown here: https://stackoverflow.com/a/37230133/5951226 */
-            if(!internalInstance){
-                let firstChild;
-                view.eachChild((child) => {
-                    firstChild = child;
-                    return false;
-                });
-                console.log(`Got firstChild:`, firstChild);
-                if(firstChild){
-                    const internalInstance = getInstanceFromNode(firstChild);
-                    console.log(`Got firstChild internalInstance:`, internalInstance);
+            // const internalInstance = getInstanceFromNode(view);
+            // console.log(`Got internalInstance:`, internalInstance);
+            // console.log(`And view was:`, view);
+            // /* Seems that we can't get a React reference to the root component because it's not a typical component (and thus hasn't had precacheFiberNode() run upon it); a hack around this is shown here: https://stackoverflow.com/a/37230133/5951226 */
+            // if(!internalInstance){
+            //     let firstChild;
+            //     view.eachChild((child) => {
+            //         firstChild = child;
+            //         return false;
+            //     });
+            //     console.log(`Got firstChild:`, firstChild);
+            //     if(firstChild){
+            //         const internalInstance = getInstanceFromNode(firstChild);
+            //         console.log(`Got firstChild internalInstance:`, internalInstance);
 
-                    /* Not understanding what this stateNode stuff is useful for... */
-                    // const stateNode: React.Component<{}, {}> = internalInstance._debugOwner
-                    // ? internalInstance._debugOwner.stateNode
-                    // : internalInstance.return.stateNode;
-                    // console.log(`Got firstChild stateNode:`, stateNode);
-                    // console.log(`Got firstChild stateNode.setState():`, stateNode.setState);
-                }
-            }
+            //         /* Not understanding what this stateNode stuff is useful for... */
+            //         // const stateNode: React.Component<{}, {}> = internalInstance._debugOwner
+            //         // ? internalInstance._debugOwner.stateNode
+            //         // : internalInstance.return.stateNode;
+            //         // console.log(`Got firstChild stateNode:`, stateNode);
+            //         // console.log(`Got firstChild stateNode.setState():`, stateNode.setState);
+            //     }
+            // }
 
-            console.log(`Not sure how to pass props into unreferenced React tree... recreating it instead.`);
+            // console.log(`Not sure how to pass props into unreferenced React tree... recreating it instead.`);
 
-            /* Note: if we do this, new Labels are clearly created (rather than altering props on the existing ones in the tree). I don't know whether the previous render tree fights with this one, either. */
-            ReactNativeScript.render(
-                React.createElement(
-                    "label",
-                    {
-                        text: `[React] UPDATED Item: ${this.props.items[args.index]}`
-                    },
-                    null
-                ),
-                args.view,
-                () => {
-                    console.log(`[ListView cell] Container #${args.index} updated!`);
-                }
-            );
+            // /* Note: if we do this, new Labels are clearly created (rather than altering props on the existing ones in the tree). I don't know whether the previous render tree fights with this one, either. */
+            // ReactNativeScript.render(
+            //     React.createElement(
+            //         "label",
+            //         {
+            //             text: `[React] UPDATED Item: ${this.props.items[args.index]}`
+            //         },
+            //         null
+            //     ),
+            //     args.view,
+            //     () => {
+            //         console.log(`[ListView cell] Container #${args.index} updated!`);
+            //     }
+            // );
         }
         // (view as ContentView).text = "Item number: " + args.index;
     }
@@ -190,6 +213,20 @@ export class ListView extends React.Component<ListViewComponentProps, {}> {
                 {
                     className: "list-group-item"
                 },
+                ...Object.keys(this.state.nativeCells).map((index: string) => {
+                    const nativeCell: ContentView = this.state.nativeCells[index];
+                    return ReactNativeScript.createPortal(
+                        React.createElement(
+                            "label",
+                            {
+                                text: `Text: ${(items as any[])[index].text}`,
+                                textWrap: true,
+                                class: "title"
+                            }
+                        ),
+                        nativeCell
+                    );
+                })
                 /* So far, I've only found that these labels are ignored completely. */
                 // ...(items as any).map((item: any) => {
                 //     return React.createElement(
