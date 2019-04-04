@@ -28,7 +28,7 @@ export default {
         // );
         // TODO (from Facebook): pass ReactDOM portal implementation as third argument
         const portal = createPortal(children, container, null, key);
-        console.log(`Created portal:`, portal);
+        // console.log(`Created portal:`, portal);
         return portal;
     },
 
