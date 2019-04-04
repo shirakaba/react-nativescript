@@ -208,46 +208,37 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 items,
                 ref: this.myRef
             },
-            React.createElement(
-                "stackLayout",
-                {
-                    className: "list-group-item"
-                },
-                ...Object.keys(this.state.nativeCells).map((index: string) => {
-                    const nativeCell: ContentView = this.state.nativeCells[index];
-                    return ReactNativeScript.createPortal(
-                        React.createElement(
-                            "label",
-                            {
-                                text: `Text: ${(items as any[])[index].text}`,
-                                textWrap: true,
-                                class: "title"
-                            }
-                        ),
-                        nativeCell
-                    );
-                })
-                /* So far, I've only found that these labels are ignored completely. */
-                // ...(items as any).map((item: any) => {
-                //     return React.createElement(
-                //         "label",
-                //         {
-                //             text: `Text: ${item.text}`,
-                //             textWrap: true,
-                //             class: "title"
-                //         }
-                //     )
-                // })
-                // React.createElement(
-                //     "label",
-                //     {
-                //         // text: `Text: ${item.text}`,
-                //         text: `Testing`,
-                //         textWrap: true,
-                //         class: "title"
-                //     }
-                // )
-            )
+            // React.createElement(
+            //     "stackLayout",
+            //     {
+            //         className: "list-group-item"
+            //     }
+            // )
+            // ReactNativeScript.createPortal(
+            //     React.createElement(
+            //         "label",
+            //         {
+            //             text: `Text: ${(items as any[])[0].text}`,
+            //             textWrap: true,
+            //             class: "title"
+            //         }
+            //     ),
+            //     this.state.nativeCells[0]
+            // )
+            ...Object.keys(this.state.nativeCells).map((index: string) => {
+                const nativeCell: ContentView = this.state.nativeCells[index];
+                return ReactNativeScript.createPortal(
+                    React.createElement(
+                        "label",
+                        {
+                            text: `Text: ${(items as any[])[index].text}`,
+                            textWrap: true,
+                            class: "title"
+                        }
+                    ),
+                    nativeCell
+                );
+            })
         );
     }
 }
