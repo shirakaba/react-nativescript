@@ -44,6 +44,10 @@ const noTimeoutValue: NoTimeout = undefined;
 const rootHostContext: HostContext = {};
 const childHostContext: HostContext = {};
 
+function isASingleChildContainer(view: Instance): view is Page|ContentView {
+    return view instanceof Page || view instanceof ContentView;
+}
+
 function handleChildrenProp(
     type: Type,
     props: Props,
