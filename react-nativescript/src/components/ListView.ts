@@ -56,6 +56,10 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             console.log(`'onItemLoading': <empty> -> ${args.index}`);
 
+            if(this.state.itemToNativeCellIndex.has(args.index)){
+                console.warn(`WARNING: list index already registered yet args.view was falsy!`);
+            }
+
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
                 nativeCellToItemIndex.set(contentView, args.index);
@@ -85,9 +89,19 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
                 return;
             }
+
+            // TODO: find using nativeCellToItemIndex rather than findIndex(); complexity goes from O(N) -> O(1).
+
             // setState() completed for <empty> -> 37
             // 'onItemLoading': 0 -> 38
             console.log(`'onItemLoading': ${filledIndex} -> ${args.index}`);
+
+            /* TODO: Not sure whether it's a no-op in truth. Have to re-examine. */
+            // if(parseInt(filledIndex) === args.index){
+            //     console.log(`Filled index matched args.index, so treating as no-op...`);
+            //     return;
+            // }
+
             // nativeCells[0] now needs to display props.items[38]
 
             this.setState((prev: State) => {
@@ -103,7 +117,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     [args.index]: args.view as ContentView
                 };
 
-                delete nativeCells[filledIndex];
+                /* TODO: nativeCells can be replaced with nativeCellToItemIndex... though it gives very nice logs */
+                // delete nativeCells[filledIndex];
+                
                 return {
                     nativeCells,
                     nativeCellToItemIndex,
