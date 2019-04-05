@@ -18,6 +18,9 @@ interface Props {
 
 interface State {
     nativeCells: Record<number, ContentView>;
+    /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
+    nativeCellToItemIndex: Map<ContentView, number>;
+    itemToNativeCellIndex: Map<number, ContentView>;
 }
 
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
@@ -35,7 +38,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         super(props);
 
         this.state = {
-            nativeCells: {}
+            nativeCells: {},
+            nativeCellToItemIndex: new Map(),
+            itemToNativeCellIndex: new Map()
         };
     }
 
@@ -50,12 +55,20 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             console.log(`'onItemLoading': <empty> -> ${args.index}`);
 
             this.setState((prev: State) => {
+                const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
+                nativeCellToItemIndex.set(contentView, args.index);
+
+                const itemToNativeCellIndex = new Map(prev.itemToNativeCellIndex);
+                itemToNativeCellIndex.set(args.index, contentView);
+
                 return {
                     ...prev,
                     nativeCells: {
                         ...prev.nativeCells,
                         [args.index]: contentView
-                    }
+                    },
+                    nativeCellToItemIndex,
+                    itemToNativeCellIndex
                 };
             }, () => {
                 console.log(`setState() completed for <empty> -> ${args.index}`);
@@ -70,10 +83,18 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
                 return;
             }
-
+            // setState() completed for <empty> -> 37
+            // 'onItemLoading': 0 -> 38
             console.log(`'onItemLoading': ${filledIndex} -> ${args.index}`);
+            // nativeCells[0] now needs to display props.items[38]
 
             this.setState((prev: State) => {
+                const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
+                nativeCellToItemIndex.set(args.view as ContentView, args.index);
+
+                const itemToNativeCellIndex = new Map(prev.itemToNativeCellIndex);
+                itemToNativeCellIndex.set(args.index, args.view as ContentView);
+
                 const nativeCells: Record<number, ContentView> = {
                     ...prev.nativeCells,
                     [args.index]: args.view as ContentView
@@ -145,6 +166,24 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
         }
+
+        const portals: React.ReactPortal[] = [];
+        this.state.itemToNativeCellIndex.forEach((view: ContentView, itemIndex: number) => {
+            const portal = ReactNativeScript.createPortal(
+                React.createElement(
+                    "label",
+                    {
+                        key: `KEY-${(items as any[])[itemIndex]}`,
+                        text: `Text: ${(items as any[])[itemIndex].text}`,
+                        textWrap: true,
+                        class: "title"
+                    }
+                ),
+                view
+            );
+            portals.push(portal);
+        })
+
         return React.createElement(
             'listView',
             {
@@ -173,33 +212,23 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 {
                     className: "list-group-item"
                 },
-                ...Object.keys(this.state.nativeCells).map((index: string) => {
-                    const nativeCell: ContentView = this.state.nativeCells[index];
-                    return ReactNativeScript.createPortal(
-                        React.createElement(
-                            "label",
-                            {
-                                key: `KEY-${(items as any[])[index]}`,
-                                text: `Text: ${(items as any[])[index].text}`,
-                                textWrap: true,
-                                class: "title"
-                            }
-                        ),
-                        nativeCell
-                    );
-                })
+                ...portals
+                // ...Object.keys(this.state.nativeCells).map((index: string) => {
+                //     const nativeCell: ContentView = this.state.nativeCells[index];
+                //     return ReactNativeScript.createPortal(
+                //         React.createElement(
+                //             "label",
+                //             {
+                //                 key: `KEY-${(items as any[])[index]}`,
+                //                 text: `Text: ${(items as any[])[index].text}`,
+                //                 textWrap: true,
+                //                 class: "title"
+                //             }
+                //         ),
+                //         nativeCell
+                //     );
+                // })
             )
-            // ReactNativeScript.createPortal(
-            //     React.createElement(
-            //         "label",
-            //         {
-            //             text: `Text: ${(items as any[])[0].text}`,
-            //             textWrap: true,
-            //             class: "title"
-            //         }
-            //     ),
-            //     this.state.nativeCells[0]
-            // )
         );
     }
 }
