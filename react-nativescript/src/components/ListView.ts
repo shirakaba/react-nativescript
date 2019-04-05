@@ -16,11 +16,13 @@ interface Props {
     // TODO: support all the inherited props from the View component, i.e. listeners!
 }
 
+type NumberKey = number|string;
+
 interface State {
-    nativeCells: Record<number, ContentView>;
+    nativeCells: Record<NumberKey, ContentView>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
-    nativeCellToItemIndex: Map<ContentView, number>;
-    itemToNativeCellIndex: Map<number, ContentView>;
+    nativeCellToItemIndex: Map<ContentView, NumberKey>;
+    itemToNativeCellIndex: Map<NumberKey, ContentView>;
 }
 
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
@@ -93,6 +95,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 nativeCellToItemIndex.set(args.view as ContentView, args.index);
 
                 const itemToNativeCellIndex = new Map(prev.itemToNativeCellIndex);
+                itemToNativeCellIndex.delete(filledIndex);
                 itemToNativeCellIndex.set(args.index, args.view as ContentView);
 
                 const nativeCells: Record<number, ContentView> = {
@@ -100,9 +103,11 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     [args.index]: args.view as ContentView
                 };
 
-                // delete nativeCells[filledIndex];
+                delete nativeCells[filledIndex];
                 return {
-                    nativeCells
+                    nativeCells,
+                    nativeCellToItemIndex,
+                    itemToNativeCellIndex
                 };
             }, () => {
                 console.log(`setState() completed for ${filledIndex} -> ${args.index}`);
@@ -173,7 +178,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 React.createElement(
                     "label",
                     {
-                        key: `KEY-${(items as any[])[itemIndex]}`,
+                        key: `KEY-${itemIndex}`,
                         text: `Text: ${(items as any[])[itemIndex].text}`,
                         textWrap: true,
                         class: "title"
@@ -182,7 +187,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 view
             );
             portals.push(portal);
-        })
+        });
 
         return React.createElement(
             'listView',
