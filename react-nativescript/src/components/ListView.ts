@@ -233,7 +233,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     "label",
                     {
                         key: view._domId,
-                        text: `Text: ${(items as any[])[itemIndex].text}`,
+                        text: `${(items as any[])[itemIndex].text}`,
+                        fontSize: 150,
+                        height: 150,
                         // textWrap: true,
                         // class: "title"
                     }

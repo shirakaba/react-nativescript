@@ -31,7 +31,7 @@ run({
                         {
                             items: [
                                 /* Enough cells to see how view recycling works/ doesn't work */
-                                ...[...Array(50).keys()].map((val) => {
+                                ...[...Array(7).keys()].map((val) => {
                                     return { text: val };
                                 })
                             ]
