@@ -22,7 +22,7 @@ interface State {
     nativeCells: Record<NumberKey, ContentView>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
     nativeCellToItemIndex: Map<ContentView, NumberKey>;
-    itemToNativeCellIndex: Map<NumberKey, ContentView>;
+    itemIndexToNativeCell: Map<NumberKey, ContentView>;
 }
 
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
@@ -42,7 +42,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         this.state = {
             nativeCells: {},
             nativeCellToItemIndex: new Map(),
-            itemToNativeCellIndex: new Map()
+            itemIndexToNativeCell: new Map()
         };
     }
 
@@ -56,7 +56,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             console.log(`'onItemLoading': <empty> -> ${args.index}`);
 
-            if(this.state.itemToNativeCellIndex.has(args.index)){
+            if(this.state.itemIndexToNativeCell.has(args.index)){
                 console.warn(`WARNING: list index already registered yet args.view was falsy!`);
             }
 
@@ -64,8 +64,8 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
                 nativeCellToItemIndex.set(contentView, args.index);
 
-                const itemToNativeCellIndex = new Map(prev.itemToNativeCellIndex);
-                itemToNativeCellIndex.set(args.index, contentView);
+                const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
+                itemIndexToNativeCell.set(args.index, contentView);
 
                 return {
                     ...prev,
@@ -74,19 +74,26 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                         [args.index]: contentView
                     },
                     nativeCellToItemIndex,
-                    itemToNativeCellIndex
+                    itemIndexToNativeCell
                 };
             }, () => {
                 console.log(`setState() completed for <empty> -> ${args.index}`);
             });
         } else {
-            const filledIndices: string[] = Object.keys(this.state.nativeCells);
-            const sparseIndex: number|-1 = filledIndices.findIndex((index: string) => {
-                return view === this.state.nativeCells[index];
-            });
-            const filledIndex: string|null = sparseIndex === -1 ? null : filledIndices[sparseIndex];
-            if(filledIndex === null){
-                console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
+            // const filledIndices: string[] = Object.keys(this.state.nativeCells);
+            // const sparseIndex: number|-1 = filledIndices.findIndex((index: string) => {
+            //     return view === this.state.nativeCells[index];
+            // });
+            // const filledIndex: string|null = sparseIndex === -1 ? null : filledIndices[sparseIndex];
+            // if(filledIndex === null){
+            //     console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
+            //     return;
+            // }
+
+            const currentIndex: NumberKey|undefined = this.state.nativeCellToItemIndex.get(view as ContentView);
+
+            if(typeof currentIndex === "undefined"){
+                console.warn(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
                 return;
             }
 
@@ -94,10 +101,10 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             // setState() completed for <empty> -> 37
             // 'onItemLoading': 0 -> 38
-            console.log(`'onItemLoading': ${filledIndex} -> ${args.index}`);
+            console.log(`'onItemLoading': ${currentIndex} -> ${args.index}`);
 
             /* TODO: Not sure whether it's a no-op in truth. Have to re-examine. */
-            // if(parseInt(filledIndex) === args.index){
+            // if(parseInt(currentIndex) === args.index){
             //     console.log(`Filled index matched args.index, so treating as no-op...`);
             //     return;
             // }
@@ -106,27 +113,29 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
-                nativeCellToItemIndex.set(args.view as ContentView, args.index);
+                nativeCellToItemIndex.set(view as ContentView, args.index);
+                // console.log(`old map:`, prev.nativeCellToItemIndex);
+                // console.log(`new map:`, nativeCellToItemIndex);
 
-                const itemToNativeCellIndex = new Map(prev.itemToNativeCellIndex);
-                itemToNativeCellIndex.delete(filledIndex);
-                itemToNativeCellIndex.set(args.index, args.view as ContentView);
+                const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
+                itemIndexToNativeCell.delete(currentIndex);
+                itemIndexToNativeCell.set(args.index, view as ContentView);
 
                 const nativeCells: Record<number, ContentView> = {
                     ...prev.nativeCells,
-                    [args.index]: args.view as ContentView
+                    [args.index]: view as ContentView
                 };
 
                 /* TODO: nativeCells can be replaced with nativeCellToItemIndex... though it gives very nice logs */
-                // delete nativeCells[filledIndex];
+                delete nativeCells[currentIndex];
                 
                 return {
                     nativeCells,
                     nativeCellToItemIndex,
-                    itemToNativeCellIndex
+                    itemIndexToNativeCell
                 };
             }, () => {
-                console.log(`setState() completed for ${filledIndex} -> ${args.index}`);
+                console.log(`setState() completed for ${currentIndex} -> ${args.index}`);
             });
         }
     }
@@ -149,6 +158,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     shouldComponentUpdate(nextProps: ListViewComponentProps, nextState: State): boolean {
         console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
+        ListView.logItemIndexToNativeCell(nextState.itemIndexToNativeCell);
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
@@ -181,6 +191,33 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }
     }
 
+    static mapToKV<K, V>(map: Map<K, V>): [K, V][] {
+        const arr: [K, V][] = [];
+        map.forEach((value: V, key: K) => {
+            arr.push([key, value]);
+        });
+        return arr;
+    }
+
+    static logNativeCellToItemIndex<ContentView, NumberKey>(map: Map<ContentView, NumberKey>): void {
+        console.log(
+            ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index]) => {
+                acc[`ContentView(${(view as any)._domId})`] = `args[${index}]`;
+                return acc;
+            }, {})
+        );
+    }
+
+    static logItemIndexToNativeCell<NumberKey, ContentView>(map: Map<NumberKey, ContentView>): void {
+        console.log(
+            ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
+                // acc[`args[${index}]`] = `ContentView(${(view as any)._domId})`;
+                acc[`${index}`] = `CV(${(view as any)._domId})`;
+                return acc;
+            }, {})
+        );
+    }
+
     render(){
         const { children, items, ...rest } = this.props;
         // console.warn("ListView implementation not yet complete!");
@@ -189,12 +226,13 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }
 
         const portals: React.ReactPortal[] = [];
-        this.state.itemToNativeCellIndex.forEach((view: ContentView, itemIndex: number) => {
+        this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
+            // console.log(`key: ${view._domId}`);
             const portal = ReactNativeScript.createPortal(
                 React.createElement(
                     "label",
                     {
-                        key: `KEY-${itemIndex}`,
+                        key: view._domId,
                         text: `Text: ${(items as any[])[itemIndex].text}`,
                         // textWrap: true,
                         // class: "title"
