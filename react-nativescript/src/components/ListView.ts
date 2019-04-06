@@ -90,9 +90,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             //     return;
             // }
 
-            const currentIndex: NumberKey|undefined = this.state.nativeCellToItemIndex.get(view as ContentView);
+            const itemIndexOfArgsView: NumberKey|undefined = this.state.nativeCellToItemIndex.get(view as ContentView);
 
-            if(typeof currentIndex === "undefined"){
+            if(typeof itemIndexOfArgsView === "undefined"){
                 console.warn(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
                 return;
             }
@@ -101,10 +101,11 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             // setState() completed for <empty> -> 37
             // 'onItemLoading': 0 -> 38
-            console.log(`'onItemLoading': ${currentIndex} -> ${args.index}`);
+            
+            console.log(`'onItemLoading'! ${view} ${itemIndexOfArgsView} -> ${args.index}`);
 
             /* TODO: Not sure whether it's a no-op in truth. Have to re-examine. */
-            // if(parseInt(currentIndex) === args.index){
+            // if(parseInt(itemIndexOfArgsView) === args.index){
             //     console.log(`Filled index matched args.index, so treating as no-op...`);
             //     return;
             // }
@@ -113,12 +114,20 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
+                const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
+
+                // 'onItemLoading': 6 -> 5 (where 5 is already occupied by an incumbent view) may happen.
+                const incumbentView: ContentView|undefined = itemIndexToNativeCell.get(args.index);
+                if(incumbentView){
+                    itemIndexToNativeCell.delete(args.index);
+                    nativeCellToItemIndex.delete(incumbentView as ContentView);
+                }
+                // nativeCellToItemIndex.delete(view as ContentView); /* redundant */
                 nativeCellToItemIndex.set(view as ContentView, args.index);
                 console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
                 console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
 
-                const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
-                itemIndexToNativeCell.delete(currentIndex);
+                itemIndexToNativeCell.delete(itemIndexOfArgsView);
                 itemIndexToNativeCell.set(args.index, view as ContentView);
 
                 console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
@@ -130,7 +139,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 };
 
                 /* TODO: nativeCells can be replaced with nativeCellToItemIndex... though it gives very nice logs */
-                delete nativeCells[currentIndex];
+                delete nativeCells[itemIndexOfArgsView];
                 
                 return {
                     nativeCells,
@@ -138,7 +147,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     itemIndexToNativeCell
                 };
             }, () => {
-                console.log(`setState() completed for ${currentIndex} -> ${args.index}`);
+                console.log(`setState() completed for ${itemIndexOfArgsView} -> ${args.index}`);
             });
         }
     }
@@ -163,7 +172,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
         console.log(`[ListView] shouldComponentUpdate! itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(nextState.itemIndexToNativeCell));
         console.log(`[ListView] shouldComponentUpdate! nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nextState.nativeCellToItemIndex));
-        
+
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
