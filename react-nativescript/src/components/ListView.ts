@@ -114,12 +114,15 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
                 nativeCellToItemIndex.set(view as ContentView, args.index);
-                // console.log(`old map:`, prev.nativeCellToItemIndex);
-                // console.log(`new map:`, nativeCellToItemIndex);
+                console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
+                console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
 
                 const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
                 itemIndexToNativeCell.delete(currentIndex);
                 itemIndexToNativeCell.set(args.index, view as ContentView);
+
+                console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
+                console.log(`INCOMING itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
 
                 const nativeCells: Record<number, ContentView> = {
                     ...prev.nativeCells,
@@ -158,7 +161,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     shouldComponentUpdate(nextProps: ListViewComponentProps, nextState: State): boolean {
         console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
-        ListView.logItemIndexToNativeCell(nextState.itemIndexToNativeCell);
+        console.log(`[ListView] shouldComponentUpdate! itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(nextState.itemIndexToNativeCell));
+        console.log(`[ListView] shouldComponentUpdate! nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nextState.nativeCellToItemIndex));
+        
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
@@ -199,23 +204,19 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         return arr;
     }
 
-    static logNativeCellToItemIndex<ContentView, NumberKey>(map: Map<ContentView, NumberKey>): void {
-        console.log(
-            ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index]) => {
-                acc[`ContentView(${(view as any)._domId})`] = `args[${index}]`;
-                return acc;
-            }, {})
-        );
+    static serialiseNativeCellToItemIndex<ContentView, NumberKey>(map: Map<ContentView, NumberKey>): Record<string, string> {
+        return ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index], iterand: number) => {
+            acc[`CV(${(view as any)._domId})`] = `args_${index}`;
+            return acc;
+        }, {});
     }
 
-    static logItemIndexToNativeCell<NumberKey, ContentView>(map: Map<NumberKey, ContentView>): void {
-        console.log(
-            ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
-                // acc[`args[${index}]`] = `ContentView(${(view as any)._domId})`;
-                acc[`${index}`] = `CV(${(view as any)._domId})`;
-                return acc;
-            }, {})
-        );
+    static serialiseItemIndexToNativeCell<NumberKey, ContentView>(map: Map<NumberKey, ContentView>): Record<string, string> {
+        return ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
+            // acc[`args[${index}]`] = `ContentView(${(view as any)._domId})`;
+            acc[`args_${index}`] = `CV(${(view as any)._domId})`;
+            return acc;
+        }, {});
     }
 
     render(){
