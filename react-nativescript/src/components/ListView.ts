@@ -183,7 +183,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     render(){
         const { children, items, ...rest } = this.props;
-        console.warn("ListView implementation not yet complete!");
+        // console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
         }
@@ -196,8 +196,8 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     {
                         key: `KEY-${itemIndex}`,
                         text: `Text: ${(items as any[])[itemIndex].text}`,
-                        textWrap: true,
-                        class: "title"
+                        // textWrap: true,
+                        // class: "title"
                     }
                 ),
                 view

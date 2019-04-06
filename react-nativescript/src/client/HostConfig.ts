@@ -199,7 +199,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     value
                 );
             } else if(prop === "class"){
-                console.warn(`Note that 'class' is remapped to 'className'.`);
+                // console.warn(`Note that 'class' is remapped to 'className'.`);
                 view.set("className", value);
             } else if(prop === "style"){
                 if(typeof value === "undefined"){
@@ -329,24 +329,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendChild()] ${parentInstance} >`, child);
-        
         if(isASingleChildContainer(parentInstance)){
-            console.log(`[appendChild()] instance of single-child container.`);
+            console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
             parentInstance.content = child as View;
         } else if(parentInstance instanceof LayoutBase){
-            console.log(`[appendChild()] instance of LayoutBase.`);
+            console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
         } else {
-            console.log(`[appendChild()] default clause.`);
+            console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
         }
         // TODO: check whether a property/event change should be fired. 
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-        console.log(`[appendChildToContainer()] deferring to appendChild()`, container, child);
+        // console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
         hostConfig.appendChild(container, child);
         // TODO: check whether a property/event change should be fired.
     },
