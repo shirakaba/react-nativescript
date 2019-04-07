@@ -7,6 +7,19 @@ interface Props {
 }
 
 export class ListViewCell extends React.Component<Props, {}> {
+    componentDidMount(){
+        console.log(`[ListViewCell] componentDidMount!`);
+    }
+
+    shouldComponentUpdate(nextProps: Props, nextState: {}): boolean {
+        console.log(`[ListViewCell] shouldComponentUpdate!`);
+        return true;
+    }
+
+    componentWillUnmount(){
+        console.log(`[ListViewCell] componentWillUnmount!`);
+    }
+
     render(){
         return ReactNativeScript.createPortal(
             this.props.children,
