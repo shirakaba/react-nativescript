@@ -190,7 +190,7 @@ export function diffProperties(
             continue;
         }
         if (propKey === STYLE) {
-            if (__DEV__) {
+            if ((global as any).__DEV__) {
                 if (nextProp) {
                     // Freeze the next style object so that we can assume it won't be
                     // mutated. We have already warned for this in the past.
@@ -287,47 +287,48 @@ export function diffProperties(
 export function updateProperties(
     instance: Instance,
     updatePayload: Array<any>,
-    tag: string,
+    type: Type,
     lastRawProps: any,
     nextRawProps: any,
 ): void {
     // Update checked *before* name.
     // In the middle of an update, it is possible to have multiple checked.
     // When a checked radio tries to change name, browser makes another radio's checked false.
-    if (
-        tag === 'input' &&
-        nextRawProps.type === 'radio' &&
-        nextRawProps.name != null
-    ) {
-        ReactDOMInputUpdateChecked(instance, nextRawProps);
-    }
+    // if (
+    //     tag === 'input' &&
+    //     nextRawProps.type === 'radio' &&
+    //     nextRawProps.name != null
+    // ) {
+    //     ReactDOMInputUpdateChecked(instance, nextRawProps);
+    // }
 
-    const wasCustomComponentTag = isCustomComponent(tag, lastRawProps);
-    const isCustomComponentTag = isCustomComponent(tag, nextRawProps);
+    /* More relevant to HTML. */
+    // const wasCustomComponentTag = isCustomComponent(tag, lastRawProps);
+    // const isCustomComponentTag = isCustomComponent(tag, nextRawProps);
+
     // Apply the diff.
     updateDOMProperties(
         instance,
         updatePayload,
-        wasCustomComponentTag,
-        isCustomComponentTag,
+        false,
+        false,
     );
 
-    // TODO: Ensure that an update gets scheduled if any of the special props
-    // changed.
-    switch (tag) {
-        case 'input':
-            // Update the wrapper around inputs *after* updating props. This has to
-            // happen after `updateDOMProperties`. Otherwise HTML5 input validations
-            // raise warnings and prevent the new value from being assigned.
-            ReactDOMInputUpdateWrapper(instance, nextRawProps);
-            break;
-        case 'textarea':
-            ReactDOMTextareaUpdateWrapper(instance, nextRawProps);
-            break;
-        case 'select':
-            // <select> value update needs to occur after <option> children
-            // reconciliation
-            ReactDOMSelectPostUpdateWrapper(instance, nextRawProps);
-            break;
-    }
+    /* TODO: I Won't be implementing these for now. */
+    // switch (tag) {
+    //     case 'input':
+    //         // Update the wrapper around inputs *after* updating props. This has to
+    //         // happen after `updateDOMProperties`. Otherwise HTML5 input validations
+    //         // raise warnings and prevent the new value from being assigned.
+    //         ReactDOMInputUpdateWrapper(instance, nextRawProps);
+    //         break;
+    //     case 'textarea':
+    //         ReactDOMTextareaUpdateWrapper(instance, nextRawProps);
+    //         break;
+    //     case 'select':
+    //         // <select> value update needs to occur after <option> children
+    //         // reconciliation
+    //         ReactDOMSelectPostUpdateWrapper(instance, nextRawProps);
+    //         break;
+    // }
 }
