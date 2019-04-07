@@ -258,8 +258,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         //     portals.push(portal);
         // });
 
+        console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
         this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
-            // console.log(`key: ${view._domId}`);
+            console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
             const portal = ReactNativeScript.createPortal(
                 React.createElement(
                     "label",
