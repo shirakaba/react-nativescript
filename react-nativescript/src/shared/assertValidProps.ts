@@ -10,7 +10,7 @@ function assertValidProps(tag: string, props?: any): void|never {
         return;
     }
 
-    if (__DEV__) {
+    if ((global as any).__DEV__) {
         if(
             !(
                 props.suppressContentEditableWarning ||

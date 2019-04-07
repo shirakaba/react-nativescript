@@ -22,7 +22,7 @@ export function setValueForStyles(instance: Instance, styles: Style): void {
     //         continue;
     //     }
     //     const isCustomProperty = styleName.indexOf('--') === 0;
-    //     if (__DEV__) {
+    //     if ((global as any).__DEV__) {
     //         if (!isCustomProperty) {
     //             // TODO
     //             // warnValidStyle(styleName, styles[styleName]);

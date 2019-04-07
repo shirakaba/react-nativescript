@@ -44,7 +44,7 @@ interface AncestorInfo {
 };
 
 
-if (__DEV__) {
+if ((global as any).__DEV__) {
     // This validation code was written based on the HTML5 parsing spec:
     // https://html.spec.whatwg.org/multipage/syntax.html#has-an-element-in-scope
     //

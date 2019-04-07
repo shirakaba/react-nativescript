@@ -56,14 +56,14 @@ interface HostContextDev {
     }
 };
 
-const rootHostContext: HostContext = __DEV__ ? 
+const rootHostContext: HostContext = (global as any).__DEV__ ? 
     {
         namespace: "rootHostContextNamespaceStub",
         ancestorInfo: {},
         eventData: null,
     } : 
     "rootHostContextStub";
-const childHostContext: HostContext = __DEV__ ? 
+const childHostContext: HostContext = (global as any).__DEV__ ? 
     {
         namespace: "childHostContextNamespace",
         ancestorInfo: {},
