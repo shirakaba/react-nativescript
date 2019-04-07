@@ -280,6 +280,8 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             const portal = React.createElement(
                 ListViewCell,
                 {
+                    identifier: `Portal(${view._domId})`,
+                    textReference: `${(items as any[])[itemIndex].text}`,
                     nativeElement: view,
                 },
                 React.createElement(
