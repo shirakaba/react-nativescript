@@ -80,6 +80,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 console.log(`setState() completed for <empty> -> ${args.index}`);
             });
         } else {
+            args.view.backgroundColor = "blue";
             // const filledIndices: string[] = Object.keys(this.state.nativeCells);
             // const sparseIndex: number|-1 = filledIndices.findIndex((index: string) => {
             //     return view === this.state.nativeCells[index];
@@ -119,8 +120,10 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 // 'onItemLoading': 6 -> 5 (where 5 is already occupied by an incumbent view) may happen.
                 const incumbentView: ContentView|undefined = itemIndexToNativeCell.get(args.index);
                 if(incumbentView){
+                    /* itemIndexToNativeCell will only show the latest native cell rendering each args.index */
                     itemIndexToNativeCell.delete(args.index);
-                    nativeCellToItemIndex.delete(incumbentView as ContentView);
+                    /* nativeCellToItemIndex is permitted to have multiple views rendering the same args.index */
+                    // nativeCellToItemIndex.delete(incumbentView as ContentView);
                 }
                 // nativeCellToItemIndex.delete(view as ContentView); /* redundant */
                 nativeCellToItemIndex.set(view as ContentView, args.index);
@@ -236,7 +239,26 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }
 
         const portals: React.ReactPortal[] = [];
-        this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
+        // this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
+        //     // console.log(`key: ${view._domId}`);
+        //     const portal = ReactNativeScript.createPortal(
+        //         React.createElement(
+        //             "label",
+        //             {
+        //                 key: view._domId,
+        //                 text: `${(items as any[])[itemIndex].text}`,
+        //                 fontSize: 150,
+        //                 height: 150,
+        //                 // textWrap: true,
+        //                 // class: "title"
+        //             }
+        //         ),
+        //         view
+        //     );
+        //     portals.push(portal);
+        // });
+
+        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
             // console.log(`key: ${view._domId}`);
             const portal = ReactNativeScript.createPortal(
                 React.createElement(
