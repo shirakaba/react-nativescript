@@ -1,11 +1,13 @@
 /**
- * Refer to:
- * 
- * https://github.com/facebook/react/blob/6a1e6b2f78da3a56aa497902951c6e9ce654eafc/packages/react-dom/src/client/ReactDOMHostConfig.js
- * 
+ * Code in here referenced from:
+ * https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMHostConfig.js
  * https://github.com/facebook/react/blob/6a1e6b2f78da3a56aa497902951c6e9ce654eafc/packages/react-native-renderer/src/ReactNativeHostConfig.js
+ * ... which both carry the following copyright:
  * 
- * Searching for the term 'precacheFiberNode()' is a good way to orientate oneself.
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 // import ReactReconciler = require('react-reconciler');
@@ -26,23 +28,46 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
+import { diffProperties } from './ReactNativeScriptComponent';
+import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 
-type Type = TNSElements | React.JSXElementConstructor<any>;
+export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = Record<string, any>;
 export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
 export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
 type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
-type HostContext = any;
+type HostContext = HostContextDev | HostContextProd;
 type UpdatePayload = any;
 type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
+type HostContextProd = string;
+interface HostContextDev {
+    namespace: string,
+    ancestorInfo: any,
+    eventData: null | {
+        isEventComponent?: boolean,
+        isEventTarget?: boolean,
+    }
+};
 
-const rootHostContext: HostContext = {};
-const childHostContext: HostContext = {};
+const rootHostContext: HostContext = __DEV__ ? 
+    {
+        namespace: "rootHostContextNamespaceStub",
+        ancestorInfo: {},
+        eventData: null,
+    } : 
+    "rootHostContextStub";
+const childHostContext: HostContext = __DEV__ ? 
+    {
+        namespace: "childHostContextNamespace",
+        ancestorInfo: {},
+        eventData: null,
+    } : 
+    "childHostContextStub";
 
 function isASingleChildContainer(view: Instance): view is Page|ContentView {
     return view instanceof Page || view instanceof ContentView;
@@ -371,25 +396,32 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): null | UpdatePayload {
-        // TODO
         console.log(`prepareUpdate() with type: ${type}`, instance);
 
-        return {}; // Simply return a non-null value to permit commitUpdate();
+        if (__DEV__) {
+            const hostContextDev: HostContextDev = hostContext as HostContextDev;
+            if (
+                typeof newProps.children !== typeof oldProps.children &&
+                (typeof newProps.children === 'string' ||
+                    typeof newProps.children === 'number')
+            ) {
+                const str: string = '' + newProps.children;
+                const ownAncestorInfo = updatedAncestorInfo(
+                    hostContextDev.ancestorInfo,
+                    type as string,
+                );
+                validateDOMNesting(null, str, ownAncestorInfo);
+            }
+        }
+        return diffProperties(
+            instance,
+            type,
+            oldProps,
+            newProps,
+            rootContainerInstance,
+        );
 
-        // const propKeys: Set<string> = new Set(
-        //     Object.keys(newProps).concat(Object.keys(oldProps))
-        // );
-        // const payload = [];
-        // for (let key of propKeys.values()) {
-        //     if (
-        //         key !== 'children' && // text children are already handled
-        //         oldProps[key] !== newProps[key]
-        //     ){
-        //         payload.push({ [key]: newProps[key] })
-        //     }
-        // }
-        // return payload;
-
+        // return {}; // Simply return a non-null value to permit commitUpdate();
         // return null;
     },
     commitUpdate(
@@ -401,26 +433,34 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): void {
         console.log(`commitUpdate() with type: ${type}`, instance);
-        Object.keys(newProps).forEach((prop: string) => {
-            const value: any = newProps[prop];
-            if(prop === "children"){
-                if(typeof prop === "string" || typeof prop === "number"){
-                    if(instance instanceof TextBase){
-                        const oldText: string = instance.text;
-                        instance.text = value;
-                        instance.notifyPropertyChange("text", "newText", oldText);
-                    } else {
-                        console.warn(`commitUpdate() called with text as a prop upon a non-TextBase View. Text-setting is only implemented for instances extending TextBase.`);
-                    }
-                } else {
-                    console.warn(`commitUpdate() called with a non-textual 'children' value; ignoring.`);
-                }
-            } else {
-                instance.set(prop, value);
-                // TODO: check whether Observable.set() is appropriate.
-                // TODO: should probably notify of property change, too.
-            }
-        })
+
+        // Update the props handle so that we know which props are the ones with
+        // with current event handlers.
+        updateFiberProps(instance, newProps);
+
+        // Apply the diff to the DOM node.
+        updateProperties(instance, updatePayload, type, oldProps, newProps);
+
+        // Object.keys(newProps).forEach((prop: string) => {
+        //     const value: any = newProps[prop];
+        //     if(prop === "children"){
+        //         if(typeof prop === "string" || typeof prop === "number"){
+        //             if(instance instanceof TextBase){
+        //                 const oldText: string = instance.text;
+        //                 instance.text = value;
+        //                 instance.notifyPropertyChange("text", "newText", oldText);
+        //             } else {
+        //                 console.warn(`commitUpdate() called with text as a prop upon a non-TextBase View. Text-setting is only implemented for instances extending TextBase.`);
+        //             }
+        //         } else {
+        //             console.warn(`commitUpdate() called with a non-textual 'children' value; ignoring.`);
+        //         }
+        //     } else {
+        //         instance.set(prop, value);
+        //         // TODO: check whether Observable.set() is appropriate.
+        //         // TODO: should probably notify of property change, too.
+        //     }
+        // })
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
