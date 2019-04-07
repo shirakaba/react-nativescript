@@ -10,16 +10,16 @@ interface Props {
 
 export class ListViewCell extends React.Component<Props, {}> {
     componentDidMount(){
-        console.log(`[ListViewCell ${this.props.identifier}] componentDidMount! With: ${this.props.textReference}`);
+        // console.log(`[ListViewCell ${this.props.identifier}] componentDidMount! With: ${this.props.textReference}`);
     }
 
     shouldComponentUpdate(nextProps: Props, nextState: {}): boolean {
-        console.log(`[ListViewCell ${this.props.identifier}] shouldComponentUpdate! With: ${nextProps.textReference}`);
+        // console.log(`[ListViewCell ${this.props.identifier}] shouldComponentUpdate! With: ${nextProps.textReference}`);
         return true;
     }
 
     componentWillUnmount(){
-        console.log(`[ListViewCell ${this.props.identifier}] componentWillUnmount!`);
+        // console.log(`[ListViewCell ${this.props.identifier}] componentWillUnmount!`);
     }
 
     render(){
