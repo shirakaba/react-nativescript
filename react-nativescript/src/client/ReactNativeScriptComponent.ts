@@ -15,6 +15,7 @@ const SUPPRESS_CONTENT_EDITABLE_WARNING: string = 'suppressContentEditableWarnin
 const SUPPRESS_HYDRATION_WARNING: string = 'suppressHydrationWarning';
 const AUTOFOCUS: string = 'autoFocus';
 const CHILDREN: string = 'children';
+const TEXT: string = 'text';
 const STYLE: string = 'style';
 const HTML: string = '__html';
 // const TEXT_NODE: string = '';
@@ -71,8 +72,14 @@ export function updateDOMProperties(
         // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
         //     setInnerHTML(instance, propValue);
         } else if (propKey === CHILDREN) {
+            /* The fact that React DOM don't handle child nesting here suggests that
+             * it has already been filtered out beforehand, and children can only be 
+             * text content by this point. */
+            setTextContent(instance, propValue);
+        } else if (propKey === TEXT && instance instanceof TextBase) {
             setTextContent(instance, propValue);
         } else {
+            console.log(`[updateDOMProperties] calling setValueForProperty on ${instance} for propKey: ${propKey}; value:`, propValue);
             setValueForProperty(instance, propKey, propValue, isCustomComponentTag);
         }
     }
@@ -143,6 +150,7 @@ export function diffProperties(
             !lastProps.hasOwnProperty(propKey) ||
             lastProps[propKey] == null
         ) {
+            console.log(`[diffProperties] skipping on lastProps key:`, propKey); 
             continue;
         }
         if (propKey === STYLE) {
@@ -157,6 +165,7 @@ export function diffProperties(
             }
         } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) {
             // Noop. This is handled by the clear text mechanism.
+            console.warn(`[diffProperties] propKey === CHILDREN; Noop. This is handled by the clear text mechanism.`);
         } else if (
             propKey === SUPPRESS_CONTENT_EDITABLE_WARNING ||
             propKey === SUPPRESS_HYDRATION_WARNING
@@ -172,12 +181,14 @@ export function diffProperties(
         //         updatePayload = [];
         //     }
         } else {
+            console.log(`[diffProperties] INSPECTING OLDPROPS key:`, propKey);
             // For all other deleted properties we add it to the queue. We use
             // the whitelist in the commit phase instead.
             (updatePayload = updatePayload || []).push(propKey, null);
         }
     }
 
+    console.log(`[diffProperties] updatePayload as of lastProp`, updatePayload);
 
     for (propKey in nextProps) {
         const nextProp = nextProps[propKey];
@@ -187,6 +198,7 @@ export function diffProperties(
             nextProp === lastProp ||
             (nextProp == null && lastProp == null)
         ) {
+            console.log(`[diffProperties] skipping on nextProps key:`, propKey); 
             continue;
         }
         if (propKey === STYLE) {
@@ -232,23 +244,28 @@ export function diffProperties(
                 }
                 styleUpdates = nextProp;
             }
-        } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
-            const nextHtml = nextProp ? nextProp[HTML] : undefined;
-            const lastHtml = lastProp ? lastProp[HTML] : undefined;
-            if (nextHtml != null) {
-                if (lastHtml !== nextHtml) {
-                    (updatePayload = updatePayload || []).push(propKey, '' + nextHtml);
-                }
-            } else {
-                // TODO: It might be too late to clear this if we have children
-                // inserted already.
-            }
+        // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
+        //     const nextHtml = nextProp ? nextProp[HTML] : undefined;
+        //     const lastHtml = lastProp ? lastProp[HTML] : undefined;
+        //     if (nextHtml != null) {
+        //         if (lastHtml !== nextHtml) {
+        //             (updatePayload = updatePayload || []).push(propKey, '' + nextHtml);
+        //         }
+        //     } else {
+        //         // TODO: It might be too late to clear this if we have children
+        //         // inserted already.
+        //     }
         } else if (propKey === CHILDREN) {
+            // console.log(`[diffProperties] got propKey === CHILDREN.`);
+            // console.log(`[diffProperties] lastProp`, lastProp);
+            // console.log(`[diffProperties] nextProp`, nextProp);
             if (
                 lastProp !== nextProp &&
                 (typeof nextProp === 'string' || typeof nextProp === 'number')
             ) {
                 (updatePayload = updatePayload || []).push(propKey, '' + nextProp);
+            } else {
+                // console.log(`[diffProperties] not pushing for propKey === CHILDREN.`);
             }
         } else if (
             propKey === SUPPRESS_CONTENT_EDITABLE_WARNING ||
@@ -269,7 +286,8 @@ export function diffProperties(
         //         // to update this element.
         //         updatePayload = [];
         //     }
-        // } else {
+        } else {
+            console.log(`[diffProperties] INSPECTING NEWPROPS key and nextProp`, propKey, nextProp);
             // For any other property we always add it to the queue and then we
             // filter it out using the whitelist during the commit.
             (updatePayload = updatePayload || []).push(propKey, nextProp);
@@ -281,6 +299,7 @@ export function diffProperties(
         // }
         (updatePayload = updatePayload || []).push(STYLE, styleUpdates);
     }
+    console.log(`[diffProperties] updatePayload as of nextProp:`, updatePayload);
     return updatePayload;
 }
 

@@ -26,23 +26,23 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
-                    // React.createElement(
-                    //     ListView,
-                    //     {
-                    //         items: [
-                    //             /* Enough cells to see how view recycling works/ doesn't work */
-                    //             ...[...Array(7).keys()].map((val) => {
-                    //                 return { text: val };
-                    //             })
-                    //         ]
-                    //     },
-                    //     null
-                    // ),
                     React.createElement(
-                        Clock,
-                        {},
+                        ListView,
+                        {
+                            items: [
+                                /* Enough cells to see how view recycling works/ doesn't work */
+                                ...[...Array(7).keys()].map((val) => {
+                                    return { text: val };
+                                })
+                            ]
+                        },
                         null
                     ),
+                    // React.createElement(
+                    //     Clock,
+                    //     {},
+                    //     null
+                    // ),
                     page,
                     () => {
                         console.log(`Container updated!`);

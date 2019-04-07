@@ -1,4 +1,5 @@
 import { Instance } from "./HostConfig";
+import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:

@@ -398,7 +398,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     ): null | UpdatePayload {
         console.log(`prepareUpdate() with type: ${type}`, instance);
 
-        if (__DEV__) {
+        if ((global as any).__DEV__) {
             const hostContextDev: HostContextDev = hostContext as HostContextDev;
             if (
                 typeof newProps.children !== typeof oldProps.children &&
@@ -413,13 +413,27 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 validateDOMNesting(null, str, ownAncestorInfo);
             }
         }
-        return diffProperties(
+
+        (()=>{
+            const { children, ...rest } = oldProps;
+            console.log(`About to run diffProperties on ${instance}. oldProps:`, { ...rest });
+        })();
+        (()=>{
+            const { children, ...rest } = newProps;
+            console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
+        })();
+
+        const diffed = diffProperties(
             instance,
             type,
             oldProps,
             newProps,
             rootContainerInstance,
         );
+
+        console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
+
+        return diffed;
 
         // return {}; // Simply return a non-null value to permit commitUpdate();
         // return null;
