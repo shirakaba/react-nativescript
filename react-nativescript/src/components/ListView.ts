@@ -7,6 +7,7 @@ import { Label } from "tns-core-modules/ui/label/label";
 import { default as ReactNativeScript } from "../index"
 import { ContentView } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
+import { ListViewCell } from "./ListViewCell";
 
 interface Props {
     items: ListViewProps["items"],
@@ -261,7 +262,26 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
         this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
             console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
-            const portal = ReactNativeScript.createPortal(
+            // const portal = ReactNativeScript.createPortal(
+            //     React.createElement(
+            //         "label",
+            //         {
+            //             key: view._domId,
+            //             text: `${(items as any[])[itemIndex].text}`,
+            //             fontSize: 150,
+            //             height: 150,
+            //             // textWrap: true,
+            //             // class: "title"
+            //         }
+            //     ),
+            //     view,
+            //     `LVC(${view._domId})`
+            // );
+            const portal = React.createElement(
+                ListViewCell,
+                {
+                    nativeElement: view,
+                },
                 React.createElement(
                     "label",
                     {
@@ -272,11 +292,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                         // textWrap: true,
                         // class: "title"
                     }
-                ),
-                view,
-                `LVC(${view._domId})`
-            );
-            portals.push(portal);
+                )
+            )
+            portals.push(portal as React.ReactPortal);
         });
 
         return React.createElement(
