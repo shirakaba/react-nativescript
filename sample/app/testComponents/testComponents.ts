@@ -176,3 +176,44 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
 //     },
 //     null
 // ),
+
+export class Clock extends React.Component<{}, { date: Date }> {
+    private timerID!: number;
+
+    constructor(props) {
+        super(props);
+        this.state = { date: new Date() };
+    }
+  
+    componentDidMount() {
+      this.timerID = setInterval(
+          () => this.tick(),
+          1000
+      );
+    }
+  
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+  
+    tick() {
+        this.setState({
+          date: new Date()
+        });
+    }
+  
+    render() {
+    //   return (
+    //     <div>
+    //       <h1>Hello, world!</h1>
+    //       <FormattedDate date={this.state.date} />
+    //     </div>
+    //   );
+        return React.createElement(
+            ReactTextView,
+            {
+            },
+            this.state.date.toLocaleTimeString()
+        );
+    }
+  }

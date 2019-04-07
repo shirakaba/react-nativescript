@@ -12,7 +12,7 @@ import { TextView as ReactTextView } from "react-nativescript/dist/components/Te
 import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
 import { ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1 } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1, Clock } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
 
@@ -26,16 +26,21 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
+                    // React.createElement(
+                    //     ListView,
+                    //     {
+                    //         items: [
+                    //             /* Enough cells to see how view recycling works/ doesn't work */
+                    //             ...[...Array(7).keys()].map((val) => {
+                    //                 return { text: val };
+                    //             })
+                    //         ]
+                    //     },
+                    //     null
+                    // ),
                     React.createElement(
-                        ListView,
-                        {
-                            items: [
-                                /* Enough cells to see how view recycling works/ doesn't work */
-                                ...[...Array(7).keys()].map((val) => {
-                                    return { text: val };
-                                })
-                            ]
-                        },
+                        Clock,
+                        {},
                         null
                     ),
                     page,
