@@ -15,6 +15,10 @@ import { reactReconcilerInst, Container } from "./client/HostConfig";
 import { ReactPortal } from "react";
 import { createPortal } from './client/ReactPortal';
 
+declare global {
+    var __DEV__: boolean|undefined;
+}
+
 // https://blog.atulr.com/react-custom-renderer-1/
 export default {
     createPortal(
