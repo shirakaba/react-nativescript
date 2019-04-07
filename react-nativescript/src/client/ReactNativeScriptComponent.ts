@@ -6,6 +6,9 @@
  */
 import assertValidProps from "../shared/assertValidProps";
 import { Type, Instance, Container } from "./HostConfig";
+import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
+import { setValueForStyles } from "../shared/CSSPropertyOperations";
+import { setValueForProperty } from "./NativeScriptPropertyOperations";
 
 const DANGEROUSLY_SET_INNER_HTML: string = 'dangerouslySetInnerHTML';
 const SUPPRESS_CONTENT_EDITABLE_WARNING: string = 'suppressContentEditableWarning';
@@ -14,6 +17,66 @@ const AUTOFOCUS: string = 'autoFocus';
 const CHILDREN: string = 'children';
 const STYLE: string = 'style';
 const HTML: string = '__html';
+// const TEXT_NODE: string = '';
+
+function setTextContent(node: Instance, text: string): void {
+    /* No concept of text nodes in NativeScript as far as I know... */
+    // if (text) {
+    //     let firstChild;
+    //     let i: number = 0;
+    //     node.eachChild((child: ViewBase) => {
+    //         if(i === 0){
+    //             firstChild = child;
+    //         } else if(i > 0){
+    //             return false;
+    //         }
+    //         i++;
+    //         return true;
+    //     });
+    //     const isLastChild: boolean = firstChild && i === 1;
+    //     if (
+    //         firstChild &&
+    //         isLastChild &&
+    //         // firstChild.nodeType === TEXT_NODE
+    //         typeof firstChild === "string" || typeof firstChild === "number"
+    //     ) {
+    //         const oldText: string = firstChild.text;
+    //         firstChild.text = text;
+    //         firstChild.notifyPropertyChange("text", text, oldText);
+    //         return;
+    //     }
+    // }
+
+    if(node instanceof TextBase){
+        const oldText: string = node.text;
+        node.text = text;
+        node.notifyPropertyChange("text", text, oldText);
+    } else {
+        console.warn(`setTextContent() content incorrectly called on non-TextBase!`);
+    }
+};
+
+export function updateDOMProperties(
+    instance: Instance,
+    updatePayload: Array<any>,
+    wasCustomComponentTag: boolean,
+    isCustomComponentTag: boolean,
+): void {
+    // TODO: Handle wasCustomComponentTag
+    for (let i = 0; i < updatePayload.length; i += 2) {
+        const propKey = updatePayload[i];
+        const propValue = updatePayload[i + 1];
+        if (propKey === STYLE) {
+            setValueForStyles(instance, propValue);
+        // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
+        //     setInnerHTML(instance, propValue);
+        } else if (propKey === CHILDREN) {
+            setTextContent(instance, propValue);
+        } else {
+            setValueForProperty(instance, propKey, propValue, isCustomComponentTag);
+        }
+    }
+}
 
 export function diffProperties(
     domElement: Instance,
@@ -219,4 +282,52 @@ export function diffProperties(
         (updatePayload = updatePayload || []).push(STYLE, styleUpdates);
     }
     return updatePayload;
+}
+
+export function updateProperties(
+    instance: Instance,
+    updatePayload: Array<any>,
+    tag: string,
+    lastRawProps: any,
+    nextRawProps: any,
+): void {
+    // Update checked *before* name.
+    // In the middle of an update, it is possible to have multiple checked.
+    // When a checked radio tries to change name, browser makes another radio's checked false.
+    if (
+        tag === 'input' &&
+        nextRawProps.type === 'radio' &&
+        nextRawProps.name != null
+    ) {
+        ReactDOMInputUpdateChecked(instance, nextRawProps);
+    }
+
+    const wasCustomComponentTag = isCustomComponent(tag, lastRawProps);
+    const isCustomComponentTag = isCustomComponent(tag, nextRawProps);
+    // Apply the diff.
+    updateDOMProperties(
+        instance,
+        updatePayload,
+        wasCustomComponentTag,
+        isCustomComponentTag,
+    );
+
+    // TODO: Ensure that an update gets scheduled if any of the special props
+    // changed.
+    switch (tag) {
+        case 'input':
+            // Update the wrapper around inputs *after* updating props. This has to
+            // happen after `updateDOMProperties`. Otherwise HTML5 input validations
+            // raise warnings and prevent the new value from being assigned.
+            ReactDOMInputUpdateWrapper(instance, nextRawProps);
+            break;
+        case 'textarea':
+            ReactDOMTextareaUpdateWrapper(instance, nextRawProps);
+            break;
+        case 'select':
+            // <select> value update needs to occur after <option> children
+            // reconciliation
+            ReactDOMSelectPostUpdateWrapper(instance, nextRawProps);
+            break;
+    }
 }

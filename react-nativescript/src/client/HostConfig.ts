@@ -28,11 +28,13 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
-import { diffProperties } from './ReactNativeScriptComponent';
+import { diffProperties, updateProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
+import { setValueForStyles } from '../shared/CSSPropertyOperations';
+import { setValueForProperty } from './NativeScriptPropertyOperations';
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
-type Props = Record<string, any>;
+type Props = any;
 export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
 export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
 type TextInstance = TextBase;
@@ -166,6 +168,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     resetAfterCommit(rootContainerInstance: Container): void {
         // TODO
     },
+    // TODO: replace parts of this with updateDOMProperties() where applicable
     createInstance(
         type: Type,
         props: Props,
@@ -233,15 +236,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 }
                 console.warn(`Support for setting styles is experimental.`);
                 // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
-                Object.keys(value).forEach((styleName: string) => {
-                    console.log(`Setting style:`, styleName);
-                    const styleValue: any = value[styleName];
-                    view.set(styleName, styleValue);
-                });
+                setValueForStyles(view, value);
                 // console.log(`Width now:`, view.width);
                 // console.log(`Height now:`, view.height);
             } else {
-                view.set(prop, value);
+                // view.set(prop, value);
+                setValueForProperty(view, prop, value, false);
             }
 
             // TODO: should probably notify of property change, too.
