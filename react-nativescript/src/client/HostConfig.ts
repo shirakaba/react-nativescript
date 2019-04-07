@@ -248,10 +248,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
     ): boolean {
         // TODO
+        console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         return false;
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-3/
+     * Expanded on in: https://hackernoon.com/learn-you-some-custom-react-renderers-aed7164a4199
      * @param instance - the current DOM instance of the Node.
      * @param type - the type of fiber, e.g. "div".
      * @param oldProps - props before this update.
@@ -269,7 +271,25 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
     ): null | UpdatePayload {
         // TODO
-        return null;
+        console.log(`prepareUpdate() with type: ${type}`, instance);
+
+        return {}; // Simply return a non-null value to permit commitUpdate();
+
+        // const propKeys: Set<string> = new Set(
+        //     Object.keys(newProps).concat(Object.keys(oldProps))
+        // );
+        // const payload = [];
+        // for (let key of propKeys.values()) {
+        //     if (
+        //         key !== 'children' && // text children are already handled
+        //         oldProps[key] !== newProps[key]
+        //     ){
+        //         payload.push({ [key]: newProps[key] })
+        //     }
+        // }
+        // return payload;
+
+        // return null;
     },
     shouldSetTextContent(type: Type, props: Props): boolean {
         return typeof props.children === 'string' || typeof props.children === 'number';
@@ -369,6 +389,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): void {
+        console.log(`commitMount() with type: ${type}`, instance);
         (instance as View).focus();
     },
     commitUpdate(

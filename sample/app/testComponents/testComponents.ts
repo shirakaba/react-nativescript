@@ -216,12 +216,8 @@ export class Clock extends React.Component<{}, { date: Date }> {
     }
   
     render() {
-    //   return (
-    //     <div>
-    //       <h1>Hello, world!</h1>
-    //       <FormattedDate date={this.state.date} />
-    //     </div>
-    //   );
+        console.log(`[Clock] render()!`);
+        
         return React.createElement(
             ReactTextView,
             {
