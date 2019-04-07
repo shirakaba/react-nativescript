@@ -55,7 +55,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             contentView.backgroundColor = "orange";
             args.view = contentView;
 
-            // console.log(`'onItemLoading': <empty> -> ${args.index}`);
+            console.log(`'onItemLoading': <empty> -> ${args.index}`);
 
             if(this.state.itemIndexToNativeCell.has(args.index)){
                 console.warn(`WARNING: list index already registered yet args.view was falsy!`);
@@ -78,7 +78,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     itemIndexToNativeCell
                 };
             }, () => {
-                // console.log(`setState() completed for <empty> -> ${args.index}`);
+                console.log(`setState() completed for <empty> -> ${args.index}`);
             });
         } else {
             args.view.backgroundColor = "blue";
@@ -88,7 +88,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             // });
             // const filledIndex: string|null = sparseIndex === -1 ? null : filledIndices[sparseIndex];
             // if(filledIndex === null){
-            //     // console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
+            //     console.log(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
             //     return;
             // }
 
@@ -104,11 +104,11 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             // setState() completed for <empty> -> 37
             // 'onItemLoading': 0 -> 38
             
-            // console.log(`'onItemLoading'! ${view} ${itemIndexOfArgsView} -> ${args.index}`);
+            console.log(`'onItemLoading'! ${view} ${itemIndexOfArgsView} -> ${args.index}`);
 
             /* TODO: Not sure whether it's a no-op in truth. Have to re-examine. */
             // if(parseInt(itemIndexOfArgsView) === args.index){
-            //     // console.log(`Filled index matched args.index, so treating as no-op...`);
+            //     console.log(`Filled index matched args.index, so treating as no-op...`);
             //     return;
             // }
 
@@ -128,14 +128,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 }
                 // nativeCellToItemIndex.delete(view as ContentView); /* redundant */
                 nativeCellToItemIndex.set(view as ContentView, args.index);
-                // console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
-                // console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
+                console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
+                console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
 
                 itemIndexToNativeCell.delete(itemIndexOfArgsView);
                 itemIndexToNativeCell.set(args.index, view as ContentView);
 
-                // console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
-                // console.log(`INCOMING itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
+                console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
+                console.log(`INCOMING itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
 
                 const nativeCells: Record<number, ContentView> = {
                     ...prev.nativeCells,
@@ -151,7 +151,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     itemIndexToNativeCell
                 };
             }, () => {
-                // console.log(`setState() completed for ${itemIndexOfArgsView} -> ${args.index}`);
+                console.log(`setState() completed for ${itemIndexOfArgsView} -> ${args.index}`);
             });
         }
     }
@@ -173,9 +173,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     }
 
     shouldComponentUpdate(nextProps: ListViewComponentProps, nextState: State): boolean {
-        // console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
-        // console.log(`[ListView] shouldComponentUpdate! itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(nextState.itemIndexToNativeCell));
-        // console.log(`[ListView] shouldComponentUpdate! nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nextState.nativeCellToItemIndex));
+        console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
+        console.log(`[ListView] shouldComponentUpdate! itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(nextState.itemIndexToNativeCell));
+        console.log(`[ListView] shouldComponentUpdate! nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nextState.nativeCellToItemIndex));
 
         // TODO: check whether this is the ideal lifecycle function to do this in.
         const node: NativeScriptListView|null = this.myRef.current;
@@ -193,7 +193,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     componentWillUnmount(){
         const node: NativeScriptListView|null = this.myRef.current;
 
-        // console.log(`[ListView] componentWillUnmount!`);
+        console.log(`[ListView] componentWillUnmount!`);
         
         if(node){
             const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
@@ -234,14 +234,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
     render(){
         const { children, items, ...rest } = this.props;
-        // console.warn("ListView implementation not yet complete!");
+        console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
         }
 
         const portals: React.ReactPortal[] = [];
         // this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
-        //     // // console.log(`key: ${view._domId}`);
+        //     // console.log(`key: ${view._domId}`);
         //     const portal = ReactNativeScript.createPortal(
         //         React.createElement(
         //             "label",
@@ -259,9 +259,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         //     portals.push(portal);
         // });
 
-        // console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
+        console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
         this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
-            // console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
+            console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
             // const portal = ReactNativeScript.createPortal(
             //     React.createElement(
             //         "label",
@@ -289,7 +289,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     {
                         key: view._domId,
                         text: `${(items as any[])[itemIndex].text}`,
-                        fontSize: 50,
+                        fontSize: 150,
                         // height: 50,
                         // textWrap: true,
                         // class: "title"
