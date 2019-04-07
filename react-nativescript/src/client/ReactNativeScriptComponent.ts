@@ -5,6 +5,7 @@
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
 import assertValidProps from "../shared/assertValidProps";
+import { Type, Instance, Container } from "./HostConfig";
 
 const DANGEROUSLY_SET_INNER_HTML: string = 'dangerouslySetInnerHTML';
 const SUPPRESS_CONTENT_EDITABLE_WARNING: string = 'suppressContentEditableWarning';
@@ -15,11 +16,11 @@ const STYLE: string = 'style';
 const HTML: string = '__html';
 
 export function diffProperties(
-    domElement: Element,
-    tag: string,
+    domElement: Instance,
+    tag: Type,
     lastRawProps: object,
     nextRawProps: object,
-    rootContainerElement: Element | Document,
+    rootContainerElement: Container,
   ): null | Array<any> {
     // if(__DEV__){
     //   validatePropertiesInDevelopment(tag, nextRawProps);
@@ -64,7 +65,11 @@ export function diffProperties(
     //     break;
     // }
     
-    assertValidProps(tag, nextProps);
+    if(typeof tag === "string"){
+        assertValidProps(tag, nextProps);
+    } else {
+        console.warn(`TODO: determine whether a custom component may pass through client/ReactNativeScriptComponent.diffProperties()`);
+    }
 
     let propKey: string;
     let styleName: string;
