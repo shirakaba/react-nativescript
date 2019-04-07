@@ -251,46 +251,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         return false;
     },
-    /**
-     * From: https://blog.atulr.com/react-custom-renderer-3/
-     * Expanded on in: https://hackernoon.com/learn-you-some-custom-react-renderers-aed7164a4199
-     * @param instance - the current DOM instance of the Node.
-     * @param type - the type of fiber, e.g. "div".
-     * @param oldProps - props before this update.
-     * @param newProps - incoming props.
-     * @param rootContainerInstance - root dom node you specify while calling render. This is most commonly <div id="root"></div>
-     * @param hostContext - contains the context from the parent node enclosing this node. This is the return value from getChildHostContext of the parent node.
-     * @returns This function should return a payload object. Payload is a Javascript object that can contain information on what needs to be changed on this host element.
-     */
-    prepareUpdate(
-        instance: Instance,
-        type: Type,
-        oldProps: Props,
-        newProps: Props,
-        rootContainerInstance: Container,
-        hostContext: HostContext,
-    ): null | UpdatePayload {
-        // TODO
-        console.log(`prepareUpdate() with type: ${type}`, instance);
-
-        return {}; // Simply return a non-null value to permit commitUpdate();
-
-        // const propKeys: Set<string> = new Set(
-        //     Object.keys(newProps).concat(Object.keys(oldProps))
-        // );
-        // const payload = [];
-        // for (let key of propKeys.values()) {
-        //     if (
-        //         key !== 'children' && // text children are already handled
-        //         oldProps[key] !== newProps[key]
-        //     ){
-        //         payload.push({ [key]: newProps[key] })
-        //     }
-        // }
-        // return payload;
-
-        // return null;
-    },
     shouldSetTextContent(type: Type, props: Props): boolean {
         return typeof props.children === 'string' || typeof props.children === 'number';
     },
@@ -391,6 +351,46 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     ): void {
         console.log(`commitMount() with type: ${type}`, instance);
         (instance as View).focus();
+    },
+    /**
+     * From: https://blog.atulr.com/react-custom-renderer-3/
+     * Expanded on in: https://hackernoon.com/learn-you-some-custom-react-renderers-aed7164a4199
+     * @param instance - the current DOM instance of the Node.
+     * @param type - the type of fiber, e.g. "div".
+     * @param oldProps - props before this update.
+     * @param newProps - incoming props.
+     * @param rootContainerInstance - root dom node you specify while calling render. This is most commonly <div id="root"></div>
+     * @param hostContext - contains the context from the parent node enclosing this node. This is the return value from getChildHostContext of the parent node.
+     * @returns This function should return a payload object. Payload is a Javascript object that can contain information on what needs to be changed on this host element.
+     */
+    prepareUpdate(
+        instance: Instance,
+        type: Type,
+        oldProps: Props,
+        newProps: Props,
+        rootContainerInstance: Container,
+        hostContext: HostContext,
+    ): null | UpdatePayload {
+        // TODO
+        console.log(`prepareUpdate() with type: ${type}`, instance);
+
+        return {}; // Simply return a non-null value to permit commitUpdate();
+
+        // const propKeys: Set<string> = new Set(
+        //     Object.keys(newProps).concat(Object.keys(oldProps))
+        // );
+        // const payload = [];
+        // for (let key of propKeys.values()) {
+        //     if (
+        //         key !== 'children' && // text children are already handled
+        //         oldProps[key] !== newProps[key]
+        //     ){
+        //         payload.push({ [key]: newProps[key] })
+        //     }
+        // }
+        // return payload;
+
+        // return null;
     },
     commitUpdate(
         instance: Instance,
