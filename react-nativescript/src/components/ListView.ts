@@ -273,7 +273,8 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                         // class: "title"
                     }
                 ),
-                view
+                view,
+                `LVC(${view._domId})`
             );
             portals.push(portal);
         });
