@@ -6,6 +6,7 @@ import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
 import { default as ReactNativeScript } from "../index"
 import { ContentView } from "tns-core-modules/ui/page/page";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
 
@@ -20,10 +21,10 @@ interface Props {
 type NumberKey = number|string;
 
 interface State {
-    nativeCells: Record<NumberKey, ContentView>;
+    nativeCells: Record<NumberKey, ProxyViewContainer>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
-    nativeCellToItemIndex: Map<ContentView, NumberKey>;
-    itemIndexToNativeCell: Map<NumberKey, ContentView>;
+    nativeCellToItemIndex: Map<ProxyViewContainer, NumberKey>;
+    itemIndexToNativeCell: Map<NumberKey, ProxyViewContainer>;
 }
 
 export type ListViewComponentProps = Props & Partial<ListViewProps>;
@@ -51,7 +52,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         let view: View|undefined = args.view;
         if(!view){
-            const contentView = new ContentView();
+            const contentView = new ProxyViewContainer();
             contentView.backgroundColor = "orange";
             args.view = contentView;
 
@@ -92,7 +93,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
             //     return;
             // }
 
-            const itemIndexOfArgsView: NumberKey|undefined = this.state.nativeCellToItemIndex.get(view as ContentView);
+            const itemIndexOfArgsView: NumberKey|undefined = this.state.nativeCellToItemIndex.get(view as ProxyViewContainer);
 
             if(typeof itemIndexOfArgsView === "undefined"){
                 console.warn(`Unable to find 'nativeCell' that args.view corresponds to!`, view);
@@ -119,27 +120,27 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 const itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
 
                 // 'onItemLoading': 6 -> 5 (where 5 is already occupied by an incumbent view) may happen.
-                const incumbentView: ContentView|undefined = itemIndexToNativeCell.get(args.index);
+                const incumbentView: ProxyViewContainer|undefined = itemIndexToNativeCell.get(args.index);
                 if(incumbentView){
                     /* itemIndexToNativeCell will only show the latest native cell rendering each args.index */
                     itemIndexToNativeCell.delete(args.index);
                     /* nativeCellToItemIndex is permitted to have multiple views rendering the same args.index */
-                    // nativeCellToItemIndex.delete(incumbentView as ContentView);
+                    // nativeCellToItemIndex.delete(incumbentView as ProxyViewContainer);
                 }
-                // nativeCellToItemIndex.delete(view as ContentView); /* redundant */
-                nativeCellToItemIndex.set(view as ContentView, args.index);
+                // nativeCellToItemIndex.delete(view as ProxyViewContainer); /* redundant */
+                nativeCellToItemIndex.set(view as ProxyViewContainer, args.index);
                 console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
                 console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
 
                 itemIndexToNativeCell.delete(itemIndexOfArgsView);
-                itemIndexToNativeCell.set(args.index, view as ContentView);
+                itemIndexToNativeCell.set(args.index, view as ProxyViewContainer);
 
                 console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
                 console.log(`INCOMING itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
 
-                const nativeCells: Record<number, ContentView> = {
+                const nativeCells: Record<number, ProxyViewContainer> = {
                     ...prev.nativeCells,
-                    [args.index]: view as ContentView
+                    [args.index]: view as ProxyViewContainer
                 };
 
                 /* TODO: nativeCells can be replaced with nativeCellToItemIndex... though it gives very nice logs */
@@ -217,17 +218,17 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         return arr;
     }
 
-    static serialiseNativeCellToItemIndex<ContentView, NumberKey>(map: Map<ContentView, NumberKey>): Record<string, string> {
+    static serialiseNativeCellToItemIndex<ProxyViewContainer, NumberKey>(map: Map<ProxyViewContainer, NumberKey>): Record<string, string> {
         return ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index], iterand: number) => {
-            acc[`CV(${(view as any)._domId})`] = `args_${index}`;
+            acc[`PVC(${(view as any)._domId})`] = `args_${index}`;
             return acc;
         }, {});
     }
 
-    static serialiseItemIndexToNativeCell<NumberKey, ContentView>(map: Map<NumberKey, ContentView>): Record<string, string> {
+    static serialiseItemIndexToNativeCell<NumberKey, ProxyViewContainer>(map: Map<NumberKey, ProxyViewContainer>): Record<string, string> {
         return ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
             // acc[`args[${index}]`] = `ContentView(${(view as any)._domId})`;
-            acc[`args_${index}`] = `CV(${(view as any)._domId})`;
+            acc[`args_${index}`] = `PVC(${(view as any)._domId})`;
             return acc;
         }, {});
     }
@@ -240,7 +241,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }
 
         const portals: React.ReactPortal[] = [];
-        // this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
+        // this.state.itemIndexToNativeCell.forEach((view: ProxyViewContainer, itemIndex: number) => {
         //     // console.log(`key: ${view._domId}`);
         //     const portal = ReactNativeScript.createPortal(
         //         React.createElement(
@@ -260,7 +261,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         // });
 
         console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
-        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
+        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ProxyViewContainer) => {
             console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
             // const portal = ReactNativeScript.createPortal(
             //     React.createElement(

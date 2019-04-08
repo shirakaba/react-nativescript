@@ -1,11 +1,11 @@
 import * as React from "react";
 import { default as ReactNativeScript } from "../index";
-import { ContentView } from "tns-core-modules/ui/page/page";
+import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
 
 interface Props {
     identifier: string,
     textReference: string,
-    nativeElement: ContentView
+    nativeElement: ProxyViewContainer
 }
 
 export class ListViewCell extends React.Component<Props, {}> {
