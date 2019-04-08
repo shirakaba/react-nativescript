@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ListViewProps } from "./NativeScriptComponentTypings";
-import { ListView as NativeScriptListView, ItemEventData, knownTemplates } from "tns-core-modules/ui/list-view/list-view";
+import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsSource } from "tns-core-modules/ui/list-view/list-view";
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
@@ -20,6 +20,7 @@ interface Props {
 type NumberKey = number|string;
 
 interface State {
+    isItemsSource: boolean,
     nativeCells: Record<NumberKey, ContentView>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
     nativeCellToItemIndex: Map<ContentView, NumberKey>;
@@ -41,6 +42,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         super(props);
 
         this.state = {
+            isItemsSource: ListView.isItemsSource(props.items),
             nativeCells: {},
             nativeCellToItemIndex: new Map(),
             itemIndexToNativeCell: new Map()
@@ -232,6 +234,11 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }, {});
     }
 
+    public static isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
+        // Same implementation as: https://github.com/NativeScript/NativeScript/blob/b436ecde3605b695a0ffa1757e38cc094e2fe311/tns-core-modules/ui/list-picker/list-picker-common.ts#L74
+        return typeof (arr as ItemsSource).getItem === "function";
+    }
+
     render(){
         const { children, items, ...rest } = this.props;
         console.warn("ListView implementation not yet complete!");
@@ -241,13 +248,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
         const portals: React.ReactPortal[] = [];
         // this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
+        //     const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
         //     // console.log(`key: ${view._domId}`);
         //     const portal = ReactNativeScript.createPortal(
         //         React.createElement(
         //             "label",
         //             {
         //                 key: view._domId,
-        //                 text: `${(items as any[])[itemIndex].text}`,
+        //                 text: `item.text}`,
         //                 fontSize: 150,
         //                 height: 150,
         //                 // textWrap: true,
@@ -261,13 +269,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
 
         console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
         this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
-            console.log(`CV(${view._domId}): ${(items as any[])[itemIndex].text}`);
+            const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
+            console.log(`CV(${view._domId}): ${item.text}`);
             // const portal = ReactNativeScript.createPortal(
             //     React.createElement(
             //         "label",
             //         {
             //             key: view._domId,
-            //             text: `${(items as any[])[itemIndex].text}`,
+            //             text: `${item.text}`,
             //             fontSize: 150,
             //             height: 150,
             //             // textWrap: true,
@@ -281,14 +290,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 ListViewCell,
                 {
                     identifier: `Portal(${view._domId})`,
-                    textReference: `${(items as any[])[itemIndex].text}`,
+                    textReference: `${item.text}`,
                     nativeElement: view,
                 },
                 React.createElement(
                     "label",
                     {
                         key: view._domId,
-                        text: `${(items as any[])[itemIndex].text}`,
+                        text: `${item.text}`,
                         fontSize: 150,
                         // height: 50,
                         // textWrap: true,
