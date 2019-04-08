@@ -34,7 +34,20 @@ run({
                                 ...[...Array(7).keys()].map((val) => {
                                     return { text: val };
                                 })
-                            ]
+                            ],
+                            cellFactory: (item: any, container: ContentView) => {
+                                return React.createElement(
+                                    "label",
+                                    {
+                                        key: container._domId,
+                                        text: `${item.text}`,
+                                        fontSize: 150,
+                                        // textWrap: true,
+                                        // class: "title"
+                                        
+                                    }
+                                )
+                            }
                         },
                         null
                     ),

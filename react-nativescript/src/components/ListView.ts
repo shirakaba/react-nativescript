@@ -11,6 +11,7 @@ import { ListViewCell } from "./ListViewCell";
 
 interface Props {
     items: ListViewProps["items"],
+    cellFactory: (item: any, container: ContentView) => React.ReactElement,
     onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
@@ -293,17 +294,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                     textReference: `${item.text}`,
                     nativeElement: view,
                 },
-                React.createElement(
-                    "label",
-                    {
-                        key: view._domId,
-                        text: `${item.text}`,
-                        fontSize: 150,
-                        // height: 50,
-                        // textWrap: true,
-                        // class: "title"
-                    }
-                )
+                this.props.cellFactory(item, view)
             )
             portals.push(portal as React.ReactPortal);
         });
