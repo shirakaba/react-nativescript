@@ -10,11 +10,13 @@ import * as React from "react";
 import { default as ReactNativeScript } from "react-nativescript/dist/index"
 import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";;
 import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
-import { ViewBase } from "tns-core-modules/ui/text-base/text-base";
+import { ViewBase, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1, Clock } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
+import { Label } from "../../react-nativescript/dist/components/Label";
+import { Span } from "tns-core-modules/text/span";
 
 run({
     create: () => {
@@ -22,35 +24,43 @@ run({
         frame.navigate({
             create: () => {
                 const page = new Page();
-                page.backgroundColor = "green";
+                page.backgroundColor = "white";
+
+
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        ListView,
-                        {
-                            items: [
-                                /* Enough cells to see how view recycling works/ doesn't work */
-                                ...[...Array(7).keys()].map((val) => {
-                                    return { text: val };
-                                })
-                            ],
-                            cellFactory: (item: any, container: ContentView) => {
-                                return React.createElement(
-                                    "label",
-                                    {
-                                        key: container._domId,
-                                        text: `${item.text}`,
-                                        fontSize: 150,
-                                        // textWrap: true,
-                                        // class: "title"
-                                        
-                                    }
-                                )
-                            }
-                        },
+                        FormattedStringLabel,
+                        {},
                         null
                     ),
+                    // React.createElement(
+                    //     ListView,
+                    //     {
+                    //         items: [
+                    //             /* Enough cells to see how view recycling works/ doesn't work */
+                    //             ...[...Array(7).keys()].map((val) => {
+                    //                 return { text: val };
+                    //             })
+                    //         ],
+                    //         cellFactory: (item: any, container: ContentView) => {
+                    //             return React.createElement(
+                    //                 "label",
+                    //                 {
+                    //                     key: container._domId,
+                    //                     text: `${item.text}`,
+                    //                     fontSize: 150,
+                    //                     // textWrap: true,
+                    //                     // class: "title"
+                                        
+                    //                 }
+                    //             )
+                    //         }
+                    //     },
+                    //     null
+                    // ),
+
                     // React.createElement(
                     //     Clock,
                     //     {},

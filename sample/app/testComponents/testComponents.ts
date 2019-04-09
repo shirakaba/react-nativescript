@@ -5,7 +5,7 @@ import { default as ReactNativeScript } from "react-nativescript/dist/index";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { EventData } from "tns-core-modules/data/observable/observable";
-import { TextBase, ViewBase, PercentLength } from "tns-core-modules/ui/text-base/text-base";
+import { TextBase, ViewBase, PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { Page } from "tns-core-modules/ui/page/page";
@@ -16,7 +16,9 @@ import { Button } from "tns-core-modules/ui/button/button";
 import { Button as ReactButton } from "react-nativescript/dist/components/Button";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
+import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 import { ViewProps } from "react-nativescript/dist/components/NativeScriptComponentTypings";
+import { Span } from "tns-core-modules/text/span";
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
@@ -67,6 +69,49 @@ export class NestedContentView extends React.Component<{}, {}> {
                     },
                 }
             )
+        );
+    }
+}
+
+/**
+ * Referring to:
+ * https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/formatted-string/code-behind/code-behind-ts-page.ts
+ * https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript
+ */
+export class FormattedStringLabel extends React.Component<{}, {}> {
+    render(){
+        const formattedString = new FormattedString();
+
+        const firstSpan: Span = new Span();
+        firstSpan.color = new Color("#3C5AFD");
+        firstSpan.text = "NativeScript";
+
+        const secondSpan: Span = new Span();
+        secondSpan.text = " is an ";
+
+        const thirdSpan: Span = new Span();
+        thirdSpan.fontWeight = "bold";
+        thirdSpan.fontSize = 28;
+        thirdSpan.textDecoration = "underline";
+        thirdSpan.color = new Color("white");
+        thirdSpan.backgroundColor = new Color("green");
+        thirdSpan.fontFamily = "Courier";
+        thirdSpan.text = "AMAZING";
+
+        const fourthSpan: Span = new Span();
+        fourthSpan.text = " framework";
+
+        formattedString.spans.push(firstSpan);
+        formattedString.spans.push(secondSpan);
+        formattedString.spans.push(thirdSpan);
+        formattedString.spans.push(fourthSpan);
+
+        return React.createElement(
+            ReactLabel,
+            {
+                formattedText: formattedString
+            },
+            null
         );
     }
 }
