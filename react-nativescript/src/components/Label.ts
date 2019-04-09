@@ -1,19 +1,19 @@
 import * as React from "react";
-import { TextFieldProps } from "./NativeScriptComponentTypings";
-import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
+import { LabelProps } from "./NativeScriptComponentTypings";
+import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
+import { FormattedString } from "tns-core-modules/text/formatted-string";
 
 interface Props {
-    // No mandatory props.
 }
 
-export type TextFieldComponentProps = Props & Partial<TextFieldProps>;
+export type LabelComponentProps = Props & Partial<LabelProps>;
 
 /**
- * A React wrapper around the NativeScript TextField component.
+ * A React wrapper around the NativeScript Label component.
  * See: ui/layouts/flexbox-layout
  */
-export class TextField extends React.Component<TextFieldComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptTextField> = React.createRef<NativeScriptTextField>();
+export class Label extends React.Component<LabelComponentProps, {}> {
+    private readonly myRef: React.RefObject<NativeScriptLabel> = React.createRef<NativeScriptLabel>();
 
     render(){
         const { children, text, formattedText, ...rest } = this.props;
@@ -27,11 +27,11 @@ export class TextField extends React.Component<TextFieldComponentProps, {}> {
         };
 
         return React.createElement(
-            'textField',
+            'label',
             {
                 ...rest,
                 ...textContent,
-                ref: this.myRef
+                ref: this.myRef,
             },
             children
         );
