@@ -6,17 +6,8 @@ import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
 import { updateListener } from "../client/EventHandling";
 
-/**
- * From React Native's 'ButtonProps' interface.
- */
 interface Props {
-    title: string;
     onPress: (args: EventData) => void;
-    /**
-     * Colour of the text (iOS) or background colour (Android)
-     */
-    color?: string | Color;
-    disabled?: boolean;
 }
 
 type ButtonComponentProps = Props & Partial<TextBaseProps>;
@@ -67,17 +58,22 @@ export class Button extends React.Component<ButtonComponentProps, {}> {
     }
 
     render(){
-        const { title, disabled, color, onPress, style, children, ...rest } = this.props;
+        const { onPress, text, formattedText, children, ...rest } = this.props;
+
+        if(text && formattedText){
+            console.warn(`Both text and formattedText provided; shall use formattedText.`);
+        }
+
+        const textContent = {
+            [formattedText ? "formattedText" : "text"] : formattedText || text
+        };
 
         return React.createElement(
                 'button',
                 {
                     className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                     ...rest,
-                    [isIOS ? "color" : "backgroundColor"]: color, // Should this be done inside style instead?
-                    text: title, // From TextBase
-                    isEnabled: !!!disabled,
-                    style,
+                    ...textContent,
                     ref: this.myRef
                 },
                 children // Weird that a button may contain children, but what do I know.
