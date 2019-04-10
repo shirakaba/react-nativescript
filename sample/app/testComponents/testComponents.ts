@@ -185,7 +185,7 @@ export class GameLoop {
 
         /* NativeScript doesn't have requestAnimationFrame() :( */
         // this.loopID = global.requestAnimationFrame(this.loop);
-        this.loopID = setInterval(this.loop, this.frameRateMs);
+        this.loopID = setTimeout(this.loop, this.frameRateMs);
 	}
 
 	start(): void {
@@ -197,7 +197,7 @@ export class GameLoop {
 	stop(): void {
 		if (!this.loopID) {
             // window.cancelAnimationFrame(this.loopID);
-            clearInterval(this.loopID);
+            clearTimeout(this.loopID);
 			this.loopID = null;
 		}
 	}

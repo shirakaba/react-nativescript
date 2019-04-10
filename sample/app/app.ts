@@ -33,7 +33,7 @@ run({
                     React.createElement(
                         GameLoopProvider,
                         {
-                            frameRateMs: 1000
+                            frameRateMs: (1000 / 60) / 4
                         },
                         React.createElement(
                             Marquee,
