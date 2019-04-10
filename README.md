@@ -57,9 +57,10 @@ Note that 'basic support' may mean "seen to work in very specific favourable cir
 * [x] Basic ListView support
 * [x] Mapping event-handler props to event handlers (e.g. `onTap` prop maps to `on("tap")` for Button component)
 * [x] Mapping React refs to native components (I've given an example in Button)
-* [ ] Implement CSS cascading
-* [ ] Support [FormattedString](https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript)
-* [ ] Create React Components for each of the NativeScript core views (there are a few of them!)
+* [x] Support [FormattedString](https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript)
+* [ ] Implement CSS cascading (assuming that NativeScript Core uses it at all..?)
+* [ ] Create React Components for each of the NativeScript Core views (there are a few of them!)
+* [ ] Map the React NativeScript Components to platform-agnostic [React primitives](https://github.com/lelandrichardson/react-primitives) to support multi-platform apps! [Lerna](https://lernajs.io) may become relevant here.
 * [ ] Handling of props other than by `Observer.setValue()` (I'll gradually discover where this is needed)
 * [ ] Support for non-visual components (e.g. in case you want a `<GameLoop>` component to simply pass down a run loop callback as a context).
 * [ ] Support for context (currently I don't do anything with the `context` param in the HostConfig)
