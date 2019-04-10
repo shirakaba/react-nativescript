@@ -12,7 +12,7 @@ import { TextView as ReactTextView } from "react-nativescript/dist/components/Te
 import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
 import { ViewBase, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel, Marquee } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
 import { Label } from "../../react-nativescript/dist/components/Label";
@@ -31,10 +31,17 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     React.createElement(
-                        FormattedStringLabel,
-                        {},
+                        Marquee,
+                        {
+                            text: "NativeScript is an AMAZING framework"
+                        },
                         null
                     ),
+                    // React.createElement(
+                    //     FormattedStringLabel,
+                    //     {},
+                    //     null
+                    // ),
                     // React.createElement(
                     //     ListView,
                     //     {
