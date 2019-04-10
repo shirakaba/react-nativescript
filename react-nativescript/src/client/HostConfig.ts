@@ -40,36 +40,21 @@ export type Instance = ViewBase; // We may extend this to Observable in future, 
 type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
-type HostContext = HostContextDev | HostContextProd;
-type UpdatePayload = any;
+type HostContext = {
+    isInAParentText: boolean,
+};
+type UpdatePayload = Array<any>;
 type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
-type HostContextProd = string;
-interface HostContextDev {
-    namespace: string,
-    ancestorInfo: any,
-    eventData: null | {
-        isEventComponent?: boolean,
-        isEventTarget?: boolean,
-    }
-};
 
-const rootHostContext: HostContext = (global as any).__DEV__ ? 
-    {
-        namespace: "rootHostContextNamespaceStub",
-        ancestorInfo: {},
-        eventData: null,
-    } : 
-    "rootHostContextStub";
-const childHostContext: HostContext = (global as any).__DEV__ ? 
-    {
-        namespace: "childHostContextNamespace",
-        ancestorInfo: {},
-        eventData: null,
-    } : 
-    "childHostContextStub";
+const rootHostContext: HostContext = {
+    isInAParentText: false,
+};
+const childHostContext: HostContext = {
+    isInAParentText: false
+};
 
 function isASingleChildContainer(view: Instance): view is Page|ContentView {
     return view instanceof Page || view instanceof ContentView;
@@ -146,10 +131,20 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return instance;
     },
     getRootHostContext(rootContainerInstance: Container): HostContext {
-        return rootHostContext;
+        return { isInAParentText: false };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
-        return childHostContext;
+        const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
+        const isInAParentText: boolean =
+            type === 'TextView' ||
+            type === 'TextField' ||
+            type === 'Button';
+      
+        if (prevIsInAParentText !== isInAParentText) {
+            return { isInAParentText };
+        } else {
+            return parentHostContext;
+        }
     },
     /**
      * This function is called when we have made a in-memory render tree of all the views (Remember we are yet to attach it the the actual root dom node).
@@ -185,6 +180,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         let view: View;
         const viewConstructor: ConcreteViewConstructor|null = typeof type === "string" ? elementMap[type] : null;
         if(viewConstructor){
+            if(type === 'contentView' && hostContext.isInAParentText){
+                throw new Error('Nesting of <ContentView> within a TextBase is not currently supported.');
+            };
             view = new viewConstructor();
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
@@ -293,10 +291,13 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): TextInstance {
+        if(!hostContext.isInAParentText){
+            throw new Error('Text strings must be rendered within a component extending <TextBase>.');
+        }
         // See createInstance().
 
-        /* Is TextView the most appropriate here?
-         * Alternative is TextField. TextBase just a base class.
+        /* Is TextView the most appropriate here? RN uses RCTRawText.
+         * Alternative is TextField or Label. TextBase just a base class.
          * Medium tutorial uses: document.createTextNode(text); */
         const textView: TextView = new TextView();
         textView.text = text;
@@ -398,21 +399,21 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     ): null | UpdatePayload {
         console.log(`prepareUpdate() with type: ${type}`, instance);
 
-        if ((global as any).__DEV__) {
-            const hostContextDev: HostContextDev = hostContext as HostContextDev;
-            if (
-                typeof newProps.children !== typeof oldProps.children &&
-                (typeof newProps.children === 'string' ||
-                    typeof newProps.children === 'number')
-            ) {
-                const str: string = '' + newProps.children;
-                const ownAncestorInfo = updatedAncestorInfo(
-                    hostContextDev.ancestorInfo,
-                    type as string,
-                );
-                validateDOMNesting(null, str, ownAncestorInfo);
-            }
-        }
+        // if ((global as any).__DEV__) {
+        //     const hostContextDev: HostContextDev = hostContext as HostContextDev;
+        //     if (
+        //         typeof newProps.children !== typeof oldProps.children &&
+        //         (typeof newProps.children === 'string' ||
+        //             typeof newProps.children === 'number')
+        //     ) {
+        //         const str: string = '' + newProps.children;
+        //         const ownAncestorInfo = updatedAncestorInfo(
+        //             hostContextDev.ancestorInfo,
+        //             type as string,
+        //         );
+        //         validateDOMNesting(null, str, ownAncestorInfo);
+        //     }
+        // }
 
         (()=>{
             const { children, ...rest } = oldProps;
@@ -423,7 +424,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
         })();
 
-        const diffed = diffProperties(
+        const diffed: null | UpdatePayload = diffProperties(
             instance,
             type,
             oldProps,
@@ -454,27 +455,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
         // Apply the diff to the DOM node.
         updateProperties(instance, updatePayload, type, oldProps, newProps);
-
-        // Object.keys(newProps).forEach((prop: string) => {
-        //     const value: any = newProps[prop];
-        //     if(prop === "children"){
-        //         if(typeof prop === "string" || typeof prop === "number"){
-        //             if(instance instanceof TextBase){
-        //                 const oldText: string = instance.text;
-        //                 instance.text = value;
-        //                 instance.notifyPropertyChange("text", "newText", oldText);
-        //             } else {
-        //                 console.warn(`commitUpdate() called with text as a prop upon a non-TextBase View. Text-setting is only implemented for instances extending TextBase.`);
-        //             }
-        //         } else {
-        //             console.warn(`commitUpdate() called with a non-textual 'children' value; ignoring.`);
-        //         }
-        //     } else {
-        //         instance.set(prop, value);
-        //         // TODO: check whether Observable.set() is appropriate.
-        //         // TODO: should probably notify of property change, too.
-        //     }
-        // })
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
