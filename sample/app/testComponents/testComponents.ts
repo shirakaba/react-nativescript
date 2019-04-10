@@ -17,8 +17,9 @@ import { Button as ReactButton } from "react-nativescript/dist/components/Button
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
 import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
-import { ViewProps } from "react-nativescript/dist/components/NativeScriptComponentTypings";
+import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 import { Span } from "tns-core-modules/text/span";
+const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
@@ -118,8 +119,14 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
 }
 
 export class Marquee extends React.Component<{ text: string }, { date: Date, index: number }> {
-    private timerID!: number;
+    private loopID: number;
+    // private timerID!: number;
     // private text: string = "NativeScript is an AMAZING framework";
+
+    /* Warning: %s.getChildContext(): childContextTypes must be defined in order to use getChildContext(). GameLoopProvider */
+    static contextTypes = {
+        loop: PropTypes.object,
+    };
 
     constructor(props) {
         super(props);
@@ -130,14 +137,16 @@ export class Marquee extends React.Component<{ text: string }, { date: Date, ind
     }
   
     componentDidMount() {
-      this.timerID = setInterval(
-          () => this.tick(),
-          100
-      );
+    //   this.timerID = setInterval(
+    //       () => this.tick(),
+    //       100
+    //   );
+        this.loopID = this.context.loop.subscribe(this.tick.bind(this));
     }
   
     componentWillUnmount() {
-        clearInterval(this.timerID);
+        // clearInterval(this.timerID);
+        this.context.loop.unsubscribe(this.loopID);
     }
   
     tick() {
@@ -159,6 +168,98 @@ export class Marquee extends React.Component<{ text: string }, { date: Date, ind
             null
         );
     }
+}
+
+export class GameLoop {
+    private readonly subscribers = [];
+    private loopID: number|null = null;
+
+	constructor(private readonly frameRateMs: number = 1000 / 60){
+		this.loop = this.loop.bind(this);
+	}
+
+	loop(): void {
+		this.subscribers.forEach((callback) => {
+			callback.call();
+		});
+
+        /* NativeScript doesn't have requestAnimationFrame() :( */
+        // this.loopID = global.requestAnimationFrame(this.loop);
+        this.loopID = setInterval(this.loop, this.frameRateMs);
+	}
+
+	start(): void {
+		if (!this.loopID) {
+			this.loop();
+		}
+	}
+
+	stop(): void {
+		if (!this.loopID) {
+            // window.cancelAnimationFrame(this.loopID);
+            clearInterval(this.loopID);
+			this.loopID = null;
+		}
+	}
+
+	subscribe(callback: (...args: any[]) => any): number {
+		return this.subscribers.push(callback);
+	}
+
+	unsubscribe(id: number): void {
+		this.subscribers.splice((id - 1), 1);
+	}
+}
+
+export class GameLoopProvider extends React.Component<{ frameRateMs?: number, style?: Partial<StylePropContents> }, {}> {
+    private readonly loop;
+
+    /* Warning: %s.getChildContext(): childContextTypes must be defined in order to use getChildContext(). GameLoopProvider */
+    static propTypes = {
+        children: PropTypes.any,
+        style: PropTypes.object,
+    };
+    
+    static childContextTypes = {
+        loop: PropTypes.object,
+    };
+
+	constructor(props) {
+		super(props);
+
+		this.loop = new GameLoop(this.props.frameRateMs || 1000 / 60);
+	}
+
+	componentDidMount() {
+		this.loop.start();
+	}
+
+	componentWillUnmount() {
+		this.loop.stop();
+	}
+
+	getChildContext() {
+        console.log(`[GameLoopProvider] getChildContext()!`);
+		return {
+			loop: this.loop,
+		};
+	}
+
+	render() {
+        const { children, frameRateMs, ...rest } = this.props;
+
+		return React.createElement(
+            ReactView,
+            {
+                style: {
+                    width: { unit: "%", value: 100 },
+                    height: { unit: "%", value: 100 }
+                },
+                ...rest,
+            },
+            children
+        );
+	}
 }
 
 export class FlexboxLayoutTest1 extends React.Component<{}, {}> {

@@ -18,7 +18,7 @@ import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
 import { ListView } from "tns-core-modules/ui/list-view/list-view";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
+export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
 interface PartialStyleProp {
     style: Partial<StylePropContents>
 }
