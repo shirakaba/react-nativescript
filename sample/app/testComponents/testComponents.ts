@@ -78,6 +78,7 @@ export class NestedContentView extends React.Component<{}, {}> {
  * https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/formatted-string/code-behind/code-behind-ts-page.ts
  * https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript
  */
+
 export class FormattedStringLabel extends React.Component<{}, {}> {
     render(){
         const formattedString = new FormattedString();
@@ -101,15 +102,59 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
         const fourthSpan: Span = new Span();
         fourthSpan.text = " framework";
 
-        formattedString.spans.push(firstSpan);
-        formattedString.spans.push(secondSpan);
-        formattedString.spans.push(thirdSpan);
-        formattedString.spans.push(fourthSpan);
+        [firstSpan, secondSpan, thirdSpan, fourthSpan]
+        .forEach((span) => {
+            formattedString.spans.push(span);
+        })
 
         return React.createElement(
             ReactLabel,
             {
                 formattedText: formattedString
+            },
+            null
+        );
+    }
+}
+
+export class Marquee extends React.Component<{ text: string }, { date: Date, index: number }> {
+    private timerID!: number;
+    // private text: string = "NativeScript is an AMAZING framework";
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            date: new Date(),
+            index: 0
+        };
+    }
+  
+    componentDidMount() {
+      this.timerID = setInterval(
+          () => this.tick(),
+          100
+      );
+    }
+  
+    componentWillUnmount() {
+        clearInterval(this.timerID);
+    }
+  
+    tick() {
+        this.setState((prev) => ({
+            date: new Date(),
+            index: (prev.index + 1) % this.props.text.length
+        }));
+    }
+
+    render(){
+        const { text } = this.props;
+        const { index } = this.state;
+
+        return React.createElement(
+            ReactLabel,
+            {
+                text: text.slice(index, text.length)
             },
             null
         );
