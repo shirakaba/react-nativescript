@@ -5,11 +5,13 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
 import { updateListener } from "../client/EventHandling";
+import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 
 /**
  * From React Native's 'ViewProps' interface.
  */
 interface Props {
+    dock?: Dock; //
     onLayout?: (...args: any[]) => void;
     onShowingModally?: (args: ShownModallyData) => void;
     onShownModally?: (args: ShownModallyData) => void;

@@ -1,6 +1,8 @@
 import { Instance } from "./HostConfig";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
+import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
+import { View } from "tns-core-modules/ui/core/view/view";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -90,7 +92,13 @@ export function setValueForProperty(
         // console.warn(`Support for setting styles is experimental.`);
         // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
         setValueForStyles(instance, value);
+    } else if(name === "dock"){
+        DockLayout.setDock(instance as View, value);
+        // Unsure how to unset Dock (does it take null?)
+        // https://github.com/NativeScript/NativeScript/blob/05c2460fc4989dae4d7fa1ee52f6d54e0c3113f5/tns-core-modules/ui/layouts/dock-layout/dock-layout-common.ts
     } else {
+        /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
+         * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
         instance.set(name, value);
         // TODO: should probably notify of property change, too..?
     }

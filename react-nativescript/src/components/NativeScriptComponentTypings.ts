@@ -9,6 +9,7 @@ import { View as ReactView } from "../components/View";
 import { ViewComponentProps } from "./View";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
 import { Label } from "tns-core-modules/ui/label/label";
@@ -191,6 +192,11 @@ export type FlexboxLayoutProps = LayoutBaseProps & Pick<
     "justifyContent"|
     "alignItems"|
     "alignContent"
+>;
+
+export type DockLayoutProps = LayoutBaseProps & Pick<
+    DockLayout,
+    "stretchLastChild"
 >;
 
 export type ListViewProps = ViewProps & Pick<

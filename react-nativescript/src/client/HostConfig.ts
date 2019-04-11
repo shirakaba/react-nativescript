@@ -42,19 +42,13 @@ type HydratableInstance = any;
 type PublicInstance = any;
 type HostContext = {
     isInAParentText: boolean,
+    isInADockLayout: boolean,
 };
 type UpdatePayload = Array<any>;
 type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
-
-const rootHostContext: HostContext = {
-    isInAParentText: false,
-};
-const childHostContext: HostContext = {
-    isInAParentText: false
-};
 
 function isASingleChildContainer(view: Instance): view is Page|ContentView {
     return view instanceof Page || view instanceof ContentView;
@@ -131,19 +125,35 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return instance;
     },
     getRootHostContext(rootContainerInstance: Container): HostContext {
-        return { isInAParentText: false };
+        return {
+            isInAParentText: false,
+            isInADockLayout: false
+        };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
+        const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const isInAParentText: boolean =
-            type === 'TextView' ||
-            type === 'TextField' ||
-            type === 'Button';
+            type === 'textView' ||
+            type === 'textField' ||
+            type === 'button';
+        const isInADockLayout: boolean = type === 'dockLayout';
       
-        if (prevIsInAParentText !== isInAParentText) {
-            return { isInAParentText };
-        } else {
+        /* I think that text CSS props cascade all the way down, but dock props are only
+         * with respect to the immediate DockLayout parent, so we won't look at the parent.
+         *
+         * Here we avoid recreating an object that happens to deep-equal parentHostContext.
+         */
+        if(
+            prevIsInAParentText === isInAParentText &&
+            prevIsInADockLayout === isInADockLayout
+        ){
             return parentHostContext;
+        } else {
+            return {
+                isInAParentText,
+                isInADockLayout,
+            };
         }
     },
     /**
@@ -201,6 +211,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 hostContext,
                 internalInstanceHandle
             );
+        }
+
+        if(hostContext.isInADockLayout && !props.dock){
+            console.warn(`Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`);
         }
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
