@@ -3,6 +3,7 @@ import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { View } from "tns-core-modules/ui/core/view/view";
+import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -92,10 +93,44 @@ export function setValueForProperty(
         // console.warn(`Support for setting styles is experimental.`);
         // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
         setValueForStyles(instance, value);
-    } else if(name === "dock"){
-        DockLayout.setDock(instance as View, value);
-        // Unsure how to unset Dock (does it take null?)
+    } else if((name === "rows" || name === "columns") && instance instanceof GridLayout){
+        if(name === "rows"){
+            /* Clear any existing rows; would be more efficient to do a diff, but hard to get right. */
+            if((instance as GridLayout).getRows().length > 0){
+                (instance as GridLayout).removeRows();
+            }
+            (value as ItemSpec[]).forEach((item: ItemSpec) => {
+                (instance as GridLayout).addRow(item);
+            });
+        } else if(name === "columns"){
+            /* Clear any existing columns; would be more efficient to do a diff, but hard to get right. */
+            if((instance as GridLayout).getColumns().length > 0){
+                (instance as GridLayout).removeColumns();
+            }
+            (instance as GridLayout).removeColumns();
+            (value as ItemSpec[]).forEach((item: ItemSpec) => {
+                (instance as GridLayout).addColumn(item);
+            });
+        }
+    } else if(name === "dock" && instance instanceof View){
         // https://github.com/NativeScript/NativeScript/blob/05c2460fc4989dae4d7fa1ee52f6d54e0c3113f5/tns-core-modules/ui/layouts/dock-layout/dock-layout-common.ts
+        // FIXME: Unsure how to unset Dock (does it take null?)
+        DockLayout.setDock(instance as View, value);
+    } else if(
+        (name === "row" || name === "column" || name === "rowSpan" || name === "columnSpan") && 
+        instance instanceof View
+    ){
+        // https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/grid-layout/grid-layout-ts-page.ts
+        // FIXME: Unsure how to unset any of these properties!
+        if(name === "row"){
+            GridLayout.setRow(instance, value);
+        } else if(name === "rowSpan"){
+            GridLayout.setRowSpan(instance, value);
+        } else if(name === "column"){
+            GridLayout.setColumn(instance, value);
+        } else if(name === "columnSpan"){
+            GridLayout.setColumnSpan(instance, value);
+        }
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */

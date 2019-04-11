@@ -10,6 +10,7 @@ import { ViewComponentProps } from "./View";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
 import { Label } from "tns-core-modules/ui/label/label";
@@ -198,6 +199,12 @@ export type DockLayoutProps = LayoutBaseProps & Pick<
     DockLayout,
     "stretchLastChild"
 >;
+
+/* No props on GridLayout; just getters and setters. */
+export type GridLayoutProps = LayoutBaseProps; 
+// & Pick<
+//     GridLayout,
+// >;
 
 export type ListViewProps = ViewProps & Pick<
     ListView,
