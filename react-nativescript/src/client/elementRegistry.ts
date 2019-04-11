@@ -41,6 +41,7 @@ import { FadeTransition } from "tns-core-modules/ui/transition/fade-transition";
 import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
 import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/Grid-layout";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -61,23 +62,24 @@ export const elementMap = {
     // "animation": Animation,
     // "border": Border
     // "builder": Builder,
-    "button": Button,
-    "contentView": ContentView,
+    "button": Button, // √ Pending event listeners.
+    "contentView": ContentView, // √ Pending event listeners.
     "datePicker": DatePicker,
     // "dialogs": Dialogs, // No components in here.
     "editableTextBase": EditableTextBase,
-    "htmlView": HtmlView,
+    "htmlView": HtmlView, // √
     "image": Image,
     // "cache": Cache, // Observable.observable, but doesn't extend View.
-    "label": Label,
-    "layoutBase": LayoutBase,
+    "label": Label, // √
+    "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
     "absoluteLayout": AbsoluteLayout,
-    "dockLayout": DockLayout,
-    "flexboxLayout": FlexboxLayout,
+    "dockLayout": DockLayout, // √
+    "flexboxLayout": FlexboxLayout, // √
+    "gridLayout": GridLayout, // √
     "stackLayout": StackLayout,
     "wrapLayout": WrapLayout,
     "listPicker": ListPicker,
-    "listView": ListView,
+    "listView": ListView, // √
     "placeholder": Placeholder,
     "progress": Progress,
     "proxyViewContainer": ProxyViewContainer,
@@ -88,15 +90,15 @@ export const elementMap = {
     "slider": Slider,
     "switch": Switch,
     "tabView": TabView,
-    "textView": TextView,
-    "textBase": TextBase,
-    "textField": TextField,
+    "textView": TextView, // √
+    "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
+    "textField": TextField, // √
     "timePicker": TimePicker,
     // "transition": Transition,
     // "fadeTransition": FadeTransition,
     // "flipTransition": FlipTransition,
     // "slideTransition": SlideTransition,
-    "webView": WebView,
+    "webView": WebView, // √ Pending event listeners.
     // There's a whole "styling" folder, but nothing is a component.
     "frame": Frame,
     // "view": View,
