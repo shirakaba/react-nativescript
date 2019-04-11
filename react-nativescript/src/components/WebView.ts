@@ -4,6 +4,7 @@ import { WebView as NativeScriptWebView } from "tns-core-modules/ui/web-view/web
 
 interface Props {
     // No mandatory props.
+    /* TODO: add event listener-based props. */
 }
 
 export type WebViewComponentProps = Props & Partial<WebViewProps>;
