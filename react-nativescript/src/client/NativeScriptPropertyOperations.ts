@@ -1,5 +1,6 @@
 import { Instance } from "./HostConfig";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
+import { setValueForStyles } from "../shared/CSSPropertyOperations";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -9,6 +10,7 @@ import { TextBase } from "tns-core-modules/ui/text-base/text-base";
  */
 
  /**
+ * TODO: much more work here. Handle styles and event listeners, for example.
  * Sets the value for a property on a node.
  *
  * @param {DOMElement} node
@@ -76,6 +78,20 @@ export function setValueForProperty(
     //         instance.setAttribute(attributeName, attributeValue);
     //     }
     // }
-    
-    instance.set(name, value);
+
+    if(name === "class"){
+        // console.warn(`Note that 'class' is remapped to 'className'.`);
+        instance.set("className", value);
+    } else if(name === "style"){
+        if(typeof value === "undefined"){
+            console.warn(`'style' prop was specified, but value was undefined.`);
+            return;
+        }
+        // console.warn(`Support for setting styles is experimental.`);
+        // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
+        setValueForStyles(instance, value);
+    } else {
+        instance.set(name, value);
+        // TODO: should probably notify of property change, too..?
+    }
 }

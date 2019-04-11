@@ -207,7 +207,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         Object.keys(props).forEach((prop: string) => {
             const value: any = props[prop];
 
-            // TODO: much more work here. Handle styles and event listeners, for example. Think this Observable method handles barely anything.
             /*
                 Note that in this situation, only <span>One</span> will be shown. Probably handled before it reaches the Host Config though:
                   <div children={[<span>Two</span>, <span>Three</span>]}>
@@ -224,29 +223,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                     view,
                     value
                 );
-            } else if(prop === "class"){
-                // console.warn(`Note that 'class' is remapped to 'className'.`);
-                view.set("className", value);
-            } else if(prop === "style"){
-                if(typeof value === "undefined"){
-                    console.warn(`'style' prop was specified, but value was undefined.`);
-                    return;
-                }
-                console.warn(`Support for setting styles is experimental.`);
-                // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
-                setValueForStyles(view, value);
-                // console.log(`Width now:`, view.width);
-                // console.log(`Height now:`, view.height);
             } else {
-                // view.set(prop, value);
                 setValueForProperty(view, prop, value, false);
             }
-
-            // TODO: should probably notify of property change, too.
         });
-        // console.log(`[createInstance() 1e] type: ${type}. returning:`, view);
-
-        // TODO: also merge in the hostContext (whatever that is).
 
         return view;
     },
