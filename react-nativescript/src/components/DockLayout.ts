@@ -11,7 +11,7 @@ export type DockLayoutComponentProps = Props & Partial<DockLayoutProps>;
 
 /**
  * A React wrapper around the NativeScript DockLayout component.
- * See: ui/layouts/flexbox-layout
+ * See: ui/layouts/dock-layout
  */
 export class DockLayout extends React.Component<DockLayoutComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptDockLayout> = React.createRef<NativeScriptDockLayout>();

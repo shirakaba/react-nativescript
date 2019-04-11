@@ -32,6 +32,7 @@ import { diffProperties, updateProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 import { setValueForStyles } from '../shared/CSSPropertyOperations';
 import { setValueForProperty } from './NativeScriptPropertyOperations';
+import { GridLayout } from 'src/components/GridLayout';
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
@@ -43,6 +44,7 @@ type PublicInstance = any;
 type HostContext = {
     isInAParentText: boolean,
     isInADockLayout: boolean,
+    isInAGridLayout: boolean,
 };
 type UpdatePayload = Array<any>;
 type ChildSet = any;
@@ -127,7 +129,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     getRootHostContext(rootContainerInstance: Container): HostContext {
         return {
             isInAParentText: false,
-            isInADockLayout: false
+            isInADockLayout: false,
+            isInAGridLayout: false
         };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
@@ -138,6 +141,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             type === 'textField' ||
             type === 'button';
         const isInADockLayout: boolean = type === 'dockLayout';
+        const isInAGridLayout: boolean = type === 'gridLayout';
       
         /* I think that text CSS props cascade all the way down, but dock props are only
          * with respect to the immediate DockLayout parent, so we won't look at the parent.
@@ -145,14 +149,16 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
          * Here we avoid recreating an object that happens to deep-equal parentHostContext.
          */
         if(
-            prevIsInAParentText === isInAParentText &&
-            prevIsInADockLayout === isInADockLayout
+            prevIsInAParentText === isInAParentText
+            && prevIsInADockLayout === isInADockLayout
+            && prevIsInADockLayout === isInAGridLayout
         ){
             return parentHostContext;
         } else {
             return {
                 isInAParentText,
                 isInADockLayout,
+                isInAGridLayout,
             };
         }
     },
@@ -215,6 +221,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
         if(hostContext.isInADockLayout && !props.dock){
             console.warn(`Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`);
+        }
+        if(hostContext.isInAGridLayout && (!props.rows || !props.columns)){
+            console.warn(`Components in a GridLayout should bear both the 'rows' and 'columns' properties. Undefined behaviour if they don't!`);
         }
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
@@ -451,6 +460,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         updateProperties(instance, updatePayload, type, oldProps, newProps);
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
+        /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
+        if(parentInstance instanceof GridLayout){
+            console.warn(`HostConfig.insertBefore() not implemented for GridLayout!`);
+            // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
+        }
+
         // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
         let beforeChildIndex: number = 0;
         parentInstance.eachChild((viewBase: ViewBase) => {
