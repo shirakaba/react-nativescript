@@ -32,7 +32,7 @@ import { diffProperties, updateProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 import { setValueForStyles } from '../shared/CSSPropertyOperations';
 import { setValueForProperty } from './NativeScriptPropertyOperations';
-import { GridLayout } from 'src/components/GridLayout';
+import { GridLayout } from '../components/GridLayout';
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
