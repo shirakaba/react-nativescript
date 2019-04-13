@@ -4,7 +4,6 @@ import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsS
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
-import { default as ReactNativeScript } from "../index"
 import { ContentView } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";

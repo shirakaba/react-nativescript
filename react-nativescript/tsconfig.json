@@ -14,6 +14,7 @@
         "baseUrl": ".",
         "sourceMap": true,
         "pretty": true,
+        "jsx": "react",
         "downlevelIteration": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,

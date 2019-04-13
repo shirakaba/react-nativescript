@@ -7,6 +7,7 @@
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
+        "jsx": "react",
         "lib": [
             "es6",
             "dom"
@@ -22,7 +23,7 @@
         }
     },
     "include": [
-        "../react-nativescript",
+        // "../react-nativescript",
         "**/*"
     ],
     "exclude": [

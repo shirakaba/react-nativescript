@@ -6,9 +6,10 @@
   "files": [
     "dist"
   ],
-  "types": "dist",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --project ./tsconfig.json",
+    "prepublish": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

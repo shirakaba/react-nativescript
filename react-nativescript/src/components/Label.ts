@@ -3,6 +3,15 @@ import { LabelProps } from "./NativeScriptComponentTypings";
 import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
 import { FormattedString } from "tns-core-modules/text/formatted-string";
 
+// declare namespace JSX {
+//     interface IntrinsicElements {
+//         label: {
+//             // props go here
+//             textytext: string
+//         }
+//     }
+// }
+
 interface Props {
 }
 
@@ -35,5 +44,8 @@ export class Label extends React.Component<LabelComponentProps, {}> {
             },
             children
         );
+        // return (
+        //     <label text="hi">children</label>
+        // )
     }
 }
