@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ReactHTML, FunctionComponent } from "react";
 import { on, run, launchEvent, getMainEntry, getRootView, LaunchEventData } from "tns-core-modules/application";
-import { default as ReactNativeScript } from "react-nativescript/dist/index";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 import { EventData } from "tns-core-modules/data/observable/observable";
