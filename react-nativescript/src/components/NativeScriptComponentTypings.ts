@@ -18,6 +18,8 @@ import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
 import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
 import { ListView } from "tns-core-modules/ui/list-view/list-view";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
+import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -205,6 +207,18 @@ export type GridLayoutProps = LayoutBaseProps;
 // & Pick<
 //     GridLayout,
 // >;
+
+export type StackLayoutProps = LayoutBaseProps & Pick<
+    StackLayout,
+    "orientation"
+>;
+
+export type WrapLayoutProps = LayoutBaseProps & Pick<
+    WrapLayout,
+    "orientation"|
+    "itemWidth"|
+    "itemHeight"
+>;
 
 export type ListViewProps = ViewProps & Pick<
     ListView,
