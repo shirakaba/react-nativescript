@@ -5,6 +5,7 @@ import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout"
 import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -105,6 +106,23 @@ export function setValueForProperty(
             (value as ItemSpec[]).forEach((item: ItemSpec) => {
                 instance.addColumn(item);
             });
+        }
+    } else if(
+        (
+            name === "alignSelf" || name === "flexGrow" || name === "flexShrink" ||
+            name === "flexWrapBefore" || name === "order"
+        ) && hostContext.isInAFlexboxLayout
+    ){
+        if(name === "alignSelf"){
+            FlexboxLayout.setAlignSelf(instance as View, value);
+        } else if(name === "flexGrow"){
+            FlexboxLayout.setFlexGrow(instance as View, value);
+        } else if(name === "flexShrink"){
+            FlexboxLayout.setFlexShrink(instance as View, value);
+        } else if(name === "flexWrapBefore"){
+            FlexboxLayout.setFlexWrapBefore(instance as View, value);
+        } else if(name === "order"){
+            FlexboxLayout.setOrder(instance as View, value);
         }
     } else if((name === "top" || name === "left") && hostContext.isInAnAbsoluteLayout){
         /* FIXME: Determine whether it makes sense for top/left to be applied upon the instance    * itself if component is ever removed from its AbsoluteLayout parent (and how to do so). */

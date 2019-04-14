@@ -15,7 +15,7 @@ import { DockLayout as ReactDockLayout } from "react-nativescript/dist/component
 import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
 import { ViewBase, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel, Marquee, GameLoopProvider, DockLayoutTest, AbsoluteLayoutTest } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1, FlexboxLayoutTest2, Clock, FormattedStringLabel, Marquee, GameLoopProvider, DockLayoutTest, AbsoluteLayoutTest } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
 import { Label } from "react-nativescript/dist/components/Label";
@@ -45,11 +45,11 @@ run({
                     // ),
 
                     React.createElement(
-                        AbsoluteLayoutTest,
+                        FlexboxLayoutTest2,
                         {},
                         null
                     ),
-                    
+
                     page,
                     () => {
                         console.log(`Container updated!`);
