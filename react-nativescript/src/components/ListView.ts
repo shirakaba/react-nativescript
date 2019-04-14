@@ -11,7 +11,8 @@ import { ListViewCell } from "./ListViewCell";
 interface Props {
     items: ListViewProps["items"],
     cellFactory: (item: any, container: ContentView) => React.ReactElement,
-    onItemLoading?: (args: ItemEventData) => void,
+    /* For now, we don't support custom onItemLoading event handlers. */
+    // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
     // TODO: support all the inherited props from the View component, i.e. listeners!
@@ -161,9 +162,9 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     componentDidMount(){
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
-            const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
+            const { /* onItemLoading, */ onItemTap, onLoadMoreItems } = this.props;
             
-            node.on(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
+            node.on(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
 
             if(onItemTap){
                 node.on(NativeScriptListView.itemTapEvent, onItemTap);
@@ -183,7 +184,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         const node: NativeScriptListView|null = this.myRef.current;
         if(node){
             /* FIXME: evidently updateListener() isn't working as intended - it removes onItemTap even when it's no different to this.defaultOnItemLoading. */
-            // updateListener(node, NativeScriptListView.itemLoadingEvent, this.props.onItemLoading || this.defaultOnItemLoading, nextProps.onItemLoading);
+            // updateListener(node, NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading, nextProps.onItemLoading);
             updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
             updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
         } else {
@@ -198,10 +199,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         console.log(`[ListView] componentWillUnmount!`);
         
         if(node){
-            const { onItemLoading, onItemTap, onLoadMoreItems } = this.props;
-            if(onItemLoading){
-                node.off(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
-            }
+            const { /* onItemLoading, */ onItemTap, onLoadMoreItems } = this.props;
+            
+            // if(onItemLoading){
+            //     node.off(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
+            // }
+
+            node.off(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
+
             if(onItemTap){
                 node.off(NativeScriptListView.itemTapEvent, onItemTap);
             }
