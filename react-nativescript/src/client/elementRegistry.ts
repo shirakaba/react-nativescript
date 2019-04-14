@@ -41,7 +41,7 @@ import { FadeTransition } from "tns-core-modules/ui/transition/fade-transition";
 import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
 import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/Grid-layout";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
