@@ -25,7 +25,63 @@ Status: The sample app is happily using the renderer, and I'm busy adding both c
 
 I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project. If this gets unexpected traction, I could look into setting up a dedicated Gitter.
 
+## Setup
+
+The library is not stable yet, so I won't be publishing it to npm anytime soon. For now, you can install the latest commit of the project directly from GitHub at any time. The following instructions assume that you'll be developing in TypeScript
+
+```sh
+# Create a project like this (or continue from an existing one)
+tns create mycoolapp --tsc
+cd mycoolapp
+
+# In your NativeScript project.
+npm install --save https://github.com/shirakaba/react-nativescript.git
+npm install --save react
+npm install --save-dev @types/react
+
+# In one shell (transpiles your project's TypeScript to JS):
+node_modules/.bin/tsc --project ./tsconfig.tns.json --watch
+
+# In another shell (builds the project from your transpiled JS sources):
+tns run ios --bundle --syncAllFiles --emulator
+
+# OPTIONAL (library development only): You can also update the source library:
+cd node_modules/react-nativescript
+node_modules/.bin/tsc --watch
+```
+
+Please file an Issue if you meet any problems when following these instructions. They could well be missing something!
+
 ## Examples
+
+### Hello World app
+
+For now, I'm not focusing on JSX/TSX, but it may well work (just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`). Here is how to make a `<View>` component (a React wrapper around a NativeScript ContentView) without JSX:
+
+```typescript
+// In app.ts
+import * as React from "react";
+import * as ReactNativeScript from "react-nativescript/dist/index";
+import { View } from "react-nativescript/dist/components/View";
+import { Label } from "react-nativescript/dist/components/Label";
+
+ReactNativeScript.start(
+    React.createElement(
+        View,
+        {
+            backgroundColor: "orange"
+        },
+        React.createElement(
+            Label,
+            {
+                /* Write text either as a prop or as a child. */
+                // text: "Hello, world!"
+            },
+            "Hello, world!"
+        )
+    )
+);
+```
 
 ### Layouts
 
