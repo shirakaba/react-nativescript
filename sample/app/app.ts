@@ -30,44 +30,46 @@ run({
 
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
-                    React.createElement(
-                        GameLoopProvider,
-                        {
-                            frameRateMs: (1000 / 60) / 4
-                        },
-                        React.createElement(
-                            Marquee,
-                            {
-                                text: "NativeScript is an AMAZING framework"
-                            },
-                            null
-                        ),
-                    ),
                     // React.createElement(
-                    //     ListView,
+                    //     GameLoopProvider,
                     //     {
-                    //         items: [
-                    //             /* Enough cells to see how view recycling works/ doesn't work */
-                    //             ...[...Array(7).keys()].map((val) => {
-                    //                 return { text: val };
-                    //             })
-                    //         ],
-                    //         cellFactory: (item: any, container: ContentView) => {
-                    //             return React.createElement(
-                    //                 "label",
-                    //                 {
-                    //                     key: container._domId,
-                    //                     text: `${item.text}`,
-                    //                     fontSize: 150,
-                    //                     // textWrap: true,
-                    //                     // class: "title"
-                                        
-                    //                 }
-                    //             )
-                    //         }
+                    //         frameRateMs: (1000 / 60) / 4
                     //     },
-                    //     null
+                    //     React.createElement(
+                    //         Marquee,
+                    //         {
+                    //             text: "NativeScript is an AMAZING framework"
+                    //         },
+                    //         null
+                    //     ),
                     // ),
+
+
+                    React.createElement(
+                        ListView,
+                        {
+                            items: [
+                                /* Enough cells to see how view recycling works/ doesn't work */
+                                ...[...Array(7).keys()].map((val) => {
+                                    return { text: val };
+                                })
+                            ],
+                            cellFactory: (item: any, container: ContentView) => {
+                                return React.createElement(
+                                    "label",
+                                    {
+                                        key: container._domId,
+                                        text: `${item.text}`,
+                                        fontSize: 150,
+                                        // textWrap: true,
+                                        // class: "title"
+                                        
+                                    }
+                                )
+                            }
+                        },
+                        null
+                    ),
 
                     // React.createElement(
                     //     Clock,

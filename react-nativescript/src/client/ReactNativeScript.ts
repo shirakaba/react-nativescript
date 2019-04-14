@@ -22,7 +22,7 @@ import { createPortal as _createPortal } from './ReactPortal';
 (global as any).__DEV__ = false;
 
 // https://blog.atulr.com/react-custom-renderer-1/
-function createPortal(
+export function createPortal(
     children: ReactReconciler.ReactNodeList,
     container: Container,
     key: string|null = null,
@@ -37,7 +37,7 @@ function createPortal(
     return portal;
 }
 
-function render(
+export function render(
     reactElement: ReactReconciler.ReactNodeList, // <App />
     domElement: Container, // document.getElementById('root')
     callback: () => void|null|undefined = () => undefined // Called after the component is rendered or updated
@@ -55,9 +55,4 @@ function render(
         null,
         callback
     );
-}
-
-export {
-    createPortal,
-    render
 }

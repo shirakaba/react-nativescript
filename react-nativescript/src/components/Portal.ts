@@ -1,5 +1,5 @@
 import * as React from "react";
-import { default as ReactNativeScript } from "../client/ReactNativeScript"
+import * as ReactNativeScript from "../client/ReactNativeScript"
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
 
 // interface Props {
