@@ -27,7 +27,7 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 
 ## Setup
 
-The library is not stable yet, so I won't be publishing it to npm anytime soon. For now, you can install the latest commit of the project directly from GitHub at any time. The following instructions assume that you'll be developing in TypeScript
+The library is not stable yet, so I won't be publishing it to npm anytime soon. For now, you can install the latest commit of the project directly from GitHub at any time. The following instructions assume that you'll be developing in TypeScript.
 
 ```sh
 # Create a project like this (or continue from an existing one)
@@ -82,6 +82,8 @@ ReactNativeScript.start(
     )
 );
 ```
+
+There are some more complex components to test (or refer to) in [`sample/app/testComponents/testComponents.ts`](https://github.com/shirakaba/react-nativescript/blob/master/sample/app/testComponents/testComponents.ts). GameLoop has some potential ;)
 
 ### Layouts
 
