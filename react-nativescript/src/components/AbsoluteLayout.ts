@@ -11,7 +11,7 @@ interface Props {
 export type AbsoluteLayoutComponentProps = Props & Partial<AbsoluteLayoutProps>;
 
 /**
- * A React Absoluteper around the NativeScript AbsoluteLayout component.
+ * A React wrapper around the NativeScript AbsoluteLayout component.
  * See: ui/layouts/grid-layout
  */
 export class AbsoluteLayout extends React.Component<AbsoluteLayoutComponentProps, {}> {
