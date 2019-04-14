@@ -18,52 +18,27 @@ import { Page } from "tns-core-modules/ui/page/page";
 import { NestedContentView, FlexboxLayoutTest1, FlexboxLayoutTest2, Clock, FormattedStringLabel, Marquee, GameLoopProvider, DockLayoutTest, AbsoluteLayoutTest } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
-import { Label } from "react-nativescript/dist/components/Label";
+import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 import { Span } from "tns-core-modules/text/span";
 import { Button as ReactButton } from "react-nativescript/dist/components/Button";
+import { Color } from "tns-core-modules/color";
 
-run({
-    create: () => {
-        const frame = new Frame();
-        frame.navigate({
-            create: () => {
-                const page = new Page();
-                page.backgroundColor = "white";
+ReactNativeScript.start(
+    React.createElement(
+        ReactView,
+        {
+            backgroundColor: "orange"
+        },
+        React.createElement(
+            ReactLabel,
+            {
+                // text: "Hello, world!"
+            },
+            "Hello, world!"
+        )
+    )
+);
 
-                // https://reactjs.org/docs/react-without-jsx.html
-                ReactNativeScript.render(
-                    // React.createElement(
-                    //     Clock,
-                    //     {},
-                    //     null
-                    // ),
-
-                    // React.createElement(
-                    //     NestedContentView,
-                    //     {},
-                    //     null
-                    // ),
-
-                    React.createElement(
-                        FlexboxLayoutTest2,
-                        {},
-                        null
-                    ),
-
-                    page,
-                    () => {
-                        console.log(`Container updated!`);
-                    }
-                );
-
-                return page;
-            }
-        });
-        return frame;
-    }
-});
-
-run();
 
 // application.run({ moduleName: "app-root" });
 
