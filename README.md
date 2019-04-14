@@ -28,20 +28,20 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 ## Examples
 
 <div style="display: flex; width: 100%;">
-    <div style="display: flex; width: 200px;">
+    <div style="width: 200px;">
         <img width="200px" src="/github_img/DockLayout.png">
-        <p style="text-align: center;">DockLayout</p>
-        <p style="text-align: center;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></p>
+        <p style="">DockLayout</p>
+        <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></p>
     </div>
-    <div style="display: flex; width: 200px;">
+    <div style="width: 200px;">
         <img width="200px" src="/github_img/AbsoluteLayout.png">
-        <p style="text-align: center;">AbsoluteLayout</p>
-        <p style="text-align: center;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></p>
+        <p style="">AbsoluteLayout</p>
+        <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></p>
     </div>
-    <div style="display: flex; width: 200px;">
+    <div style="width: 200px;">
         <img width="200px" src="/github_img/FlexboxLayout.png">
-        <p style="text-align: center;">FlexboxLayout</p>
-        <p style="text-align: center;">Based on the Layout Containers<a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">documentation example</a></p>
+        <p style="">FlexboxLayout</p>
+        <p style="font-style: italic;">Based on the <a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">docs example</a></p>
     </div>
 </div>
 
