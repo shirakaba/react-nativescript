@@ -5,19 +5,19 @@ React plugin for NativeScript (*very* under construction; expect swathing refact
 
 <p align="center">
     <a href="https://github.com/shirakaba/nside">
-        <img src="http://githubbadges.com/star.svg?user=shirakaba&repo=react-nativescript&style=flat">
+        <img src="http://githubbadges.com/star.svg?user=shirakaba&repo=react-nativescript&style=flat"/>
     </a>
     <a href="https://github.com/shirakaba/nside/fork">
-        <img src="http://githubbadges.com/fork.svg?user=shirakaba&repo=react-nativescript&style=flat">
+        <img src="http://githubbadges.com/fork.svg?user=shirakaba&repo=react-nativescript&style=flat"/>
     </a>
     <a href="https://opensource.org/licenses/mit-license.php">
-        <img src="https://badges.frapsoft.com/os/mit/mit.png?v=103">
+        <img src="https://badges.frapsoft.com/os/mit/mit.png?v=103"/>
     </a>
     <!-- <a href="http://makeapullrequest.com">
-        <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat">
+        <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"/>
     </a> -->
     <a href="https://twitter.com/intent/follow?screen_name=LinguaBrowse">
-        <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter">
+        <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter"/>
     </a>
 </p>
 
@@ -29,17 +29,17 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 
 <div style="display: flex; width: 100%;">
     <div style="width: 200px;">
-        <img width="200px" src="/github_img/DockLayout.png">
+        <img width="200px" src="/github_img/DockLayout.png"/>
         <p style="">DockLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></p>
     </div>
     <div style="width: 200px;">
-        <img width="200px" src="/github_img/AbsoluteLayout.png">
+        <img width="200px" src="/github_img/AbsoluteLayout.png"/>
         <p style="">AbsoluteLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></p>
     </div>
     <div style="width: 200px;">
-        <img width="200px" src="/github_img/FlexboxLayout.png">
+        <img width="200px" src="/github_img/FlexboxLayout.png"/>
         <p style="">FlexboxLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">docs example</a></p>
     </div>
