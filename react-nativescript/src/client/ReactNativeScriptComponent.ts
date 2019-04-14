@@ -507,6 +507,7 @@ export function updateProperties(
     type: Type,
     lastRawProps: any,
     nextRawProps: any,
+    hostContext: HostContext
 ): void {
     // Update checked *before* name.
     // In the middle of an update, it is possible to have multiple checked.
@@ -529,6 +530,7 @@ export function updateProperties(
         updatePayload,
         false,
         false,
+        hostContext
     );
 
     /* TODO: I Won't be implementing these for now. */

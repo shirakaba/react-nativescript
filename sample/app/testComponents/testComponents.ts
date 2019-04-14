@@ -17,7 +17,9 @@ import { View as ReactView } from "react-nativescript/dist/components/View";
 import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
 import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
+import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
 import { Span } from "tns-core-modules/text/span";
+import { ListView as ReactListView } from "react-nativescript/dist/components/ListView";
 const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -415,4 +417,102 @@ export class Clock extends React.Component<{}, { date: Date }> {
             this.state.date.toLocaleTimeString()
         );
     }
-  }
+}
+
+export class ListViewTest extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            ReactListView,
+            {
+                items: [
+                    /* Enough cells to see how view recycling works/ doesn't work */
+                    ...[...Array(7).keys()].map((val) => {
+                        return { text: val };
+                    })
+                ],
+                cellFactory: (item: any, container: ContentView) => {
+                    return React.createElement(
+                        "label",
+                        {
+                            key: container._domId,
+                            text: `${item.text}`,
+                            fontSize: 150,
+                            // textWrap: true,
+                            // class: "title"
+                            
+                        }
+                    )
+                }
+            },
+            null
+        );
+    }
+}
+
+export class GameLoopTest extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            GameLoopProvider,
+            {
+                frameRateMs: (1000 / 60) // Bigger number means slower
+            },
+            React.createElement(
+                Marquee,
+                {
+                    text: "NativeScript is an AMAZING framework"
+                },
+                null
+            ),
+        );
+    }
+}
+
+export class DockLayoutTest extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            ReactDockLayout,
+            {
+            },
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "left",
+                    text: "Left",
+                    backgroundColor: "#0099CC",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "top",
+                    text: "Top",
+                    backgroundColor: "#AA0078",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "right",
+                    text: "Right",
+                    backgroundColor: "#8C489F",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "bottom",
+                    text: "Bottom",
+                    backgroundColor: "#B3B3D7",
+                    onPress: () => {}
+                },
+                null
+            ),
+        );
+    }
+}
