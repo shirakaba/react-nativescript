@@ -45,6 +45,7 @@ type HostContext = {
     isInAParentText: boolean,
     isInADockLayout: boolean,
     isInAGridLayout: boolean,
+    isInAnAbsoluteLayout: boolean,
 };
 type UpdatePayload = Array<any>;
 type ChildSet = any;
@@ -130,18 +131,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return {
             isInAParentText: false,
             isInADockLayout: false,
-            isInAGridLayout: false
+            isInAGridLayout: false,
+            isInAnAbsoluteLayout: false,
         };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
+        const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
+
         const isInAParentText: boolean =
             type === 'textView' ||
             type === 'textField' ||
             type === 'button';
         const isInADockLayout: boolean = type === 'dockLayout';
         const isInAGridLayout: boolean = type === 'gridLayout';
+        const isInAnAbsoluteLayout: boolean = type === 'absoluteLayout';
       
         /* I think that text CSS props cascade all the way down, but dock props are only
          * with respect to the immediate DockLayout parent, so we won't look at the parent.
@@ -152,6 +157,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             prevIsInAParentText === isInAParentText
             && prevIsInADockLayout === isInADockLayout
             && prevIsInADockLayout === isInAGridLayout
+            && prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout
         ){
             return parentHostContext;
         } else {
@@ -159,6 +165,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 isInAParentText,
                 isInADockLayout,
                 isInAGridLayout,
+                isInAnAbsoluteLayout
             };
         }
     },
@@ -224,6 +231,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         }
         if(hostContext.isInAGridLayout && (!props.rows || !props.columns)){
             console.warn(`Components in a GridLayout should bear both the 'rows' and 'columns' properties. Undefined behaviour if they don't!`);
+        }
+        if(hostContext.isInAnAbsoluteLayout && (!props.left || !props.top)){
+            console.warn(`Components in a GridLayout should bear both the 'top' and 'left' properties, passed as a property rather than a style. Undefined behaviour if they don't!`);
         }
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);

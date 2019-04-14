@@ -71,13 +71,13 @@ export const elementMap = {
     "image": Image,
     // "cache": Cache, // Observable.observable, but doesn't extend View.
     "label": Label, // √
-    "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
-    "absoluteLayout": AbsoluteLayout,
+    // "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
+    "absoluteLayout": AbsoluteLayout, // √
     "dockLayout": DockLayout, // √
     "flexboxLayout": FlexboxLayout, // √
     "gridLayout": GridLayout, // √
-    "stackLayout": StackLayout,
-    "wrapLayout": WrapLayout,
+    "stackLayout": StackLayout, // √
+    "wrapLayout": WrapLayout, // √
     "listPicker": ListPicker,
     "listView": ListView, // √
     "placeholder": Placeholder,
@@ -91,7 +91,7 @@ export const elementMap = {
     "switch": Switch,
     "tabView": TabView,
     "textView": TextView, // √
-    "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
+    // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
     "textField": TextField, // √
     "timePicker": TimePicker,
     // "transition": Transition,
