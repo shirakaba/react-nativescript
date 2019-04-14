@@ -27,6 +27,10 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 
 ## Examples
 
+### Layouts
+
+All layouts are supported. Here are a few samples:
+
 <table>
     <tbody>
         <tr>
@@ -42,24 +46,24 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
         </tr>
         <tr>
             <td align="center" valign="middle">
-                <p style="">DockLayout</p>
+                <p><b>DockLayout</b></p>
             </td>
             <td align="center" valign="middle">
-                <p style="">AbsoluteLayout</p>
+                <p><b>AbsoluteLayout</b></p>
             </td>
             <td align="center" valign="middle">
-                <p style="">FlexboxLayout</p>
+                <p><b>FlexboxLayout</b></p>
             </td>
         </tr>
         <tr>
             <td align="center" valign="middle">
-                <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></p>
+                <p><em>Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></em></p>
             </td>
             <td align="center" valign="middle">
-                <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></p>
+                <p><em>Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></em></p>
             </td>
             <td align="center" valign="middle">
-                <p style="font-style: italic;">Based on the <a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">docs example</a></p>
+                <p><em>Based on the <a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">docs example</a></em></p>
             </td>
         </tr>
     </tbody>
