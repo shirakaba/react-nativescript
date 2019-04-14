@@ -10,15 +10,17 @@ import * as application from "tns-core-modules/application";
 import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";;
+import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
+import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
 import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
 import { ViewBase, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel, Marquee, GameLoopProvider } from "./testComponents/testComponents";
+import { NestedContentView, FlexboxLayoutTest1, Clock, FormattedStringLabel, Marquee, GameLoopProvider, DockLayoutTest } from "./testComponents/testComponents";
 import { View as ReactView } from "react-nativescript/dist/components/View";
 import { ListView } from "react-nativescript/dist/components/ListView";
 import { Label } from "react-nativescript/dist/components/Label";
 import { Span } from "tns-core-modules/text/span";
+import { Button as ReactButton } from "react-nativescript/dist/components/Button";
 
 run({
     create: () => {
@@ -31,54 +33,19 @@ run({
                 // https://reactjs.org/docs/react-without-jsx.html
                 ReactNativeScript.render(
                     // React.createElement(
-                    //     GameLoopProvider,
-                    //     {
-                    //         frameRateMs: (1000 / 60) // Bigger number means slower
-                    //     },
-                    //     React.createElement(
-                    //         Marquee,
-                    //         {
-                    //             text: "NativeScript is an AMAZING framework"
-                    //         },
-                    //         null
-                    //     ),
-                    // ),
-
-
-                    // React.createElement(
-                    //     ListView,
-                    //     {
-                    //         items: [
-                    //             /* Enough cells to see how view recycling works/ doesn't work */
-                    //             ...[...Array(7).keys()].map((val) => {
-                    //                 return { text: val };
-                    //             })
-                    //         ],
-                    //         cellFactory: (item: any, container: ContentView) => {
-                    //             return React.createElement(
-                    //                 "label",
-                    //                 {
-                    //                     key: container._domId,
-                    //                     text: `${item.text}`,
-                    //                     fontSize: 150,
-                    //                     // textWrap: true,
-                    //                     // class: "title"
-                                        
-                    //                 }
-                    //             )
-                    //         }
-                    //     },
-                    //     null
-                    // ),
-
-                    // React.createElement(
                     //     Clock,
                     //     {},
                     //     null
                     // ),
 
+                    // React.createElement(
+                    //     NestedContentView,
+                    //     {},
+                    //     null
+                    // ),
+
                     React.createElement(
-                        NestedContentView,
+                        DockLayoutTest,
                         {},
                         null
                     ),

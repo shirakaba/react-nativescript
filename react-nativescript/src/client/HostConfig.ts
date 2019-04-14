@@ -47,7 +47,10 @@ export type HostContext = {
     isInAGridLayout: boolean,
     isInAnAbsoluteLayout: boolean,
 };
-type UpdatePayload = Array<any>;
+type UpdatePayload = {
+    hostContext: HostContext,
+    updates: Array<any>
+};
 type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
@@ -440,7 +443,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         //     console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
         // })();
 
-        const diffed: null | UpdatePayload = diffProperties(
+        const diffed: null | UpdatePayload["updates"] = diffProperties(
             instance,
             type,
             oldProps,
@@ -450,7 +453,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
         // console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
 
-        return diffed;
+        return diffed === null ? null : {
+            hostContext,
+            updates: diffed
+        }
 
         // return {}; // Simply return a non-null value to permit commitUpdate();
         // return null;
@@ -470,7 +476,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         updateFiberProps(instance, newProps);
 
         // Apply the diff to the DOM node.
-        updateProperties(instance, updatePayload, type, oldProps, newProps);
+        updateProperties(instance, updatePayload.updates, type, oldProps, newProps, updatePayload.hostContext);
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
