@@ -5,7 +5,7 @@
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
 import assertValidProps from "../shared/assertValidProps";
-import { Type, Instance, Container } from "./HostConfig";
+import { Type, Instance, Container, HostContext } from "./HostConfig";
 import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
@@ -61,7 +61,8 @@ export function setInitialProperties(
 	domElement: Instance,
 	tag: Type,
 	rawProps: Object,
-	rootContainerElement: Container,
+    rootContainerElement: Container,
+    hostContext: HostContext
 ): void {
 	// const isCustomComponentTag = isCustomComponent(tag, rawProps);
 	// if ((global as any).__DEV__) {
@@ -157,7 +158,8 @@ export function setInitialProperties(
 		domElement,
 		rootContainerElement,
 		props,
-		false,
+        false,
+        hostContext,
 	);
 
 	// switch (tag) {
@@ -193,7 +195,8 @@ export function setInitialDOMProperties(
 	domElement: Instance,
 	rootContainerElement: Container,
 	nextProps: Object,
-	isCustomComponentTag: boolean,
+    isCustomComponentTag: boolean,
+    hostContext: HostContext
 ): void {
 	for (const propKey in nextProps) {
 		if (!nextProps.hasOwnProperty(propKey)) {
@@ -246,7 +249,7 @@ export function setInitialDOMProperties(
 		// 		ensureListeningTo(rootContainerElement, propKey);
 		// 	}
 		} else if (nextProp != null) {
-			setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag);
+			setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag, hostContext);
 		}
 	}
 }
@@ -256,6 +259,7 @@ export function updateDOMProperties(
     updatePayload: Array<any>,
     wasCustomComponentTag: boolean,
     isCustomComponentTag: boolean,
+    hostContext: HostContext
 ): void {
     // TODO: Handle wasCustomComponentTag
     for (let i = 0; i < updatePayload.length; i += 2) {
@@ -274,7 +278,7 @@ export function updateDOMProperties(
             setTextContent(instance, propValue);
         } else {
             console.log(`[updateDOMProperties] calling setValueForProperty on ${instance} for propKey: ${propKey}; value:`, propValue);
-            setValueForProperty(instance, propKey, propValue, isCustomComponentTag);
+            setValueForProperty(instance, propKey, propValue, isCustomComponentTag, hostContext);
         }
     }
 }

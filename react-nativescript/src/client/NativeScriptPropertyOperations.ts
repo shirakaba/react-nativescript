@@ -1,4 +1,4 @@
-import { Instance } from "./HostConfig";
+import { Instance, HostContext } from "./HostConfig";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
@@ -26,6 +26,7 @@ export function setValueForProperty(
     name: string,
     value: any,
     isCustomComponentTag: boolean,
+    hostContext: HostContext
 ) {
     // const propertyInfo = getPropertyInfo(name);
     // if (shouldIgnoreAttribute(name, propertyInfo, isCustomComponentTag)) {
@@ -89,47 +90,49 @@ export function setValueForProperty(
     } else if((name === "rows" || name === "columns") && instance instanceof GridLayout){
         if(name === "rows"){
             /* Clear any existing rows; would be more efficient to do a diff, but hard to get right. */
-            if((instance as GridLayout).getRows().length > 0){
-                (instance as GridLayout).removeRows();
+            if(instance.getRows().length > 0){
+                instance.removeRows();
             }
             (value as ItemSpec[]).forEach((item: ItemSpec) => {
-                (instance as GridLayout).addRow(item);
+                instance.addRow(item);
             });
         } else if(name === "columns"){
             /* Clear any existing columns; would be more efficient to do a diff, but hard to get right. */
-            if((instance as GridLayout).getColumns().length > 0){
-                (instance as GridLayout).removeColumns();
+            if(instance.getColumns().length > 0){
+                instance.removeColumns();
             }
-            (instance as GridLayout).removeColumns();
+            instance.removeColumns();
             (value as ItemSpec[]).forEach((item: ItemSpec) => {
-                (instance as GridLayout).addColumn(item);
+                instance.addColumn(item);
             });
         }
-    } else if((name === "top" || name === "left") && instance instanceof AbsoluteLayout){
-        // FIXME: If child top/left should be applied
+    } else if((name === "top" || name === "left") && hostContext.isInAnAbsoluteLayout){
+        /* FIXME: Determine whether it makes sense for top/left to be applied upon the instance    * itself if component is ever removed from its AbsoluteLayout parent (and how to do so). */
         if(name === "top"){
             AbsoluteLayout.setTop(instance as View, value);
         } else if(name === "left"){
             AbsoluteLayout.setLeft(instance as View, value);
         }
-    } else if(name === "dock" && instance instanceof View){
+    } else if(name === "dock" && hostContext.isInADockLayout){
         // https://github.com/NativeScript/NativeScript/blob/05c2460fc4989dae4d7fa1ee52f6d54e0c3113f5/tns-core-modules/ui/layouts/dock-layout/dock-layout-common.ts
-        // FIXME: Unsure how to unset Dock (does it take null?)
+        /* If the component is subsequently removed from its Dock parent, I'm guessing that
+         * this property probably has no effect, so no need to figure out how to unset it. */
         DockLayout.setDock(instance as View, value);
     } else if(
         (name === "row" || name === "column" || name === "rowSpan" || name === "columnSpan") && 
-        instance instanceof View
+        hostContext.isInAGridLayout
     ){
         // https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/grid-layout/grid-layout-ts-page.ts
-        // FIXME: Unsure how to unset any of these properties!
+        /* If the component is subsequently removed from its Grid parent, I'm guessing that
+         * this property probably has no effect, so no need to figure out how to unset it. */
         if(name === "row"){
-            GridLayout.setRow(instance, value);
+            GridLayout.setRow(instance as View, value);
         } else if(name === "rowSpan"){
-            GridLayout.setRowSpan(instance, value);
+            GridLayout.setRowSpan(instance as View, value);
         } else if(name === "column"){
-            GridLayout.setColumn(instance, value);
+            GridLayout.setColumn(instance as View, value);
         } else if(name === "columnSpan"){
-            GridLayout.setColumnSpan(instance, value);
+            GridLayout.setColumnSpan(instance as View, value);
         }
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
