@@ -46,6 +46,7 @@ export type HostContext = {
     isInADockLayout: boolean,
     isInAGridLayout: boolean,
     isInAnAbsoluteLayout: boolean,
+    isInAFlexboxLayout: boolean,
 };
 type UpdatePayload = {
     hostContext: HostContext,
@@ -136,12 +137,14 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             isInADockLayout: false,
             isInAGridLayout: false,
             isInAnAbsoluteLayout: false,
+            isInAFlexboxLayout: false,
         };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
+        const prevIsInAFlexboxLayout: boolean = parentHostContext.isInAFlexboxLayout;
 
         const isInAParentText: boolean =
             type === 'textView' ||
@@ -150,9 +153,11 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         const isInADockLayout: boolean = type === 'dockLayout';
         const isInAGridLayout: boolean = type === 'gridLayout';
         const isInAnAbsoluteLayout: boolean = type === 'absoluteLayout';
+        const isInAFlexboxLayout: boolean = type === 'flexboxLayout';
       
-        /* I think that text CSS props cascade all the way down, but dock props are only
-         * with respect to the immediate DockLayout parent, so we won't look at the parent.
+        /* We do have the option here in future to force ancestry based on a previous ancestor
+         * (e.g. if we want text styles to cascade to all ancestors). Layout props are only with
+         * respect to the immediate parent, however, so no need to do anything special for those.
          *
          * Here we avoid recreating an object that happens to deep-equal parentHostContext.
          */
@@ -161,6 +166,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             && prevIsInADockLayout === isInADockLayout
             && prevIsInADockLayout === isInAGridLayout
             && prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout
+            && prevIsInAFlexboxLayout === isInAFlexboxLayout
         ){
             return parentHostContext;
         } else {
@@ -168,7 +174,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 isInAParentText,
                 isInADockLayout,
                 isInAGridLayout,
-                isInAnAbsoluteLayout
+                isInAnAbsoluteLayout,
+                isInAFlexboxLayout
             };
         }
     },

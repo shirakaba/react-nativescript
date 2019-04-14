@@ -18,7 +18,8 @@ import { TextView as ReactTextView } from "react-nativescript/dist/components/Te
 import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
-import { AbsoluteLayout as ReactAbsoluteLayout } from "react-nativescript/dist/components/AbsoluteLayout";;
+import { AbsoluteLayout as ReactAbsoluteLayout } from "react-nativescript/dist/components/AbsoluteLayout";
+import { FlexboxLayout as ReactFlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
 import { Span } from "tns-core-modules/text/span";
 import { ListView as ReactListView } from "react-nativescript/dist/components/ListView";
 const PropTypes = require('prop-types');
@@ -582,6 +583,64 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     top: 150,
                     backgroundColor: "#8C489F",
                     onPress: () => {}
+                },
+                null
+            ),
+        );
+    }
+}
+
+export class FlexboxLayoutTest2 extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            ReactFlexboxLayout,
+            {
+                flexDirection: "column-reverse",
+                justifyContent: "space-around",
+                alignItems: "stretch",
+                height: 300,
+                width: 300,
+                backgroundColor: "lightGray"
+            },
+            React.createElement(
+                ReactLabel,
+                {
+                    text: "Label 1",
+                    width: 60,
+                    height: 60,
+                    backgroundColor: "red",
+                },
+                null
+            ),
+            React.createElement(
+                ReactLabel,
+                {
+                    text: "Label 2",
+                    alignSelf: "center",
+                    width: 60,
+                    height: 60,
+                    backgroundColor: "green",
+                },
+                null
+            ),
+            React.createElement(
+                ReactLabel,
+                {
+                    text: "Label 3",
+                    alignSelf: "flex-end",
+                    width: 60,
+                    height: 60,
+                    backgroundColor: "blue",
+                },
+                null
+            ),
+            React.createElement(
+                ReactLabel,
+                {
+                    text: "Label 4",
+                    width: 60,
+                    height: 60,
+                    backgroundColor: "yellow",
                 },
                 null
             ),
