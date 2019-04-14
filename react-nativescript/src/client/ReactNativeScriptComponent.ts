@@ -57,6 +57,200 @@ function setTextContent(node: Instance, text: string): void {
     }
 };
 
+export function setInitialProperties(
+	domElement: Instance,
+	tag: Type,
+	rawProps: Object,
+	rootContainerElement: Container,
+): void {
+	// const isCustomComponentTag = isCustomComponent(tag, rawProps);
+	// if ((global as any).__DEV__) {
+	// 	validatePropertiesInDevelopment(tag, rawProps);
+	// 	if (
+	// 		isCustomComponentTag &&
+	// 		!didWarnShadyDOM &&
+	// 		(domElement: any).shadyRoot
+	// 	) {
+	// 		warning(
+	// 			false,
+	// 			'%s is using shady DOM. Using shady DOM with React can ' +
+	// 				'cause things to break subtly.',
+	// 			getCurrentFiberOwnerNameInDevOrNull() || 'A component',
+	// 		);
+	// 		didWarnShadyDOM = true;
+	// 	}
+	// }
+
+	// TODO: Make sure that we check isMounted before firing any of these events.
+	// let props: Object;
+	// switch (tag) {
+	// 	case 'iframe':
+	// 	case 'object':
+	// 		trapBubbledEvent(TOP_LOAD, domElement);
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'video':
+	// 	case 'audio':
+	// 		// Create listener for each media event
+	// 		for (let i = 0; i < mediaEventTypes.length; i++) {
+	// 			trapBubbledEvent(mediaEventTypes[i], domElement);
+	// 		}
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'source':
+	// 		trapBubbledEvent(TOP_ERROR, domElement);
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'img':
+	// 	case 'image':
+	// 	case 'link':
+	// 		trapBubbledEvent(TOP_ERROR, domElement);
+	// 		trapBubbledEvent(TOP_LOAD, domElement);
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'form':
+	// 		trapBubbledEvent(TOP_RESET, domElement);
+	// 		trapBubbledEvent(TOP_SUBMIT, domElement);
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'details':
+	// 		trapBubbledEvent(TOP_TOGGLE, domElement);
+	// 		props = rawProps;
+	// 		break;
+	// 	case 'input':
+	// 		ReactDOMInputInitWrapperState(domElement, rawProps);
+	// 		props = ReactDOMInputGetHostProps(domElement, rawProps);
+	// 		trapBubbledEvent(TOP_INVALID, domElement);
+	// 		// For controlled components we always need to ensure we're listening
+	// 		// to onChange. Even if there is no listener.
+	// 		ensureListeningTo(rootContainerElement, 'onChange');
+	// 		break;
+	// 	case 'option':
+	// 		ReactDOMOptionValidateProps(domElement, rawProps);
+	// 		props = ReactDOMOptionGetHostProps(domElement, rawProps);
+	// 		break;
+	// 	case 'select':
+	// 		ReactDOMSelectInitWrapperState(domElement, rawProps);
+	// 		props = ReactDOMSelectGetHostProps(domElement, rawProps);
+	// 		trapBubbledEvent(TOP_INVALID, domElement);
+	// 		// For controlled components we always need to ensure we're listening
+	// 		// to onChange. Even if there is no listener.
+	// 		ensureListeningTo(rootContainerElement, 'onChange');
+	// 		break;
+	// 	case 'textarea':
+	// 		ReactDOMTextareaInitWrapperState(domElement, rawProps);
+	// 		props = ReactDOMTextareaGetHostProps(domElement, rawProps);
+	// 		trapBubbledEvent(TOP_INVALID, domElement);
+	// 		// For controlled components we always need to ensure we're listening
+	// 		// to onChange. Even if there is no listener.
+	// 		ensureListeningTo(rootContainerElement, 'onChange');
+	// 		break;
+	// 	default:
+	// 		props = rawProps;
+	// }
+
+    const props = rawProps;
+	assertValidProps(tag, props);
+
+	setInitialDOMProperties(
+		tag,
+		domElement,
+		rootContainerElement,
+		props,
+		false,
+	);
+
+	// switch (tag) {
+	// 	case 'input':
+	// 		// TODO: Make sure we check if this is still unmounted or do any clean
+	// 		// up necessary since we never stop tracking anymore.
+	// 		track((domElement: any));
+	// 		ReactDOMInputPostMountWrapper(domElement, rawProps, false);
+	// 		break;
+	// 	case 'textarea':
+	// 		// TODO: Make sure we check if this is still unmounted or do any clean
+	// 		// up necessary since we never stop tracking anymore.
+	// 		track((domElement: any));
+	// 		ReactDOMTextareaPostMountWrapper(domElement, rawProps);
+	// 		break;
+	// 	case 'option':
+	// 		ReactDOMOptionPostMountWrapper(domElement, rawProps);
+	// 		break;
+	// 	case 'select':
+	// 		ReactDOMSelectPostMountWrapper(domElement, rawProps);
+	// 		break;
+	// 	default:
+	// 		if (typeof props.onClick === 'function') {
+	// 			// TODO: This cast may not be sound for SVG, MathML or custom elements.
+	// 			trapClickOnNonInteractiveElement(((domElement: any): HTMLElement));
+	// 		}
+	// 		break;
+	// }
+}
+
+export function setInitialDOMProperties(
+	tag: Type,
+	domElement: Instance,
+	rootContainerElement: Container,
+	nextProps: Object,
+	isCustomComponentTag: boolean,
+): void {
+	for (const propKey in nextProps) {
+		if (!nextProps.hasOwnProperty(propKey)) {
+			continue;
+		}
+		const nextProp = nextProps[propKey];
+		if (propKey === STYLE) {
+			if ((global as any).__DEV__) {
+				if (nextProp) {
+					// Freeze the next style object so that we can assume it won't be
+					// mutated. We have already warned for this in the past.
+					Object.freeze(nextProp);
+				}
+			}
+			// Relies on `updateStylesByID` not mutating `styleUpdates`.
+			setValueForStyles(domElement, nextProp);
+		// } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
+		// 	const nextHtml = nextProp ? nextProp[HTML] : undefined;
+		// 	if (nextHtml != null) {
+		// 		setInnerHTML(domElement, nextHtml);
+		// 	}
+		} else if (propKey === CHILDREN) {
+			if (typeof nextProp === 'string') {
+				// Avoid setting initial textContent when the text is empty. In IE11 setting
+				// textContent on a <textarea> will cause the placeholder to not
+				// show within the <textarea> until it has been focused and blurred again.
+				// https://github.com/facebook/react/issues/6731#issuecomment-254874553
+				const canSetTextContent = tag !== 'textarea' || nextProp !== '';
+				if (canSetTextContent) {
+					setTextContent(domElement, nextProp);
+				}
+			} else if (typeof nextProp === 'number') {
+				setTextContent(domElement, '' + nextProp);
+			}
+		} else if (
+			propKey === SUPPRESS_CONTENT_EDITABLE_WARNING ||
+			propKey === SUPPRESS_HYDRATION_WARNING
+		) {
+			// Noop
+		} else if (propKey === AUTOFOCUS) {
+			// We polyfill it separately on the client during commit.
+			// We could have excluded it in the property list instead of
+			// adding a special case here, but then it wouldn't be emitted
+			// on server rendering (but we *do* want to emit it in SSR).
+		// } else if (registrationNameModules.hasOwnProperty(propKey)) {
+		// 	if (nextProp != null) {
+		// 		if (__DEV__ && typeof nextProp !== 'function') {
+		// 			warnForInvalidEventListener(propKey, nextProp);
+		// 		}
+		// 		ensureListeningTo(rootContainerElement, propKey);
+		// 	}
+		} else if (nextProp != null) {
+			setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag);
+		}
+	}
+}
+
 export function updateDOMProperties(
     instance: Instance,
     updatePayload: Array<any>,

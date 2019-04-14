@@ -86,14 +86,6 @@ export function setValueForProperty(
     if(name === "class"){
         // console.warn(`Note that 'class' is remapped to 'className'.`);
         instance.set("className", value);
-    } else if(name === "style"){
-        if(typeof value === "undefined"){
-            console.warn(`'style' prop was specified, but value was undefined.`);
-            return;
-        }
-        // console.warn(`Support for setting styles is experimental.`);
-        // console.log(`[createInstance()] type: ${type}. iterating style:`, value);
-        setValueForStyles(instance, value);
     } else if((name === "rows" || name === "columns") && instance instanceof GridLayout){
         if(name === "rows"){
             /* Clear any existing rows; would be more efficient to do a diff, but hard to get right. */
@@ -114,6 +106,7 @@ export function setValueForProperty(
             });
         }
     } else if((name === "top" || name === "left") && instance instanceof AbsoluteLayout){
+        // FIXME: If child top/left should be applied
         if(name === "top"){
             AbsoluteLayout.setTop(instance as View, value);
         } else if(name === "left"){

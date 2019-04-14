@@ -33,7 +33,7 @@ run({
                     // React.createElement(
                     //     GameLoopProvider,
                     //     {
-                    //         frameRateMs: (1000 / 60) / 4
+                    //         frameRateMs: (1000 / 60) // Bigger number means slower
                     //     },
                     //     React.createElement(
                     //         Marquee,
@@ -45,37 +45,43 @@ run({
                     // ),
 
 
-                    React.createElement(
-                        ListView,
-                        {
-                            items: [
-                                /* Enough cells to see how view recycling works/ doesn't work */
-                                ...[...Array(7).keys()].map((val) => {
-                                    return { text: val };
-                                })
-                            ],
-                            cellFactory: (item: any, container: ContentView) => {
-                                return React.createElement(
-                                    "label",
-                                    {
-                                        key: container._domId,
-                                        text: `${item.text}`,
-                                        fontSize: 150,
-                                        // textWrap: true,
-                                        // class: "title"
+                    // React.createElement(
+                    //     ListView,
+                    //     {
+                    //         items: [
+                    //             /* Enough cells to see how view recycling works/ doesn't work */
+                    //             ...[...Array(7).keys()].map((val) => {
+                    //                 return { text: val };
+                    //             })
+                    //         ],
+                    //         cellFactory: (item: any, container: ContentView) => {
+                    //             return React.createElement(
+                    //                 "label",
+                    //                 {
+                    //                     key: container._domId,
+                    //                     text: `${item.text}`,
+                    //                     fontSize: 150,
+                    //                     // textWrap: true,
+                    //                     // class: "title"
                                         
-                                    }
-                                )
-                            }
-                        },
-                        null
-                    ),
+                    //                 }
+                    //             )
+                    //         }
+                    //     },
+                    //     null
+                    // ),
 
                     // React.createElement(
                     //     Clock,
                     //     {},
                     //     null
                     // ),
+
+                    React.createElement(
+                        NestedContentView,
+                        {},
+                        null
+                    ),
                     page,
                     () => {
                         console.log(`Container updated!`);
