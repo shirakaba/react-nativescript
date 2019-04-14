@@ -28,17 +28,17 @@ I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](htt
 ## Examples
 
 <div style="display: flex; width: 100%;">
-    <div style="width: 200px;">
+    <div style="display: inline-block; width: 200px;">
         <img width="200px" src="/github_img/DockLayout.png"/>
         <p style="">DockLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/dock-layout/dock-layout-ts-page.ts">SDK example</a></p>
     </div>
-    <div style="width: 200px;">
+    <div style="display: inline-block; width: 200px;">
         <img width="200px" src="/github_img/AbsoluteLayout.png"/>
         <p style="">AbsoluteLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/layouts/absolute-layout/absolute-layout-ts-page.ts">SDK example</a></p>
     </div>
-    <div style="width: 200px;">
+    <div style="display: inline-block; width: 200px;">
         <img width="200px" src="/github_img/FlexboxLayout.png"/>
         <p style="">FlexboxLayout</p>
         <p style="font-style: italic;">Based on the <a href="https://docs.nativescript.org/ui/layouts/layout-containers#flexboxlayout">docs example</a></p>
