@@ -25,6 +25,13 @@ Status: The sample app is happily using the renderer, and I'm busy adding both c
 
 I'm always keeping an eye on the `#general` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project. If this gets unexpected traction, I could look into setting up a dedicated Gitter.
 
+## Examples
+
+<div style="display: flex; width: 100%;">
+    <img width="200px" src="/github_img/DockLayout.png">
+    <img width="200px" src="/github_img/AbsoluteLayout.png">
+</div>
+
 ## Why not just use React Native? 🤷‍♂️
 
 There are great benefits to being able to use React as a renderer for NativeScript, rather than React Native.
