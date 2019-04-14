@@ -28,7 +28,7 @@ import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbo
 import { Frame } from 'tns-core-modules/ui/frame/frame';
 import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
-import { diffProperties, updateProperties } from './ReactNativeScriptComponent';
+import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 import { setValueForStyles } from '../shared/CSSPropertyOperations';
 import { setValueForProperty } from './NativeScriptPropertyOperations';
@@ -57,69 +57,69 @@ function isASingleChildContainer(view: Instance): view is Page|ContentView {
     return view instanceof Page || view instanceof ContentView;
 }
 
-function handleChildrenProp(
-    type: Type,
-    props: Props,
-    rootContainerInstance: Container,
-    hostContext: HostContext,
-    internalInstanceHandle: ReactReconciler.OpaqueHandle,
-    view: View,
-    value: any,
-){
-    if(value === null){
-        // No children specified.
-        return;
-    }
-    if(Array.isArray(value)){
-        console.warn(`'children' value was array; support is experimental!`);
-    }
+// function handleChildrenProp(
+//     type: Type,
+//     props: Props,
+//     rootContainerInstance: Container,
+//     hostContext: HostContext,
+//     internalInstanceHandle: ReactReconciler.OpaqueHandle,
+//     view: View,
+//     value: any,
+// ){
+//     if(value === null){
+//         // No children specified.
+//         return;
+//     }
+//     if(Array.isArray(value)){
+//         console.warn(`'children' value was array; support is experimental!`);
+//     }
 
-    const valueArray: any[] = Array.isArray(value) ? value : [value];
+//     const valueArray: any[] = Array.isArray(value) ? value : [value];
 
-    valueArray.forEach((value: any) => {
-        if(hostConfig.shouldSetTextContent(type, props)){
-            if(view instanceof TextBase){
-                // WARNING: unsure that this is how you're supposed to use HostConfig.
-                hostConfig.commitTextUpdate(view, "", value);
-                console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
-            } else {
-                const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
+//     valueArray.forEach((value: any) => {
+//         if(hostConfig.shouldSetTextContent(type, props)){
+//             if(view instanceof TextBase){
+//                 // WARNING: unsure that this is how you're supposed to use HostConfig.
+//                 hostConfig.commitTextUpdate(view, "", value);
+//                 console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
+//             } else {
+//                 const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
     
-                console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
-                hostConfig.appendChild(view, tv);
-            }
-        } else {
-            if(!value){
-                console.warn(`'children' prop's value was ${value}, so skipping.`);
-                return;
-            }
+//                 console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
+//                 hostConfig.appendChild(view, tv);
+//             }
+//         } else {
+//             if(!value){
+//                 console.warn(`'children' prop's value was ${value}, so skipping.`);
+//                 return;
+//             }
 
-            // console.log(`value:`, value);
-            const prospectiveChild = value as React.ReactElement<any, string>;
+//             // console.log(`value:`, value);
+//             const prospectiveChild = value as React.ReactElement<any, string>;
 
-            (()=>{
-                const { children, ...rest } = prospectiveChild.props;
-                console.warn(`Support for nesting children is experimental. child type: ${prospectiveChild.type}. props:`, { ...rest });
-            })();
+//             (()=>{
+//                 const { children, ...rest } = prospectiveChild.props;
+//                 console.warn(`Support for nesting children is experimental. child type: ${prospectiveChild.type}. props:`, { ...rest });
+//             })();
     
-            if(!prospectiveChild.type){
-                console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
-                return;
-            }
+//             if(!prospectiveChild.type){
+//                 console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
+//                 return;
+//             }
     
-            const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
-                prospectiveChild.type as Type,
-                prospectiveChild.props,
-                rootContainerInstance,
-                hostContext,
-                internalInstanceHandle
-            );
-            hostConfig.appendChild(view, instanceFromChild);
+//             const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
+//                 prospectiveChild.type as Type,
+//                 prospectiveChild.props,
+//                 rootContainerInstance,
+//                 hostContext,
+//                 internalInstanceHandle
+//             );
+//             hostConfig.appendChild(view, instanceFromChild);
             
-            // hostConfig.appendChild(view, value);
-        }
-    });
-}
+//             // hostConfig.appendChild(view, value);
+//         }
+//     });
+// }
 
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout> = {
@@ -237,29 +237,31 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         }
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
-        Object.keys(props).forEach((prop: string) => {
-            const value: any = props[prop];
+        // Object.keys(props).forEach((prop: string) => {
+        //     const value: any = props[prop];
 
-            /*
-                Note that in this situation, only <span>One</span> will be shown. Probably handled before it reaches the Host Config though:
-                  <div children={[<span>Two</span>, <span>Three</span>]}>
-                    <span>One</span>
-                </div>
-            */
-            if(prop === "children"){
-                return handleChildrenProp(
-                    type,
-                    props,
-                    rootContainerInstance,
-                    hostContext,
-                    internalInstanceHandle,
-                    view,
-                    value
-                );
-            } else {
-                setValueForProperty(view, prop, value, false);
-            }
-        });
+        //     /*
+        //         Note that in this situation, only <span>One</span> will be shown. Probably handled before it reaches the Host Config though:
+        //           <div children={[<span>Two</span>, <span>Three</span>]}>
+        //             <span>One</span>
+        //         </div>
+        //     */
+        //     if(prop === "children"){
+        //         return handleChildrenProp(
+        //             type,
+        //             props,
+        //             rootContainerInstance,
+        //             hostContext,
+        //             internalInstanceHandle,
+        //             view,
+        //             value
+        //         );
+        //     } else {
+        //         setValueForProperty(view, prop, value, false);
+        //     }
+        // });
+
+        /* finalizeInitialChildren() > setInitialProperties() shall handle props, just as in React DOM. */
 
         return view;
     },
@@ -283,8 +285,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): boolean {
-        // TODO
         console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
+        setInitialProperties(parentInstance, type, props, rootContainerInstance);
+
         return false;
     },
     shouldSetTextContent(type: Type, props: Props): boolean {
