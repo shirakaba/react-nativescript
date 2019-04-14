@@ -150,7 +150,7 @@ export function diffProperties(
             !lastProps.hasOwnProperty(propKey) ||
             lastProps[propKey] == null
         ) {
-            console.log(`[diffProperties] skipping on lastProps key:`, propKey); 
+            // console.log(`[diffProperties] skipping on lastProps key:`, propKey); 
             continue;
         }
         if (propKey === STYLE) {
@@ -188,7 +188,7 @@ export function diffProperties(
         }
     }
 
-    console.log(`[diffProperties] updatePayload as of lastProp`, updatePayload);
+    // console.log(`[diffProperties] updatePayload as of lastProp`, updatePayload);
 
     for (propKey in nextProps) {
         const nextProp = nextProps[propKey];
@@ -198,7 +198,7 @@ export function diffProperties(
             nextProp === lastProp ||
             (nextProp == null && lastProp == null)
         ) {
-            console.log(`[diffProperties] skipping on nextProps key:`, propKey); 
+            // console.log(`[diffProperties] skipping on nextProps key:`, propKey); 
             continue;
         }
         if (propKey === STYLE) {
@@ -287,7 +287,7 @@ export function diffProperties(
         //         updatePayload = [];
         //     }
         } else {
-            console.log(`[diffProperties] INSPECTING NEWPROPS key and nextProp`, propKey, nextProp);
+            // console.log(`[diffProperties] INSPECTING NEWPROPS key and nextProp`, propKey, nextProp);
             // For any other property we always add it to the queue and then we
             // filter it out using the whitelist during the commit.
             (updatePayload = updatePayload || []).push(propKey, nextProp);
@@ -299,7 +299,7 @@ export function diffProperties(
         // }
         (updatePayload = updatePayload || []).push(STYLE, styleUpdates);
     }
-    console.log(`[diffProperties] updatePayload as of nextProp:`, updatePayload);
+    // console.log(`[diffProperties] updatePayload as of nextProp:`, updatePayload);
     return updatePayload;
 }
 

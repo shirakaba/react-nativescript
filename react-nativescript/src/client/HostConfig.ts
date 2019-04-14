@@ -400,7 +400,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): null | UpdatePayload {
-        console.log(`prepareUpdate() with type: ${type}`, instance);
+        // console.log(`prepareUpdate() with type: ${type}`, instance);
 
         // if ((global as any).__DEV__) {
         //     const hostContextDev: HostContextDev = hostContext as HostContextDev;
@@ -418,14 +418,14 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         //     }
         // }
 
-        (()=>{
-            const { children, ...rest } = oldProps;
-            console.log(`About to run diffProperties on ${instance}. oldProps:`, { ...rest });
-        })();
-        (()=>{
-            const { children, ...rest } = newProps;
-            console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
-        })();
+        // (()=>{
+        //     const { children, ...rest } = oldProps;
+        //     console.log(`About to run diffProperties on ${instance}. oldProps:`, { ...rest });
+        // })();
+        // (()=>{
+        //     const { children, ...rest } = newProps;
+        //     console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
+        // })();
 
         const diffed: null | UpdatePayload = diffProperties(
             instance,
@@ -435,7 +435,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             rootContainerInstance,
         );
 
-        console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
+        // console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
 
         return diffed;
 
@@ -450,7 +450,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): void {
-        console.log(`commitUpdate() with type: ${type}`, instance);
+        // console.log(`commitUpdate() with type: ${type}`, instance);
 
         // Update the props handle so that we know which props are the ones with
         // with current event handlers.
