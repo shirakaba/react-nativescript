@@ -18,6 +18,7 @@ import { TextView as ReactTextView } from "react-nativescript/dist/components/Te
 import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
+import { AbsoluteLayout as ReactAbsoluteLayout } from "react-nativescript/dist/components/AbsoluteLayout";;
 import { Span } from "tns-core-modules/text/span";
 import { ListView as ReactListView } from "react-nativescript/dist/components/ListView";
 const PropTypes = require('prop-types');
@@ -472,6 +473,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
         return React.createElement(
             ReactDockLayout,
             {
+                stretchLastChild: true,
             },
             React.createElement(
                 ReactButton,
@@ -509,6 +511,76 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     dock: "bottom",
                     text: "Bottom",
                     backgroundColor: "#B3B3D7",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    // dock: "bottom",
+                    text: "Fill",
+                    // 'grey' is invalid! D:
+                    color: new Color("gray"),
+                    backgroundColor: "#CCFFFF",
+                    onPress: () => {}
+                },
+                null
+            ),
+        );
+    }
+}
+
+export class AbsoluteLayoutTest extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            ReactAbsoluteLayout,
+            {
+            },
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "left",
+                    text: "Left: 10, Top: 5",
+                    left: 10,
+                    top: 5,
+                    backgroundColor: "#0099CC",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "top",
+                    text: "Left: 30, Top: 80",
+                    left: 30,
+                    top: 80,
+                    backgroundColor: "#C3C3E5",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "right",
+                    text: "Left: 150, Top: 25",
+                    left: 150,
+                    top: 25,
+                    backgroundColor: "#CCFFFF",
+                    onPress: () => {}
+                },
+                null
+            ),
+            React.createElement(
+                ReactButton,
+                {
+                    dock: "bottom",
+                    text: "Left: 70, Top: 150",
+                    left: 70,
+                    top: 150,
+                    backgroundColor: "#8C489F",
                     onPress: () => {}
                 },
                 null
