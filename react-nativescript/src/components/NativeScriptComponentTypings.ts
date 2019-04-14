@@ -20,6 +20,7 @@ import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
 import { ListView } from "tns-core-modules/ui/list-view/list-view";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
 import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
+import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -219,6 +220,12 @@ export type WrapLayoutProps = LayoutBaseProps & Pick<
     "itemWidth"|
     "itemHeight"
 >;
+
+/* No props on AbsoluteLayout; just getters and setters. */
+export type AbsoluteLayoutProps = LayoutBaseProps;
+//  & Pick<
+//     AbsoluteLayout,
+// >;
 
 export type ListViewProps = ViewProps & Pick<
     ListView,

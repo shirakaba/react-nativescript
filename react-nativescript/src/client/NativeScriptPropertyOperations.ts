@@ -4,6 +4,7 @@ import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -111,6 +112,12 @@ export function setValueForProperty(
             (value as ItemSpec[]).forEach((item: ItemSpec) => {
                 (instance as GridLayout).addColumn(item);
             });
+        }
+    } else if((name === "top" || name === "left") && instance instanceof AbsoluteLayout){
+        if(name === "top"){
+            AbsoluteLayout.setTop(instance as View, value);
+        } else if(name === "left"){
+            AbsoluteLayout.setLeft(instance as View, value);
         }
     } else if(name === "dock" && instance instanceof View){
         // https://github.com/NativeScript/NativeScript/blob/05c2460fc4989dae4d7fa1ee52f6d54e0c3113f5/tns-core-modules/ui/layouts/dock-layout/dock-layout-common.ts
