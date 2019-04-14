@@ -41,7 +41,7 @@ export type Instance = ViewBase; // We may extend this to Observable in future, 
 type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
-type HostContext = {
+export type HostContext = {
     isInAParentText: boolean,
     isInADockLayout: boolean,
     isInAGridLayout: boolean,
@@ -286,7 +286,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
     ): boolean {
         console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
-        setInitialProperties(parentInstance, type, props, rootContainerInstance);
+        setInitialProperties(parentInstance, type, props, rootContainerInstance, hostContext);
 
         return false;
     },
