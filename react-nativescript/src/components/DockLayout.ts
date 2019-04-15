@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DockLayoutProps } from "./NativeScriptComponentTypings";
+import { DockLayoutProps } from "../shared/NativeScriptComponentTypings";
 import { DockLayout as NativeScriptDockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 
 interface Props {

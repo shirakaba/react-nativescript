@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GridLayoutProps } from "./NativeScriptComponentTypings";
+import { GridLayoutProps } from "../shared/NativeScriptComponentTypings";
 import { GridLayout as NativeScriptGridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
 interface Props {

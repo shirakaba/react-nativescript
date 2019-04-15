@@ -1,5 +1,5 @@
 import * as React from "react";
-import { WebViewProps } from "./NativeScriptComponentTypings";
+import { WebViewProps } from "../shared/NativeScriptComponentTypings";
 import { WebView as NativeScriptWebView } from "tns-core-modules/ui/web-view/web-view";
 
 interface Props {

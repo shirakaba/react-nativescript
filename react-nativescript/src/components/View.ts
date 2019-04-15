@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ViewProps, TextBaseProps } from "./NativeScriptComponentTypings";
+import { ViewProps, TextBaseProps } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";

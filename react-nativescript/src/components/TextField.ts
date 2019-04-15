@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextFieldProps } from "./NativeScriptComponentTypings";
+import { TextFieldProps } from "../shared/NativeScriptComponentTypings";
 import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
 
 interface Props {

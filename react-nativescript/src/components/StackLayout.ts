@@ -1,5 +1,5 @@
 import * as React from "react";
-import { StackLayoutProps } from "./NativeScriptComponentTypings";
+import { StackLayoutProps } from "../shared/NativeScriptComponentTypings";
 import { StackLayout as NativeScriptStackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
 
 interface Props {
