@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FlexboxLayoutProps } from "./NativeScriptComponentTypings";
+import { FlexboxLayoutProps } from "../shared/NativeScriptComponentTypings";
 import { FlexboxLayout as NativeScriptFlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 
 interface Props {

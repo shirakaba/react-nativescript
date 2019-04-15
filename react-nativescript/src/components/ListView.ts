@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ListViewProps } from "./NativeScriptComponentTypings";
+import { ListViewProps } from "../shared/NativeScriptComponentTypings";
 import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsSource } from "tns-core-modules/ui/list-view/list-view";
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";

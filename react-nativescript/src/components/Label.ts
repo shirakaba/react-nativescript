@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LabelProps } from "./NativeScriptComponentTypings";
+import { LabelProps } from "../shared/NativeScriptComponentTypings";
 import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
 import { FormattedString } from "tns-core-modules/text/formatted-string";
 

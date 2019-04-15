@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TextViewProps } from "./NativeScriptComponentTypings";
+import { TextViewProps } from "../shared/NativeScriptComponentTypings";
 import { TextView as NativeScriptTextView } from "tns-core-modules/ui/text-view/text-view";
 
 interface Props {

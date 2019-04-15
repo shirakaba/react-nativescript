@@ -1,6 +1,6 @@
 import * as React from "react";
-import { WrapLayoutProps } from "./NativeScriptComponentTypings";
-import { WrapLayout as WativeScriptwrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
+import { WrapLayoutProps } from "../shared/NativeScriptComponentTypings";
+import { WrapLayout as NativeScriptwrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 
 interface Props {
     /* orientation defaults to "horizontal", so is not mandatory.
@@ -15,7 +15,7 @@ export type WrapLayoutComponentProps = Props & Partial<WrapLayoutProps>;
  * See: ui/layouts/grid-layout
  */
 export class WrapLayout extends React.Component<WrapLayoutComponentProps, {}> {
-    private readonly myRef: React.RefObject<WativeScriptwrapLayout> = React.createRef<WativeScriptwrapLayout>();
+    private readonly myRef: React.RefObject<NativeScriptwrapLayout> = React.createRef<NativeScriptwrapLayout>();
 
     render(){
         const { children, ...rest } = this.props;

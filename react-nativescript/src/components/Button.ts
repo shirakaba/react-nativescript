@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ViewBaseProps, TextBaseProps } from "./NativeScriptComponentTypings";
+import { ViewBaseProps, TextBaseProps } from "../shared/NativeScriptComponentTypings";
 import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";

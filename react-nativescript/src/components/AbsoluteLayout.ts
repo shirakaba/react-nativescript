@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AbsoluteLayoutProps } from "./NativeScriptComponentTypings";
+import { AbsoluteLayoutProps } from "../shared/NativeScriptComponentTypings";
 import { AbsoluteLayout as NativeScriptAbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 
 interface Props {

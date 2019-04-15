@@ -1,5 +1,5 @@
 import * as React from "react";
-import { HtmlViewProps } from "./NativeScriptComponentTypings";
+import { HtmlViewProps } from "../shared/NativeScriptComponentTypings";
 import { HtmlView as NativeScriptHtmlView } from "tns-core-modules/ui/html-view/html-view";
 
 interface Props {
