@@ -1,27 +1,30 @@
-import { Page } from "tns-core-modules/ui/page";
-import { View } from "tns-core-modules/ui/core/view";
-import { ContentView } from "tns-core-modules/ui/content-view";
+import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { ActionBar } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActivityIndicator } from "tns-core-modules/ui/activity-indicator/activity-indicator";
 import { Animation } from "tns-core-modules/ui/animation/animation";
 import { Button } from "tns-core-modules/ui/button/button";
+import { Cache } from "tns-core-modules/ui/image-cache/image-cache";
+import { Color } from 'tns-core-modules/color/color';
+import { ContainerView } from "tns-core-modules/ui/core/view/view";
+import { ContentView } from "tns-core-modules/ui/content-view";
 import { DatePicker } from "tns-core-modules/ui/date-picker/date-picker";
 // import { Dialogs } from "tns-core-modules/ui/dialogs/dialogs";
+import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
+import { FadeTransition } from "tns-core-modules/ui/transition/fade-transition";
+import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 // import { Gestures } from "tns-core-modules/ui/gestures/gestures";
+import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
 import { Image } from "tns-core-modules/ui/image/image";
-import { Cache } from "tns-core-modules/ui/image-cache/image-cache";
 import { Label } from "tns-core-modules/ui/label/label";
 import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
-import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
-import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 import { ListView } from "tns-core-modules/ui/list-view/list-view";
+import { Observable } from "tns-core-modules/data/observable";
+import { Page } from "tns-core-modules/ui/page";
 import { Placeholder } from "tns-core-modules/ui/placeholder/placeholder";
 import { Progress } from "tns-core-modules/ui/progress/progress";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
@@ -30,18 +33,20 @@ import { ScrollView } from "tns-core-modules/ui/scroll-view/scroll-view";
 import { SearchBar } from "tns-core-modules/ui/search-bar/search-bar";
 import { SegmentedBar } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { Slider } from "tns-core-modules/ui/slider/slider";
+import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
+import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
+import { Style } from "tns-core-modules/ui/styling/style/style";
 import { Switch } from "tns-core-modules/ui/switch/switch";
 import { TabView } from "tns-core-modules/ui/tab-view/tab-view";
-import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
+import { TextView } from "tns-core-modules/ui/text-view/text-view";
 import { TimePicker } from "tns-core-modules/ui/time-picker/time-picker";
 import { Transition } from "tns-core-modules/ui/transition/transition";
-import { FadeTransition } from "tns-core-modules/ui/transition/fade-transition";
-import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
-import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
+import { View } from "tns-core-modules/ui/core/view";
+import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -103,4 +108,56 @@ export const elementMap = {
     "frame": Frame,
     // "view": View,
     "page": Page
+};
+
+export {
+    AbsoluteLayout,
+    ActionBar,
+    ActivityIndicator,
+    Animation,
+    Button,
+    Cache,
+    Color,
+    ContentView,
+    ContainerView,
+    DatePicker,
+    // Dialogs,
+    DockLayout,
+    EditableTextBase,
+    FadeTransition,
+    FlexboxLayout,
+    FlipTransition,
+    Frame,
+    // Gestures,
+    GridLayout,
+    HtmlView,
+    Image,
+    Label,
+    LayoutBase,
+    ListPicker,
+    ListView,
+    Observable,
+    Page,
+    Placeholder,
+    Progress,
+    ProxyViewContainer,
+    Repeater,
+    ScrollView,
+    SearchBar,
+    SegmentedBar,
+    Slider,
+    SlideTransition,
+    StackLayout,
+    Switch,
+    Style,
+    TabView,
+    TextBase,
+    TextField,
+    TextView,
+    TimePicker,
+    Transition,
+    View,
+    ViewBase,
+    WebView,
+    WrapLayout,
 };

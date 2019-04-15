@@ -1,6 +1,6 @@
 import * as React from "react";
 import { AbsoluteLayoutProps } from "./NativeScriptComponentTypings";
-import { AbsoluteLayout as WativeScriptAbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import { AbsoluteLayout as NativeScriptAbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 
 interface Props {
     /* orientation defaults to "horizontal", so is not mandatory.
@@ -15,7 +15,7 @@ export type AbsoluteLayoutComponentProps = Props & Partial<AbsoluteLayoutProps>;
  * See: ui/layouts/grid-layout
  */
 export class AbsoluteLayout extends React.Component<AbsoluteLayoutComponentProps, {}> {
-    private readonly myRef: React.RefObject<WativeScriptAbsoluteLayout> = React.createRef<WativeScriptAbsoluteLayout>();
+    private readonly myRef: React.RefObject<NativeScriptAbsoluteLayout> = React.createRef<NativeScriptAbsoluteLayout>();
 
     render(){
         const { children, ...rest } = this.props;

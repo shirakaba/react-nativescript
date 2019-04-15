@@ -1,26 +1,53 @@
-import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
-import { View, ContainerView } from "tns-core-modules/ui/core/view/view";
-import { ContentView } from "tns-core-modules/ui/content-view/content-view";
-import { TextBase } from "tns-core-modules/ui/text-base/text-base";
-import { Observable } from "tns-core-modules/data/observable";
-import { Style } from "tns-core-modules/ui/styling/style/style";
-import { elementMap, TNSElements, ConcreteViewConstructor } from "../client/ElementRegistry";
-import { View as ReactView } from "../components/View";
-import { ViewComponentProps } from "./View";
-import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
-import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
-import { TextView } from "tns-core-modules/ui/text-view/text-view";
-import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
-import { Label } from "tns-core-modules/ui/label/label";
-import { TextField } from "tns-core-modules/ui/text-field/text-field";
-import { WebView } from "tns-core-modules/ui/web-view/web-view";
-import { HtmlView } from "tns-core-modules/ui/html-view/html-view";
-import { ListView } from "tns-core-modules/ui/list-view/list-view";
-import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
-import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
-import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import {
+    AbsoluteLayout,
+    ActionBar,
+    ActivityIndicator,
+    Animation,
+    Button,
+    Cache,
+    ContentView,
+    ContainerView,
+    DatePicker,
+    // Dialogs,
+    DockLayout,
+    EditableTextBase,
+    FadeTransition,
+    FlexboxLayout,
+    FlipTransition,
+    Frame,
+    // Gestures,
+    GridLayout,
+    HtmlView,
+    Image,
+    Label,
+    LayoutBase,
+    ListPicker,
+    ListView,
+    Observable,
+    Page,
+    Placeholder,
+    Progress,
+    ProxyViewContainer,
+    Repeater,
+    ScrollView,
+    SearchBar,
+    SegmentedBar,
+    Slider,
+    SlideTransition,
+    StackLayout,
+    Switch,
+    Style,
+    TabView,
+    TextBase,
+    TextField,
+    TextView,
+    TimePicker,
+    Transition,
+    View,
+    ViewBase,
+    WebView,
+    WrapLayout,
+} from "../client/ElementRegistry";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
