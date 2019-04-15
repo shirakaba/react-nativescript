@@ -12,27 +12,24 @@
 
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
-
-import { TNSElements, elementMap, ConcreteViewConstructor } from './ElementRegistry';
-// TODO: Would be less coupled if we imported View and TextBase from elementRegistry.ts.
-import { View } from 'tns-core-modules/ui/core/view/view';
-import { Color } from 'tns-core-modules/color/color';
-import { Button } from "tns-core-modules/ui/button/button";
-import { ViewBase } from 'tns-core-modules/ui/core/view-base/view-base';
-import { ContentView } from "tns-core-modules/ui/content-view";
-import { TextBase } from 'tns-core-modules/ui/text-base/text-base';
-import { TextView } from 'tns-core-modules/ui/text-view/text-view';
-import { Page } from "tns-core-modules/ui/page";
-import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-// import { Page } from 'tns-core-modules/ui/page/page';
-import { Frame } from 'tns-core-modules/ui/frame/frame';
-import { LayoutBase } from 'tns-core-modules/ui/layouts/layout-base';
+import { 
+    TNSElements,
+    elementMap,
+    ConcreteViewConstructor,
+    ContentView,
+    GridLayout,
+    LayoutBase,
+    Page,
+    TextBase,
+    TextView,
+    View,
+    ViewBase,
+} from './ElementRegistry';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 import { setValueForStyles } from '../shared/CSSPropertyOperations';
 import { setValueForProperty } from './NativeScriptPropertyOperations';
-import { GridLayout } from '../components/GridLayout';
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;

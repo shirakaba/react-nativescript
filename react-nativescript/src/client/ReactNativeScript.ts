@@ -15,8 +15,23 @@ import { reactReconcilerInst, Container } from "./HostConfig";
 import { ReactPortal } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
-import { Frame } from 'tns-core-modules/ui/frame/frame';
-import { Page } from 'tns-core-modules/ui/page/page';
+import { Frame, Page } from "../client/ElementRegistry";
+import { AbsoluteLayout as AbsoluteLayoutComponent } from "../components/AbsoluteLayout";
+import { Button as ButtonComponent } from "../components/Button";
+import { DockLayout as DockLayoutComponent } from "../components/DockLayout";
+import { FlexboxLayout as FlexboxLayoutComponent } from "../components/FlexboxLayout";
+import { GridLayout as GridLayoutComponent } from "../components/GridLayout";
+import { HtmlView as HtmlViewComponent } from "../components/HtmlView";
+import { Label as LabelComponent } from "../components/Label";
+import { ListView as ListViewComponent } from "../components/ListView";
+import { ListViewCell as ListViewCellComponent } from "../components/ListViewCell";
+// import { Portal as PortalComponent } from "../components/Portal";
+import { StackLayout as StackLayoutComponent } from "../components/StackLayout";
+import { TextField as TextFieldComponent } from "../components/TextField";
+import { TextView as TextViewComponent } from "../components/TextView";
+import { View as ViewComponent } from "../components/View";
+import { WebView as WebViewComponent } from "../components/WebView";
+import { WrapLayout as WrapLayoutComponent } from "../components/WrapLayout";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -99,3 +114,22 @@ export function start(
         }
     });
 }
+
+export {
+    AbsoluteLayoutComponent as AbsoluteLayout,
+    ButtonComponent as Button,
+    // DialogsComponent as Dialogs,
+    DockLayoutComponent as DockLayout,
+    FlexboxLayoutComponent as FlexboxLayout,
+    // GesturesComponent as Gestures,
+    GridLayoutComponent as GridLayout,
+    HtmlViewComponent as HtmlView,
+    LabelComponent as Label,
+    ListViewComponent as ListView,
+    StackLayoutComponent as StackLayout,
+    TextFieldComponent as TextField,
+    TextViewComponent as TextView,
+    ViewComponent as View,
+    WebViewComponent as WebView,
+    WrapLayoutComponent as WrapLayout,
+};
