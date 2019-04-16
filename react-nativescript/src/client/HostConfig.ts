@@ -13,6 +13,7 @@
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from 'react-reconciler';
 import { 
+    ActionBar,
     TNSElements,
     elementMap,
     ConcreteViewConstructor,
@@ -358,11 +359,18 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        // console.log(`[appendChild()] child's page was: `, child.page);
+        // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
         if(isASingleChildContainer(parentInstance)){
             console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
-            parentInstance.content = child as View;
+
+             if(child instanceof ActionBar && parentInstance instanceof Page){
+                parentInstance.actionBar = child;
+             } else {
+                parentInstance.content = child as View;
+             }
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
@@ -532,8 +540,13 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         }
     },
     removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        parentInstance._removeView(child);
-        // TODO: check whether a property/event change should be fired.
+        if(child instanceof ActionBar && parentInstance instanceof Page){
+            // FIXME: determine the best way to implement this for ActionBar. Will have to figure out potential scenarios.
+            // parentInstance.actionBar = null;
+         } else {
+            parentInstance._removeView(child);
+            // TODO: check whether a property/event change should be fired.
+         }
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
         if(isASingleChildContainer(container)){

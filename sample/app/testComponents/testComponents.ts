@@ -14,8 +14,10 @@ import {
     AbsoluteLayout as ReactAbsoluteLayout,
     FlexboxLayout as ReactFlexboxLayout,
     ListView as ReactListView,
+    ActionBar as ReactActionBar,
 } from "react-nativescript/dist/index";
 import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
+import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -638,6 +640,22 @@ export class FlexboxLayoutTest2 extends React.Component<{}, {}> {
                 },
                 null
             ),
+        );
+    }
+}
+
+export class ActionBarTest extends React.Component<{}, {}> {
+    render(){
+        const navigationButton = new NavigationButton();
+        navigationButton.text = "Go Back";
+        return React.createElement(
+            ReactActionBar,
+            {
+                navigationButton,
+                // color: new Color("red"),
+                // backgroundColor: new Color("blue"),
+            },
+            null
         );
     }
 }
