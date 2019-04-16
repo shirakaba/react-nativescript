@@ -64,7 +64,7 @@ import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
 
-ReactNativeScript.start(
+ReactNativeScript.startWithFrame(
     React.createElement(
         ContentView,
         {
