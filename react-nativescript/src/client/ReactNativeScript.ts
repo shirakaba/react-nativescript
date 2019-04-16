@@ -15,7 +15,7 @@ import { reactReconcilerInst, Container } from "./HostConfig";
 import { ReactPortal } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
-import { Frame, Page } from "../client/ElementRegistry";
+import { Frame, Page, TabView, View, ContentView } from "../client/ElementRegistry";
 import { AbsoluteLayout as AbsoluteLayoutComponent } from "../components/AbsoluteLayout";
 import { ActionBar as ActionBarComponent } from "../components/ActionBar";
 import { Button as ButtonComponent } from "../components/Button";
@@ -88,10 +88,10 @@ export function render(
  * 
  *  
  * @param app - Your <App/> component.
- * @param frame - A custom Frame for your NativeScript app (optional)
- * @param page - A custom Page for your NativeScript app (optional)
+ * @param frame - The top frame for your NativeScript app (optional).
+ * @param page - A custom Page for your NativeScript app (optional).
  */
-export function start(
+export function startWithFrame(
     app: ReactReconciler.ReactNodeList,
     frame: Frame = new Frame(),
     page: Page = new Page(),
@@ -111,7 +111,65 @@ export function start(
                     return page;
                 }
             });
+
             return frame;
+        }
+    });
+}
+
+/**
+ * Convenience function to start your React NativeScript app.
+ * This should be placed as the final line of your app.ts file, as no
+ * code will run after it (at least on iOS).
+ * 
+ *  
+ * @param app - Your <App/> component.
+ * @param rootView - The root view for your NativeScript app.
+ */
+export function startWithTabView(
+    app: ReactReconciler.ReactNodeList,
+    tabView: TabView = new TabView(),
+): void {
+    console.warn(
+        `Support for TabView as a root view component is limited. ` +
+        `React NativeScript assumes that you have set its items, ` +
+        `selectedIndex, and selectedIndexChangeEvent listener yourself.`
+    );
+
+    return startWithView(
+        app,
+        tabView,
+    );
+}
+
+/**
+ * Convenience function to start your React NativeScript app.
+ * This should be placed as the final line of your app.ts file, as no
+ * code will run after it (at least on iOS).
+ * 
+ *  
+ * @param app - Your <App/> component.
+ * @param rootView - The root view for your NativeScript app
+ */
+export function startWithView(
+    app: ReactReconciler.ReactNodeList,
+    rootView: View = new ContentView(),
+): void {
+    console.warn(
+        `Support for root view components other than Frame or TabView is limited.`
+    );
+    
+    run({
+        create: () => {
+            render(
+                app,
+                rootView,
+                () => {
+                    console.log(`Container updated!`);
+                }
+            );
+
+            return rootView;
         }
     });
 }

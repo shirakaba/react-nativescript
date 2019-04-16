@@ -19,7 +19,7 @@ const frame = new Frame();
 const page = new Page();
 page.actionBarHidden = false;
 
-ReactNativeScript.start(
+ReactNativeScript.startWithFrame(
     React.createElement(
         ActionBarTest,
         {
