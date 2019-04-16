@@ -284,6 +284,14 @@ export type WebViewProps = LayoutBaseProps & Pick<
     "canGoForward"
 >;
 
+export type ActionBarProps = LayoutBaseProps & Pick<
+    ActionBar,
+    "title"|
+    "titleView"|
+    "navigationButton"|
+    "flat"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };

@@ -17,6 +17,7 @@ import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
 import { Frame, Page } from "../client/ElementRegistry";
 import { AbsoluteLayout as AbsoluteLayoutComponent } from "../components/AbsoluteLayout";
+import { ActionBar as ActionBarComponent } from "../components/ActionBar";
 import { Button as ButtonComponent } from "../components/Button";
 import { DockLayout as DockLayoutComponent } from "../components/DockLayout";
 import { FlexboxLayout as FlexboxLayoutComponent } from "../components/FlexboxLayout";
@@ -117,6 +118,7 @@ export function start(
 
 export {
     AbsoluteLayoutComponent as AbsoluteLayout,
+    ActionBarComponent as ActionBar,
     ButtonComponent as Button,
     // DialogsComponent as Dialogs,
     DockLayoutComponent as DockLayout,

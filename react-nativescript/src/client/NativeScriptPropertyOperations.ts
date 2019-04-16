@@ -6,6 +6,7 @@ import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { ActionBar } from "./ElementRegistry";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -152,6 +153,11 @@ export function setValueForProperty(
         } else if(name === "columnSpan"){
             GridLayout.setColumnSpan(instance as View, value);
         }
+    // } else if(
+    //     name === "color" && instance instanceof ActionBar ||
+    //     name === "backgroundColor" && instance instanceof ActionBar
+    // ){
+        // 
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
