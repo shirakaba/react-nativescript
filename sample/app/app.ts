@@ -10,22 +10,12 @@ import * as application from "tns-core-modules/application";
 import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
-import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
-import { Frame, ContentView } from "tns-core-modules/ui/frame/frame";
-import { ViewBase, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { Page } from "tns-core-modules/ui/page/page";
-import { NestedContentView, FlexboxLayoutTest1, FlexboxLayoutTest2, Clock, FormattedStringLabel, Marquee, GameLoopProvider, DockLayoutTest, AbsoluteLayoutTest } from "./testComponents/testComponents";
-import { View as ReactView } from "react-nativescript/dist/components/View";
-import { ListView } from "react-nativescript/dist/components/ListView";
+import { ContentView, Label } from "react-nativescript/dist/index";
 import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
-import { Span } from "tns-core-modules/text/span";
-import { Button as ReactButton } from "react-nativescript/dist/components/Button";
-import { Color } from "tns-core-modules/color";
 
 ReactNativeScript.start(
     React.createElement(
-        ReactView,
+        ContentView,
         {
             backgroundColor: "orange"
         },

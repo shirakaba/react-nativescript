@@ -1,27 +1,21 @@
 import * as React from "react";
-import { ReactHTML, FunctionComponent } from "react";
-import { on, run, launchEvent, getMainEntry, getRootView, LaunchEventData } from "tns-core-modules/application";
-import { Frame } from "tns-core-modules/ui/frame/frame";
 import { ContentView } from "tns-core-modules/ui/content-view/content-view";
-import { EventData } from "tns-core-modules/data/observable/observable";
 import { TextBase, ViewBase, PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { TextField } from "tns-core-modules/ui/text-field/text-field";
-import { TextView } from "tns-core-modules/ui/text-view/text-view";
-import { Page } from "tns-core-modules/ui/page/page";
 import { Color } from "tns-core-modules/color";
-import { FlexboxLayout as NativeScriptFlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
-import { Button } from "tns-core-modules/ui/button/button";
-import { Button as ReactButton } from "react-nativescript/dist/components/Button";
-import { View as ReactView } from "react-nativescript/dist/components/View";
-import { TextView as ReactTextView } from "react-nativescript/dist/components/TextView";
-import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
-import { DockLayout as ReactDockLayout } from "react-nativescript/dist/components/DockLayout";;
-import { AbsoluteLayout as ReactAbsoluteLayout } from "react-nativescript/dist/components/AbsoluteLayout";
-import { FlexboxLayout as ReactFlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
 import { Span } from "tns-core-modules/text/span";
-import { ListView as ReactListView } from "react-nativescript/dist/components/ListView";
+import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
+import {
+    Button as ReactButton,
+    ContentView as ReactContentView,
+    TextView as ReactTextView,
+    Label as ReactLabel,
+    // StylePropContents,
+    DockLayout as ReactDockLayout,
+    AbsoluteLayout as ReactAbsoluteLayout,
+    FlexboxLayout as ReactFlexboxLayout,
+    ListView as ReactListView,
+} from "react-nativescript/dist/index";
+import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
 const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -51,7 +45,7 @@ class MyRootView extends React.Component<{}, {}> {
 export class NestedContentView extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactView,
+            ReactContentView,
             {
                 style: {
                     /* Note that "75%" and "yellow" also work at run-time; it's just that the typings disallow it. */
@@ -63,7 +57,7 @@ export class NestedContentView extends React.Component<{}, {}> {
                 // width: 75,
             },
             React.createElement(
-                ReactView,
+                ReactContentView,
                 {
                     /* Seems that these props are totally untyped (deep 'any'). */
                     style: {
@@ -252,7 +246,7 @@ export class GameLoopProvider extends React.Component<{ frameRateMs?: number, st
         const { children, frameRateMs, ...rest } = this.props;
 
 		return React.createElement(
-            ReactView,
+            ReactContentView,
             {
                 style: {
                     width: { unit: "%", value: 100 },
@@ -308,7 +302,7 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
             //     }
             // ),
             React.createElement(
-                ReactView,
+                ReactContentView,
                 {
                     style: {
                         backgroundColor: new Color("blue"),
@@ -318,7 +312,7 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
                 }
             ),
             // React.createElement(
-            //     ReactView,
+            //     ReactContentView,
             //     {
             //         style: {
             //             backgroundColor: new Color("red"),
@@ -328,7 +322,7 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
             //     }
             // ),
             // React.createElement(
-            //     ReactView,
+            //     ReactContentView,
             //     {
             //         style: {
             //             backgroundColor: new Color("yellow"),
@@ -338,7 +332,7 @@ export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
             //     }
             // ),
             // React.createElement(
-            //     ReactView,
+            //     ReactContentView,
             //     {
             //         style: {
             //             backgroundColor: new Color("lightgreen"),
