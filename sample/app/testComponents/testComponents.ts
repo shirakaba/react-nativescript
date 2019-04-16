@@ -16,6 +16,8 @@ import {
     FlexboxLayout as ReactFlexboxLayout,
     ListView as ReactListView,
     ActionBar as ReactActionBar,
+    TabView as ReactTabView,
+    TabViewItem as ReactTabViewItem,
 } from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 const PropTypes = require('prop-types');
@@ -470,6 +472,8 @@ export class DockLayoutTest extends React.Component<{}, {}> {
         return React.createElement(
             ReactDockLayout,
             {
+                width: { value: 100, unit: "%" },
+                height: { value: 100, unit: "%" },
                 stretchLastChild: true,
             },
             React.createElement(
@@ -594,8 +598,10 @@ export class FlexboxLayoutTest2 extends React.Component<{}, {}> {
                 flexDirection: "column-reverse",
                 justifyContent: "space-around",
                 alignItems: "stretch",
-                height: 300,
-                width: 300,
+                // height: 300,
+                // width: 300,
+                width: { value: 100, unit: "%" },
+                height: { value: 100, unit: "%" },
                 backgroundColor: "lightGray"
             },
             React.createElement(
@@ -690,3 +696,75 @@ export function makeTabView(): TabView {
 
     return tabView;
 }
+
+export class TabViewTest extends React.Component<{}, {}> {
+    render(){
+        return React.createElement(
+            ReactTabView,
+            {
+                // selectedIndex: 1
+            },
+
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Dock",
+                    identifier: `Item 0`,
+                },
+                React.createElement(
+                    DockLayoutTest,
+                    {},
+                    null
+                )
+            ),
+
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Flexbox",
+                    identifier: `Item 1`,
+                },
+                React.createElement(
+                    FlexboxLayoutTest2,
+                    {},
+                    null
+                )
+            ),
+
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Clock",
+                    identifier: `Item 2`,
+                },
+                React.createElement(
+                    Clock,
+                    {},
+                    null
+                )
+            ),
+
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Marquee",
+                    identifier: `Item 3`,
+                },
+                React.createElement(
+                    GameLoopProvider,
+                    {
+                        frameRateMs: 1000,
+                    },
+                    React.createElement(
+                        Marquee,
+                        {
+                            text: "Have you ever seen a game-looped Marquee before?"
+                        },
+                        null
+                    )
+                )
+            ),
+        );
+    }
+}
+// ReactTabViewItem

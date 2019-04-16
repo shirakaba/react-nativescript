@@ -295,7 +295,6 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 ListViewCell,
                 {
                     identifier: `Portal(${view._domId})`,
-                    textReference: `${item.text}`,
                     nativeElement: view,
                 },
                 this.props.cellFactory(item, view)

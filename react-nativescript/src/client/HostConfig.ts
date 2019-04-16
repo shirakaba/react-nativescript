@@ -25,6 +25,8 @@ import {
     TextView,
     View,
     ViewBase,
+    TabView,
+    TabViewItem,
 } from './ElementRegistry';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
@@ -214,7 +216,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             if(type === 'contentView' && hostContext.isInAParentText){
                 throw new Error('Nesting of <ContentView> within a TextBase is not currently supported.');
             };
-            view = new viewConstructor();
+            view = new viewConstructor() as View;
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
@@ -374,6 +376,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
+        } else if(parentInstance instanceof TabView && child instanceof TabViewItem){
+            console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
+            /* We must go through the setter rather than simply mutate the existing array. */
+            const newItems = [...(parentInstance.items || []), child];
+            parentInstance.items = newItems;
+            console.log(`[appendChild()] parentInstance.items now updated to:`, parentInstance.items);
         } else {
             console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
@@ -543,6 +551,13 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         if(child instanceof ActionBar && parentInstance instanceof Page){
             // FIXME: determine the best way to implement this for ActionBar. Will have to figure out potential scenarios.
             // parentInstance.actionBar = null;
+        if(parentInstance instanceof TabView && child instanceof TabViewItem){
+                if(!parentInstance.items){
+                    parentInstance.items = [];
+                }
+                // TODO: remove from array without creating new one.
+                parentInstance.items = parentInstance.items.filter(i => i !== child);
+            }
          } else {
             parentInstance._removeView(child);
             // TODO: check whether a property/event change should be fired.

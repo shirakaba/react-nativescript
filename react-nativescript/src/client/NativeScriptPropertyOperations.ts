@@ -6,7 +6,7 @@ import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-import { ActionBar } from "./ElementRegistry";
+import { ActionBar, TabViewItem } from "./ElementRegistry";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -157,7 +157,12 @@ export function setValueForProperty(
     //     name === "color" && instance instanceof ActionBar ||
     //     name === "backgroundColor" && instance instanceof ActionBar
     // ){
-        // 
+    
+    /* Looks like instance.set() suffices for this case; but will keep this
+     * implementation commented out here just in case I've missed something. */
+    // } else if(name === "view" && instance instanceof TabViewItem){
+    //     // console.log(`[setValueForProperty] SETTING .view on ${instance}. Value:`, value);
+    //     (instance as TabViewItem).view = value;
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */

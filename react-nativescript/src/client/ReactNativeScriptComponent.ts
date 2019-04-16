@@ -198,6 +198,7 @@ export function setInitialDOMProperties(
     isCustomComponentTag: boolean,
     hostContext: HostContext
 ): void {
+    console.log(`[setInitialDOMProperties] for: ${domElement}`);
 	for (const propKey in nextProps) {
 		if (!nextProps.hasOwnProperty(propKey)) {
 			continue;
@@ -261,6 +262,7 @@ export function updateDOMProperties(
     isCustomComponentTag: boolean,
     hostContext: HostContext
 ): void {
+    console.log(`[updateDOMProperties] for: ${instance}`);
     // TODO: Handle wasCustomComponentTag
     for (let i = 0; i < updatePayload.length; i += 2) {
         const propKey = updatePayload[i];
