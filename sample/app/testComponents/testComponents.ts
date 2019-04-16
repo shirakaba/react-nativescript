@@ -1,9 +1,10 @@
 import * as React from "react";
-import { ContentView } from "tns-core-modules/ui/content-view/content-view";
-import { TextBase, ViewBase, PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
+import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
+import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
     Button as ReactButton,
     ContentView as ReactContentView,
@@ -16,8 +17,7 @@ import {
     ListView as ReactListView,
     ActionBar as ReactActionBar,
 } from "react-nativescript/dist/index";
-import { FlexboxLayout } from "react-nativescript/dist/components/FlexboxLayout";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
+import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -264,7 +264,7 @@ export class GameLoopProvider extends React.Component<{ frameRateMs?: number, st
 export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            FlexboxLayout,
+            ReactFlexboxLayout,
             {
                 style: {
                     alignItems: "center",
@@ -658,4 +658,35 @@ export class ActionBarTest extends React.Component<{}, {}> {
             null
         );
     }
+}
+
+export function makeTabView(): TabView {
+    const stackLayout0 = new StackLayout();
+    const label0 = new Label();
+    label0.text = "Tab 0";
+    stackLayout0.addChild(label0);
+
+    const stackLayout1 = new StackLayout();
+    const label1 = new Label();
+    label1.text = "Tab 1";
+    stackLayout1.addChild(label1);
+
+    const tabViewItem0 = new TabViewItem();
+    tabViewItem0.title = "Tab 0";
+    tabViewItem0.view = stackLayout0;
+
+    const tabViewItem1 = new TabViewItem();
+    tabViewItem1.title = "Tab 1";
+    tabViewItem1.view = stackLayout1;
+
+    // creating TabView
+    const tabView = new TabView();
+    // setting up its items and the selected index
+    const items = [];
+    items.push(tabViewItem0);
+    items.push(tabViewItem1);
+    tabView.items = items;
+    tabView.selectedIndex = 1;
+
+    return tabView;
 }

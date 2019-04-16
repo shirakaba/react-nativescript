@@ -11,7 +11,7 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { ActionBarTest } from "./testComponents/testComponents";
+import { ActionBarTest, makeTabView } from "./testComponents/testComponents";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { Page } from "tns-core-modules/ui/page/page";
 
@@ -19,7 +19,7 @@ const frame = new Frame();
 const page = new Page();
 page.actionBarHidden = false;
 
-ReactNativeScript.startWithFrame(
+ReactNativeScript.startWithTabView(
     React.createElement(
         ActionBarTest,
         {
@@ -27,9 +27,20 @@ ReactNativeScript.startWithFrame(
         },
         null
     ),
-    frame,
-    page
+    makeTabView()
 );
+
+// ReactNativeScript.startWithFrame(
+//     React.createElement(
+//         ActionBarTest,
+//         {
+
+//         },
+//         null
+//     ),
+//     frame,
+//     page
+// );
 
 
 // application.run({ moduleName: "app-root" });
