@@ -29,7 +29,7 @@ import { ListViewCell as ListViewCellComponent } from "../components/ListViewCel
 import { StackLayout as StackLayoutComponent } from "../components/StackLayout";
 import { TextField as TextFieldComponent } from "../components/TextField";
 import { TextView as TextViewComponent } from "../components/TextView";
-import { View as ViewComponent } from "../components/View";
+import { ContentView as ContentViewComponent } from "../components/ContentView";
 import { WebView as WebViewComponent } from "../components/WebView";
 import { WrapLayout as WrapLayoutComponent } from "../components/WrapLayout";
 
@@ -129,7 +129,7 @@ export {
     StackLayoutComponent as StackLayout,
     TextFieldComponent as TextField,
     TextViewComponent as TextView,
-    ViewComponent as View,
+    ContentViewComponent as ContentView,
     WebViewComponent as WebView,
     WrapLayoutComponent as WrapLayout,
 };

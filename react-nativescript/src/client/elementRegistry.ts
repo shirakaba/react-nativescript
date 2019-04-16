@@ -13,7 +13,7 @@ import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout"
 import { EditableTextBase } from "tns-core-modules/ui/editable-text-base/editable-text-base";
 import { FadeTransition } from "tns-core-modules/ui/transition/fade-transition";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
-import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
+// import { FlipTransition } from "tns-core-modules/ui/transition/flip-transition";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 // import { Gestures } from "tns-core-modules/ui/gestures/gestures";
 import { GridLayout } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
@@ -126,7 +126,7 @@ export {
     EditableTextBase,
     FadeTransition,
     FlexboxLayout,
-    FlipTransition,
+    // FlipTransition,
     Frame,
     // Gestures,
     GridLayout,

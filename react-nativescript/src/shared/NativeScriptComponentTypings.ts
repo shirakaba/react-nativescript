@@ -13,7 +13,7 @@ import {
     EditableTextBase,
     FadeTransition,
     FlexboxLayout,
-    FlipTransition,
+    // FlipTransition,
     Frame,
     // Gestures,
     GridLayout,

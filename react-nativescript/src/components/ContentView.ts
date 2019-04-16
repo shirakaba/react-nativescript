@@ -24,7 +24,7 @@ export type ViewComponentProps = Props & Partial<ViewProps>;
  * https://facebook.github.io/react-native/docs/View#color
  */
 // export class View extends React.Component<Props & ViewBaseProp<NativeScriptView>, {}> {
-export class View extends React.Component<ViewComponentProps, {}> {
+export class ContentView extends React.Component<ViewComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptView> = React.createRef<NativeScriptView>();
 
     /* Called before render():
