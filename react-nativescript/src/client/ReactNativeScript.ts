@@ -30,6 +30,8 @@ import { ListViewCell as ListViewCellComponent } from "../components/ListViewCel
 import { StackLayout as StackLayoutComponent } from "../components/StackLayout";
 import { TextField as TextFieldComponent } from "../components/TextField";
 import { TextView as TextViewComponent } from "../components/TextView";
+import { TabView as TabViewComponent } from "../components/TabView";
+import { TabViewItem as TabViewItemComponent } from "../components/TabViewItem";
 import { ContentView as ContentViewComponent } from "../components/ContentView";
 import { WebView as WebViewComponent } from "../components/WebView";
 import { WrapLayout as WrapLayoutComponent } from "../components/WrapLayout";
@@ -136,6 +138,8 @@ export function startWithTabView(
         `selectedIndex, and selectedIndexChangeEvent listener yourself.`
     );
 
+
+
     return startWithView(
         app,
         tabView,
@@ -155,10 +159,14 @@ export function startWithView(
     app: ReactReconciler.ReactNodeList,
     rootView: View = new ContentView(),
 ): void {
-    console.warn(
-        `Support for root view components other than Frame or TabView is limited.`
-    );
-    
+    if(
+        !(rootView instanceof TabView || rootView instanceof Frame)
+    ){
+        console.warn(
+            `Support for root view components other than Frame or TabView is limited.`
+        );
+    }
+
     run({
         create: () => {
             render(
@@ -187,6 +195,8 @@ export {
     LabelComponent as Label,
     ListViewComponent as ListView,
     StackLayoutComponent as StackLayout,
+    TabViewComponent as TabView,
+    TabViewItemComponent as TabViewItem,
     TextFieldComponent as TextField,
     TextViewComponent as TextView,
     ContentViewComponent as ContentView,

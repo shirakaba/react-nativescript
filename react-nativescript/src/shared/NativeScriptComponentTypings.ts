@@ -48,6 +48,7 @@ import {
     WebView,
     WrapLayout,
 } from "../client/ElementRegistry";
+import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -163,6 +164,30 @@ export type ViewProps = ViewBaseProps & Pick<View,
     "cssPseudoClasses"|
     "modal"
 >;
+
+export type TabViewProps = ViewProps & Pick<TabView,
+    "items"|
+    "selectedIndex"|
+    "tabTextFontSize"|
+    "tabTextColor"|
+    "tabBackgroundColor"|
+    "selectedTabTextColor"|
+    "androidSelectedTabHighlightColor"|
+    "android"|
+    "ios"|
+    "iosIconRenderingMode"|
+    "androidOffscreenTabLimit"|
+    "androidTabsPosition"|
+    "androidSwipeEnabled"
+>
+
+export type TabViewItemProps = ViewBaseProps & Pick<TabViewItem,
+    "title"|
+    // "view"| /* We provide a StackLayout and implicitly map children into it */
+    "iconSource"|
+    "textTransform"
+    // "canBeLoaded"
+>
 
 export type TextBaseProps = ViewProps & Pick<
     TextBase,

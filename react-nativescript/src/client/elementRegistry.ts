@@ -37,7 +37,7 @@ import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
 import { Style } from "tns-core-modules/ui/styling/style/style";
 import { Switch } from "tns-core-modules/ui/switch/switch";
-import { TabView } from "tns-core-modules/ui/tab-view/tab-view";
+import { TabView, TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { TextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextView } from "tns-core-modules/ui/text-view/text-view";
@@ -52,7 +52,7 @@ import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout"
 // type ConcreteView<T extends View> = T;
 
 // https://stackoverflow.com/questions/36886082/abstract-constructor-type-in-typescript
-export type ConcreteViewConstructor = new (...args: any[]) => View;
+export type ConcreteViewConstructor = new (...args: any[]) => View|ViewBase;
 
 export type TNSElements = keyof typeof elementMap;
 // const el: TNSElements =  "h9";
@@ -95,6 +95,7 @@ export const elementMap = {
     "slider": Slider,
     "switch": Switch,
     "tabView": TabView,
+    "tabViewItem": TabViewItem,
     "textView": TextView, // √
     // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
     "textField": TextField, // √
@@ -151,6 +152,7 @@ export {
     Switch,
     Style,
     TabView,
+    TabViewItem,
     TextBase,
     TextField,
     TextView,
