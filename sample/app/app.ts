@@ -11,7 +11,6 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { Label as ReactLabel } from "react-nativescript/dist/components/Label";
 
 ReactNativeScript.start(
     React.createElement(
@@ -20,7 +19,7 @@ ReactNativeScript.start(
             backgroundColor: "orange"
         },
         React.createElement(
-            ReactLabel,
+            Label,
             {
                 // text: "Hello, world!"
             },

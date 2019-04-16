@@ -56,18 +56,17 @@ Please file an Issue if you meet any problems when following these instructions.
 
 ### Hello World app
 
-For now, I'm not focusing on JSX/TSX, but it may well work (just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`). Here is how to make a `<View>` component (a React wrapper around a NativeScript ContentView) without JSX:
+For now, I'm not focusing on JSX/TSX, but it may well work (just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`). Here is how to make a `<ContentView>` component (a React wrapper around a NativeScript ContentView) without JSX:
 
 ```typescript
 // In app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { View } from "react-nativescript/dist/components/View";
-import { Label } from "react-nativescript/dist/components/Label";
+import { ContentView, Label } from "react-nativescript/dist/index";
 
 ReactNativeScript.start(
     React.createElement(
-        View,
+        ContentView,
         {
             backgroundColor: "orange"
         },
