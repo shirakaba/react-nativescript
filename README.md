@@ -84,6 +84,33 @@ ReactNativeScript.startWithFrame(
 
 There are some more complex components to test (or refer to) in [`sample/app/testComponents/testComponents.ts`](https://github.com/shirakaba/react-nativescript/blob/master/sample/app/testComponents/testComponents.ts). GameLoop has some potential ;)
 
+### Navigation
+
+#### A dedicated navigation/routing framework?
+
+A dedicated navigation/routing framework is beyond the scope of this library, but I hope to make a compatibility layer (e.g. remapping `<ContentView>` to `<View>`) to allow React NativeScript to simply be plugged into existing navigation solutions in the world of React. Tell me if you find any good candidates.
+
+I may attempt to create a first-class solution myself in time, but it would be as part of a separate project, with its own repository.
+
+#### NativeScript Core navigation
+
+NativeScript Core does have some navigation components to mirror those used by native apps, though, and I shall be supporting these.
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center" valign="middle">
+                <img width="224px" src="/github_img/TabView.gif"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <p><b>TabView</b></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 ### Layouts
 
 All layouts are supported. Here are a few samples:
@@ -125,6 +152,10 @@ All layouts are supported. Here are a few samples:
         </tr>
     </tbody>
 </table>
+
+### NativeScript Core Components
+
+I'm working on wrapping up every component provided by NativeScript Core with a dedicated React wrapper, trying to provide the most intuitive (React-like) user experience I can manage. Proper documentation will come in time. To see how many of the core components I've implemented so far, simply refer to `src/components`.
 
 ## Why not just use React Native? 🤷‍♂️
 

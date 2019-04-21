@@ -14,6 +14,11 @@ export type TabViewItemComponentProps = Props & Partial<TabViewItemProps>;
 
 /**
  * A React wrapper around the NativeScript TabViewItem component.
+ * 
+ * Renders the child passed into it into a StackLayout, via a React Portal.
+ * 
+ * See: ui/tab-view/tab-view
+ * See: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/tab-view/code-behind/code-behind-ts-page.ts
  */
 export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> {
     private readonly container = new StackLayout();

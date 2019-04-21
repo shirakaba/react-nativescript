@@ -5,3 +5,4 @@ sample/**/*.d.ts
 react-nativescript/dist
 react-nativescript/src/*.js
 react-nativescript/src/**/*.js
+*.mov
