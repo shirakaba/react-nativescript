@@ -48,7 +48,7 @@ export class Page extends React.Component<PageComponentProps, {}> {
             node.on("navigatedFrom", this._onNavigatedFrom);
             node.on("navigatedTo", this._onNavigatedTo);
             node.on("navigatingFrom", this._onNavigatingFrom);
-            node.on("navigatedFrom", this._onNavigatedFrom);
+            node.on("navigatingTo", this._onNavigatingTo);
         }
     }
   
@@ -58,7 +58,7 @@ export class Page extends React.Component<PageComponentProps, {}> {
             node.off("navigatedFrom", this._onNavigatedFrom);
             node.off("navigatedTo", this._onNavigatedTo);
             node.off("navigatingFrom", this._onNavigatingFrom);
-            node.off("navigatedFrom", this._onNavigatedFrom);
+            node.off("navigatingTo", this._onNavigatingTo);
         } else {
             console.warn(`React ref to NativeScript Page lost, so unable to clean up event listeners.`);
         }
