@@ -11,7 +11,7 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { ActionBarTest, makeTabView, TabViewTest, GameLoopTest } from "./testComponents/testComponents";
+import { ActionBarTest, TabViewTest, GameLoopTest } from "./testComponents/testComponents";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { Page } from "tns-core-modules/ui/page/page";
 import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
