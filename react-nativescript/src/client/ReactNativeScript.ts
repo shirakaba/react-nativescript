@@ -12,7 +12,8 @@
 
 import * as ReactReconciler from 'react-reconciler';
 import { reactReconcilerInst, Container } from "./HostConfig";
-import { ReactPortal } from "react";
+import * as React from "react";
+import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView } from "../client/ElementRegistry";
@@ -97,54 +98,32 @@ export function render(
 export function startWithFrame(
     app: ReactReconciler.ReactNodeList,
     frame: Frame = new Frame(),
-    page: Page = new Page(),
+    // page: Page = new Page(),
+    refToPage: React.RefObject<Page>
 ): void {
     run({
         create: () => {
             frame.navigate({
                 create: () => {
+                    // createElement('label', {}, null).ref // LegacyRef
+                    // const pageRef = React.createRef();
+                    console.log(`[frame.navigate() -> create()] Rendering app. refToPage.current:`, refToPage.current);
+
                     render(
                         app,
-                        page,
+                        refToPage.current,
                         () => {
                             console.log(`Container updated!`);
                         }
                     );
-    
-                    return page;
+
+                    return refToPage.current;
                 }
             });
 
             return frame;
         }
     });
-}
-
-/**
- * Convenience function to start your React NativeScript app.
- * This should be placed as the final line of your app.ts file, as no
- * code will run after it (at least on iOS).
- * 
- *  
- * @param app - Your <App/> component.
- * @param rootView - The root view for your NativeScript app.
- */
-export function startWithTabView(
-    app: ReactReconciler.ReactNodeList,
-    tabView: TabView = new TabView(),
-): void {
-    console.warn(
-        `Support for TabView as a root view component is limited. ` +
-        `React NativeScript assumes that you have set its items, ` +
-        `selectedIndex, and selectedIndexChangeEvent listener yourself.`
-    );
-
-
-
-    return startWithView(
-        app,
-        tabView,
-    );
 }
 
 /**

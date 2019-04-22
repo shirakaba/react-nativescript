@@ -3,6 +3,8 @@ import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 
 interface Props {
+    /* Allows us to use the page itself as the component root. */
+    innerRef: React.RefObject<NativeScriptPage>,
     onNavigatingTo?: PageNavigationEventHandler,
     onNavigatedTo?: PageNavigationEventHandler,
     onNavigatingFrom?: PageNavigationEventHandler,
@@ -18,8 +20,8 @@ export type PageComponentProps = Props & Partial<PageProps>;
  * TODO: inherit from a View component
  * See: ui/page/page
  */
-export class Page extends React.Component<PageComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
+class _Page extends React.Component<PageComponentProps, {}> {
+    // private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
 
     private readonly _onNavigatingTo: PageNavigationEventHandler = (args: NavigatedData) => {
         if(this.props.onNavigatingTo){
@@ -43,7 +45,8 @@ export class Page extends React.Component<PageComponentProps, {}> {
     };
 
     componentDidMount() {
-        const node: NativeScriptPage|null = this.myRef.current;
+        // const node: NativeScriptPage|null = this.myRef.current;
+        const node: NativeScriptPage|null = this.props.innerRef.current;
         if(node){
             node.on("navigatedFrom", this._onNavigatedFrom);
             node.on("navigatedTo", this._onNavigatedTo);
@@ -53,7 +56,8 @@ export class Page extends React.Component<PageComponentProps, {}> {
     }
   
     componentWillUnmount() {
-        const node: NativeScriptPage|null = this.myRef.current;
+        // const node: NativeScriptPage|null = this.myRef.current;
+        const node: NativeScriptPage|null = this.props.innerRef.current;
         if(node){
             node.off("navigatedFrom", this._onNavigatedFrom);
             node.off("navigatedTo", this._onNavigatedTo);
@@ -65,15 +69,28 @@ export class Page extends React.Component<PageComponentProps, {}> {
     }
 
     render(){
-        const { children, ...rest } = this.props;
+        const { children, innerRef, ...rest } = this.props;
 
         return React.createElement(
             'page',
             {
                 ...rest,
-                ref: this.myRef
+                // ref: this.myRef
+                ref: innerRef
             },
             children
         );
     }
 }
+
+export const Page = React.forwardRef<NativeScriptPage, PageComponentProps>(
+    (props: PageComponentProps, ref: React.Ref<NativeScriptPage>) => {
+        return React.createElement(
+            _Page,
+            {
+                innerRef: ref,
+                ...props
+            },
+        );
+    }
+)
