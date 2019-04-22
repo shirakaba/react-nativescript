@@ -30,7 +30,7 @@ import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
 // const frame = new Frame();
 // const page = new Page();
 // // page.actionBarHidden = false;
-// ReactNativeScript.startWithFrame(
+// ReactNativeScript.startWithFrameAndPage(
 //     React.createElement(
 //         HubTest,
 //         {
@@ -42,11 +42,9 @@ import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
 //     page
 // );
 
-console.log(`In app.ts...`);
 const pageRef = React.createRef<Page>();
-console.log(`Created pageRef:`, pageRef.current);
 const frame = new Frame();
-console.log(`Calling startWithFrame...`);
+/* Do any Frame setup here */
 ReactNativeScript.startWithFrame(
     React.createElement(
         HubTest,
