@@ -365,6 +365,18 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
             return;
         }
+        if(child instanceof ActionBar){
+            console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
+            if(parentInstance instanceof Page){
+                parentInstance.actionBar = child;
+            } else {
+                if(parentInstance.page){
+                    parentInstance.page.actionBar = child;
+                }
+            }
+            return;
+        }
+
         // console.log(`[appendChild()] child's page was: `, child.page);
         // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
         if(isASingleChildContainer(parentInstance)){
@@ -372,11 +384,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
 
-             if(child instanceof ActionBar && parentInstance instanceof Page){
-                parentInstance.actionBar = child;
-             } else {
-                parentInstance.content = child as View;
-             }
+            parentInstance.content = child as View;
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);

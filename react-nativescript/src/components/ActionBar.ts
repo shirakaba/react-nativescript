@@ -10,7 +10,7 @@ export type ActionBarComponentProps = Props & Partial<ActionBarProps>;
 
 /**
  * A React wrapper around the NativeScript ActionBar component.
- * See: ui/layouts/flexbox-layout
+ * See: ui/action-bar/action-bar
  */
 export class ActionBar extends React.Component<ActionBarComponentProps, {}> {
     private readonly myRef: React.RefObject<NativeScriptActionBar> = React.createRef<NativeScriptActionBar>();

@@ -650,21 +650,25 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
         return React.createElement(
             ReactPage,
             {
-                innerRef: this.props.innerRef
+                innerRef: this.props.innerRef,
+                actionBarHidden: false,
             },
+
+            // Will be impressed if this works.
+            React.createElement(
+                ReactActionBar,
+                {
+                    title: "Navigation Hub",
+                    className: "action-bar",
+                },
+                null
+            ),
+
             React.createElement(
                 ReactStackLayout,
                 {
                 },
 
-                // Will be impressed if this works.
-                // React.createElement(
-                //     ReactActionBar,
-                //     {
-
-                //     },
-                //     null
-                // ),
 
                 React.createElement(
                     ReactButton,
