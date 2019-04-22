@@ -191,11 +191,11 @@ Note that 'basic support' may mean "seen to work in very specific favourable cir
 * [x] Mapping React refs to native components (I've given an example in Button)
 * [x] Support [FormattedString](https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript)
 * [x] Support for context
+* [x] Support for non-visual components (e.g. [Renderless Components](https://kyleshevlin.com/renderless-components) and [Context Providers](https://reactjs.org/docs/context.html#contextprovider))
 * [ ] Implement CSS cascading (assuming that NativeScript Core uses it at all..?)
 * [ ] Create React Components for each of the NativeScript Core views (there are a few of them!)
 * [ ] Map the React NativeScript Components to platform-agnostic [React primitives](https://github.com/lelandrichardson/react-primitives) to support multi-platform apps! [Lerna](https://lernajs.io) may become relevant here.
 * [ ] Handling of props other than by `Observer.setValue()` (I'll gradually discover where this is needed)
-* [ ] Support for non-visual components (however, do ReactDOM and React Native even support this..?)
 * [ ] Mapping flexbox styles to FlexboxLayout components NOTE: these are based on [Google's FlexboxLayout repo](https://github.com/google/flexbox-layout) and not fully conformant with [CSS Flexible Box Layout](https://www.w3.org/TR/css-flexbox-1/).
 * [ ] JSX/TSX (note: this is probably handled by TypeScript/Babel, so maybe nothing to implement here). [Nick Iliev](https://github.com/NickIliev) recommends studying `nativescript-tsx`: [GitHub repo](https://github.com/PanayotCankov/nativescript-tsx); [npm package](https://www.npmjs.com/package/nativescript-tsx)
 * [ ] Tests. I see that the [Nativescript Vue](https://github.com/nativescript-vue/nativescript-vue) repo has a rather advanced [set of runnable tests](https://github.com/nativescript-vue/nativescript-vue/tree/master/samples/app). I was unable to get the sample app to build though, hence my desire to keep tooling simple. We could work towards something like this.
