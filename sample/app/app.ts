@@ -11,35 +11,36 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { ActionBarTest, makeTabView, TabViewTest } from "./testComponents/testComponents";
+import { ActionBarTest, makeTabView, TabViewTest, GameLoopTest } from "./testComponents/testComponents";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { Page } from "tns-core-modules/ui/page/page";
 import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
 
-ReactNativeScript.startWithView(
-    React.createElement(
-        TabViewTest,
-        {
-            
-        },
-        null
-    ),
-    new StackLayout()
-);        
-// const frame = new Frame();
-// const page = new Page();
-// page.actionBarHidden = false;
-// ReactNativeScript.startWithFrame(
+// ReactNativeScript.startWithView(
 //     React.createElement(
-//         ActionBarTest,
+//         TabViewTest,
 //         {
-
+            
 //         },
 //         null
 //     ),
-//     frame,
-//     page
-// );
+//     new StackLayout()
+// );        
+
+const frame = new Frame();
+const page = new Page();
+// page.actionBarHidden = false;
+ReactNativeScript.startWithFrame(
+    React.createElement(
+        GameLoopTest,
+        {
+
+        },
+        null
+    ),
+    frame,
+    page
+);
 
 
 // application.run({ moduleName: "app-root" });

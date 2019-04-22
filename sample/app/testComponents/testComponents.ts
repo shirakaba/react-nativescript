@@ -119,58 +119,6 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
     }
 }
 
-export class Marquee extends React.Component<{ text: string }, { date: Date, index: number }> {
-    private loopID: number;
-    // private timerID!: number;
-    // private text: string = "NativeScript is an AMAZING framework";
-
-    /* Warning: %s.getChildContext(): childContextTypes must be defined in order to use getChildContext(). GameLoopProvider */
-    static contextTypes = {
-        loop: PropTypes.object,
-    };
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            date: new Date(),
-            index: 0
-        };
-    }
-  
-    componentDidMount() {
-    //   this.timerID = setInterval(
-    //       () => this.tick(),
-    //       100
-    //   );
-        this.loopID = this.context.loop.subscribe(this.tick.bind(this));
-    }
-  
-    componentWillUnmount() {
-        // clearInterval(this.timerID);
-        this.context.loop.unsubscribe(this.loopID);
-    }
-  
-    tick() {
-        this.setState((prev) => ({
-            date: new Date(),
-            index: (prev.index + 1) % this.props.text.length
-        }));
-    }
-
-    render(){
-        const { text } = this.props;
-        const { index } = this.state;
-
-        return React.createElement(
-            ReactLabel,
-            {
-                text: text.slice(index, text.length)
-            },
-            null
-        );
-    }
-}
-
 export class GameLoop {
     private readonly subscribers = [];
     private loopID: number|null = null;
@@ -212,55 +160,98 @@ export class GameLoop {
 	}
 }
 
-export class GameLoopProvider extends React.Component<{ frameRateMs?: number, style?: Partial<StylePropContents> }, {}> {
-    private readonly loop;
-
-    /* Warning: %s.getChildContext(): childContextTypes must be defined in order to use getChildContext(). GameLoopProvider */
-    static propTypes = {
-        children: PropTypes.any,
-        style: PropTypes.object,
-    };
-    
-    static childContextTypes = {
-        loop: PropTypes.object,
-    };
-
-	constructor(props) {
-		super(props);
-
-		this.loop = new GameLoop(this.props.frameRateMs || 1000 / 60);
-	}
-
-	componentDidMount() {
-		this.loop.start();
-	}
-
-	componentWillUnmount() {
-		this.loop.stop();
-	}
-
-	getChildContext() {
-        console.log(`[GameLoopProvider] getChildContext()!`);
-		return {
-			loop: this.loop,
-		};
-	}
-
+const GameLoopContext = React.createContext(new GameLoop(1000 / 60));
+export class GameLoopComponent extends React.Component<{ frameRateMs?: number, style?: Partial<StylePropContents> }, {}> {
 	render() {
+        const loop: GameLoop = this.context;
+        console.log(`[GameLoopContext] render - current loop:`, loop); // logs: {}
         const { children, frameRateMs, ...rest } = this.props;
 
 		return React.createElement(
-            ReactContentView,
+            GameLoopContext.Provider,
             {
-                style: {
-                    width: { unit: "%", value: 100 },
-                    height: { unit: "%", value: 100 }
-                },
-                ...rest,
+                value: new GameLoop(frameRateMs || 1000 / 60)
             },
+            /* GameLoopComponent does not have access to the context that it is passing down
+             * during its own componentDidMount event, so we let a renderless descendant,
+             * GameLoopManager, handle it for us. */
+            React.createElement(
+                GameLoopManager,
+                {},
+                null
+            ),
             children
         );
 	}
+}
+
+export class GameLoopManager extends React.Component<{}, {}> {
+    static contextType: React.Context<GameLoop> = GameLoopContext;
+
+	componentDidMount() {
+        const loop: GameLoop = this.context;
+        console.log(`[GameLoopManager] componentDidMount - starting loop.`, loop);
+        loop.start();
+	}
+
+	componentWillUnmount() {
+        const loop: GameLoop = this.context;
+        console.log(`[GameLoopManager] componentWillUnmount - stopping loop.`, loop);
+		loop.stop();
+	}
+
+	render() {
+        const loop: GameLoop = this.context;
+        console.log(`[GameLoopManager] render - current loop:`, loop);
+        return null;
+	}
+}
+
+
+export class Marquee extends React.Component<{ text: string }, { index: number }> {
+    private loopID: number;
+    static contextType: React.Context<GameLoop> = GameLoopContext;
+
+    constructor(props: { text: string }) {
+        super(props);
+
+        this.state = {
+            index: 0
+        };
+    }
+  
+    componentDidMount() {
+        const loop: GameLoop = this.context;
+        console.log(`[Marquee] componentDidMount - subscribing to loop.`, loop);
+        this.loopID = loop.subscribe(this.tick.bind(this));
+    }
+  
+    componentWillUnmount() {
+        const loop: GameLoop = this.context;
+        console.log(`[Marquee] componentWillUnmount - unsubscribing from loop.`, loop);
+        loop.unsubscribe(this.loopID);
+    }
+  
+    tick() {
+        this.setState((prev) => ({
+            index: (prev.index + 1) % this.props.text.length
+        }));
+    }
+
+    render(){
+        const loop: GameLoop = this.context;
+        // console.log(`[Marquee] render - current loop:`, loop);
+        const { text } = this.props;
+        const { index } = this.state;
+
+        return React.createElement(
+            ReactLabel,
+            {
+                text: text.slice(index, text.length)
+            },
+            null
+        );
+    }
 }
 
 export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
@@ -452,9 +443,10 @@ export class ListViewTest extends React.Component<{}, {}> {
 export class GameLoopTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            GameLoopProvider,
+            GameLoopComponent,
             {
-                frameRateMs: (1000 / 60) // Bigger number means slower
+                // frameRateMs: (1000 / 60) // Sixty times per second
+                frameRateMs: 1111 // Once per second
             },
             React.createElement(
                 Marquee,
@@ -705,44 +697,44 @@ export class TabViewTest extends React.Component<{}, {}> {
                 // selectedIndex: 1
             },
 
-            React.createElement(
-                ReactTabViewItem,
-                {
-                    title: "Dock",
-                    identifier: `Item 0`,
-                },
-                React.createElement(
-                    DockLayoutTest,
-                    {},
-                    null
-                )
-            ),
+            // React.createElement(
+            //     ReactTabViewItem,
+            //     {
+            //         title: "Dock",
+            //         identifier: `Item 0`,
+            //     },
+            //     React.createElement(
+            //         DockLayoutTest,
+            //         {},
+            //         null
+            //     )
+            // ),
 
-            React.createElement(
-                ReactTabViewItem,
-                {
-                    title: "Flexbox",
-                    identifier: `Item 1`,
-                },
-                React.createElement(
-                    FlexboxLayoutTest2,
-                    {},
-                    null
-                )
-            ),
+            // React.createElement(
+            //     ReactTabViewItem,
+            //     {
+            //         title: "Flexbox",
+            //         identifier: `Item 1`,
+            //     },
+            //     React.createElement(
+            //         FlexboxLayoutTest2,
+            //         {},
+            //         null
+            //     )
+            // ),
 
-            React.createElement(
-                ReactTabViewItem,
-                {
-                    title: "Clock",
-                    identifier: `Item 2`,
-                },
-                React.createElement(
-                    Clock,
-                    {},
-                    null
-                )
-            ),
+            // React.createElement(
+            //     ReactTabViewItem,
+            //     {
+            //         title: "Clock",
+            //         identifier: `Item 2`,
+            //     },
+            //     React.createElement(
+            //         Clock,
+            //         {},
+            //         null
+            //     )
+            // ),
 
             React.createElement(
                 ReactTabViewItem,
@@ -751,7 +743,7 @@ export class TabViewTest extends React.Component<{}, {}> {
                     identifier: `Item 3`,
                 },
                 React.createElement(
-                    GameLoopProvider,
+                    GameLoopComponent,
                     {
                         frameRateMs: 1000,
                     },
