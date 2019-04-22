@@ -89,16 +89,15 @@ export function render(
  * Convenience function to start your React NativeScript app.
  * This should be placed as the final line of your app.ts file, as no
  * code will run after it (at least on iOS).
- * 
  *  
- * @param app - Your <App/> component.
+ * @param app - Your <App/> component (must have a <Page> as its outermost
+ *              component).
  * @param frame - The top frame for your NativeScript app (optional).
- * @param page - A custom Page for your NativeScript app (optional).
+ * @param refToPage - Reference to the host Page of your outermost component.
  */
 export function startWithFrame(
     app: ReactReconciler.ReactNodeList,
     frame: Frame = new Frame(),
-    // page: Page = new Page(),
     refToPage: React.RefObject<Page>
 ): void {
     run({
@@ -120,6 +119,42 @@ export function startWithFrame(
                     console.log(`render() hopefully complete; refToPage.current:`, refToPage.current);
 
                     return refToPage.current;
+                }
+            });
+
+            return frame;
+        }
+    });
+}
+
+/**
+ * Convenience function to start your React NativeScript app.
+ * This should be placed as the final line of your app.ts file, as no
+ * code will run after it (at least on iOS).
+ *  
+ * @param app - Your <App/> component. Outermost component must be a View
+ *              of some kind, but strictly not Page or Frame.
+ * @param frame - The top frame for your NativeScript app (optional).
+ * @param page - A custom Page for your NativeScript app (optional).
+ */
+export function startWithFrameAndPage(
+    app: ReactReconciler.ReactNodeList,
+    frame: Frame = new Frame(),
+    page: Page = new Page(),
+): void {
+    run({
+        create: () => {
+            frame.navigate({
+                create: () => {
+                    render(
+                        app,
+                        page,
+                        () => {
+                            console.log(`Container updated!`);
+                        }
+                    );
+    
+                    return page;
                 }
             });
 

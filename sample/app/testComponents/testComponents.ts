@@ -654,7 +654,6 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 actionBarHidden: false,
             },
 
-            // Will be impressed if this works.
             React.createElement(
                 ReactActionBar,
                 {
