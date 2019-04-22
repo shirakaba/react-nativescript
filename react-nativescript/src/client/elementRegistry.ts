@@ -24,7 +24,7 @@ import { LayoutBase } from "tns-core-modules/ui/layouts/layout-base";
 import { ListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 import { ListView } from "tns-core-modules/ui/list-view/list-view";
 import { Observable } from "tns-core-modules/data/observable";
-import { Page } from "tns-core-modules/ui/page";
+import { Page } from "tns-core-modules/ui/page/page";
 import { Placeholder } from "tns-core-modules/ui/placeholder/placeholder";
 import { Progress } from "tns-core-modules/ui/progress/progress";
 import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/proxy-view-container";
