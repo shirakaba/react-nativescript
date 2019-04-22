@@ -2,7 +2,7 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -13,14 +13,15 @@ import {
     // StylePropContents,
     DockLayout as ReactDockLayout,
     AbsoluteLayout as ReactAbsoluteLayout,
+    StackLayout as ReactStackLayout,
     FlexboxLayout as ReactFlexboxLayout,
     ListView as ReactListView,
     ActionBar as ReactActionBar,
     TabView as ReactTabView,
     TabViewItem as ReactTabViewItem,
+    Page as ReactPage,
 } from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
-const PropTypes = require('prop-types');
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
@@ -643,3 +644,58 @@ export class TabViewTest extends React.Component<{}, {}> {
     }
 }
 // ReactTabViewItem
+
+export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
+    render(){
+        return React.createElement(
+            ReactPage,
+            {
+                innerRef: this.props.innerRef
+            },
+            React.createElement(
+                ReactStackLayout,
+                {
+                },
+
+                // Will be impressed if this works.
+                // React.createElement(
+                //     ReactActionBar,
+                //     {
+
+                //     },
+                //     null
+                // ),
+
+                React.createElement(
+                    ReactButton,
+                    {
+                        onPress: () => {
+                            // navigate to Featured
+                        }
+                    },
+                    "Navigate to Featured"
+                ),
+
+                React.createElement(
+                    ReactButton,
+                    {
+                        onPress: () => {
+                            // navigate to Browse
+                        }
+                    },
+                    "Navigate to Browse"
+                ),
+
+                React.createElement(
+                    ReactButton,
+                    {
+                        onPress: () => {
+                            // navigate to Search
+                        }
+                    },
+                    "Navigate to Search"
+                )
+            ),
+        );
+    }
+}
