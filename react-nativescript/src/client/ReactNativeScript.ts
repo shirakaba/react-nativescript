@@ -16,7 +16,7 @@ import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
-import { Frame, Page, TabView, View, ContentView } from "../client/ElementRegistry";
+import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
 import { AbsoluteLayout as AbsoluteLayoutComponent } from "../components/AbsoluteLayout";
 import { ActionBar as ActionBarComponent } from "../components/ActionBar";
 import { Button as ButtonComponent } from "../components/Button";
@@ -105,17 +105,19 @@ export function startWithFrame(
         create: () => {
             frame.navigate({
                 create: () => {
-                    // createElement('label', {}, null).ref // LegacyRef
-                    // const pageRef = React.createRef();
                     console.log(`[frame.navigate() -> create()] Rendering app. refToPage.current:`, refToPage.current);
 
                     render(
                         app,
-                        refToPage.current,
+                        /* Any view would do here - ProxyViewContainer is not being used for anything clever;
+                         * I prevent the HostConfig from calling appendChild() when the child is a Page. */
+                        new ProxyViewContainer(),
                         () => {
                             console.log(`Container updated!`);
                         }
                     );
+
+                    console.log(`render() hopefully complete; refToPage.current:`, refToPage.current);
 
                     return refToPage.current;
                 }

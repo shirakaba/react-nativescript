@@ -361,6 +361,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        if(child instanceof Page){
+            console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
+            return;
+        }
         // console.log(`[appendChild()] child's page was: `, child.page);
         // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
         if(isASingleChildContainer(parentInstance)){
