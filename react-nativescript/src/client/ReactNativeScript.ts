@@ -35,6 +35,7 @@ import { TabViewItem as TabViewItemComponent } from "../components/TabViewItem";
 import { ContentView as ContentViewComponent } from "../components/ContentView";
 import { WebView as WebViewComponent } from "../components/WebView";
 import { WrapLayout as WrapLayoutComponent } from "../components/WrapLayout";
+import { Page as PageComponent } from "../components/Page";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -194,6 +195,7 @@ export {
     HtmlViewComponent as HtmlView,
     LabelComponent as Label,
     ListViewComponent as ListView,
+    PageComponent as Page,
     StackLayoutComponent as StackLayout,
     TabViewComponent as TabView,
     TabViewItemComponent as TabViewItem,

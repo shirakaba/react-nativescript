@@ -165,6 +165,19 @@ export type ViewProps = ViewBaseProps & Pick<View,
     "modal"
 >;
 
+export type ContentViewProps = ViewProps & Pick<ContentView,
+    "content"|
+    "layoutView"
+>
+
+export type PageProps = ContentViewProps & Pick<Page,
+    "backgroundSpanUnderStatusBar"|
+    "statusBarStyle"|
+    "androidStatusBarBackground"|
+    "actionBarHidden"|
+    "enableSwipeBackNavigation"
+>
+
 export type TabViewProps = ViewProps & Pick<TabView,
     "items"|
     "selectedIndex"|
