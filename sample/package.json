@@ -17,7 +17,6 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "nativescript-theme-core": "~1.0.4",
-    "prop-types": "^15.7.2",
     "react": "^16.8.5",
     "react-nativescript": "file:../react-nativescript",
     "tns-core-modules": "^5.2.2"
