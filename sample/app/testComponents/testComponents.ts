@@ -254,92 +254,6 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
     }
 }
 
-export class FlexboxLayoutTest1 extends React.Component<{}, {}> {
-    render(){
-        return React.createElement(
-            ReactFlexboxLayout,
-            {
-                style: {
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                },
-            },
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("blue"),
-            //         width: 75,
-            //         height: 100
-            //     }
-            // ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("red"),
-            //         width: 75,
-            //         height: 80
-            //     }
-            // ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("yellow"),
-            //         width: 75,
-            //         height: 140
-            //     }
-            // ),
-            // React.createElement(
-            //     'ContentView',
-            //     {
-            //         backgroundColor: new Color("lightgreen"),
-            //         width: 75,
-            //         height: 70
-            //     }
-            // ),
-            React.createElement(
-                ReactContentView,
-                {
-                    style: {
-                        backgroundColor: new Color("blue"),
-                        width: 75,
-                        height: 100
-                    },
-                }
-            ),
-            // React.createElement(
-            //     ReactContentView,
-            //     {
-            //         style: {
-            //             backgroundColor: new Color("red"),
-            //             width: 75,
-            //             height: 80
-            //         },
-            //     }
-            // ),
-            // React.createElement(
-            //     ReactContentView,
-            //     {
-            //         style: {
-            //             backgroundColor: new Color("yellow"),
-            //             width: 75,
-            //             height: 140
-            //         },
-            //     }
-            // ),
-            // React.createElement(
-            //     ReactContentView,
-            //     {
-            //         style: {
-            //             backgroundColor: new Color("lightgreen"),
-            //             width: 75,
-            //             height: 70
-            //         },
-            //     }
-            // ),
-        );
-    }
-}
-
 // React.createElement(
 //     MyButton,
 //     {
@@ -582,7 +496,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
     }
 }
 
-export class FlexboxLayoutTest2 extends React.Component<{}, {}> {
+export class FlexboxLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
             ReactFlexboxLayout,
@@ -658,83 +572,52 @@ export class ActionBarTest extends React.Component<{}, {}> {
     }
 }
 
-export function makeTabView(): TabView {
-    const stackLayout0 = new StackLayout();
-    const label0 = new Label();
-    label0.text = "Tab 0";
-    stackLayout0.addChild(label0);
-
-    const stackLayout1 = new StackLayout();
-    const label1 = new Label();
-    label1.text = "Tab 1";
-    stackLayout1.addChild(label1);
-
-    const tabViewItem0 = new TabViewItem();
-    tabViewItem0.title = "Tab 0";
-    tabViewItem0.view = stackLayout0;
-
-    const tabViewItem1 = new TabViewItem();
-    tabViewItem1.title = "Tab 1";
-    tabViewItem1.view = stackLayout1;
-
-    // creating TabView
-    const tabView = new TabView();
-    // setting up its items and the selected index
-    const items = [];
-    items.push(tabViewItem0);
-    items.push(tabViewItem1);
-    tabView.items = items;
-    tabView.selectedIndex = 1;
-
-    return tabView;
-}
-
 export class TabViewTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
             ReactTabView,
             {
-                // selectedIndex: 1
+                selectedIndex: 1
             },
 
-            // React.createElement(
-            //     ReactTabViewItem,
-            //     {
-            //         title: "Dock",
-            //         identifier: `Item 0`,
-            //     },
-            //     React.createElement(
-            //         DockLayoutTest,
-            //         {},
-            //         null
-            //     )
-            // ),
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Dock",
+                    identifier: `Item 0`,
+                },
+                React.createElement(
+                    DockLayoutTest,
+                    {},
+                    null
+                )
+            ),
 
-            // React.createElement(
-            //     ReactTabViewItem,
-            //     {
-            //         title: "Flexbox",
-            //         identifier: `Item 1`,
-            //     },
-            //     React.createElement(
-            //         FlexboxLayoutTest2,
-            //         {},
-            //         null
-            //     )
-            // ),
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Flexbox",
+                    identifier: `Item 1`,
+                },
+                React.createElement(
+                    FlexboxLayoutTest,
+                    {},
+                    null
+                )
+            ),
 
-            // React.createElement(
-            //     ReactTabViewItem,
-            //     {
-            //         title: "Clock",
-            //         identifier: `Item 2`,
-            //     },
-            //     React.createElement(
-            //         Clock,
-            //         {},
-            //         null
-            //     )
-            // ),
+            React.createElement(
+                ReactTabViewItem,
+                {
+                    title: "Clock",
+                    identifier: `Item 2`,
+                },
+                React.createElement(
+                    Clock,
+                    {},
+                    null
+                )
+            ),
 
             React.createElement(
                 ReactTabViewItem,
