@@ -102,18 +102,14 @@ NativeScript Core does have some navigation components to mirror those used by n
             <td align="center" valign="middle">
                 <img width="224px" src="/github_img/TabView.gif"/>
             </td>
-        </tr>
-        <tr>
-            <td align="center" valign="middle">
-                <p><b><a href="https://docs.nativescript.org/core-concepts/navigation#tabview-navigation">TabView</a></b></p>
-            </td>
-        </tr>
-        <tr>
             <td align="center" valign="middle">
                 <img width="200px" src="/github_img/Hub.gif"/>
             </td>
         </tr>
         <tr>
+            <td align="center" valign="middle">
+                <p><b><a href="https://docs.nativescript.org/core-concepts/navigation#tabview-navigation">TabView</a></b></p>
+            </td>
             <td align="center" valign="middle">
                 <p><b><a href="https://docs.nativescript.org/core-concepts/navigation#hub-navigation">Hub</a></b></p>
             </td>
