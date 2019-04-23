@@ -644,11 +644,16 @@ export class TabViewTest extends React.Component<{}, {}> {
         );
     }
 }
-// ReactTabViewItem
 
-export class SimplePage extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
+export class SimplePage extends React.Component<
+    {
+        innerRef: React.RefObject<Page>,
+        actionBarTitle: string,
+    },
+    {}
+> {
     render(){
-        const { children, innerRef, ...rest } = this.props;
+        const { children, innerRef, actionBarTitle, ...rest } = this.props;
         return React.createElement(
             ReactPage,
             {
@@ -656,19 +661,27 @@ export class SimplePage extends React.Component<{ innerRef: React.RefObject<Page
                 actionBarHidden: false,
                 ...rest
             },
+            React.createElement(
+                ReactActionBar,
+                {
+                    title: actionBarTitle,
+                    className: "action-bar",
+                },
+                null
+            ),
             children
         )
     }
 }
 
-export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, { actionBarTitle: string }> {
+export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, { }> {
 
     constructor(props){
         super(props);
 
-        this.state = {
-            actionBarTitle: "Navigation Hub"
-        }
+        // this.state = {
+        //     route: "Navigation Hub",
+        // }
     }
 
     render(){
@@ -686,7 +699,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
             React.createElement(
                 ReactActionBar,
                 {
-                    title: this.state.actionBarTitle,
+                    title: "Navigation Hub",
                     className: "action-bar",
                 },
                 null
@@ -714,6 +727,9 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
+
+                                    /* Also crashes it */
+                                    // this.setState({ route: "AbsoluteLayout" });
 
                                     // this.setState({ actionBarTitle: "AbsoluteLayout" });
 
@@ -769,7 +785,8 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 React.createElement(
                     SimplePage,
                     {
-                        innerRef: absoluteLayoutPageRef
+                        innerRef: absoluteLayoutPageRef,
+                        actionBarTitle: "AbsoluteLayout",
                     },
                     React.createElement(
                         AbsoluteLayoutTest,
@@ -785,7 +802,8 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 React.createElement(
                     SimplePage,
                     {
-                        innerRef: dockLayoutPageRef
+                        innerRef: dockLayoutPageRef,
+                        actionBarTitle: "DockLayout",
                     },
                     React.createElement(
                         DockLayoutTest,
@@ -801,7 +819,8 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 React.createElement(
                     SimplePage,
                     {
-                        innerRef: flexboxLayoutPageRef
+                        innerRef: flexboxLayoutPageRef,
+                        actionBarTitle: "FlexboxLayout",
                     },
                     React.createElement(
                         FlexboxLayoutTest,
