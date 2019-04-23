@@ -108,7 +108,7 @@ export const elementMap = {
     // There's a whole "styling" folder, but nothing is a component.
     "frame": Frame,
     // "view": View,
-    "page": Page
+    "page": Page,
 };
 
 export {
