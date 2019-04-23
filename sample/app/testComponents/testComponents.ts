@@ -661,9 +661,20 @@ export class SimplePage extends React.Component<{ innerRef: React.RefObject<Page
     }
 }
 
-export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
+export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, { actionBarTitle: string }> {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            actionBarTitle: "Navigation Hub"
+        }
+    }
+
     render(){
-        const featuredPageRef = React.createRef<Page>();
+        const absoluteLayoutPageRef = React.createRef<Page>();
+        const dockLayoutPageRef = React.createRef<Page>();
+        const flexboxLayoutPageRef = React.createRef<Page>();
 
         return React.createElement(
             ReactPage,
@@ -675,7 +686,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
             React.createElement(
                 ReactActionBar,
                 {
-                    title: "Navigation Hub",
+                    title: this.state.actionBarTitle,
                     className: "action-bar",
                 },
                 null
@@ -685,7 +696,6 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 ReactStackLayout,
                 {
                 },
-
 
                 React.createElement(
                     ReactButton,
@@ -703,52 +713,104 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             }
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating to Featured page. Ref:`, featuredPageRef.current);
-                                    return featuredPageRef.current;
+                                    console.log(`Navigating to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
+
+                                    // this.setState({ actionBarTitle: "AbsoluteLayout" });
+
+                                    return absoluteLayoutPageRef.current;
                                 }
                             });
-                            // navigate to Featured
                         }
                     },
-                    "Navigate to Featured"
+                    "Navigate to AbsoluteLayout"
                 ),
 
-                // React.createElement(
-                //     ReactButton,
-                //     {
-                //         onPress: () => {
-                //             // navigate to Browse
-                //         }
-                //     },
-                //     "Navigate to Browse"
-                // ),
+                React.createElement(
+                    ReactButton,
+                    {
+                        onPress: () => {
+                            const page: Page = this.props.innerRef.current!;
+                            page.frame.navigate({
+                                create: () => {
+                                    console.log(`Navigating to DockLayout page. Ref:`, dockLayoutPageRef.current);
 
-                // React.createElement(
-                //     ReactButton,
-                //     {
-                //         onPress: () => {
-                //             // navigate to Search
-                //         }
-                //     },
-                //     "Navigate to Search"
-                // )
+                                    // this.setState({ actionBarTitle: "DockLayout" });
+
+                                    return dockLayoutPageRef.current;
+                                }
+                            });
+                        }
+                    },
+                    "Navigate to DockLayout"
+                ),
+
+                React.createElement(
+                    ReactButton,
+                    {
+                        onPress: () => {
+                            const page: Page = this.props.innerRef.current!;
+                            page.frame.navigate({
+                                create: () => {
+                                    console.log(`Navigating to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
+
+                                    // this.setState({ actionBarTitle: "FlexboxLayout" });
+
+                                    return flexboxLayoutPageRef.current;
+                                }
+                            });
+                        }
+                    },
+                    "Navigate to FlexboxLayout"
+                ),
+            ),
+
+
+            ReactNativeScript.createPortal(
+                React.createElement(
+                    SimplePage,
+                    {
+                        innerRef: absoluteLayoutPageRef
+                    },
+                    React.createElement(
+                        AbsoluteLayoutTest,
+                        {},
+                        null
+                    )
+                ),
+                absoluteLayoutPageRef.current,
+                "Portal('AbsoluteLayout')"
             ),
 
             ReactNativeScript.createPortal(
                 React.createElement(
                     SimplePage,
                     {
-                        innerRef: featuredPageRef
+                        innerRef: dockLayoutPageRef
                     },
                     React.createElement(
-                        ReactLabel,
-                        {
-                        },
-                        "Featured"
+                        DockLayoutTest,
+                        {},
+                        null
                     )
                 ),
-                featuredPageRef.current,
-                "Portal('Featured')"
+                dockLayoutPageRef.current,
+                "Portal('DockLayout')"
+            ),
+
+            ReactNativeScript.createPortal(
+                React.createElement(
+                    SimplePage,
+                    {
+                        innerRef: flexboxLayoutPageRef
+                    },
+                    React.createElement(
+                        FlexboxLayoutTest,
+                        {},
+                        null
+                    )
+                ),
+                flexboxLayoutPageRef.current,
+                "Portal('FlexboxLayout')"
             ),
         );
     }
