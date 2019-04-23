@@ -2,7 +2,7 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/components/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -21,6 +21,7 @@ import {
     TabViewItem as ReactTabViewItem,
     Page as ReactPage,
 } from "react-nativescript/dist/index";
+import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -645,8 +646,25 @@ export class TabViewTest extends React.Component<{}, {}> {
 }
 // ReactTabViewItem
 
+export class SimplePage extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
+    render(){
+        const { children, innerRef, ...rest } = this.props;
+        return React.createElement(
+            ReactPage,
+            {
+                innerRef,
+                actionBarHidden: false,
+                ...rest
+            },
+            children
+        )
+    }
+}
+
 export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
     render(){
+        const featuredPageRef = React.createRef<Page>();
+
         return React.createElement(
             ReactPage,
             {
@@ -673,31 +691,64 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                     ReactButton,
                     {
                         onPress: () => {
+                            const page: Page|null = this.props.innerRef.current;
+                            if(page === null){
+                                console.error(`Unable to get reference to the immediate page!`);
+                                return;
+                            }
+                            console.log(`Immediate page had frame:`, page.frame);
+                            if(!page.frame){
+                                console.error(`Unable to get reference to the immediate page's frame!`);
+                                return;
+                            }
+                            page.frame.navigate({
+                                create: () => {
+                                    console.log(`Navigating to Featured page. Ref:`, featuredPageRef.current);
+                                    return featuredPageRef.current;
+                                }
+                            });
                             // navigate to Featured
                         }
                     },
                     "Navigate to Featured"
                 ),
 
-                React.createElement(
-                    ReactButton,
-                    {
-                        onPress: () => {
-                            // navigate to Browse
-                        }
-                    },
-                    "Navigate to Browse"
-                ),
+                // React.createElement(
+                //     ReactButton,
+                //     {
+                //         onPress: () => {
+                //             // navigate to Browse
+                //         }
+                //     },
+                //     "Navigate to Browse"
+                // ),
 
+                // React.createElement(
+                //     ReactButton,
+                //     {
+                //         onPress: () => {
+                //             // navigate to Search
+                //         }
+                //     },
+                //     "Navigate to Search"
+                // )
+            ),
+
+            ReactNativeScript.createPortal(
                 React.createElement(
-                    ReactButton,
+                    SimplePage,
                     {
-                        onPress: () => {
-                            // navigate to Search
-                        }
+                        innerRef: featuredPageRef
                     },
-                    "Navigate to Search"
-                )
+                    React.createElement(
+                        ReactLabel,
+                        {
+                        },
+                        "Featured"
+                    )
+                ),
+                featuredPageRef.current,
+                "Portal('Featured')"
             ),
         );
     }
