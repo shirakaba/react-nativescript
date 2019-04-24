@@ -19,12 +19,12 @@
     "nativescript-theme-core": "~1.0.4",
     "react": "^16.8.5",
     "react-nativescript": "file:../react-nativescript",
-    "tns-core-modules": "^5.2.2"
+    "tns-core-modules": "^5.3.1"
   },
   "devDependencies": {
     "@types/react": "^16.8.8",
-    "nativescript-dev-typescript": "~0.8.0",
-    "nativescript-dev-webpack": "~0.20.0"
+    "nativescript-dev-typescript": "~0.9.0",
+    "nativescript-dev-webpack": "~0.21.2"
   },
   "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
   "readme": "NativeScript Application"
