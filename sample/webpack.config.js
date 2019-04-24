@@ -78,7 +78,7 @@ module.exports = env => {
             hashSalt
         },
         resolve: {
-            extensions: [".ts", ".js", ".scss", ".css"],
+            extensions: [".ts", ".tsx", ".js", ".scss", ".css"],
             // Resolve {N} system modules from tns-core-modules
             modules: [
                 resolve(__dirname, "node_modules/tns-core-modules"),
@@ -165,7 +165,7 @@ module.exports = env => {
                 },
 
                 {
-                    test: /-page\.ts$/,
+                    test: /-page\.ts(x?)$/,
                     use: "nativescript-dev-webpack/script-hot-loader"
                 },
 
@@ -195,7 +195,7 @@ module.exports = env => {
                 },
 
                 {
-                    test: /\.ts$/,
+                    test: /\.ts(x?)$/,
                     use: {
                         loader: "ts-loader",
                         options: {

@@ -3,6 +3,7 @@ import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 
 interface Props {
+    // children: Element,
     /* Allows us to use the page itself as the component root. */
     innerRef: React.RefObject<NativeScriptPage>,
     onNavigatingTo?: PageNavigationEventHandler,
@@ -83,14 +84,17 @@ class _Page extends React.Component<PageComponentProps, {}> {
     }
 }
 
-export const Page = React.forwardRef<NativeScriptPage, PageComponentProps>(
-    (props: PageComponentProps, ref: React.Ref<NativeScriptPage>) => {
+export const Page: React.ComponentType<PageComponentProps & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PageComponentProps>(
+    (props: React.PropsWithChildren<PageComponentProps>, ref: React.Ref<NativeScriptPage>) => {
+        const { children, ...rest } = props;
+
         return React.createElement(
             _Page,
             {
                 innerRef: ref,
-                ...props
+                ...rest
             },
+            children
         );
     }
 )

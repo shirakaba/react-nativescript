@@ -111,13 +111,17 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
             formattedString.spans.push(span);
         })
 
-        return React.createElement(
-            ReactLabel,
-            {
-                formattedText: formattedString
-            },
-            null
-        );
+        // return React.createElement(
+        //     ReactLabel,
+        //     {
+        //         formattedText: formattedString
+        //     },
+        //     null
+        // );
+
+        return (
+            <ReactLabel formattedText={formattedString} />
+        )
     }
 }
 
@@ -608,39 +612,39 @@ export class TabViewTest extends React.Component<{}, {}> {
                 )
             ),
 
-            React.createElement(
-                ReactTabViewItem,
-                {
-                    title: "Clock",
-                    identifier: `Item 2`,
-                },
-                React.createElement(
-                    Clock,
-                    {},
-                    null
-                )
-            ),
+            // React.createElement(
+            //     ReactTabViewItem,
+            //     {
+            //         title: "Clock",
+            //         identifier: `Item 2`,
+            //     },
+            //     React.createElement(
+            //         Clock,
+            //         {},
+            //         null
+            //     )
+            // ),
 
-            React.createElement(
-                ReactTabViewItem,
-                {
-                    title: "Marquee",
-                    identifier: `Item 3`,
-                },
-                React.createElement(
-                    GameLoopComponent,
-                    {
-                        frameRateMs: 1000,
-                    },
-                    React.createElement(
-                        Marquee,
-                        {
-                            text: "Have you ever seen a game-looped Marquee before?"
-                        },
-                        null
-                    )
-                )
-            ),
+            // React.createElement(
+            //     ReactTabViewItem,
+            //     {
+            //         title: "Marquee",
+            //         identifier: `Item 3`,
+            //     },
+            //     React.createElement(
+            //         GameLoopComponent,
+            //         {
+            //             frameRateMs: 1000,
+            //         },
+            //         React.createElement(
+            //             Marquee,
+            //             {
+            //                 text: "Have you ever seen a game-looped Marquee before?"
+            //             },
+            //             null
+            //         )
+            //     )
+            // ),
         );
     }
 }
@@ -689,148 +693,84 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
         const dockLayoutPageRef = React.createRef<Page>();
         const flexboxLayoutPageRef = React.createRef<Page>();
 
-        return React.createElement(
-            ReactPage,
-            {
-                innerRef: this.props.innerRef,
-                actionBarHidden: false,
-            },
-
-            React.createElement(
-                ReactActionBar,
-                {
-                    title: "Navigation Hub",
-                    className: "action-bar",
-                },
-                null
-            ),
-
-            React.createElement(
-                ReactStackLayout,
-                {
-                },
-
-                React.createElement(
-                    ReactButton,
-                    {
-                        onPress: () => {
-                            const page: Page|null = this.props.innerRef.current;
-                            if(page === null){
-                                console.error(`Unable to get reference to the immediate page!`);
-                                return;
-                            }
-                            console.log(`Immediate page had frame:`, page.frame);
-                            if(!page.frame){
-                                console.error(`Unable to get reference to the immediate page's frame!`);
-                                return;
-                            }
+        return (
+            <ReactPage innerRef={this.props.innerRef} actionBarHidden={false}>
+                <ReactActionBar title="Navigation Hub" className="action-bar" />
+                <ReactStackLayout>
+                    <ReactButton
+                        text={"Navigate to AbsoluteLayout"}
+                        onPress={() => {
+                            const page: Page = this.props.innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
-
-                                    /* Also crashes it */
-                                    // this.setState({ route: "AbsoluteLayout" });
-
-                                    // this.setState({ actionBarTitle: "AbsoluteLayout" });
-
                                     return absoluteLayoutPageRef.current;
                                 }
                             });
-                        }
-                    },
-                    "Navigate to AbsoluteLayout"
-                ),
-
-                React.createElement(
-                    ReactButton,
-                    {
-                        onPress: () => {
+                        }}
+                    />
+                    <ReactButton
+                        text={"Navigate to DockLayout"}
+                        onPress={() => {
                             const page: Page = this.props.innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to DockLayout page. Ref:`, dockLayoutPageRef.current);
-
-                                    // this.setState({ actionBarTitle: "DockLayout" });
-
                                     return dockLayoutPageRef.current;
                                 }
                             });
-                        }
-                    },
-                    "Navigate to DockLayout"
-                ),
-
-                React.createElement(
-                    ReactButton,
-                    {
-                        onPress: () => {
+                        }}
+                        
+                    />
+                    <ReactButton
+                        text={"Navigate to FlexboxLayout"}
+                        onPress={() => {
                             const page: Page = this.props.innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
-
-                                    // this.setState({ actionBarTitle: "FlexboxLayout" });
-
                                     return flexboxLayoutPageRef.current;
                                 }
                             });
-                        }
-                    },
-                    "Navigate to FlexboxLayout"
-                ),
-            ),
+                        }}
+                    />
 
-
-            ReactNativeScript.createPortal(
-                React.createElement(
-                    SimplePage,
-                    {
-                        innerRef: absoluteLayoutPageRef,
-                        actionBarTitle: "AbsoluteLayout",
-                    },
-                    React.createElement(
-                        AbsoluteLayoutTest,
-                        {},
-                        null
+                </ReactStackLayout>
+                
+                {
+                    ReactNativeScript.createPortal(
+                        (
+                            <SimplePage innerRef={absoluteLayoutPageRef} actionBarTitle="AbsoluteLayout">
+                                <AbsoluteLayoutTest/>
+                            </SimplePage>
+                        ),
+                        absoluteLayoutPageRef.current,
+                        "Portal('AbsoluteLayout')"
                     )
-                ),
-                absoluteLayoutPageRef.current,
-                "Portal('AbsoluteLayout')"
-            ),
-
-            ReactNativeScript.createPortal(
-                React.createElement(
-                    SimplePage,
-                    {
-                        innerRef: dockLayoutPageRef,
-                        actionBarTitle: "DockLayout",
-                    },
-                    React.createElement(
-                        DockLayoutTest,
-                        {},
-                        null
+                }
+                {
+                    ReactNativeScript.createPortal(
+                        (
+                            <SimplePage innerRef={dockLayoutPageRef} actionBarTitle="DockLayout">
+                                <DockLayoutTest/>
+                            </SimplePage>
+                        ),
+                        dockLayoutPageRef.current,
+                        "Portal('DockLayout')"
                     )
-                ),
-                dockLayoutPageRef.current,
-                "Portal('DockLayout')"
-            ),
-
-            ReactNativeScript.createPortal(
-                React.createElement(
-                    SimplePage,
-                    {
-                        innerRef: flexboxLayoutPageRef,
-                        actionBarTitle: "FlexboxLayout",
-                    },
-                    React.createElement(
-                        FlexboxLayoutTest,
-                        {},
-                        null
+                }
+                {
+                    ReactNativeScript.createPortal(
+                        (
+                            <SimplePage innerRef={flexboxLayoutPageRef} actionBarTitle="FlexboxLayout">
+                                <FlexboxLayoutTest/>
+                            </SimplePage>
+                        ),
+                        flexboxLayoutPageRef.current,
+                        "Portal('FlexboxLayout')"
                     )
-                ),
-                flexboxLayoutPageRef.current,
-                "Portal('FlexboxLayout')"
-            ),
+                }
+            </ReactPage>
         );
     }
 }
