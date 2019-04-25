@@ -649,7 +649,7 @@ export class TabViewTest extends React.Component<{}, {}> {
     }
 }
 
-export class SimplePage extends React.Component<
+export class PageWithActionBar extends React.Component<
     {
         innerRef: React.RefObject<Page>,
         actionBarTitle: string,
@@ -658,49 +658,45 @@ export class SimplePage extends React.Component<
 > {
     render(){
         const { children, innerRef, actionBarTitle, ...rest } = this.props;
-        return React.createElement(
-            ReactPage,
-            {
-                innerRef,
-                actionBarHidden: false,
-                ...rest
-            },
-            React.createElement(
-                ReactActionBar,
-                {
-                    title: actionBarTitle,
-                    className: "action-bar",
-                },
-                null
-            ),
-            children
-        )
+
+        return (
+            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest} >
+                <ReactActionBar title={actionBarTitle} className={"action-bar"}>
+                    {children}
+                </ReactActionBar>
+            </ReactPage>
+        );
     }
 }
 
-export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, { }> {
+const PortalToPage: React.SFC<{ pageRef: React.RefObject<Page>, actionBarTitle: string }> = (props) => {
+    const { pageRef, actionBarTitle, children } = props;
+    return ReactNativeScript.createPortal(
+        (
+            <PageWithActionBar innerRef={pageRef} actionBarTitle={actionBarTitle}>
+                {children}
+            </PageWithActionBar>
+        ),
+        pageRef.current,
+        `Portal('${actionBarTitle}')`
+    );
+}
 
-    constructor(props){
-        super(props);
-
-        // this.state = {
-        //     route: "Navigation Hub",
-        // }
-    }
-
+export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }, {}> {
     render(){
+        const { innerRef } = this.props;
         const absoluteLayoutPageRef = React.createRef<Page>();
         const dockLayoutPageRef = React.createRef<Page>();
         const flexboxLayoutPageRef = React.createRef<Page>();
 
         return (
-            <ReactPage innerRef={this.props.innerRef} actionBarHidden={false}>
+            <ReactPage innerRef={innerRef} actionBarHidden={false}>
                 <ReactActionBar title="Navigation Hub" className="action-bar" />
                 <ReactStackLayout>
                     <ReactButton
                         text={"Navigate to AbsoluteLayout"}
                         onPress={() => {
-                            const page: Page = this.props.innerRef.current!;
+                            const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
@@ -712,7 +708,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                     <ReactButton
                         text={"Navigate to DockLayout"}
                         onPress={() => {
-                            const page: Page = this.props.innerRef.current!;
+                            const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to DockLayout page. Ref:`, dockLayoutPageRef.current);
@@ -720,12 +716,11 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                                 }
                             });
                         }}
-                        
                     />
                     <ReactButton
                         text={"Navigate to FlexboxLayout"}
                         onPress={() => {
-                            const page: Page = this.props.innerRef.current!;
+                            const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
                                     console.log(`Navigating to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
@@ -734,42 +729,19 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             });
                         }}
                     />
-
                 </ReactStackLayout>
                 
-                {
-                    ReactNativeScript.createPortal(
-                        (
-                            <SimplePage innerRef={absoluteLayoutPageRef} actionBarTitle="AbsoluteLayout">
-                                <AbsoluteLayoutTest/>
-                            </SimplePage>
-                        ),
-                        absoluteLayoutPageRef.current,
-                        "Portal('AbsoluteLayout')"
-                    )
-                }
-                {
-                    ReactNativeScript.createPortal(
-                        (
-                            <SimplePage innerRef={dockLayoutPageRef} actionBarTitle="DockLayout">
-                                <DockLayoutTest/>
-                            </SimplePage>
-                        ),
-                        dockLayoutPageRef.current,
-                        "Portal('DockLayout')"
-                    )
-                }
-                {
-                    ReactNativeScript.createPortal(
-                        (
-                            <SimplePage innerRef={flexboxLayoutPageRef} actionBarTitle="FlexboxLayout">
-                                <FlexboxLayoutTest/>
-                            </SimplePage>
-                        ),
-                        flexboxLayoutPageRef.current,
-                        "Portal('FlexboxLayout')"
-                    )
-                }
+                <PortalToPage pageRef={absoluteLayoutPageRef} actionBarTitle={"AbsoluteLayout"}>
+                    <AbsoluteLayoutTest/>
+                </PortalToPage>
+                
+                <PortalToPage pageRef={dockLayoutPageRef} actionBarTitle={"DockLayout"}>
+                    <DockLayoutTest/>
+                </PortalToPage>
+                
+                <PortalToPage pageRef={flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
+                    <FlexboxLayoutTest/>
+                </PortalToPage>
             </ReactPage>
         );
     }
