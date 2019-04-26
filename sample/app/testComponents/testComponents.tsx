@@ -794,3 +794,54 @@ export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page>
         );
     }
 }
+
+export class NestedHub extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps, {}> {
+    render(){
+        const { innerRef, ...rest } = this.props;
+        const greenPageRef = React.createRef<Page>();
+        const redPageRef = React.createRef<Page>();
+
+        return (
+            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+                <ReactActionBar title="Hub" className="action-bar" />
+                <ReactStackLayout>
+                    <ReactButton
+                        text={"Navigate to green page"}
+                        onPress={() => {
+                            const currentPage: Page = innerRef.current!;
+                            currentPage.frame.navigate({
+                                create: () => {
+                                    return greenPageRef.current;
+                                }
+                            });
+                        }}
+                    />
+                </ReactStackLayout>
+                
+                <PortalToPageWithActionBar innerRef={greenPageRef} actionBarTitle={"Green"} backgroundColor={"green"}>
+                    <ReactStackLayout>
+                    <ReactLabel>You're viewing the green page!</ReactLabel>
+                        <ReactButton
+                            text={"Navigate to red page"}
+                            onPress={() => {
+                                const currentPage: Page = greenPageRef.current!;
+                                currentPage.frame.navigate({
+                                    create: () => {
+                                        return redPageRef.current;
+                                    }
+                                });
+                            }}
+                        />
+                    </ReactStackLayout>
+
+                </PortalToPageWithActionBar>
+                
+                <PortalToPageWithActionBar innerRef={redPageRef} actionBarTitle={"Red"} backgroundColor={"red"}>
+                    <ReactStackLayout>
+                    <ReactLabel>You're viewing the red page!</ReactLabel>
+                    </ReactStackLayout>
+                </PortalToPageWithActionBar>
+            </ReactPage>
+        );
+    }
+}
