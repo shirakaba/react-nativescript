@@ -11,7 +11,7 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { FormattedStringLabel, ActionBarTest, TabViewTest, GameLoopTest, HubTest } from "./testComponents/testComponents";
+import { FormattedStringLabel, ActionBarTest, TabViewTest, GameLoopTest, HubTest, SimpleHub } from "./testComponents/testComponents";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { Page } from "tns-core-modules/ui/page/page";
 import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
@@ -47,7 +47,7 @@ const frame = new Frame();
 /* Do any Frame setup here */
 ReactNativeScript.startWithFrame(
     React.createElement(
-        HubTest,
+        SimpleHub,
         {
             innerRef: pageRef
         },
@@ -56,7 +56,6 @@ ReactNativeScript.startWithFrame(
     frame,
     pageRef
 );
-
 
 // application.run({ moduleName: "app-root" });
 

@@ -23,6 +23,7 @@ import {
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { PageComponentProps } from "react-nativescript/dist/components/Page";
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
@@ -742,6 +743,53 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 <PortalToPage pageRef={flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
                     <FlexboxLayoutTest/>
                 </PortalToPage>
+            </ReactPage>
+        );
+    }
+}
+
+const PortalToPageWithActionBar: React.SFC<
+    { actionBarTitle: string } & PageComponentProps
+> =
+(props) => {
+    const { innerRef, actionBarTitle, children, ...rest } = props;
+    return ReactNativeScript.createPortal(
+        (
+            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest} >
+                <ReactActionBar title={actionBarTitle} className={"action-bar"}/>
+                {children}
+            </ReactPage>
+        ),
+        innerRef.current,
+        `Portal('${actionBarTitle}')`
+    );
+}
+
+export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps, {}> {
+    render(){
+        const { innerRef, ...rest } = this.props;
+        const bluePageRef = React.createRef<Page>();
+
+        return (
+            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+                <ReactActionBar title="Navigation Hub" className="action-bar" />
+                <ReactStackLayout>
+                    <ReactButton
+                        text={"Navigate to blue page"}
+                        onPress={() => {
+                            const currentPage: Page = innerRef.current!;
+                            currentPage.frame.navigate({
+                                create: () => {
+                                    return bluePageRef.current;
+                                }
+                            });
+                        }}
+                    />
+                </ReactStackLayout>
+                
+                <PortalToPageWithActionBar innerRef={bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
+                    <ReactLabel>You're viewing the blue page!</ReactLabel>
+                </PortalToPageWithActionBar>
             </ReactPage>
         );
     }
