@@ -845,3 +845,75 @@ export class NestedHub extends React.Component<{ innerRef: React.RefObject<Page>
         );
     }
 }
+
+export class NestedModalTest extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps, {}> {
+    render(){
+        const { innerRef, ...rest } = this.props;
+        const yellowPageRef = React.createRef<Page>();
+        const greenPageRef = React.createRef<Page>();
+
+        return (
+            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+                <ReactActionBar title="Navigation Hub" className="action-bar" />
+                <ReactStackLayout>
+                    <ReactButton
+                        text={"Open yellow modal"}
+                        onPress={() => {
+                            const currentPage: Page = innerRef.current!;
+                            currentPage.showModal(
+                                yellowPageRef.current!,
+                                {
+                                    context: {},
+                                    closeCallback: () => {},
+                                    animated: true,
+                                    stretched: false,
+                                }
+                            );
+                        }}
+                    />
+                </ReactStackLayout>
+                
+                <PortalToPageWithActionBar innerRef={yellowPageRef} actionBarTitle={"Yellow page"} backgroundColor={"yellow"}>
+                    <ReactStackLayout>
+                        <ReactLabel>You're viewing the yellow page!</ReactLabel>
+                        <ReactButton
+                            text={"Open green modal"}
+                            onPress={() => {
+                                const currentPage: Page = yellowPageRef.current!;
+                                currentPage.showModal(
+                                    greenPageRef.current!,
+                                    {
+                                        context: {},
+                                        closeCallback: () => {},
+                                        animated: true,
+                                        stretched: false,
+                                    }
+                                );
+                            }}
+                        />
+                        <ReactButton
+                            text={"Close yellow modal"}
+                            onPress={() => {
+                                const currentPage: Page = yellowPageRef.current!;
+                                currentPage.closeModal({});
+                            }}
+                        />
+                    </ReactStackLayout>
+                </PortalToPageWithActionBar>
+
+                <PortalToPageWithActionBar innerRef={greenPageRef} actionBarTitle={"Green page"} backgroundColor={"green"}>
+                    <ReactStackLayout>
+                        <ReactLabel>You're viewing the green page!</ReactLabel>
+                        <ReactButton
+                            text={"Close green modal"}
+                            onPress={() => {
+                                const currentPage: Page = greenPageRef.current!;
+                                currentPage.closeModal({});
+                            }}
+                        />
+                    </ReactStackLayout>
+                </PortalToPageWithActionBar>
+            </ReactPage>
+        );
+    }
+}
