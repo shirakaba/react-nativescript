@@ -131,6 +131,8 @@ export class ContentView extends React.Component<ViewComponentProps, {}> {
             onLongPress,
             onTouch,
 
+            onPropertyChange,
+
             children,
             ...rest
         } = this.props;
