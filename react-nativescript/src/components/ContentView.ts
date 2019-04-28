@@ -79,6 +79,7 @@ export class ContentView extends React.Component<ViewComponentProps, {}> {
             node.on("androidBackPressed", this._onAndroidBackPressed);
             node.on("showingModally", this._onShowingModally);
             node.on("shownModally", this._onShownModally);
+            node.on("propertyChange", this._onPropertyChange);
             node.on(GestureTypes.tap, this._onTap);
             node.on(GestureTypes.doubleTap, this._onDoubleTap);
             node.on(GestureTypes.pinch, this._onPinch);
