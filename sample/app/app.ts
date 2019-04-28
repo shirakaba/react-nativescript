@@ -11,12 +11,13 @@ import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
-import { FormattedStringLabel, } from "./testComponents/testComponents";
+import { FormattedStringLabel } from "./testComponents/testComponents";
 import { GameLoopTest } from "./testComponents/stateful";
 import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewTest } from "./testComponents/navigation";
 import { Frame } from "tns-core-modules/ui/frame/frame";
 import { Page } from "tns-core-modules/ui/page/page";
 import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
+import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 
 // ReactNativeScript.startWithView(
 //     React.createElement(
@@ -49,7 +50,7 @@ const frame = new Frame();
 /* Do any Frame setup here */
 ReactNativeScript.startWithFrame(
     React.createElement(
-        NestedModalTest,
+        SpriteKitGameTest,
         {
             innerRef: pageRef
         },

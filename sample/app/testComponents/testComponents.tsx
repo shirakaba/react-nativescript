@@ -24,6 +24,7 @@ import {
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
+import { PortalToPageWithActionBar } from "./navigation";
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
