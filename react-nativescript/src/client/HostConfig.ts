@@ -147,6 +147,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         const prevIsInAFlexboxLayout: boolean = parentHostContext.isInAFlexboxLayout;
 
         const isInAParentText: boolean =
+            type === 'label' ||
             type === 'textView' ||
             type === 'textField' ||
             type === 'button';
