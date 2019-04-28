@@ -9,7 +9,6 @@ import {
     Button as ReactButton,
     ContentView as ReactContentView,
     TextView as ReactTextView,
-    TextField as ReactTextField,
     Label as ReactLabel,
     // StylePropContents,
     DockLayout as ReactDockLayout,
@@ -31,26 +30,19 @@ type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
 };
 
-export class TextFieldTest extends React.Component<{ toWhat: string }, {}> {
+class MyTextField extends React.Component<{ toWhat: string }, {}> {
     render(){
         return React.createElement('TextField', null, `Hello ${this.props.toWhat}`);
         // { type: "TextField", props: { toWhat: string, children: string } }
     }
 }
 
-export class TextViewTest extends React.Component<{ toWhat: string }, {}> {
+export class MyTextView extends React.Component<{ toWhat: string }, {}> {
     render(){
-        // return (<ReactTextView text={`Hello ${this.props.toWhat}`}/>);
-        return (<ReactTextView>{`Hello ${this.props.toWhat}`}</ReactTextView>);
+        return React.createElement(ReactTextView, null, `Hello ${this.props.toWhat}`);
+        // { type: "TextField", props: { toWhat: string, children: string } }
     }
 }
-
-export class LabelTest extends React.Component<{ toWhat: string }, {}> {
-    render(){
-        return (<ReactLabel>{`Hello ${this.props.toWhat}`}</ReactLabel>);
-    }
-}
-
 
 class MyRootView extends React.Component<{}, {}> {
     render(){
