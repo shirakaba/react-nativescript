@@ -26,7 +26,7 @@ import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
-import { GestureEventData } from "tns-core-modules/ui/gestures/gestures";
+import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData } from "tns-core-modules/ui/gestures/gestures";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
@@ -40,12 +40,12 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
 
                     onTap={(args: GestureEventData) => console.log(`[onTap] yellow`)}
                     onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] yellow`)}
-                    onPinch={(args: GestureEventData) => console.log(`[onPinch] yellow`)}
-                    onPan={(args: GestureEventData) => console.log(`[onPan] yellow`)}
-                    onSwipe={(args: GestureEventData) => console.log(`[onSwipe] yellow`)}
-                    onRotation={(args: GestureEventData) => console.log(`[onRotation] yellow`)}
+                    onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] yellow`)}
+                    onPan={(args: PanGestureEventData) => console.log(`[onPan] yellow`)}
+                    onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] yellow`)}
+                    onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] yellow`)}
                     onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
-                    onTouch={(args: GestureEventData) => console.log(`[onTouch] yellow`)}
+                    onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
                 >
                     <ReactFlexboxLayout justifyContent="center" alignItems="center">
                         <ReactContentView
@@ -57,12 +57,12 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
 
                             onTap={(args: GestureEventData) => console.log(`[onTap] orange`)}
                             onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] orange`)}
-                            onPinch={(args: GestureEventData) => console.log(`[onPinch] orange`)}
-                            onPan={(args: GestureEventData) => console.log(`[onPan] orange`)}
-                            onSwipe={(args: GestureEventData) => console.log(`[onSwipe] orange`)}
-                            onRotation={(args: GestureEventData) => console.log(`[onRotation] orange`)}
+                            onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] orange`)}
+                            onPan={(args: PanGestureEventData) => console.log(`[onPan] orange`)}
+                            onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] orange`)}
+                            onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] orange`)}
                             onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
-                            onTouch={(args: GestureEventData) => console.log(`[onTouch] orange`)}
+                            onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
                     </ReactFlexboxLayout>
                 </ReactContentView>

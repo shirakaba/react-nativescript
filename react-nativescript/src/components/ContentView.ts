@@ -7,7 +7,7 @@ import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
 import { updateListener } from "../client/EventHandling";
 import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { GestureEventData, GestureTypes } from "tns-core-modules/ui/gestures/gestures";
+import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
 
 interface Props {
     dock?: Dock;
@@ -22,12 +22,12 @@ interface Props {
     /* The gesture handlers. */
     onTap?: (args: GestureEventData) => void;
     onDoubleTap?: (args: GestureEventData) => void;
-    onPinch?: (args: GestureEventData) => void;
-    onPan?: (args: GestureEventData) => void;
-    onSwipe?: (args: GestureEventData) => void;
-    onRotation?: (args: GestureEventData) => void;
+    onPinch?: (args: PinchGestureEventData) => void;
+    onPan?: (args: PanGestureEventData) => void;
+    onSwipe?: (args: SwipeGestureEventData) => void;
+    onRotation?: (args: RotationGestureEventData) => void;
     onLongPress?: (args: GestureEventData) => void;
-    onTouch?: (args: GestureEventData) => void;
+    onTouch?: (args: TouchGestureEventData) => void;
 
     /* These are to be overridden in subclasses of View, so unlikely to be appropriate. */
     // onLayout?: (left: number, top: number, right: number, bottom: number) => void;
@@ -61,12 +61,12 @@ export class ContentView extends React.Component<ViewComponentProps, {}> {
     /** From ui/gestures. */
     private readonly _onTap = (args: GestureEventData) => this.props.onTap && this.props.onTap(args);
     private readonly _onDoubleTap = (args: GestureEventData) => this.props.onDoubleTap && this.props.onDoubleTap(args);
-    private readonly _onPinch = (args: GestureEventData) => this.props.onPinch && this.props.onPinch(args);
-    private readonly _onPan = (args: GestureEventData) => this.props.onPan && this.props.onPan(args);
-    private readonly _onSwipe = (args: GestureEventData) => this.props.onSwipe && this.props.onSwipe(args);
-    private readonly _onRotation = (args: GestureEventData) => this.props.onRotation && this.props.onRotation(args);
+    private readonly _onPinch = (args: PinchGestureEventData) => this.props.onPinch && this.props.onPinch(args);
+    private readonly _onPan = (args: PanGestureEventData) => this.props.onPan && this.props.onPan(args);
+    private readonly _onSwipe = (args: SwipeGestureEventData) => this.props.onSwipe && this.props.onSwipe(args);
+    private readonly _onRotation = (args: RotationGestureEventData) => this.props.onRotation && this.props.onRotation(args);
     private readonly _onLongPress = (args: GestureEventData) => this.props.onLongPress && this.props.onLongPress(args);
-    private readonly _onTouch = (args: GestureEventData) => this.props.onTouch && this.props.onTouch(args);
+    private readonly _onTouch = (args: TouchGestureEventData) => this.props.onTouch && this.props.onTouch(args);
     
     /** From data/observable. */
     private readonly _onPropertyChange = (data: EventData) => this.props.onPropertyChange && this.props.onPropertyChange(data);
