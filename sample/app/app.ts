@@ -12,7 +12,7 @@ import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { ContentView, Label } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
-import { GestureLoggingTest } from "./testComponents/gestures";
+import { GestureLoggingTest, PanGestureTest } from "./testComponents/gestures";
 import { GameLoopTest } from "./testComponents/stateful";
 import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewTest } from "./testComponents/navigation";
 import { Frame } from "tns-core-modules/ui/frame/frame";
@@ -22,7 +22,7 @@ import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 
 ReactNativeScript.startWithView(
     React.createElement(
-        GestureLoggingTest,
+        PanGestureTest,
         {
             
         },

@@ -26,7 +26,7 @@ import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
-import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData } from "tns-core-modules/ui/gestures/gestures";
+import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes } from "tns-core-modules/ui/gestures/gestures";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
@@ -65,6 +65,81 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                             onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
                     </ReactFlexboxLayout>
+                </ReactContentView>
+        );
+    }
+}
+
+export class PanGestureTest extends React.Component<
+    {},
+    {
+        xBeforePan: number,
+        yBeforePan: number,
+        x: number,
+        y: number,
+    }
+> {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            x: 0,
+            y: 0,
+            xBeforePan: 0,
+            yBeforePan: 0,
+        }
+    }
+
+    render(){
+        const { x, y } = this.state;
+
+        return (
+                <ReactContentView
+                    style={{
+                        backgroundColor: new Color("yellow"),
+                        width: { unit: "%", value: 100 },
+                        height: { unit: "%", value: 100 },
+                    }}
+                >
+                    <ReactAbsoluteLayout>
+                        <ReactContentView
+                            left={{ unit: "px", value: x }}
+                            top={{ unit: "px", value: y }}
+                            style={{
+                                backgroundColor: new Color("orange"),
+                                width: { unit: "px", value: 300 },
+                                height: { unit: "px", value: 300 },
+                            }}
+
+                            // onTap={(args: GestureEventData) => console.log(`[onTap] orange`)}
+                            onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] orange`)}
+                            onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] orange`)}
+                            onPan={(args: PanGestureEventData) => {
+                                const { deltaX, deltaY, state } = args;
+                                console.log(`[onPan] state: ${state}, deltaX: ${deltaX}, deltaY ${deltaY}`);
+
+                                const pointBeforePan = {
+                                    xBeforePan: state === GestureStateTypes.began ? x : this.state.xBeforePan,
+                                    yBeforePan: state === GestureStateTypes.began ? y : this.state.yBeforePan,
+                                }
+
+                                /* If the screen is 370 px wide and you move your mouse from one side to another,
+                                 * the deltaX will become ~370 px and we set 'left' to ~370.
+                                 *
+                                 * However, it seems that visually the orange box only moves half the screen distance.
+                                 * For some reason, the x2 factor is necessary. Maybe it's pixel density? */
+                                this.setState({
+                                    ...pointBeforePan,
+                                    x: pointBeforePan.xBeforePan + deltaX * 2,
+                                    y: pointBeforePan.yBeforePan + deltaY * 2,
+                                });
+                            }}
+                            onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] orange`)}
+                            onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] orange`)}
+                            onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
+                            // onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
+                        />
+                    </ReactAbsoluteLayout>
                 </ReactContentView>
         );
     }
