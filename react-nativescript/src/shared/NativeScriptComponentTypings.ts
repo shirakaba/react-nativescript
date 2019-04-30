@@ -56,10 +56,12 @@ interface PartialStyleProp {
     style: Partial<StylePropContents>
 }
 
+export type ObservableProps = {};
+
 /**
  * This is very naive: I just picked all the public properties that weren't readonly.
  */
-export type ViewBaseProps = PartialStyleProp & Pick<
+export type ViewBaseProps = ObservableProps & PartialStyleProp & Pick<
     ViewBase,
     "left"|
     "top"|
