@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -380,11 +380,11 @@ export class SpriteKitGameTest extends React.Component<{ innerRef: React.RefObje
         const { innerRef, ...rest } = this.props;
 
         return (
-            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
-                <ReactActionBar title="Navigation Hub" className="action-bar" />
-                <ReactStackLayout>
-                    <ReactLabel text={`Audio loaded: ${this.state.audioLoaded}`}/>
-                    <ReactButton
+            <RCTPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+                <RCTActionBar title="Navigation Hub" className="action-bar" />
+                <RCTStackLayout>
+                    <RCTLabel text={`Audio loaded: ${this.state.audioLoaded}`}/>
+                    <RCTButton
                         text={"Launch SpriteKit game (with audio)!"}
                         onPress={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
@@ -396,8 +396,8 @@ export class SpriteKitGameTest extends React.Component<{ innerRef: React.RefObje
                             nc.pushViewControllerAnimated(this.gameVC, true);
                         }}
                     />
-                </ReactStackLayout>
-            </ReactPage>
+                </RCTStackLayout>
+            </RCTPage>
         );
     }
 }

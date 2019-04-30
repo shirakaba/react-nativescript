@@ -10,7 +10,7 @@ import * as application from "tns-core-modules/application";
 import { run } from "tns-core-modules/application";
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { ContentView, Label } from "react-nativescript/dist/index";
+import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
 import { GestureLoggingTest, PanGestureTest } from "./testComponents/gestures";
 import { GameLoopTest } from "./testComponents/stateful";

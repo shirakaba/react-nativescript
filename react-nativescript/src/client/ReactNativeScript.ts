@@ -17,26 +17,26 @@ import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
 import { run } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
-import { AbsoluteLayout as AbsoluteLayoutComponent } from "../components/AbsoluteLayout";
-import { ActionBar as ActionBarComponent } from "../components/ActionBar";
-import { Button as ButtonComponent } from "../components/Button";
-import { DockLayout as DockLayoutComponent } from "../components/DockLayout";
-import { FlexboxLayout as FlexboxLayoutComponent } from "../components/FlexboxLayout";
-import { GridLayout as GridLayoutComponent } from "../components/GridLayout";
-import { HtmlView as HtmlViewComponent } from "../components/HtmlView";
-import { Label as LabelComponent } from "../components/Label";
-import { ListView as ListViewComponent } from "../components/ListView";
-import { ListViewCell as ListViewCellComponent } from "../components/ListViewCell";
-// import { Portal as PortalComponent } from "../components/Portal";
-import { StackLayout as StackLayoutComponent } from "../components/StackLayout";
-import { TextField as TextFieldComponent } from "../components/TextField";
-import { TextView as TextViewComponent } from "../components/TextView";
-import { TabView as TabViewComponent } from "../components/TabView";
-import { TabViewItem as TabViewItemComponent } from "../components/TabViewItem";
-import { ContentView as ContentViewComponent } from "../components/ContentView";
-import { WebView as WebViewComponent } from "../components/WebView";
-import { WrapLayout as WrapLayoutComponent } from "../components/WrapLayout";
-import { Page as PageComponent } from "../components/Page";
+import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
+import { ActionBar as RCTActionBar } from "../components/ActionBar";
+import { Button as RCTButton } from "../components/Button";
+import { DockLayout as RCTDockLayout } from "../components/DockLayout";
+import { FlexboxLayout as RCTFlexboxLayout } from "../components/FlexboxLayout";
+import { GridLayout as RCTGridLayout } from "../components/GridLayout";
+import { HtmlView as RCTHtmlView } from "../components/HtmlView";
+import { Label as RCTLabel } from "../components/Label";
+import { ListView as RCTListView } from "../components/ListView";
+import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
+// import { Portal as RCTPortal } from "../components/Portal";
+import { StackLayout as RCTStackLayout } from "../components/StackLayout";
+import { TextField as RCTTextField } from "../components/TextField";
+import { TextView as RCTTextView } from "../components/TextView";
+import { TabView as RCTTabView } from "../components/TabView";
+import { TabViewItem as RCTTabViewItem } from "../components/TabViewItem";
+import { ContentView as RCTContentView } from "../components/ContentView";
+import { WebView as RCTWebView } from "../components/WebView";
+import { WrapLayout as RCTWrapLayout } from "../components/WrapLayout";
+import { Page as RCTPage } from "../components/Page";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -200,24 +200,24 @@ export function startWithView(
 }
 
 export {
-    AbsoluteLayoutComponent as AbsoluteLayout,
-    ActionBarComponent as ActionBar,
-    ButtonComponent as Button,
-    // DialogsComponent as Dialogs,
-    DockLayoutComponent as DockLayout,
-    FlexboxLayoutComponent as FlexboxLayout,
-    // GesturesComponent as Gestures,
-    GridLayoutComponent as GridLayout,
-    HtmlViewComponent as HtmlView,
-    LabelComponent as Label,
-    ListViewComponent as ListView,
-    PageComponent as Page,
-    StackLayoutComponent as StackLayout,
-    TabViewComponent as TabView,
-    TabViewItemComponent as TabViewItem,
-    TextFieldComponent as TextField,
-    TextViewComponent as TextView,
-    ContentViewComponent as ContentView,
-    WebViewComponent as WebView,
-    WrapLayoutComponent as WrapLayout,
+    RCTAbsoluteLayout,
+    RCTActionBar,
+    RCTButton,
+    // RCTDialogs,
+    RCTDockLayout,
+    RCTFlexboxLayout,
+    // RCTGestures,
+    RCTGridLayout,
+    RCTHtmlView,
+    RCTLabel,
+    RCTListView,
+    RCTPage,
+    RCTStackLayout,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTTextField,
+    RCTTextView,
+    RCTContentView,
+    RCTWebView,
+    RCTWrapLayout,
 };

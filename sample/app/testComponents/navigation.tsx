@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -33,10 +33,10 @@ export class NestedHub extends React.Component<{
         const { innerRef, ...rest } = this.props;
         const greenPageRef = React.createRef<Page>();
         const redPageRef = React.createRef<Page>();
-        return (<ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
-            <ReactActionBar title="Hub" className="action-bar" />
-            <ReactStackLayout>
-                <ReactButton text={"Navigate to green page"} onPress={() => {
+        return (<RCTPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+            <RCTActionBar title="Hub" className="action-bar" />
+            <RCTStackLayout>
+                <RCTButton text={"Navigate to green page"} onPress={() => {
                     const currentPage: Page = innerRef.current!;
                     currentPage.frame.navigate({
                         create: () => {
@@ -44,12 +44,12 @@ export class NestedHub extends React.Component<{
                         }
                     });
                 }} />
-            </ReactStackLayout>
+            </RCTStackLayout>
 
             <PortalToPageWithActionBar innerRef={greenPageRef} actionBarTitle={"Green"} backgroundColor={"green"}>
-                <ReactStackLayout>
-                    <ReactLabel>You're viewing the green page!</ReactLabel>
-                    <ReactButton text={"Navigate to red page"} onPress={() => {
+                <RCTStackLayout>
+                    <RCTLabel>You're viewing the green page!</RCTLabel>
+                    <RCTButton text={"Navigate to red page"} onPress={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.frame.navigate({
                             create: () => {
@@ -57,16 +57,16 @@ export class NestedHub extends React.Component<{
                             }
                         });
                     }} />
-                </ReactStackLayout>
+                </RCTStackLayout>
 
             </PortalToPageWithActionBar>
 
             <PortalToPageWithActionBar innerRef={redPageRef} actionBarTitle={"Red"} backgroundColor={"red"}>
-                <ReactStackLayout>
-                    <ReactLabel>You're viewing the red page!</ReactLabel>
-                </ReactStackLayout>
+                <RCTStackLayout>
+                    <RCTLabel>You're viewing the red page!</RCTLabel>
+                </RCTStackLayout>
             </PortalToPageWithActionBar>
-        </ReactPage>);
+        </RCTPage>);
     }
 }
 export class NestedModalTest extends React.Component<{
@@ -76,10 +76,10 @@ export class NestedModalTest extends React.Component<{
         const { innerRef, ...rest } = this.props;
         const yellowPageRef = React.createRef<Page>();
         const greenPageRef = React.createRef<Page>();
-        return (<ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
-            <ReactActionBar title="Navigation Hub" className="action-bar" />
-            <ReactStackLayout>
-                <ReactButton text={"Open yellow modal"} onPress={() => {
+        return (<RCTPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+            <RCTActionBar title="Navigation Hub" className="action-bar" />
+            <RCTStackLayout>
+                <RCTButton text={"Open yellow modal"} onPress={() => {
                     const currentPage: Page = innerRef.current!;
                     currentPage.showModal(yellowPageRef.current!, {
                         context: {},
@@ -88,12 +88,12 @@ export class NestedModalTest extends React.Component<{
                         stretched: false,
                     });
                 }} />
-            </ReactStackLayout>
+            </RCTStackLayout>
 
             <PortalToPageWithActionBar innerRef={yellowPageRef} actionBarTitle={"Yellow page"} backgroundColor={"yellow"}>
-                <ReactStackLayout>
-                    <ReactLabel>You're viewing the yellow page!</ReactLabel>
-                    <ReactButton text={"Open green modal"} onPress={() => {
+                <RCTStackLayout>
+                    <RCTLabel>You're viewing the yellow page!</RCTLabel>
+                    <RCTButton text={"Open green modal"} onPress={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.showModal(greenPageRef.current!, {
                             context: {},
@@ -102,23 +102,23 @@ export class NestedModalTest extends React.Component<{
                             stretched: false,
                         });
                     }} />
-                    <ReactButton text={"Close yellow modal"} onPress={() => {
+                    <RCTButton text={"Close yellow modal"} onPress={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.closeModal({});
                     }} />
-                </ReactStackLayout>
+                </RCTStackLayout>
             </PortalToPageWithActionBar>
 
             <PortalToPageWithActionBar innerRef={greenPageRef} actionBarTitle={"Green page"} backgroundColor={"green"}>
-                <ReactStackLayout>
-                    <ReactLabel>You're viewing the green page!</ReactLabel>
-                    <ReactButton text={"Close green modal"} onPress={() => {
+                <RCTStackLayout>
+                    <RCTLabel>You're viewing the green page!</RCTLabel>
+                    <RCTButton text={"Close green modal"} onPress={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.closeModal({});
                     }} />
-                </ReactStackLayout>
+                </RCTStackLayout>
             </PortalToPageWithActionBar>
-        </ReactPage>);
+        </RCTPage>);
     }
 }
 
@@ -128,7 +128,7 @@ export class ActionBarTest extends React.Component<{}, {}> {
         const navigationButton = new NavigationButton();
         navigationButton.text = "Go Back";
         return React.createElement(
-            ReactActionBar,
+            RCTActionBar,
             {
                 navigationButton,
                 // color: new Color("red"),
@@ -142,13 +142,13 @@ export class ActionBarTest extends React.Component<{}, {}> {
 export class TabViewTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactTabView,
+            RCTTabView,
             {
                 selectedIndex: 1
             },
 
             React.createElement(
-                ReactTabViewItem,
+                RCTTabViewItem,
                 {
                     title: "Dock",
                     identifier: `Item 0`,
@@ -161,7 +161,7 @@ export class TabViewTest extends React.Component<{}, {}> {
             ),
 
             React.createElement(
-                ReactTabViewItem,
+                RCTTabViewItem,
                 {
                     title: "Flexbox",
                     identifier: `Item 1`,
@@ -221,11 +221,11 @@ export class PageWithActionBar extends React.Component<
         const { children, innerRef, actionBarTitle, ...rest } = this.props;
 
         return (
-            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest} >
-                <ReactActionBar title={actionBarTitle} className={"action-bar"}>
+            <RCTPage innerRef={innerRef} actionBarHidden={false} {...rest} >
+                <RCTActionBar title={actionBarTitle} className={"action-bar"}>
                     {children}
-                </ReactActionBar>
-            </ReactPage>
+                </RCTActionBar>
+            </RCTPage>
         );
     }
 }
@@ -251,10 +251,10 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
         const flexboxLayoutPageRef = React.createRef<Page>();
 
         return (
-            <ReactPage innerRef={innerRef} actionBarHidden={false}>
-                <ReactActionBar title="Navigation Hub" className="action-bar" />
-                <ReactStackLayout>
-                    <ReactButton
+            <RCTPage innerRef={innerRef} actionBarHidden={false}>
+                <RCTActionBar title="Navigation Hub" className="action-bar" />
+                <RCTStackLayout>
+                    <RCTButton
                         text={"Navigate to AbsoluteLayout"}
                         onPress={() => {
                             const page: Page = innerRef.current!;
@@ -266,7 +266,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             });
                         }}
                     />
-                    <ReactButton
+                    <RCTButton
                         text={"Navigate to DockLayout"}
                         onPress={() => {
                             const page: Page = innerRef.current!;
@@ -278,7 +278,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             });
                         }}
                     />
-                    <ReactButton
+                    <RCTButton
                         text={"Navigate to FlexboxLayout"}
                         onPress={() => {
                             const page: Page = innerRef.current!;
@@ -290,7 +290,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             });
                         }}
                     />
-                </ReactStackLayout>
+                </RCTStackLayout>
                 
                 <PortalToPage pageRef={absoluteLayoutPageRef} actionBarTitle={"AbsoluteLayout"}>
                     <AbsoluteLayoutTest/>
@@ -303,7 +303,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                 <PortalToPage pageRef={flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
                     <FlexboxLayoutTest/>
                 </PortalToPage>
-            </ReactPage>
+            </RCTPage>
         );
     }
 }
@@ -315,10 +315,10 @@ export const PortalToPageWithActionBar: React.SFC<
     const { innerRef, actionBarTitle, children, ...rest } = props;
     return ReactNativeScript.createPortal(
         (
-            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest} >
-                <ReactActionBar title={actionBarTitle} className={"action-bar"}/>
+            <RCTPage innerRef={innerRef} actionBarHidden={false} {...rest} >
+                <RCTActionBar title={actionBarTitle} className={"action-bar"}/>
                 {children}
-            </ReactPage>
+            </RCTPage>
         ),
         innerRef.current,
         `Portal('${actionBarTitle}')`
@@ -331,10 +331,10 @@ export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page>
         const bluePageRef = React.createRef<Page>();
 
         return (
-            <ReactPage innerRef={innerRef} actionBarHidden={false} {...rest}>
-                <ReactActionBar title="Navigation Hub" className="action-bar" />
-                <ReactStackLayout>
-                    <ReactButton
+            <RCTPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+                <RCTActionBar title="Navigation Hub" className="action-bar" />
+                <RCTStackLayout>
+                    <RCTButton
                         text={"Navigate to blue page"}
                         onPress={() => {
                             const currentPage: Page = innerRef.current!;
@@ -345,12 +345,12 @@ export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page>
                             });
                         }}
                     />
-                </ReactStackLayout>
+                </RCTStackLayout>
                 
                 <PortalToPageWithActionBar innerRef={bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
-                    <ReactLabel>You're viewing the blue page!</ReactLabel>
+                    <RCTLabel>You're viewing the blue page!</RCTLabel>
                 </PortalToPageWithActionBar>
-            </ReactPage>
+            </RCTPage>
         );
     }
 }

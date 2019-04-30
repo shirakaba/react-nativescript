@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -151,7 +151,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
         const { index } = this.state;
 
         return React.createElement(
-            ReactLabel,
+            RCTLabel,
             {
                 text: text.slice(index, text.length)
             },
@@ -222,7 +222,7 @@ export class Clock extends React.Component<{}, { date: Date }> {
         console.log(`[Clock] render()!`);
         
         return React.createElement(
-            ReactTextView,
+            RCTTextView,
             {
             },
             this.state.date.toLocaleTimeString()
@@ -233,7 +233,7 @@ export class Clock extends React.Component<{}, { date: Date }> {
 export class ListViewTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactListView,
+            RCTListView,
             {
                 items: [
                     /* Enough cells to see how view recycling works/ doesn't work */

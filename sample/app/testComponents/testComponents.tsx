@@ -6,21 +6,21 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    TextField as ReactTextField,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTTextField,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -41,13 +41,13 @@ export class TextFieldTest extends React.Component<{ toWhat: string }, {}> {
 export class TextViewTest extends React.Component<{ toWhat: string }, {}> {
     render(){
         // return (<ReactTextView text={`Hello ${this.props.toWhat}`}/>);
-        return (<ReactTextView>{`Hello ${this.props.toWhat}`}</ReactTextView>);
+        return (<RCTTextView>{`Hello ${this.props.toWhat}`}</RCTTextView>);
     }
 }
 
 export class LabelTest extends React.Component<{ toWhat: string }, {}> {
     render(){
-        return (<ReactLabel>{`Hello ${this.props.toWhat}`}</ReactLabel>);
+        return (<RCTLabel>{`Hello ${this.props.toWhat}`}</RCTLabel>);
     }
 }
 
@@ -60,7 +60,7 @@ class MyRootView extends React.Component<{}, {}> {
 export class NestedContentView extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactContentView,
+            RCTContentView,
             {
                 style: {
                     /* Note that "75%" and "yellow" also work at run-time; it's just that the typings disallow it. */
@@ -72,7 +72,7 @@ export class NestedContentView extends React.Component<{}, {}> {
                 // width: 75,
             },
             React.createElement(
-                ReactContentView,
+                RCTContentView,
                 {
                     /* Seems that these props are totally untyped (deep 'any'). */
                     style: {
@@ -129,7 +129,7 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
         // );
 
         return (
-            <ReactLabel formattedText={formattedString} />
+            <RCTLabel formattedText={formattedString} />
         )
     }
 }

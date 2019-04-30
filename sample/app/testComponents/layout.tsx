@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -28,14 +28,14 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 export class DockLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactDockLayout,
+            RCTDockLayout,
             {
                 width: { value: 100, unit: "%" },
                 height: { value: 100, unit: "%" },
                 stretchLastChild: true,
             },
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "left",
                     text: "Left",
@@ -45,7 +45,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "top",
                     text: "Top",
@@ -55,7 +55,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "right",
                     text: "Right",
@@ -65,7 +65,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "bottom",
                     text: "Bottom",
@@ -75,7 +75,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     // dock: "bottom",
                     text: "Fill",
@@ -93,11 +93,11 @@ export class DockLayoutTest extends React.Component<{}, {}> {
 export class AbsoluteLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactAbsoluteLayout,
+            RCTAbsoluteLayout,
             {
             },
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "left",
                     text: "Left: 10, Top: 5",
@@ -109,7 +109,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "top",
                     text: "Left: 30, Top: 80",
@@ -121,7 +121,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "right",
                     text: "Left: 150, Top: 25",
@@ -133,7 +133,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactButton,
+                RCTButton,
                 {
                     dock: "bottom",
                     text: "Left: 70, Top: 150",
@@ -151,7 +151,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
 export class FlexboxLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            ReactFlexboxLayout,
+            RCTFlexboxLayout,
             {
                 flexDirection: "column-reverse",
                 justifyContent: "space-around",
@@ -163,7 +163,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 backgroundColor: "lightGray"
             },
             React.createElement(
-                ReactLabel,
+                RCTLabel,
                 {
                     text: "Label 1",
                     width: 60,
@@ -173,7 +173,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactLabel,
+                RCTLabel,
                 {
                     text: "Label 2",
                     alignSelf: "center",
@@ -184,7 +184,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactLabel,
+                RCTLabel,
                 {
                     text: "Label 3",
                     alignSelf: "flex-end",
@@ -195,7 +195,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                ReactLabel,
+                RCTLabel,
                 {
                     text: "Label 4",
                     width: 60,

@@ -62,16 +62,16 @@ For now, I'm not focusing on JSX/TSX, but it may well work (just add `"jsx": "re
 // In app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { ContentView, Label } from "react-nativescript/dist/index";
+import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 
 ReactNativeScript.startWithFrameAndPage(
     React.createElement(
-        ContentView,
+        RCTContentView,
         {
             backgroundColor: "orange"
         },
         React.createElement(
-            Label,
+            RCTLabel,
             {
                 /* Write text either as a prop or as a child. */
                 // text: "Hello, world!"

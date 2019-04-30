@@ -6,21 +6,21 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    Button as ReactButton,
-    ContentView as ReactContentView,
-    TextView as ReactTextView,
-    TextField as ReactTextField,
-    Label as ReactLabel,
+    RCTButton,
+    RCTContentView,
+    RCTTextView,
+    RCTTextField,
+    RCTLabel,
     // StylePropContents,
-    DockLayout as ReactDockLayout,
-    AbsoluteLayout as ReactAbsoluteLayout,
-    StackLayout as ReactStackLayout,
-    FlexboxLayout as ReactFlexboxLayout,
-    ListView as ReactListView,
-    ActionBar as ReactActionBar,
-    TabView as ReactTabView,
-    TabViewItem as ReactTabViewItem,
-    Page as ReactPage,
+    RCTDockLayout,
+    RCTAbsoluteLayout,
+    RCTStackLayout,
+    RCTFlexboxLayout,
+    RCTListView,
+    RCTActionBar,
+    RCTTabView,
+    RCTTabViewItem,
+    RCTPage,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -31,7 +31,7 @@ import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGest
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
         return (
-                <ReactContentView
+                <RCTContentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
@@ -47,8 +47,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                     onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
                     onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
                 >
-                    <ReactFlexboxLayout justifyContent="center" alignItems="center">
-                        <ReactContentView
+                    <RCTFlexboxLayout justifyContent="center" alignItems="center">
+                        <RCTContentView
                             style={{
                                 backgroundColor: new Color("orange"),
                                 width: { unit: "px", value: 300 },
@@ -64,8 +64,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                             onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
                             onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
-                    </ReactFlexboxLayout>
-                </ReactContentView>
+                    </RCTFlexboxLayout>
+                </RCTContentView>
         );
     }
 }
@@ -94,15 +94,15 @@ export class PanGestureTest extends React.Component<
         const { x, y } = this.state;
 
         return (
-                <ReactContentView
+                <RCTContentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
                 >
-                    <ReactAbsoluteLayout>
-                        <ReactContentView
+                    <RCTAbsoluteLayout>
+                        <RCTContentView
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
@@ -139,8 +139,8 @@ export class PanGestureTest extends React.Component<
                             onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
                             // onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
-                    </ReactAbsoluteLayout>
-                </ReactContentView>
+                    </RCTAbsoluteLayout>
+                </RCTContentView>
         );
     }
 }
