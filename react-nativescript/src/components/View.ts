@@ -33,50 +33,32 @@ interface Props {
 export type ViewComponentProps = Props & Partial<ViewBaseProps> & ViewBaseComponentProps;
 
 export abstract class RCTView<P extends ViewComponentProps, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
-    /** From ui/core/view */
-    private readonly _onLoaded = (args: EventData) => this.props.onLoaded && this.props.onLoaded(args);
-    private readonly _onUnloaded = (args: EventData) => this.props.onUnloaded && this.props.onUnloaded(args);
-    private readonly _onAndroidBackPressed = (args: EventData) => this.props.onAndroidBackPressed && this.props.onAndroidBackPressed(args);
-    private readonly _onShowingModally = (args: ShownModallyData) => this.props.onShowingModally && this.props.onShowingModally(args);
-    private readonly _onShownModally = (args: ShownModallyData) => this.props.onShownModally && this.props.onShownModally(args);
-    
-    /** From ui/gestures. */
-    private readonly _onTap = (args: GestureEventData) => this.props.onTap && this.props.onTap(args);
-    private readonly _onDoubleTap = (args: GestureEventData) => this.props.onDoubleTap && this.props.onDoubleTap(args);
-    private readonly _onPinch = (args: PinchGestureEventData) => this.props.onPinch && this.props.onPinch(args);
-    private readonly _onPan = (args: PanGestureEventData) => this.props.onPan && this.props.onPan(args);
-    private readonly _onSwipe = (args: SwipeGestureEventData) => this.props.onSwipe && this.props.onSwipe(args);
-    private readonly _onRotation = (args: RotationGestureEventData) => this.props.onRotation && this.props.onRotation(args);
-    private readonly _onLongPress = (args: GestureEventData) => this.props.onLongPress && this.props.onLongPress(args);
-    private readonly _onTouch = (args: TouchGestureEventData) => this.props.onTouch && this.props.onTouch(args);
-
     componentDidMount(){
         super.componentDidMount();
 
         const node: E|null = this.myRef.current;
         if(node){
-            node.on("loaded", this._onLoaded);
-            node.on("unloaded", this._onUnloaded);
-            node.on("androidBackPressed", this._onAndroidBackPressed);
-            node.on("showingModally", this._onShowingModally);
-            node.on("shownModally", this._onShownModally);
-            node.on(GestureTypes.tap, this._onTap);
-            node.on(GestureTypes.doubleTap, this._onDoubleTap);
-            node.on(GestureTypes.pinch, this._onPinch);
-            node.on(GestureTypes.pan, this._onPan);
-            node.on(GestureTypes.swipe, this._onSwipe);
-            node.on(GestureTypes.rotation, this._onRotation);
-            node.on(GestureTypes.longPress, this._onLongPress);
-            node.on(GestureTypes.touch, this._onTouch);
+            if(this.props.onLoaded) node.on("loaded", this.props.onLoaded);
+            if(this.props.onUnloaded) node.on("unloaded", this.props.onUnloaded);
+            if(this.props.onAndroidBackPressed) node.on("androidBackPressed", this.props.onAndroidBackPressed);
+            if(this.props.onShowingModally) node.on("showingModally", this.props.onShowingModally);
+            if(this.props.onShownModally) node.on("shownModally", this.props.onShownModally);
+            if(this.props.onTap) node.on(GestureTypes.tap, this.props.onTap);
+            if(this.props.onDoubleTap) node.on(GestureTypes.doubleTap, this.props.onDoubleTap);
+            if(this.props.onPinch) node.on(GestureTypes.pinch, this.props.onPinch);
+            if(this.props.onPan) node.on(GestureTypes.pan, this.props.onPan);
+            if(this.props.onSwipe) node.on(GestureTypes.swipe, this.props.onSwipe);
+            if(this.props.onRotation) node.on(GestureTypes.rotation, this.props.onRotation);
+            if(this.props.onLongPress) node.on(GestureTypes.longPress, this.props.onLongPress);
+            if(this.props.onTouch) node.on(GestureTypes.touch, this.props.onTouch);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
         }
     }
 
-    shouldComponentUpdate(nextProps: P, nextState: S){
+    shouldComponentUpdate(nextProps: P, nextState: S): boolean {
         const node: E|null = this.myRef.current;
         if(node){
-            updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
             updateListener(node, "loaded", this.props.onLoaded, nextProps.onLoaded);
             updateListener(node, "unloaded", this.props.onUnloaded, nextProps.onUnloaded);
             updateListener(node, "androidBackPressed", this.props.onAndroidBackPressed, nextProps.onAndroidBackPressed);
@@ -102,19 +84,19 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
 
         const node: E|null = this.myRef.current;
         if(node){
-            node.off("loaded", this._onLoaded);
-            node.off("unloaded", this._onUnloaded);
-            node.off("androidBackPressed", this._onAndroidBackPressed);
-            node.off("showingModally", this._onShowingModally);
-            node.off("shownModally", this._onShownModally);
-            node.off(GestureTypes.tap, this._onTap);
-            node.off(GestureTypes.doubleTap, this._onDoubleTap);
-            node.off(GestureTypes.pinch, this._onPinch);
-            node.off(GestureTypes.pan, this._onPan);
-            node.off(GestureTypes.swipe, this._onSwipe);
-            node.off(GestureTypes.rotation, this._onRotation);
-            node.off(GestureTypes.longPress, this._onLongPress);
-            node.off(GestureTypes.touch, this._onTouch);
+            if(this.props.onLoaded) node.off("loaded", this.props.onLoaded);
+            if(this.props.onUnloaded) node.off("unloaded", this.props.onUnloaded);
+            if(this.props.onAndroidBackPressed) node.off("androidBackPressed", this.props.onAndroidBackPressed);
+            if(this.props.onShowingModally) node.off("showingModally", this.props.onShowingModally);
+            if(this.props.onShownModally) node.off("shownModally", this.props.onShownModally);
+            if(this.props.onTap) node.off(GestureTypes.tap, this.props.onTap);
+            if(this.props.onDoubleTap) node.off(GestureTypes.doubleTap, this.props.onDoubleTap);
+            if(this.props.onPinch) node.off(GestureTypes.pinch, this.props.onPinch);
+            if(this.props.onPan) node.off(GestureTypes.pan, this.props.onPan);
+            if(this.props.onSwipe) node.off(GestureTypes.swipe, this.props.onSwipe);
+            if(this.props.onRotation) node.off(GestureTypes.rotation, this.props.onRotation);
+            if(this.props.onLongPress) node.off(GestureTypes.longPress, this.props.onLongPress);
+            if(this.props.onTouch) node.off(GestureTypes.touch, this.props.onTouch);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to clean up event listeners.`);
         }

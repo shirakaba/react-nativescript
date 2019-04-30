@@ -4,7 +4,12 @@ import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
 // type GenericListener = (...args: any[]) => void;
 type GenericListener = (data: EventData) => void
 
-export function updateListener<T extends Observable>(node: T, eventName: string|GestureTypes, currentListener: GenericListener|undefined, incomingListener: GenericListener|undefined): void {
+export function updateListener<T extends Observable>(
+    node: T,
+    eventName: string|GestureTypes,
+    currentListener: GenericListener|undefined,
+    incomingListener: GenericListener|undefined,
+): void {
     if(currentListener){
         if(incomingListener){
             if(incomingListener !== currentListener){

@@ -13,14 +13,11 @@ export type ObservableComponentProps = Props & Partial<ObservableProps>;
 
 export abstract class RCTObservable<P extends ObservableComponentProps, S extends {}, E extends NativeScriptObservable> extends React.Component<P, S> {
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
-    
-    /** From data/observable. */
-    private readonly _onPropertyChange = (data: EventData) => this.props.onPropertyChange && this.props.onPropertyChange(data);
 
     componentDidMount(){
         const node: E|null = this.myRef.current;
         if(node){
-            node.on("propertyChange", this._onPropertyChange);
+            if(this.props.onPropertyChange) node.on("propertyChange", this.props.onPropertyChange);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
         }
@@ -31,7 +28,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps, S extend
      * comparison of props and state. We'll implement our Component's shouldComponentUpdate() to
      * match the way PureComponent is handled.
      */
-    shouldComponentUpdate(nextProps: P, nextState: S){
+    shouldComponentUpdate(nextProps: P, nextState: S): boolean {
         const node: E|null = this.myRef.current;
         if(node){
             updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
@@ -46,7 +43,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps, S extend
     componentWillUnmount(){
         const node: E|null = this.myRef.current;
         if(node){
-            node.off("propertyChange", this._onPropertyChange);
+            if(this.props.onPropertyChange) node.off("propertyChange", this.props.onPropertyChange);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to clean up event listeners.`);
         }
