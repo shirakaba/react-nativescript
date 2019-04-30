@@ -50,6 +50,8 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
     private readonly _onTouch = (args: TouchGestureEventData) => this.props.onTouch && this.props.onTouch(args);
 
     componentDidMount(){
+        super.componentDidMount();
+
         const node: E|null = this.myRef.current;
         if(node){
             node.on("loaded", this._onLoaded);
@@ -71,6 +73,8 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
     }
 
     componentWillUnmount(){
+        super.componentWillUnmount();
+
         const node: E|null = this.myRef.current;
         if(node){
             node.off("loaded", this._onLoaded);
