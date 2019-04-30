@@ -5,6 +5,7 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 import { updateListener } from "../client/EventHandling";
+import { shallowEqual } from "src/client/shallowEqual";
 
 interface Props {
     /* From View. */
@@ -70,6 +71,30 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
         }
+    }
+
+    shouldComponentUpdate(nextProps: P, nextState: S){
+        const node: E|null = this.myRef.current;
+        if(node){
+            updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
+            updateListener(node, "loaded", this.props.onLoaded, nextProps.onLoaded);
+            updateListener(node, "unloaded", this.props.onUnloaded, nextProps.onUnloaded);
+            updateListener(node, "androidBackPressed", this.props.onAndroidBackPressed, nextProps.onAndroidBackPressed);
+            updateListener(node, "showingModally", this.props.onShowingModally, nextProps.onShowingModally);
+            updateListener(node, "shownModally", this.props.onShownModally, nextProps.onShownModally);
+            updateListener(node, GestureTypes.tap, this.props.onTap, nextProps.onTap);
+            updateListener(node, GestureTypes.doubleTap, this.props.onDoubleTap, nextProps.onDoubleTap);
+            updateListener(node, GestureTypes.pinch, this.props.onPinch, nextProps.onPinch);
+            updateListener(node, GestureTypes.pan, this.props.onPan, nextProps.onPan);
+            updateListener(node, GestureTypes.swipe, this.props.onSwipe, nextProps.onSwipe);
+            updateListener(node, GestureTypes.rotation, this.props.onRotation, nextProps.onRotation);
+            updateListener(node, GestureTypes.longPress, this.props.onLongPress, nextProps.onLongPress);
+            updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch);
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
+        }
+        
+        return super.shouldComponentUpdate(nextProps, nextState);
     }
 
     componentWillUnmount(){
