@@ -14,13 +14,26 @@ export type ObservableComponentProps = Props & Partial<ObservableProps>;
 export abstract class RCTObservable<P extends ObservableComponentProps, S extends {}, E extends NativeScriptObservable> extends React.Component<P, S> {
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
 
-    componentDidMount(){
+    /**
+     * 
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(attach: boolean|null, nextProps?: P): void {
         const node: E|null = this.myRef.current;
         if(node){
-            if(this.props.onPropertyChange) node.on("propertyChange", this.props.onPropertyChange);
+            if(attach === null){
+                updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
+            } else {
+                const method = attach ? node.on : node.off;
+                if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
+            }
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
         }
+    }
+
+    componentDidMount(){
+        this.updateListeners(true);
     }
 
     /**
@@ -29,24 +42,14 @@ export abstract class RCTObservable<P extends ObservableComponentProps, S extend
      * match the way PureComponent is handled.
      */
     shouldComponentUpdate(nextProps: P, nextState: S): boolean {
-        const node: E|null = this.myRef.current;
-        if(node){
-            updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
-        } else {
-            console.warn(`React ref to NativeScript View lost, so unable to attach event listeners.`);
-        }
+        this.updateListeners(null, nextProps);
         
         // https://lucybain.com/blog/2018/react-js-pure-component/
         return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
     }
 
     componentWillUnmount(){
-        const node: E|null = this.myRef.current;
-        if(node){
-            if(this.props.onPropertyChange) node.off("propertyChange", this.props.onPropertyChange);
-        } else {
-            console.warn(`React ref to NativeScript View lost, so unable to clean up event listeners.`);
-        }
+        this.updateListeners(false);
     }
 
     abstract render(): React.ReactNode;
