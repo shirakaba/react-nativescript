@@ -57,9 +57,7 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
                 updateListener(node, GestureTypes.longPress, this.props.onLongPress, nextProps.onLongPress);
                 updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch);
             } else {
-                const method = attach ? node.on : node.off;
-                if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
-
+                const method = (attach ? node.on : node.off).bind(node);
                 if(this.props.onLoaded) method("loaded", this.props.onLoaded);
                 if(this.props.onUnloaded) method("unloaded", this.props.onUnloaded);
                 if(this.props.onAndroidBackPressed) method("androidBackPressed", this.props.onAndroidBackPressed);

@@ -24,7 +24,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps, S extend
             if(attach === null){
                 updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
             } else {
-                const method = attach ? node.on : node.off;
+                const method = (attach ? node.on : node.off).bind(node);
                 if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
             }
         } else {
