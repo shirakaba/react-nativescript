@@ -4,10 +4,7 @@ import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/pag
 import { ContentView, ContentViewComponentProps } from "./ContentView";
 import { updateListener } from "../client/EventHandling";
 
-interface Props<E extends NativeScriptPage = NativeScriptPage> {
-    // children: Element,
-    /* Allows us to use the page itself as the component root. */
-    innerRef: React.RefObject<E>,
+interface Props {
     onNavigatingTo?: PageNavigationEventHandler,
     onNavigatedTo?: PageNavigationEventHandler,
     onNavigatingFrom?: PageNavigationEventHandler,
@@ -16,7 +13,7 @@ interface Props<E extends NativeScriptPage = NativeScriptPage> {
 
 export type PageNavigationEventHandler = (args: NavigatedData) => void;
 
-export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = Props<E> & Partial<PageProps> & ContentViewComponentProps;
+export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = Props /* & typeof _Page.defaultProps */ & Partial<PageProps> & ContentViewComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript Page component.
@@ -24,6 +21,10 @@ export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = 
  * See: ui/page/page
  */
 class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends ContentView<P, S, E> {
+    // static defaultProps = {
+    //     innerRef: React.createRef<NativeScriptPage>()
+    // };
+
     // private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
 
     /**
@@ -32,7 +33,10 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
         super.updateListeners(attach, nextProps);
 
-        const node: E|null = this.props.innerRef.current;
+        const ref = this.props.innerRef || this.myRef;
+        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+
+        const node: E|null = ref.current;
         if(node){
             if(attach === null){
                 updateListener(node, "navigatedFrom", this.props.onNavigatedFrom, nextProps.onNavigatedFrom);
@@ -60,7 +64,7 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
             {
                 ...rest,
                 // ref: this.myRef
-                ref: innerRef
+                ref: innerRef || this.myRef
             },
             children
         );
@@ -68,7 +72,7 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
 }
 
 export const Page: React.ComponentType<PageComponentProps<NativeScriptPage> & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PageComponentProps<NativeScriptPage>>(
-    (props: React.PropsWithChildren<PageComponentProps<NativeScriptPage>>, ref: React.Ref<NativeScriptPage>) => {
+    (props: React.PropsWithChildren<PageComponentProps<NativeScriptPage>>, ref: React.RefObject<NativeScriptPage>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

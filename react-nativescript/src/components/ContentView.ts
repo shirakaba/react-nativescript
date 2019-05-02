@@ -6,11 +6,17 @@ import { ViewComponentProps, RCTView } from "./View";
 interface Props {
 }
 
-export type ContentViewComponentProps = Props & Partial<ContentViewProps> & ViewComponentProps;
+export type ContentViewComponentProps<E extends NativeScriptContentView = NativeScriptContentView> = Props /* & typeof ContentView.defaultProps */ & Partial<ContentViewProps> & ViewComponentProps<E>;
 
-export class ContentView<P extends ContentViewComponentProps, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
+export class ContentView<P extends ContentViewComponentProps<E>, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
+    // static defaultProps = {
+    //     innerRef: React.createRef<NativeScriptContentView>()
+    // };
+
     render(): React.ReactNode {
         const {
+            innerRef,
+
             onLoaded,
             onUnloaded,
             onAndroidBackPressed,
@@ -36,7 +42,7 @@ export class ContentView<P extends ContentViewComponentProps, S extends {}, E ex
             'contentView',
             {
                 ...rest,
-                ref: this.myRef
+                ref: innerRef || this.myRef
             },
             children
         );

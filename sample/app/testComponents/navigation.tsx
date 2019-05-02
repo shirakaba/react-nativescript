@@ -260,7 +260,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
+                                    console.log(`Navigating from ${innerRef.current} to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
                                     return absoluteLayoutPageRef.current;
                                 }
                             });
@@ -272,7 +272,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating to DockLayout page. Ref:`, dockLayoutPageRef.current);
+                                    console.log(`Navigating from ${innerRef.current} to DockLayout page. Ref:`, dockLayoutPageRef.current);
                                     return dockLayoutPageRef.current;
                                 }
                             });
@@ -284,7 +284,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
                             const page: Page = innerRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
+                                    console.log(`Navigating from ${innerRef.current} to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
                                     return flexboxLayoutPageRef.current;
                                 }
                             });

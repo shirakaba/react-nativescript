@@ -30,9 +30,13 @@ interface Props {
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
 
-export type ViewComponentProps = Props & Partial<ViewBaseProps> & ViewBaseComponentProps;
+export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewBaseProps> & ViewBaseComponentProps<E>;
 
-export abstract class RCTView<P extends ViewComponentProps, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
+export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
+    // static defaultProps = {
+    //     innerRef: React.createRef<NativeScriptView>()
+    // };
+
     /**
      * 
      * @param attach true: attach; false: detach; null: update
@@ -40,7 +44,10 @@ export abstract class RCTView<P extends ViewComponentProps, S extends {}, E exte
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
         super.updateListeners(attach, nextProps);
 
-        const node: E|null = this.myRef.current;
+        const ref = this.props.innerRef || this.myRef;
+        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+
+        const node: E|null = ref.current;
         if(node){
             if(attach === null){
                 updateListener(node, "loaded", this.props.onLoaded, nextProps.onLoaded);

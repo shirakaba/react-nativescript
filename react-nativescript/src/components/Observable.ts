@@ -4,22 +4,31 @@ import { Observable as NativeScriptObservable, EventData } from "tns-core-module
 import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "../client/shallowEqual";
 
-interface Props {
+interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
+    innerRef?: React.RefObject<E>,
+
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
 }
 
-export type ObservableComponentProps = Props & Partial<ObservableProps>;
+export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<E> /* & typeof RCTObservable.defaultProps */ & Partial<ObservableProps>;
 
-export abstract class RCTObservable<P extends ObservableComponentProps, S extends {}, E extends NativeScriptObservable> extends React.Component<P, S> {
+export abstract class RCTObservable<P extends ObservableComponentProps<E>, S extends {}, E extends NativeScriptObservable> extends React.Component<P, S> {
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
+
+    // static defaultProps = {
+    //     innerRef: React.createRef<NativeScriptObservable>()
+    // };
 
     /**
      * 
      * @param attach true: attach; false: detach; null: update
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        const node: E|null = this.myRef.current;
+        const ref = this.props.innerRef || this.myRef;
+        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+
+        const node: E|null = ref.current;
         if(node){
             if(attach === null){
                 updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
