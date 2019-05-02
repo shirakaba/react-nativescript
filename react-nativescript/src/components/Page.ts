@@ -1,11 +1,13 @@
 import * as React from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
+import { ContentView, ContentViewComponentProps } from "./ContentView";
+import { updateListener } from "../client/EventHandling";
 
-interface Props {
+interface Props<E extends NativeScriptPage = NativeScriptPage> {
     // children: Element,
     /* Allows us to use the page itself as the component root. */
-    innerRef: React.RefObject<NativeScriptPage>,
+    innerRef: React.RefObject<E>,
     onNavigatingTo?: PageNavigationEventHandler,
     onNavigatedTo?: PageNavigationEventHandler,
     onNavigatingFrom?: PageNavigationEventHandler,
@@ -14,62 +16,43 @@ interface Props {
 
 export type PageNavigationEventHandler = (args: NavigatedData) => void;
 
-export type PageComponentProps = Props & Partial<PageProps>;
+export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = Props<E> & Partial<PageProps> & ContentViewComponentProps;
 
 /**
  * A React wrapper around the NativeScript Page component.
  * TODO: inherit from a View component
  * See: ui/page/page
  */
-class _Page extends React.Component<PageComponentProps, {}> {
+class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends ContentView<P, S, E> {
     // private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
 
-    private readonly _onNavigatingTo: PageNavigationEventHandler = (args: NavigatedData) => {
-        if(this.props.onNavigatingTo){
-            this.props.onNavigatingTo(args);
-        }
-    };
-    private readonly _onNavigatedTo: PageNavigationEventHandler = (args: NavigatedData) => {
-        if(this.props.onNavigatedTo){
-            this.props.onNavigatedTo(args);
-        }
-    };
-    private readonly _onNavigatingFrom: PageNavigationEventHandler = (args: NavigatedData) => {
-        if(this.props.onNavigatingFrom){
-            this.props.onNavigatingFrom(args);
-        }
-    };
-    private readonly _onNavigatedFrom: PageNavigationEventHandler = (args: NavigatedData) => {
-        if(this.props.onNavigatedFrom){
-            this.props.onNavigatedFrom(args);
-        }
-    };
+    /**
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(attach, nextProps);
 
-    componentDidMount() {
-        // const node: NativeScriptPage|null = this.myRef.current;
-        const node: NativeScriptPage|null = this.props.innerRef.current;
+        const node: E|null = this.props.innerRef.current;
         if(node){
-            node.on("navigatedFrom", this._onNavigatedFrom);
-            node.on("navigatedTo", this._onNavigatedTo);
-            node.on("navigatingFrom", this._onNavigatingFrom);
-            node.on("navigatingTo", this._onNavigatingTo);
-        }
-    }
-  
-    componentWillUnmount() {
-        // const node: NativeScriptPage|null = this.myRef.current;
-        const node: NativeScriptPage|null = this.props.innerRef.current;
-        if(node){
-            node.off("navigatedFrom", this._onNavigatedFrom);
-            node.off("navigatedTo", this._onNavigatedTo);
-            node.off("navigatingFrom", this._onNavigatingFrom);
-            node.off("navigatingTo", this._onNavigatingTo);
+            if(attach === null){
+                updateListener(node, "navigatedFrom", this.props.onNavigatedFrom, nextProps.onNavigatedFrom);
+                updateListener(node, "navigatedTo", this.props.onNavigatedTo, nextProps.onNavigatedTo);
+                updateListener(node, "navigatingFrom", this.props.onNavigatingFrom, nextProps.onNavigatingFrom);
+                updateListener(node, "navigatingTo", this.props.onNavigatingTo, nextProps.onNavigatingTo);
+            } else {
+                const method = (attach ? node.on : node.off).bind(node);
+
+                if(this.props.onNavigatedFrom) method("navigatedFrom", this.props.onNavigatedFrom);
+                if(this.props.onNavigatedTo) method("navigatedTo", this.props.onNavigatedTo);
+                if(this.props.onNavigatingFrom) method("navigatingFrom", this.props.onNavigatingFrom);
+                if(this.props.onNavigatingTo) method("navigatingTo", this.props.onNavigatingTo);
+            }
         } else {
-            console.warn(`React ref to NativeScript Page lost, so unable to clean up event listeners.`);
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
         }
     }
 
-    render(){
+    render(): React.ReactNode {
         const { children, innerRef, ...rest } = this.props;
 
         return React.createElement(
@@ -84,8 +67,8 @@ class _Page extends React.Component<PageComponentProps, {}> {
     }
 }
 
-export const Page: React.ComponentType<PageComponentProps & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PageComponentProps>(
-    (props: React.PropsWithChildren<PageComponentProps>, ref: React.Ref<NativeScriptPage>) => {
+export const Page: React.ComponentType<PageComponentProps<NativeScriptPage> & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PageComponentProps<NativeScriptPage>>(
+    (props: React.PropsWithChildren<PageComponentProps<NativeScriptPage>>, ref: React.Ref<NativeScriptPage>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

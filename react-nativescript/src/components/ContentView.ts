@@ -9,7 +9,7 @@ interface Props {
 export type ContentViewComponentProps = Props & Partial<ContentViewProps> & ViewComponentProps;
 
 export class ContentView<P extends ContentViewComponentProps, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
-    render(){
+    render(): React.ReactNode {
         const {
             onLoaded,
             onUnloaded,

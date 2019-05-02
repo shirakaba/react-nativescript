@@ -28,7 +28,7 @@ import { DockLayoutTest, FlexboxLayoutTest, AbsoluteLayoutTest } from "./layout"
 
 export class NestedHub extends React.Component<{
     innerRef: React.RefObject<Page>;
-} & PageComponentProps, {}> {
+} & PageComponentProps<Page>, {}> {
     render() {
         const { innerRef, ...rest } = this.props;
         const greenPageRef = React.createRef<Page>();
@@ -71,7 +71,7 @@ export class NestedHub extends React.Component<{
 }
 export class NestedModalTest extends React.Component<{
     innerRef: React.RefObject<Page>;
-} & PageComponentProps, {}> {
+} & PageComponentProps<Page>, {}> {
     render() {
         const { innerRef, ...rest } = this.props;
         const yellowPageRef = React.createRef<Page>();
@@ -309,7 +309,7 @@ export class HubTest extends React.Component<{ innerRef: React.RefObject<Page> }
 }
 
 export const PortalToPageWithActionBar: React.SFC<
-    { actionBarTitle: string } & PageComponentProps
+    { actionBarTitle: string } & PageComponentProps<Page>
 > =
 (props) => {
     const { innerRef, actionBarTitle, children, ...rest } = props;
@@ -325,7 +325,7 @@ export const PortalToPageWithActionBar: React.SFC<
     );
 }
 
-export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps, {}> {
+export class SimpleHub extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {
     render(){
         const { innerRef, ...rest } = this.props;
         const bluePageRef = React.createRef<Page>();

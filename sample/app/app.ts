@@ -20,16 +20,16 @@ import { Page } from "tns-core-modules/ui/page/page";
 import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 
-ReactNativeScript.startWithView(
-    React.createElement(
-        PanGestureTest,
-        {
+// ReactNativeScript.startWithView(
+//     React.createElement(
+//         PanGestureTest,
+//         {
             
-        },
-        null
-    ),
-    new StackLayout()
-);
+//         },
+//         null
+//     ),
+//     new StackLayout()
+// );
 
 // const frame = new Frame();
 // const page = new Page();
@@ -38,7 +38,7 @@ ReactNativeScript.startWithView(
 //     React.createElement(
 //         HubTest,
 //         {
-
+//             innerRef: pageRef
 //         },
 //         null
 //     ),
@@ -46,20 +46,20 @@ ReactNativeScript.startWithView(
 //     page
 // );
 
-// const pageRef = React.createRef<Page>();
-// const frame = new Frame();
-// /* Do any Frame setup here */
-// ReactNativeScript.startWithFrame(
-//     React.createElement(
-//         SpriteKitGameTest,
-//         {
-//             innerRef: pageRef
-//         },
-//         null
-//     ),
-//     frame,
-//     pageRef
-// );
+const pageRef = React.createRef<Page>();
+const frame = new Frame();
+/* Do any Frame setup here */
+ReactNativeScript.startWithFrame(
+    React.createElement(
+        HubTest,
+        {
+            innerRef: pageRef
+        },
+        null
+    ),
+    frame,
+    pageRef
+);
 
 
 // application.run({ moduleName: "app-root" });
