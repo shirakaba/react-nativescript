@@ -222,9 +222,8 @@ export class PageWithActionBar extends React.Component<
 
         return (
             <RCTPage ref={forwardedRef} actionBarHidden={false} {...rest} >
-                <RCTActionBar title={actionBarTitle} className={"action-bar"}>
-                    {children}
-                </RCTActionBar>
+                <RCTActionBar title={actionBarTitle} className={"action-bar"}/>
+                {children}
             </RCTPage>
         );
     }
