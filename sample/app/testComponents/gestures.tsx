@@ -26,7 +26,7 @@ import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
-import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes } from "tns-core-modules/ui/gestures/gestures";
+import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "tns-core-modules/ui/gestures/gestures";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
@@ -149,6 +149,53 @@ export class PanGestureTest extends React.Component<
                         />
                     </RCTAbsoluteLayout>
                 </RCTContentView>
+        );
+    }
+}
+
+export class PageGestureTest extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {
+    private readonly yellowPageRef = React.createRef<Page>();
+    render(){
+        const { forwardedRef, ...rest } = this.props;
+
+        return (
+            <RCTPage
+                ref={forwardedRef}
+                actionBarHidden={false}
+                {...rest}
+                onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] base Page`)}
+            >
+                <RCTActionBar title="Navigation Hub" className="action-bar" />
+                <RCTStackLayout>
+                    <RCTButton
+                        text={"Navigate to yellow page"}
+                        onPress={() => {
+                            const currentPage: Page = forwardedRef.current!;
+                            currentPage.frame.navigate({
+                                create: () => {
+                                    return this.yellowPageRef.current;
+                                }
+                            });
+                        }}
+                    />
+                </RCTStackLayout>
+                
+                <PortalToPageWithActionBar
+                    forwardedRef={this.yellowPageRef}
+                    actionBarTitle={"Yellow page"}
+                    backgroundColor={"yellow"}
+                    onSwipe={(args: SwipeGestureEventData) => {
+                        if(args.direction === SwipeDirection.right){
+                            console.log(`[onSwipe] yellow Page, rightwards (so shall go back)`);
+                            this.yellowPageRef.current!.frame.goBack();
+                        } else {
+                            console.log(`[onSwipe] yellow Page, not rightwards (so shan't go back). direction: ${args.direction}`);
+                        }
+                    }}
+                >
+                    <RCTLabel>You're viewing the yellow page!</RCTLabel>
+                </PortalToPageWithActionBar>
+            </RCTPage>
         );
     }
 }
