@@ -308,11 +308,25 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
     }
 }
 
+/**
+ * MUST render the portal into a container (but only via a Host Config hack, as Pages can't have containers) or null.
+ * 
+ * Rendering into forwardedRef.current mysteriously works on the first render, but only because forwardedRef.current
+ * is null at first. On second render (due to a state change of any component within), forwardedRef.current will become
+ * populated and thus cause this to break (because it's not a container of the root component; it IS the root component).
+ * 
+ * ... So we render into null. This seems to work perfectly, but we'll probably have to add special-case handling in the
+ * Host Config so that if the root component (Page) is ever unmounted, we don't call null.removeChild().
+ *
+ * The converse case of outerparent.removeChild(null) (when we unmount the Portal) might not need special handling,
+ * because null is not regarded as a ReactNode to begin with.
+ */
 export const PortalToPageWithActionBar: React.SFC<
     { actionBarTitle: string } & PageComponentProps<Page>
 > =
 (props) => {
     const { forwardedRef, actionBarTitle, children, ...rest } = props;
+    console.log(`[PortalToPageWithActionBar - "${actionBarTitle}"] createPortal() forwardedRef.current: ${forwardedRef.current}`);
     return ReactNativeScript.createPortal(
         (
             <RCTPage ref={forwardedRef} actionBarHidden={false} {...rest} >
@@ -320,9 +334,46 @@ export const PortalToPageWithActionBar: React.SFC<
                 {children}
             </RCTPage>
         ),
-        forwardedRef.current,
+        null,
         `Portal('${actionBarTitle}')`
     );
+}
+
+/**
+ * Above, we use a Stateless Functional Component. Here is the equivalent using a regular class component.
+ * 
+ * We may find that a class component is necessary to provide the lifecycle methods to clean up upon unmount 
+ * (componentWillUnmount), but also... maybe not.
+ * 
+ * An explicit shouldComponentUpdate() is purely there to help me follow the logs. It's not needed otherwise.
+ */
+export class StatefulPortalToPageWithActionBar extends React.Component<
+    { actionBarTitle: string } & PageComponentProps<Page>,
+    {}
+> {
+    shouldComponentUpdate(
+        nextProps: StatefulPortalToPageWithActionBar["props"],
+        nextState: StatefulPortalToPageWithActionBar["state"]
+    ): boolean {
+        console.log(`[StatefulPortalToPageWithActionBar.shouldComponentUpdate]`);
+        return true;
+    }
+
+    render(){
+        const { forwardedRef, actionBarTitle, children, ...rest } = this.props;
+        console.log(`[StatefulPortalToPageWithActionBar - "${actionBarTitle}"] createPortal() forwardedRef.current: ${forwardedRef.current}`);
+
+        return ReactNativeScript.createPortal(
+            (
+                <RCTPage actionBarHidden={false} {...rest} ref={forwardedRef} >
+                    <RCTActionBar title={actionBarTitle} className={"action-bar"}/>
+                    {children}
+                </RCTPage>
+            ),
+            null,
+            `Portal('${actionBarTitle}')`
+        );
+    }
 }
 
 export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {

@@ -8,7 +8,7 @@ interface Props {
 
 export type ContentViewComponentProps<E extends NativeScriptContentView = NativeScriptContentView> = Props /* & typeof ContentView.defaultProps */ & Partial<ContentViewProps> & ViewComponentProps<E>;
 
-export class ContentView<P extends ContentViewComponentProps<E>, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
+export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptContentView>()
     // };
@@ -48,3 +48,22 @@ export class ContentView<P extends ContentViewComponentProps<E>, S extends {}, E
         );
     }
 }
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+type PropsWithoutForwardedRef = Omit<ContentViewComponentProps<NativeScriptContentView>, "forwardedRef">;
+
+export const ContentView: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>> = React.forwardRef<NativeScriptContentView, PropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptContentView>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _ContentView,
+            {
+                ...rest,
+                forwardedRef: ref,
+            },
+            children
+        );
+    }
+)

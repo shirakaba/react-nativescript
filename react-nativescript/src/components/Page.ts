@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
-import { ContentView, ContentViewComponentProps } from "./ContentView";
+import { _ContentView, ContentViewComponentProps } from "./ContentView";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
@@ -20,7 +20,7 @@ export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = 
  * TODO: inherit from a View component
  * See: ui/page/page
  */
-class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends ContentView<P, S, E> {
+class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends _ContentView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptPage>()
     // };

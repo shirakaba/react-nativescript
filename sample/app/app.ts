@@ -12,12 +12,10 @@ import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
-import { GestureLoggingTest, PanGestureTest, PageGestureTest } from "./testComponents/gestures";
+import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./testComponents/gestures";
 import { GameLoopTest } from "./testComponents/stateful";
 import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewTest } from "./testComponents/navigation";
-import { Frame } from "tns-core-modules/ui/frame/frame";
-import { Page } from "tns-core-modules/ui/page/page";
-import { StackLayout } from "react-nativescript/dist/client/ElementRegistry";
+import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 
 // ReactNativeScript.startWithView(
@@ -51,7 +49,7 @@ const frame = new Frame();
 /* Do any Frame setup here */
 ReactNativeScript.startWithFrame(
     React.createElement(
-        PageGestureTest,
+        StatefulPageGestureTest,
         {
             forwardedRef: pageRef
         },

@@ -3,6 +3,7 @@ import { ObservableProps } from "../shared/NativeScriptComponentTypings";
 import { Observable as NativeScriptObservable, EventData } from "tns-core-modules/data/observable/observable";
 import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "../client/shallowEqual";
+import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
 
 interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
     forwardedRef?: React.RefObject<E>,
@@ -26,7 +27,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
         const ref = this.props.forwardedRef || this.myRef;
-        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
         const node: E|null = ref.current;
         if(node){
@@ -51,10 +52,13 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      * match the way PureComponent is handled.
      */
     shouldComponentUpdate(nextProps: P, nextState: S): boolean {
+        const shouldUpdate: boolean = !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
+        // console.log(`[shouldComponentUpdate] shouldUpdate: ${shouldUpdate}.`);
+
         this.updateListeners(null, nextProps);
         
         // https://lucybain.com/blog/2018/react-js-pure-component/
-        return !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
+        return shouldUpdate;
     }
 
     componentWillUnmount(){

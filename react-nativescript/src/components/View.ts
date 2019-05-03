@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
-import { EventData } from "tns-core-modules/data/observable/observable";
+import { EventData, Observable } from "tns-core-modules/data/observable/observable";
 import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 import { updateListener } from "../client/EventHandling";
@@ -45,7 +45,7 @@ export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E e
         super.updateListeners(attach, nextProps);
 
         const ref = this.props.forwardedRef || this.myRef;
-        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
         const node: E|null = ref.current;
         if(node){
@@ -55,14 +55,14 @@ export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E e
                 updateListener(node, "androidBackPressed", this.props.onAndroidBackPressed, nextProps.onAndroidBackPressed);
                 updateListener(node, "showingModally", this.props.onShowingModally, nextProps.onShowingModally);
                 updateListener(node, "shownModally", this.props.onShownModally, nextProps.onShownModally);
-                updateListener(node, GestureTypes.tap, this.props.onTap, nextProps.onTap);
-                updateListener(node, GestureTypes.doubleTap, this.props.onDoubleTap, nextProps.onDoubleTap);
-                updateListener(node, GestureTypes.pinch, this.props.onPinch, nextProps.onPinch);
-                updateListener(node, GestureTypes.pan, this.props.onPan, nextProps.onPan);
-                updateListener(node, GestureTypes.swipe, this.props.onSwipe, nextProps.onSwipe);
-                updateListener(node, GestureTypes.rotation, this.props.onRotation, nextProps.onRotation);
-                updateListener(node, GestureTypes.longPress, this.props.onLongPress, nextProps.onLongPress);
-                updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch);
+                updateListener(node, GestureTypes.tap, this.props.onTap, nextProps.onTap, "tap");
+                updateListener(node, GestureTypes.doubleTap, this.props.onDoubleTap, nextProps.onDoubleTap, "doubleTap");
+                updateListener(node, GestureTypes.pinch, this.props.onPinch, nextProps.onPinch, "pinch");
+                updateListener(node, GestureTypes.pan, this.props.onPan, nextProps.onPan, "pan");
+                updateListener(node, GestureTypes.swipe, this.props.onSwipe, nextProps.onSwipe, "swipe");
+                updateListener(node, GestureTypes.rotation, this.props.onRotation, nextProps.onRotation, "rotation");
+                updateListener(node, GestureTypes.longPress, this.props.onLongPress, nextProps.onLongPress, "longPress");
+                updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch, "touch");
             } else {
                 const method = (attach ? node.on : node.off).bind(node);
                 if(this.props.onLoaded) method("loaded", this.props.onLoaded);
