@@ -10,12 +10,12 @@ export type ContentViewComponentProps<E extends NativeScriptContentView = Native
 
 export class ContentView<P extends ContentViewComponentProps<E>, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
     // static defaultProps = {
-    //     innerRef: React.createRef<NativeScriptContentView>()
+    //     forwardedRef: React.createRef<NativeScriptContentView>()
     // };
 
     render(): React.ReactNode {
         const {
-            innerRef,
+            forwardedRef,
 
             onLoaded,
             onUnloaded,
@@ -42,7 +42,7 @@ export class ContentView<P extends ContentViewComponentProps<E>, S extends {}, E
             'contentView',
             {
                 ...rest,
-                ref: innerRef || this.myRef
+                ref: forwardedRef || this.myRef
             },
             children
         );

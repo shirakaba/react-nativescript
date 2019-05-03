@@ -22,7 +22,7 @@ export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = 
  */
 class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends ContentView<P, S, E> {
     // static defaultProps = {
-    //     innerRef: React.createRef<NativeScriptPage>()
+    //     forwardedRef: React.createRef<NativeScriptPage>()
     // };
 
     // private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
@@ -33,7 +33,7 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
         super.updateListeners(attach, nextProps);
 
-        const ref = this.props.innerRef || this.myRef;
+        const ref = this.props.forwardedRef || this.myRef;
         console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
         const node: E|null = ref.current;
@@ -57,29 +57,33 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     }
 
     render(): React.ReactNode {
-        const { children, innerRef, ...rest } = this.props;
+        const { children, forwardedRef, ...rest } = this.props;
 
         return React.createElement(
             'page',
             {
                 ...rest,
                 // ref: this.myRef
-                ref: innerRef || this.myRef
+                ref: forwardedRef || this.myRef
             },
             children
         );
     }
 }
 
-export const Page: React.ComponentType<PageComponentProps<NativeScriptPage> & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PageComponentProps<NativeScriptPage>>(
-    (props: React.PropsWithChildren<PageComponentProps<NativeScriptPage>>, ref: React.RefObject<NativeScriptPage>) => {
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+type PropsWithoutForwardedRef = Omit<PageComponentProps<NativeScriptPage>, "forwardedRef">;
+
+export const Page: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptPage>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
             _Page,
             {
-                innerRef: ref,
-                ...rest
+                ...rest,
+                forwardedRef: ref,
             },
             children
         );

@@ -354,7 +354,7 @@ function downloadFileFromURL(url: NSURL): Promise<NSURL> {
 }
 
 
-export class SpriteKitGameTest extends React.Component<{ innerRef: React.RefObject<Page> } & PageComponentProps, { audioLoaded: boolean }> {
+export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps, { audioLoaded: boolean }> {
     private playerStrongRef: { player?: AVAudioPlayer } = {};
     private readonly gameVC: UIViewController = GameViewController.alloc().init();
 
@@ -377,10 +377,10 @@ export class SpriteKitGameTest extends React.Component<{ innerRef: React.RefObje
     }
 
     render(){
-        const { innerRef, ...rest } = this.props;
+        const { forwardedRef, ...rest } = this.props;
 
         return (
-            <RCTPage innerRef={innerRef} actionBarHidden={false} {...rest}>
+            <RCTPage ref={forwardedRef} actionBarHidden={false} {...rest}>
                 <RCTActionBar title="Navigation Hub" className="action-bar" />
                 <RCTStackLayout>
                     <RCTLabel text={`Audio loaded: ${this.state.audioLoaded}`}/>
@@ -389,7 +389,7 @@ export class SpriteKitGameTest extends React.Component<{ innerRef: React.RefObje
                         onPress={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
 
-                            const currentPage: Page = innerRef.current!;
+                            const currentPage: Page = forwardedRef.current!;
                             const currentFrame: Frame = currentPage.frame;
                             const nc: UINavigationController = currentFrame.ios.controller;
                             (this.gameVC as any).willPopCb = () => this.playerStrongRef.player && this.playerStrongRef.player.stop();

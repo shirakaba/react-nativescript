@@ -34,7 +34,7 @@ export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = 
 
 export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
     // static defaultProps = {
-    //     innerRef: React.createRef<NativeScriptView>()
+    //     forwardedRef: React.createRef<NativeScriptView>()
     // };
 
     /**
@@ -44,7 +44,7 @@ export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E e
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
         super.updateListeners(attach, nextProps);
 
-        const ref = this.props.innerRef || this.myRef;
+        const ref = this.props.forwardedRef || this.myRef;
         console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
         const node: E|null = ref.current;

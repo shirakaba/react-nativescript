@@ -5,7 +5,7 @@ import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "../client/shallowEqual";
 
 interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
-    innerRef?: React.RefObject<E>,
+    forwardedRef?: React.RefObject<E>,
 
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
@@ -17,7 +17,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
 
     // static defaultProps = {
-    //     innerRef: React.createRef<NativeScriptObservable>()
+    //     forwardedRef: React.createRef<NativeScriptObservable>()
     // };
 
     /**
@@ -25,7 +25,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      * @param attach true: attach; false: detach; null: update
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        const ref = this.props.innerRef || this.myRef;
+        const ref = this.props.forwardedRef || this.myRef;
         console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
         const node: E|null = ref.current;

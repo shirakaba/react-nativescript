@@ -38,7 +38,7 @@ import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 //     React.createElement(
 //         HubTest,
 //         {
-//             innerRef: pageRef
+//             forwardedRef: pageRef
 //         },
 //         null
 //     ),
@@ -51,9 +51,10 @@ const frame = new Frame();
 /* Do any Frame setup here */
 ReactNativeScript.startWithFrame(
     React.createElement(
+        // SimpleHub,
         HubTest,
         {
-            innerRef: pageRef
+            forwardedRef: pageRef
         },
         null
     ),
