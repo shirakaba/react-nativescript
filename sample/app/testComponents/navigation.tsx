@@ -244,11 +244,12 @@ const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<Page>, actionBarTi
 }
 
 export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Page> }, {}> {
+    private readonly absoluteLayoutPageRef = React.createRef<Page>();
+    private readonly dockLayoutPageRef = React.createRef<Page>();
+    private readonly flexboxLayoutPageRef = React.createRef<Page>();
+
     render(){
         const { forwardedRef } = this.props;
-        const absoluteLayoutPageRef = React.createRef<Page>();
-        const dockLayoutPageRef = React.createRef<Page>();
-        const flexboxLayoutPageRef = React.createRef<Page>();
 
         return (
             <RCTPage ref={forwardedRef} actionBarHidden={false}>
@@ -260,8 +261,8 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to AbsoluteLayout page. Ref:`, absoluteLayoutPageRef.current);
-                                    return absoluteLayoutPageRef.current;
+                                    console.log(`Navigating from ${forwardedRef.current} to AbsoluteLayout page. Ref:`, this.absoluteLayoutPageRef.current);
+                                    return this.absoluteLayoutPageRef.current;
                                 }
                             });
                         }}
@@ -272,8 +273,8 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to DockLayout page. Ref:`, dockLayoutPageRef.current);
-                                    return dockLayoutPageRef.current;
+                                    console.log(`Navigating from ${forwardedRef.current} to DockLayout page. Ref:`, this.dockLayoutPageRef.current);
+                                    return this.dockLayoutPageRef.current;
                                 }
                             });
                         }}
@@ -284,23 +285,23 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to FlexboxLayout page. Ref:`, flexboxLayoutPageRef.current);
-                                    return flexboxLayoutPageRef.current;
+                                    console.log(`Navigating from ${forwardedRef.current} to FlexboxLayout page. Ref:`, this.flexboxLayoutPageRef.current);
+                                    return this.flexboxLayoutPageRef.current;
                                 }
                             });
                         }}
                     />
                 </RCTStackLayout>
                 
-                <PortalToPage forwardedRef={absoluteLayoutPageRef} actionBarTitle={"AbsoluteLayout"}>
+                <PortalToPage forwardedRef={this.absoluteLayoutPageRef} actionBarTitle={"AbsoluteLayout"}>
                     <AbsoluteLayoutTest/>
                 </PortalToPage>
                 
-                <PortalToPage forwardedRef={dockLayoutPageRef} actionBarTitle={"DockLayout"}>
+                <PortalToPage forwardedRef={this.dockLayoutPageRef} actionBarTitle={"DockLayout"}>
                     <DockLayoutTest/>
                 </PortalToPage>
                 
-                <PortalToPage forwardedRef={flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
+                <PortalToPage forwardedRef={this.flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
                     <FlexboxLayoutTest/>
                 </PortalToPage>
             </RCTPage>
@@ -326,9 +327,9 @@ export const PortalToPageWithActionBar: React.SFC<
 }
 
 export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {
+    private readonly bluePageRef = React.createRef<Page>();
     render(){
         const { forwardedRef, ...rest } = this.props;
-        const bluePageRef = React.createRef<Page>();
 
         return (
             <RCTPage ref={forwardedRef} actionBarHidden={false} {...rest}>
@@ -340,14 +341,14 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
                             const currentPage: Page = forwardedRef.current!;
                             currentPage.frame.navigate({
                                 create: () => {
-                                    return bluePageRef.current;
+                                    return this.bluePageRef.current;
                                 }
                             });
                         }}
                     />
                 </RCTStackLayout>
                 
-                <PortalToPageWithActionBar forwardedRef={bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
+                <PortalToPageWithActionBar forwardedRef={this.bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
                     <RCTLabel>You're viewing the blue page!</RCTLabel>
                 </PortalToPageWithActionBar>
             </RCTPage>
