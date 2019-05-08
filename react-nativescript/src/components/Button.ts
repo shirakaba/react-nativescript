@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ButtonProps } from "../shared/NativeScriptComponentTypings";
+import { ButtonProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
@@ -67,12 +67,10 @@ export class _Button<P extends ButtonComponentProps<E>, S extends {}, E extends 
     }
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ButtonComponentProps<NativeScriptButton>>;
 
-type PropsWithoutForwardedRef = Omit<ButtonComponentProps<NativeScriptButton>, "forwardedRef">;
-
-export const Button: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptButton>> = React.forwardRef<NativeScriptButton, PropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptButton>) => {
+export const Button: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptButton>> = React.forwardRef<NativeScriptButton, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptButton>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

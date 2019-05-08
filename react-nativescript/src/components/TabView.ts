@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
-import { TabViewProps } from "../shared/NativeScriptComponentTypings";
+import { TabViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { TabViewItem } from "./TabViewItem";
 import { TabView as NativeScriptTabView, TabViewItem as NativeScriptTabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { StackLayout, Color, Label } from "../client/ElementRegistry";
@@ -41,12 +41,10 @@ export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extend
     }
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TabViewComponentProps<NativeScriptTabView>>;
 
-type PropsWithoutForwardedRef = Omit<TabViewComponentProps<NativeScriptTabView>, "forwardedRef">;
-
-export const TabView: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTabView>> = React.forwardRef<NativeScriptTabView, PropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTabView>) => {
+export const TabView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTabView>> = React.forwardRef<NativeScriptTabView, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTabView>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
@@ -58,4 +56,4 @@ export const TabView: React.ComponentType<PropsWithoutForwardedRef & React.Class
             children
         );
     }
-)
+);

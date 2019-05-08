@@ -49,12 +49,15 @@ import {
     WrapLayout,
 } from "../client/ElementRegistry";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { ObservableComponentProps } from "../components/Observable";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
 interface PartialStyleProp {
     style: Partial<StylePropContents>
 }
+
+export type PropsWithoutForwardedRef<P extends ObservableComponentProps> = Omit<P, "forwardedRef">;
 
 export type ObservableProps = {};
 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { PageProps } from "../shared/NativeScriptComponentTypings";
+import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps } from "./ContentView";
 import { updateListener } from "../client/EventHandling";
@@ -71,12 +71,10 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     }
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<PageComponentProps<NativeScriptPage>>;
 
-type PropsWithoutForwardedRef = Omit<PageComponentProps<NativeScriptPage>, "forwardedRef">;
-
-export const Page: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, PropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptPage>) => {
+export const Page: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptPage>> = React.forwardRef<NativeScriptPage, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptPage>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

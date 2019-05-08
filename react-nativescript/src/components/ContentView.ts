@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ContentViewProps } from "../shared/NativeScriptComponentTypings";
+import { ContentViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, RCTView } from "./View";
 
@@ -49,12 +49,10 @@ export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, 
     }
 }
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ContentViewComponentProps<NativeScriptContentView>>;
 
-type PropsWithoutForwardedRef = Omit<ContentViewComponentProps<NativeScriptContentView>, "forwardedRef">;
-
-export const ContentView: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>> = React.forwardRef<NativeScriptContentView, PropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptContentView>) => {
+export const ContentView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>> = React.forwardRef<NativeScriptContentView, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptContentView>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
