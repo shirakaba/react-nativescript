@@ -332,6 +332,11 @@ export type ActionBarProps = LayoutBaseProps & Pick<
     "flat"
 >;
 
+export type ButtonProps = TextBaseProps & Pick<
+    Button,
+    "textWrap"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };
