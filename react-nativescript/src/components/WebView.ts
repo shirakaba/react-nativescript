@@ -84,7 +84,7 @@ class _WebView<P extends WebViewComponentProps<E>, S extends {}, E extends Nativ
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<WebViewComponentProps<NativeScriptWebView>>;
 
-export const TabView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptWebView>> = React.forwardRef<NativeScriptWebView, OwnPropsWithoutForwardedRef>(
+export const WebView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptWebView>> = React.forwardRef<NativeScriptWebView, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptWebView>) => {
         const { children, ...rest } = props;
 
