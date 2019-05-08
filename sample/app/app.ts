@@ -18,16 +18,16 @@ import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewT
 import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 
-// ReactNativeScript.startWithView(
-//     React.createElement(
-//         PanGestureTest,
-//         {
+ReactNativeScript.startWithView(
+    React.createElement(
+        TabViewTest,
+        {
             
-//         },
-//         null
-//     ),
-//     new StackLayout()
-// );
+        },
+        null
+    ),
+    new StackLayout()
+);
 
 // const frame = new Frame();
 // const page = new Page();
@@ -44,20 +44,20 @@ import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 //     page
 // );
 
-const pageRef = React.createRef<Page>();
-const frame = new Frame();
-/* Do any Frame setup here */
-ReactNativeScript.startWithFrame(
-    React.createElement(
-        StatefulPageGestureTest,
-        {
-            forwardedRef: pageRef
-        },
-        null
-    ),
-    frame,
-    pageRef
-);
+// const pageRef = React.createRef<Page>();
+// const frame = new Frame();
+// /* Do any Frame setup here */
+// ReactNativeScript.startWithFrame(
+//     React.createElement(
+//         StatefulPageGestureTest,
+//         {
+//             forwardedRef: pageRef
+//         },
+//         null
+//     ),
+//     frame,
+//     pageRef
+// );
 
 
 // application.run({ moduleName: "app-root" });
