@@ -1,6 +1,7 @@
 import * as React from "react";
-import { AbsoluteLayoutProps } from "../shared/NativeScriptComponentTypings";
+import { AbsoluteLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { AbsoluteLayout as NativeScriptAbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import { LayoutBaseComponentProps, RCTLayoutBase } from "./LayoutBase";
 
 interface Props {
     /* orientation defaults to "horizontal", so is not mandatory.
@@ -8,25 +9,63 @@ interface Props {
      * Unlike other layouts, constituent views require no properties. */
 }
 
-export type AbsoluteLayoutComponentProps = Props & Partial<AbsoluteLayoutProps>;
+export type AbsoluteLayoutComponentProps<E extends NativeScriptAbsoluteLayout = NativeScriptAbsoluteLayout> = Props /* & typeof RCTAbsoluteLayout.defaultProps */ & Partial<AbsoluteLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
- * A React wrapper around the NativeScript AbsoluteLayout component.
- * See: ui/layouts/grid-layout
+ * A React Absoluteper around the NativeScript AbsoluteLayout component.
+ * See: ui/layouts/absolute-layout
  */
-export class AbsoluteLayout extends React.Component<AbsoluteLayoutComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptAbsoluteLayout> = React.createRef<NativeScriptAbsoluteLayout>();
-
+export class _AbsoluteLayout<P extends AbsoluteLayoutComponentProps<E>, S extends {}, E extends NativeScriptAbsoluteLayout> extends RCTLayoutBase<P, S, E> {
     render(){
-        const { children, ...rest } = this.props;
+        const {
+            forwardedRef,
+
+            onLoaded,
+            onUnloaded,
+            onAndroidBackPressed,
+            onShowingModally,
+            onShownModally,
+            
+            onTap,
+            onDoubleTap,
+            onPinch,
+            onPan,
+            onSwipe,
+            onRotation,
+            onLongPress,
+            onTouch,
+
+            onPropertyChange,
+            
+            children,
+
+            ...rest
+        } = this.props;
 
         return React.createElement(
             'absoluteLayout',
             {
                 ...rest,
-                ref: this.myRef
+                ref: forwardedRef || this.myRef
             },
             children
         );
     }
 }
+
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<AbsoluteLayoutComponentProps<NativeScriptAbsoluteLayout>>;
+
+export const AbsoluteLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptAbsoluteLayout>> = React.forwardRef<NativeScriptAbsoluteLayout, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptAbsoluteLayout>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _AbsoluteLayout,
+            {
+                ...rest,
+                forwardedRef: ref,
+            },
+            children
+        );
+    }
+)
