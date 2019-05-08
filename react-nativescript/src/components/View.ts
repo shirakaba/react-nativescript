@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
+import { ViewBaseProps, ViewProps } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData, Observable } from "tns-core-modules/data/observable/observable";
 import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
@@ -30,7 +30,7 @@ interface Props {
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
 
-export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewBaseProps> & ViewBaseComponentProps<E>;
+export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
 
 export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
     // static defaultProps = {
