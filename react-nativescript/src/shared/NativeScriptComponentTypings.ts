@@ -318,7 +318,7 @@ export type HtmlViewProps = LayoutBaseProps & Pick<
     "html"
 >;
 
-export type WebViewProps = LayoutBaseProps & Pick<
+export type WebViewProps = ViewProps & Pick<
     WebView,
     "android"|
     "ios"|
