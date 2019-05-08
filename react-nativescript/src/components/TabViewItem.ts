@@ -1,8 +1,9 @@
 import * as React from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
-import { TabViewItemProps } from "../shared/NativeScriptComponentTypings";
+import { TabViewItemProps, ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { View, ViewBase, StackLayout, Color, ContentView, Label } from "../client/ElementRegistry";
 import { TabView as NativeScriptTabView, TabViewItem as NativeScriptTabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
 interface Props {
     identifier: string,
@@ -10,7 +11,7 @@ interface Props {
     // view: View
 }
 
-export type TabViewItemComponentProps = Props & Partial<TabViewItemProps>;
+export type TabViewItemComponentProps<E extends NativeScriptTabViewItem = NativeScriptTabViewItem> = Props /* & typeof RCTTabViewItem.defaultProps */ & Partial<ViewBaseProps> & ViewBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript TabViewItem component.
@@ -20,9 +21,9 @@ export type TabViewItemComponentProps = Props & Partial<TabViewItemProps>;
  * See: ui/tab-view/tab-view
  * See: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/tab-view/code-behind/code-behind-ts-page.ts
  */
-export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> {
+export class _TabViewItem<P extends TabViewItemComponentProps<E>, S extends {}, E extends NativeScriptTabViewItem> extends RCTViewBase<P, S, E> {
+// export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> {
     private readonly container = new StackLayout();
-    private readonly myRef: React.RefObject<NativeScriptTabViewItem> = React.createRef<NativeScriptTabViewItem>();
 
     // componentDidMount(){
     //     console.log(`[TabViewItem ${this.props.identifier}] componentDidMount!`);
@@ -41,6 +42,7 @@ export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> 
         const {
             children,
             identifier,
+            forwardedRef,
             // view, /* We disallow this at the typings level. */
             ...rest
         } = this.props;
@@ -54,7 +56,7 @@ export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> 
             {
                 ...rest,
                 view: this.container,
-                ref: this.myRef
+                ref: forwardedRef || this.myRef
             },
             ReactNativeScript.createPortal(
                 children,
@@ -62,6 +64,24 @@ export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> 
                 identifier
             )
         );
-    }
-    
+    }   
 }
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
+type PropsWithoutForwardedRef = Omit<TabViewItemComponentProps<NativeScriptTabViewItem>, "forwardedRef">;
+
+export const TabViewItem: React.ComponentType<PropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTabViewItem>> = React.forwardRef<NativeScriptTabViewItem, PropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<PropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTabViewItem>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _TabViewItem,
+            {
+                ...rest,
+                forwardedRef: ref,
+            },
+            children
+        );
+    }
+)
