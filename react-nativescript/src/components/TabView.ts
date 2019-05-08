@@ -26,14 +26,14 @@ export type TabViewComponentProps<E extends NativeScriptTabView = NativeScriptTa
  */
 export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extends NativeScriptTabView> extends RCTView<P, S, E> {
     render(){
-        const { children, items, ...rest } = this.props;
+        const { children, forwardedRef, items, ...rest } = this.props;
 
         return React.createElement(
             'tabView',
             {
                 ...rest,
                 // items: [],
-                ref: this.myRef
+                ref: forwardedRef || this.myRef
             },
             /* For now, any TabViewItem children will be mapped to items by our React renderer. */
             ...children
