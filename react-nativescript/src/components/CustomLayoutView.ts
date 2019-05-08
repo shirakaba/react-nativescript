@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CustomLayoutViewProps } from "../shared/NativeScriptComponentTypings";
 import { CustomLayoutView as NativeScriptCustomLayoutView } from "tns-core-modules/ui/content-view/content-view";
-import { ContainerView, ContainerViewComponentProps } from "./ContainerView";
+import { RCTContainerView, ContainerViewComponentProps } from "./ContainerView";
 
 interface Props {
 }
@@ -11,5 +11,5 @@ export type CustomLayoutViewComponentProps<E extends NativeScriptCustomLayoutVie
 /**
  * Base class for all UI components that implement custom layouts.
  */
-export abstract class CustomLayoutView<P extends CustomLayoutViewComponentProps<E>, S extends {}, E extends NativeScriptCustomLayoutView> extends ContainerView<P, S, E> {
+export abstract class RCTCustomLayoutView<P extends CustomLayoutViewComponentProps<E>, S extends {}, E extends NativeScriptCustomLayoutView> extends RCTContainerView<P, S, E> {
 }

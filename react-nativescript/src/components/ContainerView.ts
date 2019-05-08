@@ -11,5 +11,5 @@ export type ContainerViewComponentProps<E extends NativeScriptContainerView = Na
 /**
  * Base class for all UI components that are containers.
  */
-export abstract class ContainerView<P extends ContainerViewComponentProps<E>, S extends {}, E extends NativeScriptContainerView> extends RCTView<P, S, E> {
+export abstract class RCTContainerView<P extends ContainerViewComponentProps<E>, S extends {}, E extends NativeScriptContainerView> extends RCTView<P, S, E> {
 }

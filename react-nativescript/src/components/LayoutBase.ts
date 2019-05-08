@@ -1,15 +1,15 @@
 import * as React from "react";
-import { CustomLayoutViewProps } from "../shared/NativeScriptComponentTypings";
-import { CustomLayoutView as NativeScriptCustomLayoutView } from "tns-core-modules/ui/content-view/content-view";
-import { CustomLayoutView, CustomLayoutViewComponentProps } from "./CustomLayoutView";
+import { CustomLayoutViewProps, LayoutBaseProps } from "../shared/NativeScriptComponentTypings";
+import { LayoutBase as NativeScriptLayoutBase } from "tns-core-modules/ui/layouts/layout-base";
+import { RCTCustomLayoutView, CustomLayoutViewComponentProps } from "./CustomLayoutView";
 
 interface Props {
 }
 
-export type CustomLayoutViewComponentProps<E extends NativeScriptCustomLayoutView = NativeScriptCustomLayoutView> = Props /* & typeof CustomLayoutView.defaultProps */ & Partial<CustomLayoutViewProps> & CustomLayoutViewComponentProps<E>;
+export type LayoutBaseComponentProps<E extends NativeScriptLayoutBase = NativeScriptLayoutBase> = Props /* & typeof LayoutBase.defaultProps */ & Partial<LayoutBaseProps> & CustomLayoutViewComponentProps<E>;
 
 /**
  * Base class for all views that supports children positioning.
  */
-export abstract class LayoutBase<P extends CustomLayoutViewComponentProps<E>, S extends {}, E extends NativeScriptCustomLayoutView> extends CustomLayoutView<P, S, E> {
+export abstract class RCTLayoutBase<P extends CustomLayoutViewComponentProps<E>, S extends {}, E extends NativeScriptLayoutBase> extends RCTCustomLayoutView<P, S, E> {
 }
