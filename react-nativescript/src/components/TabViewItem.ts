@@ -11,7 +11,7 @@ interface Props {
     // view: View
 }
 
-export type TabViewItemComponentProps<E extends NativeScriptTabViewItem = NativeScriptTabViewItem> = Props /* & typeof RCTTabViewItem.defaultProps */ & Partial<ViewBaseProps> & ViewBaseComponentProps<E>;
+export type TabViewItemComponentProps<E extends NativeScriptTabViewItem = NativeScriptTabViewItem> = Props /* & typeof RCTTabViewItem.defaultProps */ & Partial<TabViewItemProps> & ViewBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript TabViewItem component.
@@ -22,27 +22,16 @@ export type TabViewItemComponentProps<E extends NativeScriptTabViewItem = Native
  * See: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/tab-view/code-behind/code-behind-ts-page.ts
  */
 export class _TabViewItem<P extends TabViewItemComponentProps<E>, S extends {}, E extends NativeScriptTabViewItem> extends RCTViewBase<P, S, E> {
-// export class TabViewItem extends React.Component<TabViewItemComponentProps, {}> {
     private readonly container = new StackLayout();
-
-    // componentDidMount(){
-    //     console.log(`[TabViewItem ${this.props.identifier}] componentDidMount!`);
-    // }
-
-    // shouldComponentUpdate(nextProps: Props, nextState: {}): boolean {
-    //     console.log(`[TabViewItem ${this.props.identifier}] shouldComponentUpdate!`);
-    //     return true;
-    // }
-
-    // componentWillUnmount(){
-    //     console.log(`[TabViewItem ${this.props.identifier}] componentWillUnmount!`);
-    // }
 
     render(){
         const {
+            forwardedRef,
+
+            onPropertyChange,
+
             children,
             identifier,
-            forwardedRef,
             // view, /* We disallow this at the typings level. */
             ...rest
         } = this.props;
