@@ -32,17 +32,21 @@ The library is not stable yet, so I won't be publishing it to npm anytime soon. 
 ```sh
 # Create a project like this (or continue from an existing one)
 tns create mycoolapp --tsc
-cd mycoolapp
 
-# In your NativeScript project.
-npm install --save https://github.com/shirakaba/react-nativescript.git
+# Clone this repo, or download a zip of it, placing it beside your NativeScript project.
+git clone https://github.com/shirakaba/react-nativescript.git
+
+# Your folder hierarchy should now look like:
+.
+├── mycoolapp
+└── react-nativescript
+
+# In the root of your NativeScript project.
+npm install --save file:../react-nativescript/react-nativescript
 npm install --save react
 npm install --save-dev @types/react
 
-# In one shell (transpiles your project's TypeScript to JS):
-node_modules/.bin/tsc --project ./tsconfig.tns.json --watch
-
-# In another shell (builds the project from your transpiled JS sources):
+# Build and run your project like so:
 tns run ios --bundle --syncAllFiles --emulator
 
 # OPTIONAL (library development only): You can also update the source library:
@@ -56,7 +60,13 @@ Please file an Issue if you meet any problems when following these instructions.
 
 ### Hello World app
 
-For now, I'm not focusing on JSX/TSX, but it may well work (just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`). Here is how to make a `<ContentView>` component (a React wrapper around a NativeScript ContentView) without JSX:
+JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-webpack` filtering it out. It's pending me signing NativeScript's CLA (see this [PR](https://github.com/NativeScript/nativescript-dev-webpack/pull/875)), but I need to get clearance from my company first.
+
+Every other file in your project **can** be in JSX/TSX, however; just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions` and refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js) (search for the character 'x'!).
+
+Until then, you'll have to write your entry file in JS/TS. Here is how to make a `<ContentView>` component (a React wrapper around a NativeScript ContentView) without JSX:
+
+(just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`). 
 
 ```typescript
 // In app.ts
@@ -204,12 +214,12 @@ Note that 'basic support' may mean "seen to work in very specific favourable cir
 * [x] Support [FormattedString](https://www.nativescript.org/blog/bolding-italicizing-and-underlining-portions-of-text-in-nativescript)
 * [x] Support for context
 * [x] Support for non-visual components (e.g. [Renderless Components](https://kyleshevlin.com/renderless-components) and [Context Providers](https://reactjs.org/docs/context.html#contextprovider))
-* [ ] Implement CSS cascading (assuming that NativeScript Core uses it at all..?)
+* [x] ~~Implement CSS cascading~~ (it 'just works' without any special handling)
+* [x] Handling of props other than by `Observer.setValue()` (plenty of this in action in [`react-nativescript/client/NativeScriptPropertyOperations.ts`](https://github.com/shirakaba/react-nativescript/blob/master/react-nativescript/src/client/NativeScriptPropertyOperations.ts#L89))
+* [x] JSX/TSX (working! Although has possibly broken hot-module reloading).
 * [ ] Create React Components for each of the NativeScript Core views (there are a few of them!)
 * [ ] Map the React NativeScript Components to platform-agnostic [React primitives](https://github.com/lelandrichardson/react-primitives) to support multi-platform apps! [Lerna](https://lernajs.io) may become relevant here.
-* [ ] Handling of props other than by `Observer.setValue()` (I'll gradually discover where this is needed)
-* [ ] Mapping flexbox styles to FlexboxLayout components NOTE: these are based on [Google's FlexboxLayout repo](https://github.com/google/flexbox-layout) and not fully conformant with [CSS Flexible Box Layout](https://www.w3.org/TR/css-flexbox-1/).
-* [ ] JSX/TSX (note: this is probably handled by TypeScript/Babel, so maybe nothing to implement here). [Nick Iliev](https://github.com/NickIliev) recommends studying `nativescript-tsx`: [GitHub repo](https://github.com/PanayotCankov/nativescript-tsx); [npm package](https://www.npmjs.com/package/nativescript-tsx)
+* [ ] ~~Mapping flexbox styles to FlexboxLayout components NOTE: these are based on [Google's FlexboxLayout repo](https://github.com/google/flexbox-layout) and not fully conformant with [CSS Flexible Box Layout](https://www.w3.org/TR/css-flexbox-1/).~~ I'm inclined to drop this goal for now.
 * [ ] Tests. I see that the [Nativescript Vue](https://github.com/nativescript-vue/nativescript-vue) repo has a rather advanced [set of runnable tests](https://github.com/nativescript-vue/nativescript-vue/tree/master/samples/app). I was unable to get the sample app to build though, hence my desire to keep tooling simple. We could work towards something like this.
 
 ## Potential for API compatibility with React Native 🏚
