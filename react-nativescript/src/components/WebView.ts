@@ -2,7 +2,7 @@ import * as React from "react";
 import { WebViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { WebView as NativeScriptWebView, LoadEventData } from "tns-core-modules/ui/web-view/web-view";
 import { ViewComponentProps, RCTView } from "./View";
-import { updateListener } from "src/client/EventHandling";
+import { updateListener } from "../client/EventHandling";
 
 interface Props {
     onLoadFinished?: (args: LoadEventData) => void;

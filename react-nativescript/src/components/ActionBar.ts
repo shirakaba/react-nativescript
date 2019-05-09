@@ -4,7 +4,6 @@ import { ActionBarProps, PropsWithoutForwardedRef } from "../shared/NativeScript
 import { ViewComponentProps, RCTView } from "./View";
 
 interface Props {
-    html: string
 }
 
 export type ActionBarComponentProps<E extends NativeScriptActionBar = NativeScriptActionBar> = Props /* & typeof _ActionBar.defaultProps */ & Partial<ActionBarProps> & ViewComponentProps<E>;
