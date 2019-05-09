@@ -8,6 +8,7 @@ import { ContentView } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
+import * as ReactNativeScript from "../client/ReactNativeScript"
 
 interface Props {
     items: ListViewProps["items"],
@@ -289,14 +290,21 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             //     view,
             //     `LVC(${view._domId})`
             // );
-            const portal = React.createElement(
-                ListViewCell,
-                {
-                    identifier: `Portal(${view._domId})`,
-                    nativeElement: view,
-                },
-                this.props.cellFactory(item, view)
-            )
+            
+            // const portal = React.createElement(
+            //     ListViewCell,
+            //     {
+            //         identifier: `Portal(${view._domId})`,
+            //         nativeElement: view,
+            //     },
+            //     this.props.cellFactory(item, view)
+            // )
+
+            const portal = ReactNativeScript.createPortal(
+                this.props.cellFactory(item, view),
+                view,
+                `Portal(${view._domId})`,
+            );
             portals.push(portal as React.ReactPortal);
         });
 
