@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ListViewProps } from "../shared/NativeScriptComponentTypings";
+import { ListViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsSource } from "tns-core-modules/ui/list-view/list-view";
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
@@ -7,6 +7,7 @@ import { Label } from "tns-core-modules/ui/label/label";
 import { ContentView } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
+import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 
 interface Props {
     items: ListViewProps["items"],
@@ -15,7 +16,6 @@ interface Props {
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
     onLoadMoreItems?: (args: EventData) => void,
-    // TODO: support all the inherited props from the View component, i.e. listeners!
 }
 
 type NumberKey = number|string;
@@ -28,26 +28,26 @@ interface State {
     itemIndexToNativeCell: Map<NumberKey, ContentView>;
 }
 
-export type ListViewComponentProps = Props & Partial<ListViewProps>;
-
 /**
  * A React wrapper around the NativeScript ListView component.
  * Still under construction; needs to take React components as children.
  * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
  * See: ui/list-view/list-view
  */
-export class ListView extends React.Component<ListViewComponentProps, State> {
-    private readonly myRef: React.RefObject<NativeScriptListView> = React.createRef<NativeScriptListView>();
+export type ListViewComponentProps<E extends NativeScriptListView = NativeScriptListView> = Props /* & typeof ListView.defaultProps */ & Partial<ListViewProps> & ViewComponentProps<E>;
 
-    constructor(props: ListViewComponentProps){
+export type ListViewComponentState = State & ViewComponentState;
+
+export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewComponentState, E extends NativeScriptListView> extends RCTView<P, S, E> {
+    constructor(props: P){
         super(props);
 
         this.state = {
-            isItemsSource: ListView.isItemsSource(props.items),
+            isItemsSource: _ListView.isItemsSource(props.items),
             nativeCells: {},
             nativeCellToItemIndex: new Map(),
             itemIndexToNativeCell: new Map()
-        };
+        } as Readonly<S>; // No idea why I need to assert as Readonly<S> when using generics with State :(
     }
 
     /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
@@ -131,14 +131,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 }
                 // nativeCellToItemIndex.delete(view as ContentView); /* redundant */
                 nativeCellToItemIndex.set(view as ContentView, args.index);
-                console.log(`PREV nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
-                console.log(`INCOMING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
+                console.log(`PREV nativeCellToItemIndex:`, _ListView.serialiseNativeCellToItemIndex(prev.nativeCellToItemIndex));
+                console.log(`INCOMING nativeCellToItemIndex:`, _ListView.serialiseNativeCellToItemIndex(nativeCellToItemIndex));
 
                 itemIndexToNativeCell.delete(itemIndexOfArgsView);
                 itemIndexToNativeCell.set(args.index, view as ContentView);
 
-                console.log(`PREV itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
-                console.log(`INCOMING itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
+                console.log(`PREV itemIndexToNativeCell:`, _ListView.serialiseItemIndexToNativeCell(prev.itemIndexToNativeCell));
+                console.log(`INCOMING itemIndexToNativeCell:`, _ListView.serialiseItemIndexToNativeCell(itemIndexToNativeCell));
 
                 const nativeCells: Record<number, ContentView> = {
                     ...prev.nativeCells,
@@ -159,60 +159,33 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         }
     }
 
-    componentDidMount(){
-        const node: NativeScriptListView|null = this.myRef.current;
+    /**
+     * 
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(attach, nextProps);
+
+        const ref = this.props.forwardedRef || this.myRef;
+        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+
+        const node: E|null = ref.current;
         if(node){
-            const { /* onItemLoading, */ onItemTap, onLoadMoreItems } = this.props;
-            
-            node.on(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
+            if(attach === null){
+                /* TODO: decide whether to bother supporting non-default onItemLoading event handlers. */
+                // updateListener(node, NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading, nextProps.onLoaded);
 
-            if(onItemTap){
-                node.on(NativeScriptListView.itemTapEvent, onItemTap);
+                updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
+                updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
+            } else {
+                const method = (attach ? node.on : node.off).bind(node);
+                if(this.props.onLoaded) method(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
+
+                if(this.props.onLoaded) method(NativeScriptListView.itemTapEvent, this.props.onItemTap);
+                if(this.props.onLoaded) method(NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems);
             }
-            if(onLoadMoreItems){
-                node.on(NativeScriptListView.loadMoreItemsEvent, onLoadMoreItems);
-            }
-        }
-    }
-
-    shouldComponentUpdate(nextProps: ListViewComponentProps, nextState: State): boolean {
-        console.log(`[ListView] shouldComponentUpdate! nextState:`, Object.keys(nextState.nativeCells));
-        console.log(`[ListView] shouldComponentUpdate! itemIndexToNativeCell:`, ListView.serialiseItemIndexToNativeCell(nextState.itemIndexToNativeCell));
-        console.log(`[ListView] shouldComponentUpdate! nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(nextState.nativeCellToItemIndex));
-
-        // TODO: check whether this is the ideal lifecycle function to do this in.
-        const node: NativeScriptListView|null = this.myRef.current;
-        if(node){
-            /* FIXME: evidently updateListener() isn't working as intended - it removes onItemTap even when it's no different to this.defaultOnItemLoading. */
-            // updateListener(node, NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading, nextProps.onItemLoading);
-            updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
-            updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-        }
-        return true;
-    }
-
-    componentWillUnmount(){
-        const node: NativeScriptListView|null = this.myRef.current;
-
-        console.log(`[ListView] componentWillUnmount!`);
-        
-        if(node){
-            const { /* onItemLoading, */ onItemTap, onLoadMoreItems } = this.props;
-            
-            // if(onItemLoading){
-            //     node.off(NativeScriptListView.itemLoadingEvent, onItemLoading || this.defaultOnItemLoading);
-            // }
-
-            node.off(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
-
-            if(onItemTap){
-                node.off(NativeScriptListView.itemTapEvent, onItemTap);
-            }
-            if(onLoadMoreItems){
-                node.off(NativeScriptListView.loadMoreItemsEvent, onLoadMoreItems);
-            }
         }
     }
 
@@ -225,14 +198,14 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     }
 
     static serialiseNativeCellToItemIndex<ContentView, NumberKey>(map: Map<ContentView, NumberKey>): Record<string, string> {
-        return ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index], iterand: number) => {
+        return _ListView.mapToKV(map).reduce((acc: Record<string, string>, [view, index], iterand: number) => {
             acc[`CV(${(view as any)._domId})`] = `args_${index}`;
             return acc;
         }, {});
     }
 
     static serialiseItemIndexToNativeCell<NumberKey, ContentView>(map: Map<NumberKey, ContentView>): Record<string, string> {
-        return ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
+        return _ListView.mapToKV(map).reduce((acc: Record<string, string>, [index, view]) => {
             // acc[`args[${index}]`] = `ContentView(${(view as any)._domId})`;
             acc[`args_${index}`] = `CV(${(view as any)._domId})`;
             return acc;
@@ -245,7 +218,32 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
     }
 
     render(){
-        const { children, items, ...rest } = this.props;
+        const {
+            forwardedRef,
+
+            onLoaded,
+            onUnloaded,
+            onAndroidBackPressed,
+            onShowingModally,
+            onShownModally,
+            
+            onTap,
+            onDoubleTap,
+            onPinch,
+            onPan,
+            onSwipe,
+            onRotation,
+            onLongPress,
+            onTouch,
+
+            onPropertyChange,
+
+            children,
+
+            items,
+            ...rest
+        } = this.props;
+
         console.warn("ListView implementation not yet complete!");
         if(children){
             console.warn("Ignoring 'children' prop on ListView; not yet supported");
@@ -272,7 +270,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         //     portals.push(portal);
         // });
 
-        console.log(`RENDERING nativeCellToItemIndex:`, ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
+        console.log(`RENDERING nativeCellToItemIndex:`, _ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
         this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
             const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
             console.log(`CV(${view._domId}): ${item.text}`);
@@ -323,7 +321,7 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
                 /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
                  * Will have to figure out  */
                 items,
-                ref: this.myRef
+                ref: forwardedRef || this.myRef
             },
             React.createElement(
                 "stackLayout",
@@ -350,3 +348,20 @@ export class ListView extends React.Component<ListViewComponentProps, State> {
         );
     }
 }
+
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ListViewComponentProps<NativeScriptListView>>;
+
+export const ListView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptListView>> = React.forwardRef<NativeScriptListView, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptListView>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _ListView,
+            {
+                ...rest,
+                forwardedRef: ref,
+            },
+            children
+        );
+    }
+)
