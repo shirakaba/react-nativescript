@@ -230,36 +230,6 @@ export class Clock extends React.Component<{}, { date: Date }> {
     }
 }
 
-export class ListViewTest extends React.Component<{}, {}> {
-    render(){
-        return React.createElement(
-            RCTListView,
-            {
-                items: [
-                    /* Enough cells to see how view recycling works/ doesn't work */
-                    ...[...Array(7).keys()].map((val) => {
-                        return { text: val };
-                    })
-                ],
-                cellFactory: (item: any, container: ContentView) => {
-                    return React.createElement(
-                        "label",
-                        {
-                            key: container._domId,
-                            text: `${item.text}`,
-                            fontSize: 150,
-                            // textWrap: true,
-                            // class: "title"
-                            
-                        }
-                    )
-                }
-            },
-            null
-        );
-    }
-}
-
 export class GameLoopTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
