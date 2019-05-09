@@ -1,31 +1,45 @@
 import * as React from "react";
-import { LabelProps } from "../shared/NativeScriptComponentTypings";
+import { LabelProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
-import { FormattedString } from "tns-core-modules/text/formatted-string";
-
-// declare namespace JSX {
-//     interface IntrinsicElements {
-//         label: {
-//             // props go here
-//             textytext: string
-//         }
-//     }
-// }
+import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
 
 interface Props {
+    // onPress
 }
 
-export type LabelComponentProps = Props & Partial<LabelProps>;
+export type LabelComponentProps<E extends NativeScriptLabel = NativeScriptLabel> = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
 
 /**
- * A React wrapper around the NativeScript Label component.
- * See: ui/layouts/flexbox-layout
+ * Represents a text label.
  */
-export class Label extends React.Component<LabelComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptLabel> = React.createRef<NativeScriptLabel>();
+export class _Label<P extends LabelComponentProps<E>, S extends {}, E extends NativeScriptLabel = NativeScriptLabel> extends RCTTextBase<P, S, E> {
 
     render(){
-        const { children, text, formattedText, ...rest } = this.props;
+        const {
+            forwardedRef,
+            
+            onLoaded,
+            onUnloaded,
+            onAndroidBackPressed,
+            onShowingModally,
+            onShownModally,
+            
+            onTap,
+            onDoubleTap,
+            onPinch,
+            onPan,
+            onSwipe,
+            onRotation,
+            onLongPress,
+            onTouch,
+
+            onPropertyChange,
+
+            text,
+            formattedText,
+            children,
+            ...rest
+        } = this.props;
 
         if(text && formattedText){
             console.warn(`Both text and formattedText provided; shall use formattedText.`);
@@ -36,16 +50,30 @@ export class Label extends React.Component<LabelComponentProps, {}> {
         };
 
         return React.createElement(
-            'label',
+                'label',
+                {
+                    ...rest,
+                    ...textContent,
+                    ref: forwardedRef || this.myRef
+                },
+                children // Weird that a Label may contain children, but what do I know.
+            );
+    }
+}
+
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<LabelComponentProps<NativeScriptLabel>>;
+
+export const Label: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptLabel>> = React.forwardRef<NativeScriptLabel, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptLabel>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _Label,
             {
                 ...rest,
-                ...textContent,
-                ref: this.myRef,
+                forwardedRef: ref,
             },
             children
         );
-        // return (
-        //     <label text="hi">children</label>
-        // )
     }
-}
+);
