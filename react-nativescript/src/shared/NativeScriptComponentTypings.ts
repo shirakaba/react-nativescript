@@ -311,7 +311,7 @@ export type ListViewProps = ViewProps & Pick<
     "iosEstimatedRowHeight"
 >;
 
-export type HtmlViewProps = LayoutBaseProps & Pick<
+export type HtmlViewProps = ViewProps & Pick<
     HtmlView,
     "android"|
     "ios"|
