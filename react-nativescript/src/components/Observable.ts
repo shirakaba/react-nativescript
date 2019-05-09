@@ -14,7 +14,9 @@ interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
 
 export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<E> /* & typeof RCTObservable.defaultProps */ & Partial<ObservableProps>;
 
-export abstract class RCTObservable<P extends ObservableComponentProps<E>, S extends {}, E extends NativeScriptObservable> extends React.Component<P, S> {
+export type ObservableComponentState = {};
+
+export abstract class RCTObservable<P extends ObservableComponentProps<E>, S extends ObservableComponentState, E extends NativeScriptObservable> extends React.Component<P, S> {
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
 
     // static defaultProps = {

@@ -3,7 +3,7 @@ import { ViewBaseProps, ViewProps } from "../shared/NativeScriptComponentTypings
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData, Observable } from "tns-core-modules/data/observable/observable";
 import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
-import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
+import { ViewBaseComponentProps, RCTViewBase, ViewBaseComponentState } from "./ViewBase";
 import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "src/client/shallowEqual";
 
@@ -32,7 +32,9 @@ interface Props {
 
 export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
 
-export abstract class RCTView<P extends ViewComponentProps<E>, S extends {}, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
+export type ViewComponentState = {} & ViewBaseComponentState;
+
+export abstract class RCTView<P extends ViewComponentProps<E>, S extends ViewComponentState, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptView>()
     // };
