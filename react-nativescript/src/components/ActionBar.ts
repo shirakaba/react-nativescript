@@ -1,33 +1,72 @@
 import * as React from "react";
-import { ActionBarProps } from "../shared/NativeScriptComponentTypings";
 import { ActionBar as NativeScriptActionBar } from "tns-core-modules/ui/action-bar/action-bar";
-import { FormattedString } from "tns-core-modules/text/formatted-string";
+import { ActionBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { ViewComponentProps, RCTView } from "./View";
 
 interface Props {
+    html: string
 }
 
-export type ActionBarComponentProps = Props & Partial<ActionBarProps>;
+export type ActionBarComponentProps<E extends NativeScriptActionBar = NativeScriptActionBar> = Props /* & typeof _ActionBar.defaultProps */ & Partial<ActionBarProps> & ViewComponentProps<E>;
 
 /**
- * A React wrapper around the NativeScript ActionBar component.
- * See: ui/action-bar/action-bar
+ * Provides an abstraction over the ActionBar (android) and NavigationBar (iOS).
  */
-export class ActionBar extends React.Component<ActionBarComponentProps, {}> {
-    private readonly myRef: React.RefObject<NativeScriptActionBar> = React.createRef<NativeScriptActionBar>();
-
+class _ActionBar<P extends ActionBarComponentProps<E>, S extends {}, E extends NativeScriptActionBar = NativeScriptActionBar> extends RCTView<P, S, E> {
     render(){
-        const { children, ...rest } = this.props;
+        const {
+            forwardedRef,
+
+            onLoaded,
+            onUnloaded,
+            onAndroidBackPressed,
+            onShowingModally,
+            onShownModally,
+            
+            onTap,
+            onDoubleTap,
+            onPinch,
+            onPan,
+            onSwipe,
+            onRotation,
+            onLongPress,
+            onTouch,
+
+            onPropertyChange,
+
+            children,
+
+            ...rest
+        } = this.props;
+
+        if(children){
+            console.warn("Ignoring 'children' prop on ActionBar; not permitted");
+        }
 
         return React.createElement(
             'actionBar',
             {
                 ...rest,
-                ref: this.myRef,
+                ref: forwardedRef || this.myRef
+            },
+            null
+        );
+    }
+}
+
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ActionBarComponentProps<NativeScriptActionBar>>;
+
+export const ActionBar: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptActionBar>> = React.forwardRef<NativeScriptActionBar, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptActionBar>) => {
+        const { children, ...rest } = props;
+
+        return React.createElement(
+            _ActionBar,
+            {
+                ...rest,
+                forwardedRef: ref,
             },
             children
         );
-        // return (
-        //     <ActionBar text="hi">children</ActionBar>
-        // )
     }
-}
+);
