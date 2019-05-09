@@ -1,18 +1,18 @@
 import * as React from "react";
 import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextFieldProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
-import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
+import { RCTEditableTextBase, EditableTextBaseComponentProps } from "./EditableTextBase";
 
 interface Props {
     // No mandatory props.
 }
 
-export type TextFieldComponentProps<E extends NativeScriptTextField = NativeScriptTextField> = Props /* & typeof _TextField.defaultProps */ & Partial<TextFieldProps> & TextBaseComponentProps<E>;
+export type TextFieldComponentProps<E extends NativeScriptTextField = NativeScriptTextField> = Props /* & typeof _TextField.defaultProps */ & Partial<TextFieldProps> & EditableTextBaseComponentProps<E>;
 
 /**
  * Represents a text TextField.
  */
-export class _TextField<P extends TextFieldComponentProps<E>, S extends {}, E extends NativeScriptTextField = NativeScriptTextField> extends RCTTextBase<P, S, E> {
+export class _TextField<P extends TextFieldComponentProps<E>, S extends {}, E extends NativeScriptTextField = NativeScriptTextField> extends RCTEditableTextBase<P, S, E> {
 
     render(){
         const {
