@@ -37,7 +37,7 @@ export class ListViewTest extends React.Component<
                 items={[
                     /* Enough cells to see how view recycling works/ doesn't work */
                     ...[...Array(7).keys()].map((val) => {
-                        return { text: val };
+                        return val;
                     })
                 ]}
                 cellFactory={(item: any, container: ContentView) => {
