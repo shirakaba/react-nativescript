@@ -4,7 +4,7 @@ import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
 import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
 
 interface Props {
-    // onPress
+    // No mandatory props.
 }
 
 export type LabelComponentProps<E extends NativeScriptLabel = NativeScriptLabel> = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
