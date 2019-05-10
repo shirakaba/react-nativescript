@@ -35,7 +35,7 @@ export class ListViewTest extends React.Component<
 > {
     render(){
         type Item = number;
-        const items: Item[] = [...Array(7).keys()];
+        const items: Item[] = [...Array(200).keys()];
 
         /* There may be an argument for nesting the ListView within a LayoutBase once
          * dealing with the Safe Area (shall have to find out and see!). */
@@ -46,7 +46,6 @@ export class ListViewTest extends React.Component<
                     onCellFirstLoad: (container: CellViewContainer) => {
                         container.backgroundColor = "orange";
                     },
-                    
                     onCellRecycle: (container: CellViewContainer) => {
                         container.backgroundColor = "blue";
                     },
@@ -63,7 +62,7 @@ export class ListViewTest extends React.Component<
                     return (
                         <RCTLabel
                             key={container._domId}
-                            fontSize={150}
+                            fontSize={24}
                         >
                             {`#${item}`}
                         </RCTLabel>
