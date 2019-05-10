@@ -27,28 +27,36 @@ import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 
+
 export class ListViewTest extends React.Component<
     {},
     {}
 > {
     render(){
+        type Item = number;
+        const items: Item[] = [...Array(7).keys()];
+
+        /* There may be an argument for nesting the ListView within a LayoutBase once
+         * dealing with the Safe Area (shall have to find out and see!). */
         return (
             <RCTListView
+                height={{ unit: "%", value: 100 }}
                 items={[
                     /* Enough cells to see how view recycling works/ doesn't work */
-                    ...[...Array(7).keys()].map((val) => {
+                    ...items.map((val: Item) => {
                         return val;
                     })
                 ]}
-                cellFactory={(item: any, container: ContentView) => {
+                // TODO: consider usng the same API name as React Native here.
+                cellFactory={(item: Item, container: ContentView) => {
                     return (
                         <RCTLabel
                             key={container._domId}
                             fontSize={150}
                         >
-                            {`${item.text}`}
+                            {`#${item}`}
                         </RCTLabel>
-                    )
+                    );
                 }}
             >
             </RCTListView>

@@ -4,7 +4,7 @@ import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsS
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
-import { ContentView } from "tns-core-modules/ui/page/page";
+import { ContentView, Observable } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
@@ -12,7 +12,7 @@ import * as ReactNativeScript from "../client/ReactNativeScript"
 
 interface Props {
     items: ListViewProps["items"],
-    cellFactory: (item: any, container: ContentView) => React.ReactElement,
+    cellFactory: (item: any, container: CellViewContainer) => React.ReactElement,
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
@@ -20,13 +20,14 @@ interface Props {
 }
 
 type NumberKey = number|string;
+type CellViewContainer = ContentView;
 
 interface State {
     isItemsSource: boolean,
-    nativeCells: Record<NumberKey, ContentView>;
+    nativeCells: Record<NumberKey, CellViewContainer>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
-    nativeCellToItemIndex: Map<ContentView, NumberKey>;
-    itemIndexToNativeCell: Map<NumberKey, ContentView>;
+    nativeCellToItemIndex: Map<CellViewContainer, NumberKey>;
+    itemIndexToNativeCell: Map<NumberKey, CellViewContainer>;
 }
 
 /**
@@ -180,10 +181,10 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
             } else {
                 const method = (attach ? node.on : node.off).bind(node);
-                if(this.props.onLoaded) method(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
+                /* if(this.props.onItemLoadingEvent) */ method(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
 
-                if(this.props.onLoaded) method(NativeScriptListView.itemTapEvent, this.props.onItemTap);
-                if(this.props.onLoaded) method(NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems);
+                if(this.props.onItemTap) method(NativeScriptListView.itemTapEvent, this.props.onItemTap);
+                if(this.props.onLoadMoreItems) method(NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems);
             }
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
@@ -251,54 +252,11 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         }
 
         const portals: React.ReactPortal[] = [];
-        // this.state.itemIndexToNativeCell.forEach((view: ContentView, itemIndex: number) => {
-        //     const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
-        //     // console.log(`key: ${view._domId}`);
-        //     const portal = ReactNativeScript.createPortal(
-        //         React.createElement(
-        //             "label",
-        //             {
-        //                 key: view._domId,
-        //                 text: `item.text}`,
-        //                 fontSize: 150,
-        //                 height: 150,
-        //                 // textWrap: true,
-        //                 // class: "title"
-        //             }
-        //         ),
-        //         view
-        //     );
-        //     portals.push(portal);
-        // });
 
         console.log(`RENDERING nativeCellToItemIndex:`, _ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
-        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: ContentView) => {
+        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: CellViewContainer) => {
             const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
             console.log(`CV(${view._domId}): ${item.text}`);
-            // const portal = ReactNativeScript.createPortal(
-            //     React.createElement(
-            //         "label",
-            //         {
-            //             key: view._domId,
-            //             text: `${item.text}`,
-            //             fontSize: 150,
-            //             height: 150,
-            //             // textWrap: true,
-            //             // class: "title"
-            //         }
-            //     ),
-            //     view,
-            //     `LVC(${view._domId})`
-            // );
-            
-            // const portal = React.createElement(
-            //     ListViewCell,
-            //     {
-            //         identifier: `Portal(${view._domId})`,
-            //         nativeElement: view,
-            //     },
-            //     this.props.cellFactory(item, view)
-            // )
 
             const portal = ReactNativeScript.createPortal(
                 this.props.cellFactory(item, view),
@@ -326,33 +284,10 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 // }],
 
                 ...rest,
-                /* By passing 'items' into ListView, ListView automatically creates a list of labels where each text is simply a stringification of each item.
-                 * Will have to figure out  */
                 items,
                 ref: forwardedRef || this.myRef
             },
-            React.createElement(
-                "stackLayout",
-                {
-                    className: "list-group-item"
-                },
-                ...portals
-                // ...Object.keys(this.state.nativeCells).map((index: string) => {
-                //     const nativeCell: ContentView = this.state.nativeCells[index];
-                //     return ReactNativeScript.createPortal(
-                //         React.createElement(
-                //             "label",
-                //             {
-                //                 key: `KEY-${(items as any[])[index]}`,
-                //                 text: `Text: ${(items as any[])[index].text}`,
-                //                 textWrap: true,
-                //                 class: "title"
-                //             }
-                //         ),
-                //         nativeCell
-                //     );
-                // })
-            )
+            portals,
         );
     }
 }

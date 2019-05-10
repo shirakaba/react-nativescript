@@ -17,10 +17,11 @@ import { GameLoopTest } from "./testComponents/stateful";
 import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewTest } from "./testComponents/navigation";
 import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
+import { ListViewTest } from "./testComponents/list";
 
 ReactNativeScript.startWithView(
     React.createElement(
-        TabViewTest,
+        ListViewTest,
         {
             
         },
