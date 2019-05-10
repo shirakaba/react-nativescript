@@ -26,6 +26,7 @@ import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
+import { CellViewContainer } from "react-nativescript/dist/components/ListView";
 
 
 export class ListViewTest extends React.Component<
@@ -40,6 +41,16 @@ export class ListViewTest extends React.Component<
          * dealing with the Safe Area (shall have to find out and see!). */
         return (
             <RCTListView
+                _debug={{
+                    logLevel: "info",
+                    onCellFirstLoad: (container: CellViewContainer) => {
+                        container.backgroundColor = "orange";
+                    },
+                    
+                    onCellRecycle: (container: CellViewContainer) => {
+                        container.backgroundColor = "blue";
+                    },
+                }}
                 height={{ unit: "%", value: 100 }}
                 items={[
                     /* Enough cells to see how view recycling works/ doesn't work */
@@ -48,7 +59,7 @@ export class ListViewTest extends React.Component<
                     })
                 ]}
                 // TODO: consider usng the same API name as React Native here.
-                cellFactory={(item: Item, container: ContentView) => {
+                cellFactory={(item: Item, container: CellViewContainer) => {
                     return (
                         <RCTLabel
                             key={container._domId}
