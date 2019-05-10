@@ -36,7 +36,7 @@ export class NestedHub extends React.Component<{
         return (<RCTPage ref={forwardedRef} actionBarHidden={false} {...rest}>
             <RCTActionBar title="Hub" className="action-bar" />
             <RCTStackLayout>
-                <RCTButton text={"Navigate to green page"} onPress={() => {
+                <RCTButton text={"Navigate to green page"} onTap={() => {
                     const currentPage: Page = forwardedRef.current!;
                     currentPage.frame.navigate({
                         create: () => {
@@ -49,7 +49,7 @@ export class NestedHub extends React.Component<{
             <PortalToPageWithActionBar forwardedRef={greenPageRef} actionBarTitle={"Green"} backgroundColor={"green"}>
                 <RCTStackLayout>
                     <RCTLabel>You're viewing the green page!</RCTLabel>
-                    <RCTButton text={"Navigate to red page"} onPress={() => {
+                    <RCTButton text={"Navigate to red page"} onTap={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.frame.navigate({
                             create: () => {
@@ -79,7 +79,7 @@ export class NestedModalTest extends React.Component<{
         return (<RCTPage ref={forwardedRef} actionBarHidden={false} {...rest}>
             <RCTActionBar title="Navigation Hub" className="action-bar" />
             <RCTStackLayout>
-                <RCTButton text={"Open yellow modal"} onPress={() => {
+                <RCTButton text={"Open yellow modal"} onTap={() => {
                     const currentPage: Page = forwardedRef.current!;
                     currentPage.showModal(yellowPageRef.current!, {
                         context: {},
@@ -93,7 +93,7 @@ export class NestedModalTest extends React.Component<{
             <PortalToPageWithActionBar forwardedRef={yellowPageRef} actionBarTitle={"Yellow page"} backgroundColor={"yellow"}>
                 <RCTStackLayout>
                     <RCTLabel>You're viewing the yellow page!</RCTLabel>
-                    <RCTButton text={"Open green modal"} onPress={() => {
+                    <RCTButton text={"Open green modal"} onTap={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.showModal(greenPageRef.current!, {
                             context: {},
@@ -102,7 +102,7 @@ export class NestedModalTest extends React.Component<{
                             stretched: false,
                         });
                     }} />
-                    <RCTButton text={"Close yellow modal"} onPress={() => {
+                    <RCTButton text={"Close yellow modal"} onTap={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.closeModal({});
                     }} />
@@ -112,7 +112,7 @@ export class NestedModalTest extends React.Component<{
             <PortalToPageWithActionBar forwardedRef={greenPageRef} actionBarTitle={"Green page"} backgroundColor={"green"}>
                 <RCTStackLayout>
                     <RCTLabel>You're viewing the green page!</RCTLabel>
-                    <RCTButton text={"Close green modal"} onPress={() => {
+                    <RCTButton text={"Close green modal"} onTap={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.closeModal({});
                     }} />
@@ -256,7 +256,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                 <RCTStackLayout>
                     <RCTButton
                         text={"Navigate to AbsoluteLayout"}
-                        onPress={() => {
+                        onTap={() => {
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
@@ -268,7 +268,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                     />
                     <RCTButton
                         text={"Navigate to DockLayout"}
-                        onPress={() => {
+                        onTap={() => {
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
@@ -280,7 +280,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                     />
                     <RCTButton
                         text={"Navigate to FlexboxLayout"}
-                        onPress={() => {
+                        onTap={() => {
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
@@ -387,7 +387,7 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
                 <RCTStackLayout>
                     <RCTButton
                         text={"Navigate to blue page"}
-                        onPress={() => {
+                        onTap={() => {
                             const currentPage: Page = forwardedRef.current!;
                             currentPage.frame.navigate({
                                 create: () => {

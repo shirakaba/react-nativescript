@@ -158,7 +158,7 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                 <RCTStackLayout>
                     <RCTButton
                         text={"Navigate to yellow page"}
-                        onPress={() => {
+                        onTap={() => {
                             const currentPage: Page = forwardedRef.current!;
                             currentPage.frame.navigate({
                                 create: () => {
@@ -203,10 +203,10 @@ export class StatefulPageGestureTest extends React.Component<
     private readonly yellowPageRef = React.createRef<Page>();
 
     private readonly onSwipeBasePage = (args: GestureEventData) => {
-        console.log(`[onTap] onSwipeBasePage`);
+        console.log(`[onSwipe] onSwipeBasePage`);
     };
 
-    private readonly onPressBasePage = (args: EventData) => {
+    private readonly onTapBasePage = (args: EventData) => {
         const currentPage: Page = this.props.forwardedRef.current!;
         // currentPage.frame.page
         currentPage.frame.navigate({
@@ -241,7 +241,7 @@ export class StatefulPageGestureTest extends React.Component<
                 <RCTStackLayout>
                     <RCTButton
                         text={"Navigate to yellow page"}
-                        onPress={this.onPressBasePage}
+                        onTap={this.onTapBasePage}
                     />
                 </RCTStackLayout>
                 
@@ -378,7 +378,7 @@ export class StatefulPageGestureTest2 extends React.Component<
 > {
     private readonly yellowPageRef = React.createRef<Page>();
 
-    private readonly onPressBasePage = (args: EventData) => {
+    private readonly onTapBasePage = (args: EventData) => {
         const currentPage: Page = this.props.forwardedRef.current!;
         // currentPage.frame.page
         currentPage.frame.navigate({
@@ -411,7 +411,7 @@ export class StatefulPageGestureTest2 extends React.Component<
                 <RCTStackLayout>
                     <RCTButton
                         text={"Navigate to yellow page"}
-                        onPress={this.onPressBasePage}
+                        onTap={this.onTapBasePage}
                     />
                 </RCTStackLayout>
                 

@@ -173,7 +173,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
 // React.createElement(
 //     ReactButton,
 //     {
-//         onPress: (args: EventData) => console.log("Tapped!", args),
+//         onTap: (args: EventData) => console.log("Tapped!", args),
 //         title: "Tap me!",
 //         // className: "btn btn-primary btn-active"
 //     },

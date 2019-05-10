@@ -40,7 +40,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     dock: "left",
                     text: "Left",
                     backgroundColor: "#0099CC",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -50,7 +50,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     dock: "top",
                     text: "Top",
                     backgroundColor: "#AA0078",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -60,7 +60,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     dock: "right",
                     text: "Right",
                     backgroundColor: "#8C489F",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -70,7 +70,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     dock: "bottom",
                     text: "Bottom",
                     backgroundColor: "#B3B3D7",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -82,7 +82,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                     // 'grey' is invalid! D:
                     color: new Color("gray"),
                     backgroundColor: "#CCFFFF",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -104,7 +104,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 10,
                     top: 5,
                     backgroundColor: "#0099CC",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -116,7 +116,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 30,
                     top: 80,
                     backgroundColor: "#C3C3E5",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -128,7 +128,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 150,
                     top: 25,
                     backgroundColor: "#CCFFFF",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),
@@ -140,7 +140,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 70,
                     top: 150,
                     backgroundColor: "#8C489F",
-                    onPress: () => {}
+                    onTap: () => {}
                 },
                 null
             ),

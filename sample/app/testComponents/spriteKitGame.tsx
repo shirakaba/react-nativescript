@@ -386,7 +386,7 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
                     <RCTLabel text={`Audio loaded: ${this.state.audioLoaded}`}/>
                     <RCTButton
                         text={"Launch SpriteKit game (with audio)!"}
-                        onPress={() => {
+                        onTap={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
 
                             const currentPage: Page = forwardedRef.current!;
