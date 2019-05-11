@@ -28,11 +28,7 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 import { CellViewContainer } from "react-nativescript/dist/components/ListView";
 
-
-export class ListViewTest extends React.Component<
-    {},
-    {}
-> {
+export class ListViewTest extends React.Component<{}, {}> {
     render(){
         type Item = number;
         const items: Item[] = [...Array(200).keys()];
@@ -51,13 +47,7 @@ export class ListViewTest extends React.Component<
                     },
                 }}
                 height={{ unit: "%", value: 100 }}
-                items={[
-                    /* Enough cells to see how view recycling works/ doesn't work */
-                    ...items.map((val: Item) => {
-                        return val;
-                    })
-                ]}
-                // TODO: consider usng the same API name as React Native here.
+                items={[...items.map((val: Item) => val)]}
                 cellFactory={(item: Item, container: CellViewContainer) => {
                     return (
                         <RCTLabel
