@@ -340,6 +340,18 @@ export type ButtonProps = TextBaseProps & Pick<
     "textWrap"
 >;
 
+export type ImageProps = ViewProps & Pick<
+    Image,
+    "imageSource"|
+    "src"|
+    "isLoading"|
+    "stretch"|
+    "loadMode"|
+    "tintColor"|
+    "decodeHeight"|
+    "decodeWidth"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };

@@ -37,6 +37,7 @@ import { ContentView as RCTContentView } from "../components/ContentView";
 import { WebView as RCTWebView } from "../components/WebView";
 import { WrapLayout as RCTWrapLayout } from "../components/WrapLayout";
 import { Page as RCTPage } from "../components/Page";
+import { Image as RCTImage } from "../components/Image";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -209,6 +210,7 @@ export {
     // RCTGestures,
     RCTGridLayout,
     RCTHtmlView,
+    RCTImage,
     RCTLabel,
     RCTListView,
     RCTPage,
