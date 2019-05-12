@@ -11,11 +11,13 @@ import {
     RCTTextView,
     RCTTextField,
     RCTLabel,
+    RCTImage,
     // StylePropContents,
     RCTDockLayout,
     RCTAbsoluteLayout,
     RCTStackLayout,
     RCTFlexboxLayout,
+    RCTGridLayout,
     RCTListView,
     RCTActionBar,
     RCTTabView,
@@ -27,6 +29,7 @@ import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 import { CellViewContainer } from "react-nativescript/dist/components/ListView";
+import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
 export class ListViewTest extends React.Component<{}, {}> {
     render(){
@@ -56,6 +59,127 @@ export class ListViewTest extends React.Component<{}, {}> {
                         >
                             {`#${item}`}
                         </RCTLabel>
+                    );
+                }}
+            >
+            </RCTListView>
+        );
+    }
+}
+
+/**
+ * Code below here ported to React NativeScript from React Native's RNTester app:
+ * https://github.com/microsoft/react-native/blob/master/RNTester/js/ListViewExample.js
+ * ... which carries the following copyright:
+ * Copyright (c) 2015-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
+/** Used in accordance with React_Native_LICENSE.txt in the RNTester_Thumbnails folder. */
+const THUMB_URLS: string[] = [
+    "~/images/RNTester_Thumbnails/like.png",
+    "~/images/RNTester_Thumbnails/dislike.png",
+    "~/images/RNTester_Thumbnails/call.png",
+    "~/images/RNTester_Thumbnails/fist.png",
+    "~/images/RNTester_Thumbnails/bandaged.png",
+    "~/images/RNTester_Thumbnails/flowers.png",
+    "~/images/RNTester_Thumbnails/heart.png",
+    "~/images/RNTester_Thumbnails/liking.png",
+    "~/images/RNTester_Thumbnails/party.png",
+    "~/images/RNTester_Thumbnails/poke.png",
+    "~/images/RNTester_Thumbnails/superlike.png",
+    "~/images/RNTester_Thumbnails/victory.png",
+];
+
+const LOREM_IPSUM: string = "Lorem ipsum dolor sit amet, ius ad pertinax oportere accommodare, an vix civibus corrumpit referrentur. Te nam case ludus inciderint, te mea facilisi adipiscing. Sea id integre luptatum. In tota sale consequuntur nec. Erat ocurreret mei ei. Eu paulo sapientem vulputate est, vel an accusam intellegam interesset. Nam eu stet pericula reprimique, ea vim illud modus, putant invidunt reprehendunt ne qui.";
+
+function hashCode(str: string): number {
+    let hash: number = 15;
+    for(let ii = str.length - 1; ii >= 0; ii--){
+      hash = ((hash << 5) - hash) + str.charCodeAt(ii);
+    }
+    return hash;
+};
+
+type IndexToContentItem = {
+    index: number,
+    content: string,
+};
+export class StaticListViewWithImages extends React.Component<{}, {}> {
+    // private readonly _genRows = (pressData: Record<number, boolean>): string[] => {
+    //     const dataBlob: string[] = [];
+    //     for(let ii = 0; ii < 100; ii++){
+    //         const pressedText = pressData[ii] ? " (pressed)" : "";
+    //         dataBlob.push(`Row ${ii}${pressedText}`);
+    //     }
+    //     return dataBlob;
+    // };
+
+    private readonly items: IndexToContentItem[] = [...Array(200).keys()].map((value: number) => ({ index: value, content: value.toString() }));
+
+    private readonly styles = {
+        row: {
+            /* Tried with Flexbox, but it's far too non-compliant and doesn't function as expected. */
+            // flexDirection: "row" as "row",
+            // justifyContent: "center" as "center",
+
+            padding: 10,
+            backgroundColor: new Color("#F6F6F6"),
+        },
+        thumb: {
+            width: { value: 64, unit: "px" as "px" },
+            height: { value: 64, unit: "px" as "px" },
+        },
+        text: {
+            flexGrow: 1
+        }
+    };
+
+    render(){
+        return (
+            <RCTListView
+                _debug={{
+                    logLevel: "info",
+                    // onCellFirstLoad: (container: CellViewContainer) => {
+                    //     container.backgroundColor = "orange";
+                    // },
+                    // onCellRecycle: (container: CellViewContainer) => {
+                    //     container.backgroundColor = "blue";
+                    // },
+                }}
+                height={{ unit: "%", value: 100 }}
+                width={{ unit: "%", value: 100 }}
+                items={this.items}
+                cellFactory={(item: IndexToContentItem, container: CellViewContainer) => {
+                    const rowHash: number = Math.abs(hashCode(item.index.toString()));
+                    const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
+
+                    return (
+                        <RCTGridLayout
+                            rows={[new ItemSpec(1, "star")]}
+                            columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "auto")]}
+                            // style={this.styles.row}
+                        >
+                            <RCTImage
+                                row={0}
+                                col={0}
+                                src={imgSource}
+                                style={this.styles.thumb}
+                                stretch={"aspectFill"}
+                            />
+                            <RCTLabel
+                                row={0}
+                                col={1}
+                                key={container._domId}
+                                fontSize={24}
+                            >
+                                {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
+                            </RCTLabel>
+                        </RCTGridLayout>
                     );
                 }}
             >
