@@ -90,7 +90,15 @@ export function setValueForProperty(
         // console.warn(`Note that 'class' is remapped to 'className'.`);
         instance.set("className", value);
     } else if((name === "rows" || name === "columns") && instance instanceof GridLayout){
+        const deepEqualsExcuse: string = "React NativeScript will not compare ItemSpec arrays by deep-equals; will not update property:";
+
         if(name === "rows"){
+            /* We're not going to deep-equals the array of ItemSpecs. */
+            if(instance.getRows() === value as ItemSpec[]){
+                console.warn(`${deepEqualsExcuse} 'rows'.`);
+                return;
+            }
+
             /* Clear any existing rows; would be more efficient to do a diff, but hard to get right. */
             if(instance.getRows().length > 0){
                 instance.removeRows();
@@ -99,6 +107,12 @@ export function setValueForProperty(
                 instance.addRow(item);
             });
         } else if(name === "columns"){
+            /* We're not going to deep-equals the array of ItemSpecs. */
+            if(instance.getColumns() === value as ItemSpec[]){
+                console.warn(`${deepEqualsExcuse} 'columns'.`);
+                return;
+            }
+
             /* Clear any existing columns; would be more efficient to do a diff, but hard to get right. */
             if(instance.getColumns().length > 0){
                 instance.removeColumns();
