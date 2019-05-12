@@ -80,20 +80,21 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             if(onCellFirstLoad) onCellFirstLoad(contentView);
             args.view = contentView;
 
-            if(logLevel === "debug") console.log(`'onItemLoading': <empty> -> ${args.index}`);
-
-            if(this.state.itemIndexToNativeCell && this.state.itemIndexToNativeCell.has(args.index)){
-                console.warn(`WARNING: list index already registered yet args.view was falsy!`);
+            if(logLevel === "debug"){
+                console.log(`'onItemLoading': <empty> -> ${args.index}`);
+                if(this.state.itemIndexToNativeCell!.has(args.index)){
+                    console.warn(`WARNING: list index already registered yet args.view was falsy!`);
+                }
             }
 
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
                 nativeCellToItemIndex.set(contentView, args.index);
 
-                let itemIndexToNativeCell; 
+                let itemIndexToNativeCell: Map<NumberKey, CellViewContainer>|undefined;
                 if(logLevel === "debug"){
                     itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
-                    itemIndexToNativeCell.set(args.index, contentView);
+                    itemIndexToNativeCell!.set(args.index, contentView);
                 }
 
                 return {
@@ -152,7 +153,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
-                let itemIndexToNativeCell;
+                let itemIndexToNativeCell: Map<NumberKey, CellViewContainer>|undefined;
 
                 if(logLevel === "debug"){
                     itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
