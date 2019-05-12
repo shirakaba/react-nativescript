@@ -18,7 +18,11 @@ interface Props {
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
-    onLoadMoreItems?: (args: EventData) => void,
+    /**
+      * The event will be raised when the ListView is scrolled so that the last item is visible.
+      * This event is intended to be used to add additional data in the ListView.
+      */
+    onLoadMoreItems?: (args: ItemEventData) => void,
     _debug?: {
         logLevel: "debug"|"info",
         onCellFirstLoad?: (container: CellViewContainer) => void,
@@ -148,9 +152,10 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
             this.setState((prev: State) => {
                 const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
-                const itemIndexToNativeCell = logLevel === "debug" ? new Map(prev.itemIndexToNativeCell) : undefined;
+                let itemIndexToNativeCell;
 
                 if(logLevel === "debug"){
+                    itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
                     // 'onItemLoading': 6 -> 5 (where 5 is already occupied by an incumbent view) may happen.
                     const incumbentView: CellViewContainer|undefined = itemIndexToNativeCell!.get(args.index);
                     if(incumbentView){
