@@ -240,7 +240,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         if(hostContext.isInADockLayout && !props.dock){
             console.warn(`Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`);
         }
-        if(hostContext.isInAGridLayout && (!props.row || !props.col)){
+        if(hostContext.isInAGridLayout && (typeof props.row === "undefined" || typeof props.col === "undefined")){
             console.warn(`Components in a GridLayout should bear both the 'row' and 'col' properties. Undefined behaviour if they don't!`);
         }
         if(hostContext.isInAnAbsoluteLayout && (!props.left || !props.top)){
