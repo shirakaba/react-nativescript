@@ -30,6 +30,8 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 import { CellViewContainer } from "react-nativescript/dist/components/ListView";
 import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
+import { ObservableArray } from "tns-core-modules/data/observable-array/observable-array";
 
 export class ListViewTest extends React.Component<{}, {}> {
     render(){
@@ -109,7 +111,7 @@ type IndexToContentItem = {
     index: number,
     content: string,
 };
-export class StaticListViewWithImages extends React.Component<{}, {}> {
+export class DynamicListViewWithImages extends React.Component<{}, {}> {
     // private readonly _genRows = (pressData: Record<number, boolean>): string[] => {
     //     const dataBlob: string[] = [];
     //     for(let ii = 0; ii < 100; ii++){
@@ -119,7 +121,17 @@ export class StaticListViewWithImages extends React.Component<{}, {}> {
     //     return dataBlob;
     // };
 
-    private readonly items: IndexToContentItem[] = [...Array(200).keys()].map((value: number) => ({ index: value, content: value.toString() }));
+    private readonly items: ObservableArray<IndexToContentItem> = new ObservableArray([...Array(40).keys()].map((value: number) => ({ index: value, content: value.toString() })));
+
+    /* Making this no-op is sufficient to restore this to being a static list view. */
+    private readonly onLoadMoreItems = (args: ItemEventData) => {
+        const lastValueIncremented: number = this.items.length;
+
+        this.items.push({
+            index: lastValueIncremented,
+            content: lastValueIncremented.toString()
+        });
+    };
 
     private readonly styles = {
         row: {
@@ -144,16 +156,17 @@ export class StaticListViewWithImages extends React.Component<{}, {}> {
             <RCTListView
                 _debug={{
                     logLevel: "info",
-                    // onCellFirstLoad: (container: CellViewContainer) => {
-                    //     container.backgroundColor = "orange";
-                    // },
-                    // onCellRecycle: (container: CellViewContainer) => {
-                    //     container.backgroundColor = "blue";
-                    // },
+                    onCellFirstLoad: (container: CellViewContainer) => {
+                        container.backgroundColor = "orange";
+                    },
+                    onCellRecycle: (container: CellViewContainer) => {
+                        container.backgroundColor = "blue";
+                    },
                 }}
                 height={{ unit: "%", value: 100 }}
                 width={{ unit: "%", value: 100 }}
                 items={this.items}
+                onLoadMoreItems={this.onLoadMoreItems}
                 cellFactory={(item: IndexToContentItem, container: CellViewContainer) => {
                     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
