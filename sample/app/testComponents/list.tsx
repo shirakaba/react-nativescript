@@ -161,8 +161,7 @@ export class StaticListViewWithImages extends React.Component<{}, {}> {
                     return (
                         <RCTGridLayout
                             rows={[new ItemSpec(1, "star")]}
-                            columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "auto")]}
-                            // style={this.styles.row}
+                            columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                         >
                             <RCTImage
                                 row={0}
@@ -182,8 +181,7 @@ export class StaticListViewWithImages extends React.Component<{}, {}> {
                         </RCTGridLayout>
                     );
                 }}
-            >
-            </RCTListView>
+            />
         );
     }
 }
