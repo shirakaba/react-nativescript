@@ -262,7 +262,7 @@ export function updateDOMProperties(
     isCustomComponentTag: boolean,
     hostContext: HostContext
 ): void {
-    console.log(`[updateDOMProperties] for: ${instance}`);
+    // console.log(`[updateDOMProperties] for: ${instance}`);
     // TODO: Handle wasCustomComponentTag
     for (let i = 0; i < updatePayload.length; i += 2) {
         const propKey = updatePayload[i];
@@ -279,7 +279,7 @@ export function updateDOMProperties(
         } else if (propKey === TEXT && instance instanceof TextBase) {
             setTextContent(instance, propValue);
         } else {
-            console.log(`[updateDOMProperties] calling setValueForProperty on ${instance} for propKey: ${propKey}; value:`, propValue);
+            // console.log(`[updateDOMProperties] calling setValueForProperty on ${instance} for propKey: ${propKey}; value:`, propValue);
             setValueForProperty(instance, propKey, propValue, isCustomComponentTag, hostContext);
         }
     }
