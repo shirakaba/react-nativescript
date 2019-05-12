@@ -121,16 +121,23 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
     //     return dataBlob;
     // };
 
+    /* Optimisation note: at list initialisation, Portals SHALL be rendered for each item in the starting list. */
     private readonly items: ObservableArray<IndexToContentItem> = new ObservableArray([...Array(40).keys()].map((value: number) => ({ index: value, content: value.toString() })));
+
+    private readonly itemsToLoad: number = 10;
 
     /* Making this no-op is sufficient to restore this to being a static list view. */
     private readonly onLoadMoreItems = (args: ItemEventData) => {
-        const lastValueIncremented: number = this.items.length;
+        console.log(`[onLoadMoreItems]`);
 
-        this.items.push({
-            index: lastValueIncremented,
-            content: lastValueIncremented.toString()
-        });
+        for(let i = 0; i < this.itemsToLoad; i++){
+            const lastValueIncremented: number = this.items.length;
+    
+            this.items.push({
+                index: lastValueIncremented,
+                content: lastValueIncremented.toString()
+            });
+        }
     };
 
     private readonly styles = {
@@ -187,6 +194,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 row={0}
                                 col={1}
                                 key={container._domId}
+                                text={item.index.toString()}
                                 fontSize={24}
                             >
                                 {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
