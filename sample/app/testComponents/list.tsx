@@ -124,20 +124,25 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
     /* Optimisation note: at list initialisation, Portals SHALL be rendered for each item in the starting list. */
     private readonly items: ObservableArray<IndexToContentItem> = new ObservableArray([...Array(40).keys()].map((value: number) => ({ index: value, content: value.toString() })));
 
-    private readonly itemsToLoad: number = 10;
+
+    private readonly itemsToLoad: number = 40;
 
     /* Making this no-op is sufficient to restore this to being a static list view. */
     private readonly onLoadMoreItems = (args: ItemEventData) => {
-        console.log(`[onLoadMoreItems]`);
+        // console.log(`[onLoadMoreItems]`);
 
-        for(let i = 0; i < this.itemsToLoad; i++){
-            const lastValueIncremented: number = this.items.length;
+        const itemsToPush = [];
+
+        for(let i = this.items.length; i < + this.items.length + this.itemsToLoad; i++){
+            const lastValueIncremented: number = i;
     
-            this.items.push({
+            itemsToPush.push({
                 index: lastValueIncremented,
                 content: lastValueIncremented.toString()
             });
         }
+
+        this.items.push(...itemsToPush);
     };
 
     private readonly styles = {
@@ -164,10 +169,10 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
-                        container.backgroundColor = "orange";
+                        // container.backgroundColor = "orange";
                     },
                     onCellRecycle: (container: CellViewContainer) => {
-                        container.backgroundColor = "blue";
+                        // container.backgroundColor = "blue";
                     },
                 }}
                 height={{ unit: "%", value: 100 }}
@@ -195,7 +200,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 col={1}
                                 key={container._domId}
                                 text={item.index.toString()}
-                                fontSize={24}
+                                fontSize={12}
                             >
                                 {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
                             </RCTLabel>

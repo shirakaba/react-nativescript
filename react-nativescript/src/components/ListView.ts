@@ -305,23 +305,23 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
             if(_debug.logLevel === "debug") console.log(`Rendering CV(${view._domId})`);
 
-            // const portal = ReactNativeScript.createPortal(
-            //     this.props.cellFactory(item, view),
-            //     view,
-            //     `Portal(${view._domId})`,
-            // );
+            const portal = ReactNativeScript.createPortal(
+                this.props.cellFactory(item, view),
+                view,
+                `Portal(${view._domId})`,
+            );
 
-            const identifier: string = `Portal(${itemIndex}-${view._domId})`;
+            // const identifier: string = `Portal(${itemIndex}-${view._domId})`;
 
-            const portal = React.createElement(
-                ListViewCell,
-                {
-                    key: identifier,
-                    nativeElement: view,
-                    identifier: `Portal(${itemIndex}-${view._domId})`,
-                },
-                this.props.cellFactory(item, view)
-            )
+            // const portal = React.createElement(
+            //     ListViewCell,
+            //     {
+            //         key: identifier,
+            //         nativeElement: view,
+            //         identifier: `Portal(${itemIndex}-${view._domId})`,
+            //     },
+            //     this.props.cellFactory(item, view)
+            // )
             portals.push(portal as React.ReactPortal);
         });
 
