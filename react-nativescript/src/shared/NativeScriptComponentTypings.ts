@@ -352,6 +352,22 @@ export type ImageProps = ViewProps & Pick<
     "decodeWidth"
 >;
 
+export type ActivityIndicatorProps = ViewProps & Pick<
+    ActivityIndicator,
+    "busy"
+>;
+
+
+export type DatePickerProps = ViewProps & Pick<
+    DatePicker,
+    "year"|
+    "month"|
+    "day"|
+    "date"|
+    "maxDate"|
+    "minDate"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };
