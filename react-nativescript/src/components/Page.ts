@@ -17,7 +17,6 @@ export type PageComponentProps<E extends NativeScriptPage = NativeScriptPage> = 
 
 /**
  * A React wrapper around the NativeScript Page component.
- * TODO: inherit from a View component
  * See: ui/page/page
  */
 class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScriptPage = NativeScriptPage> extends _ContentView<P, S, E> {
@@ -57,13 +56,39 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     }
 
     render(): React.ReactNode {
-        const { children, forwardedRef, ...rest } = this.props;
+        const {
+            forwardedRef,
+
+            onNavigatedFrom,
+            onNavigatedTo,
+            onNavigatingFrom,
+            onNavigatingTo,
+
+            onLoaded,
+            onUnloaded,
+            onAndroidBackPressed,
+            onShowingModally,
+            onShownModally,
+            
+            onTap,
+            onDoubleTap,
+            onPinch,
+            onPan,
+            onSwipe,
+            onRotation,
+            onLongPress,
+            onTouch,
+
+            onPropertyChange,
+
+            children,
+            ...rest
+        } = this.props;
 
         return React.createElement(
             'page',
             {
                 ...rest,
-                // ref: this.myRef
                 ref: forwardedRef || this.myRef
             },
             children
