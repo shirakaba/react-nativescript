@@ -373,6 +373,32 @@ export type ProgressProps = ViewProps & Pick<
     "maxValue"
 >;
 
+export type ScrollViewProps = ContentViewProps & Pick<
+    ScrollView,
+    "isScrollEnabled"|
+    "verticalOffset"|
+    "horizontalOffset"|
+    "scrollableHeight"|
+    "scrollableWidth"|
+    "scrollBarIndicatorVisible"|
+    "orientation"
+>;
+
+export type SearchBarProps = ViewProps & Pick<
+    SearchBar,
+    "text"|
+    "hint"|
+    "textFieldBackgroundColor"|
+    "textFieldHintColor"
+>;
+
+export type SegmentedBarProps = ViewProps & Pick<
+    SegmentedBar,
+    "selectedIndex"|
+    "selectedBackgroundColor"|
+    "items"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };
