@@ -357,7 +357,6 @@ export type ActivityIndicatorProps = ViewProps & Pick<
     "busy"
 >;
 
-
 export type DatePickerProps = ViewProps & Pick<
     DatePicker,
     "year"|
@@ -366,6 +365,12 @@ export type DatePickerProps = ViewProps & Pick<
     "date"|
     "maxDate"|
     "minDate"
+>;
+
+export type ProgressProps = ViewProps & Pick<
+    Progress,
+    "value"|
+    "maxValue"
 >;
 
 // export type TextBaseProp<T extends TextBase> = {
