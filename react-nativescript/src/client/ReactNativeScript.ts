@@ -20,6 +20,13 @@ import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
 import { ActionBar as RCTActionBar } from "../components/ActionBar";
 import { Button as RCTButton } from "../components/Button";
+import { ActivityIndicator as RCTActivityIndicator } from "../components/ActivityIndicator";
+import { DatePicker as RCTDatePicker } from "../components/DatePicker";
+import { Progress as RCTProgress } from "../components/Progress";
+import { ScrollView as RCTScrollView } from "../components/ScrollView";
+import { SearchBar as RCTSearchBar } from "../components/SearchBar";
+import { SegmentedBar as RCTSegmentedBar } from "../components/SegmentedBar";
+import { Slider as RCTSlider } from "../components/Slider";
 import { DockLayout as RCTDockLayout } from "../components/DockLayout";
 import { FlexboxLayout as RCTFlexboxLayout } from "../components/FlexboxLayout";
 import { GridLayout as RCTGridLayout } from "../components/GridLayout";
@@ -208,6 +215,12 @@ export {
     RCTDockLayout,
     RCTFlexboxLayout,
     // RCTGestures,
+    RCTDatePicker,
+    RCTProgress,
+    RCTScrollView,
+    RCTSearchBar,
+    RCTSegmentedBar,
+    RCTSlider,
     RCTGridLayout,
     RCTHtmlView,
     RCTImage,
