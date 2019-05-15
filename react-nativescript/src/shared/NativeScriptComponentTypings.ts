@@ -399,6 +399,13 @@ export type SegmentedBarProps = ViewProps & Pick<
     "items"
 >;
 
+export type SliderProps = ViewProps & Pick<
+    Slider,
+    "value"|
+    "minValue"|
+    "maxValue"
+>;
+
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
 // };
