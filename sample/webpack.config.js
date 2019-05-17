@@ -7,8 +7,26 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const hashSalt = Date.now().toString();
+
+const babelLoader = {
+    loader: "babel-loader",
+    options: {
+        cacheDirectory: true,
+        babelrc: false,
+        presets: [
+            "@babel/preset-react"
+        ],
+        plugins: [
+            /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
+            // ["@babel/plugin-proposal-decorators", { legacy: true }],
+            // ["@babel/plugin-proposal-class-properties", { loose: true }],
+            "react-hot-loader/babel"
+        ]
+    }
+};
 
 module.exports = env => {
     // Add your custom Activities, Services and other Android app components here.
@@ -51,6 +69,10 @@ module.exports = env => {
 
     const entryModule = nsWebpack.getEntryModule(appFullPath);
     const entryPath = `.${sep}${entryModule}.ts`;
+    console.log(`projectRoot: ${projectRoot}`);
+    console.log(`dist: ${dist}`);
+    console.log(`appFullPath: ${appFullPath}`);
+    console.log(`entryPath: ${entryPath}`);
     const entries = { bundle: entryPath };
     if (platform === "ios") {
         entries["tns_modules/tns-core-modules/inspector_modules"] = "inspector_modules.js";
@@ -87,7 +109,8 @@ module.exports = env => {
                 "node_modules",
             ],
             alias: {
-                '~': appFullPath
+                '~': appFullPath,
+                "react-dom": "react-nativescript",
             },
             // resolve symlinks to symlinked modules
             symlinks: true
@@ -194,18 +217,29 @@ module.exports = env => {
                     ]
                 },
 
+                // { test: /\.js$/, loader: 'react-hot!jsx-loader!transform/cacheable?envify' },
+
+                {
+                    test: /\.js(x?)$/,
+                    exclude: /node_modules/,
+                    use: babelLoader,
+                },
+
                 {
                     test: /\.ts(x?)$/,
-                    use: {
-                        loader: "ts-loader",
-                        options: {
-                            configFile: "tsconfig.tns.json",
-                            allowTsInNodeModules: true,
-                            compilerOptions: {
-                                sourceMap
-                            }
-                        },
-                    }
+                    use: [
+                        babelLoader,
+                        {
+                            loader: "ts-loader",
+                            options: {
+                                configFile: "tsconfig.tns.json",
+                                allowTsInNodeModules: true,
+                                compilerOptions: {
+                                    sourceMap
+                                }
+                            },
+                        }
+                    ]
                 },
             ]
         },
@@ -281,6 +315,9 @@ module.exports = env => {
     }
 
     if (hmr) {
+        const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
+        console.log(`tsconfigPath: ${tsconfigPath}`);
+        config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 

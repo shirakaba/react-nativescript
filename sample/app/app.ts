@@ -6,9 +6,10 @@ You can use this file to perform app-level initialization, but the primary
 purpose of the file is to pass control to the app’s first module.
 */
 
+import {hot} from 'react-hot-loader/root';
+import * as React from "react";
 import * as application from "tns-core-modules/application";
 import { run } from "tns-core-modules/application";
-import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
@@ -18,10 +19,11 @@ import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewT
 import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./testComponents/list";
+import HotApp from "./testComponents/HotApp";
 
 ReactNativeScript.startWithView(
     React.createElement(
-        DynamicListViewWithImages,
+        HotApp,
         {
             
         },
