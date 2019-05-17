@@ -31,7 +31,7 @@ import { ProxyViewContainer } from "tns-core-modules/ui/proxy-view-container/pro
 import { Repeater } from "tns-core-modules/ui/repeater/repeater";
 import { ScrollView } from "tns-core-modules/ui/scroll-view/scroll-view";
 import { SearchBar } from "tns-core-modules/ui/search-bar/search-bar";
-import { SegmentedBar } from "tns-core-modules/ui/segmented-bar/segmented-bar";
+import { SegmentedBar, SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { Slider } from "tns-core-modules/ui/slider/slider";
 import { SlideTransition } from "tns-core-modules/ui/transition/slide-transition";
 import { StackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";
@@ -92,6 +92,7 @@ export const elementMap = {
     "scrollView": ScrollView,
     "searchBar": SearchBar,
     "segmentedBar": SegmentedBar,
+    "segmentedBarItem": SegmentedBarItem,
     "slider": Slider,
     "switch": Switch,
     "tabView": TabView,

@@ -27,12 +27,14 @@ import {
     ViewBase,
     TabView,
     TabViewItem,
+    SegmentedBar,
 } from './ElementRegistry';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
 import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
 import { setValueForStyles } from '../shared/CSSPropertyOperations';
 import { setValueForProperty } from './NativeScriptPropertyOperations';
+import { SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar/segmented-bar';
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
@@ -389,6 +391,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
+        } else if(parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem){
+            // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
+            const newItems = [...(parentInstance.items || []), child];
+            parentInstance.items = newItems;
         } else if(parentInstance instanceof TabView && child instanceof TabViewItem){
             console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             /* We must go through the setter rather than simply mutate the existing array. */
