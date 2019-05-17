@@ -183,6 +183,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
 
+                    /* TODO: maybe provide a hash for each Cell to inform shouldComponentUpdate()? */
                     return (
                         <RCTGridLayout
                             rows={[new ItemSpec(1, "star")]}
