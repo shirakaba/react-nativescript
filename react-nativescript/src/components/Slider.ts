@@ -11,7 +11,6 @@ interface Props {
 export type SliderComponentProps<E extends NativeScriptSlider = NativeScriptSlider> = Props /* & typeof Slider.defaultProps */ & Partial<SliderProps> & ViewComponentProps<E>;
 
 interface State {
-    // sliderValue: number,
 }
 
 export class _Slider<P extends SliderComponentProps<E>, S extends State, E extends NativeScriptSlider> extends RCTView<P, S, E> {
@@ -22,27 +21,11 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
     onValueChange = (slargs: EventData) => {
         const sliderValue: number = (<NativeScriptSlider>slargs.object).value;
 
-        // this.vm.set("slResult", (<NativeScriptSlider>slargs.object).value);
-
-        // this.setState({
-        //     sliderValue,
-        // }, () => {
-        //     this.props.onValueChange && this.props.onValueChange(sliderValue);
-        // });
-
         this.props.onValueChange && this.props.onValueChange(sliderValue);
     };
 
-    /**
-     * TODO: test whether this is a correct implementation. Mostly just replicating these demos:
-     * https://docs.nativescript.org/ui/ns-ui-widgets/slider
-     * https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/slider/code-behind/code-behind-ts-page.ts
-     */
-    // private readonly vm = new Observable();
     componentDidMount(){
         super.componentDidMount();
-
-        // this.vm.set("slResult", this.props.value);
 
         const ref = this.props.forwardedRef || this.myRef;
         const node: E|null = ref.current;
