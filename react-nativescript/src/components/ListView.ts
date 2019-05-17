@@ -9,6 +9,7 @@ import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
+import { shallowEqual } from "../client/shallowEqual";
 
 export type CellViewContainer = ContentView;
 
@@ -211,6 +212,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
      * @param attach true: attach; false: detach; null: update
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        // console.log(`ListView's updateListeners()`);
         super.updateListeners(attach, nextProps);
 
         const ref = this.props.forwardedRef || this.myRef;
@@ -264,7 +266,24 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         return typeof (arr as ItemsSource).getItem === "function";
     }
 
+    // /**
+    //  * PureComponent's shouldComponentUpdate() method is ignored and replaced with a shallowEqual()
+    //  * comparison of props and state. We'll implement our Component's shouldComponentUpdate() to
+    //  * match the way PureComponent is handled.
+    //  */
+    // shouldComponentUpdate(nextProps: P, nextState: S): boolean {
+    //     console.log(`ListView's shouldComponentUpdate`);
+    //     const shouldUpdate: boolean = !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
+    //     // console.log(`[shouldComponentUpdate] shouldUpdate: ${shouldUpdate}.`);
+
+    //     this.updateListeners(null, nextProps);
+        
+    //     // https://lucybain.com/blog/2018/react-js-pure-component/
+    //     return shouldUpdate;
+    // }
+
     render(){
+        // console.log(`ListView's render()`);
         const {
             forwardedRef,
 

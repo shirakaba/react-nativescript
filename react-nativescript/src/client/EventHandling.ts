@@ -18,7 +18,7 @@ export function updateListener<T extends Observable>(
                 node.off(eventName as any as string, currentListener);
                 node.on(eventName as any as string, incomingListener);
             } else {
-                console.log(`No change to '${eventLogName}' incomingListener.`);
+                // console.log(`No change to '${eventLogName}' incomingListener.`);
             }
         } else {
             console.log(`Removing '${eventLogName}' listener as there is a currentListener without an incomingListener.`);

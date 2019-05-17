@@ -12,10 +12,10 @@ export class ListViewCell extends React.Component<Props, {}> {
         // console.log(`[ListViewCell ${this.props.identifier}] componentDidMount! With: ${this.props.textReference}`);
     }
 
-    // shouldComponentUpdate(nextProps: Props, nextState: {}): boolean {
-    //     // console.log(`[ListViewCell ${this.props.identifier}] shouldComponentUpdate! With: ${nextProps.textReference}`);
-    //     return true;
-    // }
+    shouldComponentUpdate(nextProps: Props, nextState: {}): boolean {
+        console.log(`[ListViewCell ${this.props.identifier}] shouldComponentUpdate!`);
+        return true;
+    }
 
     componentWillUnmount(){
         // console.log(`[ListViewCell ${this.props.identifier}] componentWillUnmount!`);

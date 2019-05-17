@@ -198,7 +198,7 @@ export function setInitialDOMProperties(
     isCustomComponentTag: boolean,
     hostContext: HostContext
 ): void {
-    console.log(`[setInitialDOMProperties] for: ${domElement}`);
+    // console.log(`[setInitialDOMProperties] for: ${domElement}`);
 	for (const propKey in nextProps) {
 		if (!nextProps.hasOwnProperty(propKey)) {
 			continue;

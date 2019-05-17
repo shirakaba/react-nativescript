@@ -209,7 +209,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     ): Instance {
         (()=>{
             const { children, ...rest } = props;
-            console.log(`[createInstance() 1a] type: ${type}. props:`, { ...rest });
+            // console.log(`[createInstance() 1a] type: ${type}. props:`, { ...rest });
         })();
         // console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
 
@@ -279,7 +279,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendInitialChild()]`);
+        // console.log(`[appendInitialChild()]`);
         hostConfig.appendChild(parentInstance, child);
     },
     /**
@@ -298,7 +298,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         rootContainerInstance: Container,
         hostContext: HostContext,
     ): boolean {
-        console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
+        // console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         setInitialProperties(parentInstance, type, props, rootContainerInstance, hostContext);
 
         return false;
@@ -369,7 +369,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             return;
         }
         if(child instanceof ActionBar){
-            console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
+            // console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
             if(parentInstance instanceof Page){
                 parentInstance.actionBar = child;
             } else {
@@ -383,26 +383,26 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         // console.log(`[appendChild()] child's page was: `, child.page);
         // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
         if(isASingleChildContainer(parentInstance)){
-            console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
+            // console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
 
             parentInstance.content = child as View;
         } else if(parentInstance instanceof LayoutBase){
-            console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
+            // console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
         } else if(parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem){
             // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             const newItems = [...(parentInstance.items || []), child];
             parentInstance.items = newItems;
         } else if(parentInstance instanceof TabView && child instanceof TabViewItem){
-            console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
+            // console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             /* We must go through the setter rather than simply mutate the existing array. */
             const newItems = [...(parentInstance.items || []), child];
             parentInstance.items = newItems;
-            console.log(`[appendChild()] parentInstance.items now updated to:`, parentInstance.items);
+            // console.log(`[appendChild()] parentInstance.items now updated to:`, parentInstance.items);
         } else {
-            console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
+            // console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
         }
         // TODO: check whether a property/event change should be fired. 

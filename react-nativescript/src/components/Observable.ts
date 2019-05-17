@@ -28,6 +28,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      * @param attach true: attach; false: detach; null: update
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        // console.log(`Observable's updateListeners()`);
         const ref = this.props.forwardedRef || this.myRef;
         // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
 
@@ -46,6 +47,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
 
     componentDidMount(){
         this.updateListeners(true);
+        // console.log(`Observable's componentDidMount`);
     }
 
     /**
@@ -54,6 +56,7 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      * match the way PureComponent is handled.
      */
     shouldComponentUpdate(nextProps: P, nextState: S): boolean {
+        // console.log(`Observable's shouldComponentUpdate`);
         const shouldUpdate: boolean = !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
         // console.log(`[shouldComponentUpdate] shouldUpdate: ${shouldUpdate}.`);
 

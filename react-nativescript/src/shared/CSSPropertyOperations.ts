@@ -45,7 +45,7 @@ export function setValueForStyles(instance: Instance, styles: Style): void {
     // }
 
     Object.keys(styles).forEach((styleName: string) => {
-        console.log(`Setting style:`, styleName);
+        // console.log(`Setting style:`, styleName);
         const styleValue: any = styles[styleName];
         instance.set(styleName, styleValue);
     });

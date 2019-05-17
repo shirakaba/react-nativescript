@@ -44,6 +44,7 @@ export abstract class RCTView<P extends ViewComponentProps<E>, S extends ViewCom
      * @param attach true: attach; false: detach; null: update
      */
     protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        // console.log(`View's updateListeners()`);
         super.updateListeners(attach, nextProps);
 
         const ref = this.props.forwardedRef || this.myRef;
