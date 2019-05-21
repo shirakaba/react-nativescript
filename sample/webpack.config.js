@@ -22,8 +22,8 @@ const babelLoader = {
         plugins: [
             /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
             // ["@babel/plugin-proposal-decorators", { legacy: true }],
+            "react-hot-loader/babel",
             ["@babel/plugin-proposal-class-properties", { loose: true }],
-            "react-hot-loader/babel"
         ]
     }
 };
@@ -318,6 +318,7 @@ module.exports = env => {
         const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
         console.log(`tsconfigPath: ${tsconfigPath}`);
         config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
+        config.plugins.push(new webpack.NamedModulesPlugin());
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 

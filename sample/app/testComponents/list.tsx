@@ -1,3 +1,12 @@
+if((module as any).hot) {
+    // self accept.
+    (module as any).hot.accept(
+        function() {
+            console.log(`Error in accepting self update for list.tsx.`);
+        }
+    );
+}
+
 import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
