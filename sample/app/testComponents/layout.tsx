@@ -78,7 +78,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 RCTButton,
                 {
                     // dock: "bottom",
-                    text: "Fill",
+                    text: "HEYA",
                     // 'grey' is invalid! D:
                     color: new Color("gray"),
                     backgroundColor: "#CCFFFF",
