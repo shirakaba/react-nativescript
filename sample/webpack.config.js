@@ -17,7 +17,8 @@ const babelLoader = {
         cacheDirectory: true,
         babelrc: false,
         presets: [
-            "@babel/preset-react"
+            "@babel/preset-react",
+            '@babel/preset-typescript',
         ],
         plugins: [
             /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
@@ -220,27 +221,50 @@ module.exports = env => {
                 // { test: /\.js$/, loader: 'react-hot!jsx-loader!transform/cacheable?envify' },
 
                 {
-                    test: /\.js(x?)$/,
+                    test: /\.(j|t)sx?$/,
                     exclude: /node_modules/,
-                    use: babelLoader,
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            // TODO: re-specify tsconfig.json settings
+                            cacheDirectory: true,
+                            babelrc: false,
+                            presets: [
+                                '@babel/preset-typescript',
+                                '@babel/preset-react',
+                            ],
+                            plugins: [
+                                // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+                                ['@babel/plugin-proposal-decorators', { legacy: true }],
+                                ['@babel/plugin-proposal-class-properties', { loose: true }],
+                                'react-hot-loader/babel',
+                            ],
+                        },
+                    },
                 },
 
-                {
-                    test: /\.ts(x?)$/,
-                    use: [
-                        babelLoader,
-                        {
-                            loader: "ts-loader",
-                            options: {
-                                configFile: "tsconfig.tns.json",
-                                allowTsInNodeModules: true,
-                                compilerOptions: {
-                                    sourceMap
-                                }
-                            },
-                        }
-                    ]
-                },
+                // {
+                //     test: /\.js(x?)$/,
+                //     exclude: /node_modules/,
+                //     use: babelLoader,
+                // },
+
+                // {
+                //     test: /\.ts(x?)$/,
+                //     use: [
+                //         babelLoader,
+                //         {
+                //             loader: "ts-loader",
+                //             options: {
+                //                 configFile: "tsconfig.tns.json",
+                //                 allowTsInNodeModules: true,
+                //                 compilerOptions: {
+                //                     sourceMap
+                //                 }
+                //             },
+                //         }
+                //     ]
+                // },
             ]
         },
         plugins: [
