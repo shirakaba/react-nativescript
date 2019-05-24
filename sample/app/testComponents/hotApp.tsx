@@ -12,7 +12,7 @@ import { hot } from 'react-hot-loader';
 import * as React from "react";
 
 import { DynamicListViewWithImages } from "./list";
-import { DockLayoutTest } from './layout';
+import { DockLayoutTest, HMRTest } from './layout';
 
-export default DockLayoutTest; /* */
-// export default hot(module)(DockLayoutTest); /* */
+export default HMRTest; /* */
+// export default hot(module)(HMRTest); /* */

@@ -14,9 +14,9 @@ if((module as any).hot) {
         }
     );
 
-    (module as any).hot.addStatusHandler(status => {
-        console.log(`Change in status for app.ts.`, status);
-    });
+    // (module as any).hot.addStatusHandler(status => {
+    //     console.log(`Change in status for app.ts.`, status);
+    // });
 }
 
 import * as React from "react";
@@ -78,7 +78,7 @@ function startWithView(
 
     // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
     if(hasLaunched() || getRootView()){
-        console.log(`[renderIntoRootView] without run()`);
+        console.log(`[renderIntoRootView] without run(). Content of container: ${(rootView as ContentView).content}`);
         renderIntoRootView();
     } else {
         console.log(`[renderIntoRootView] with run()`);
@@ -103,7 +103,7 @@ startWithView(
         },
         null
     ),
-    new StackLayout()
+    new ContentView()
 );
 
 // console.log("BOO HISS OY EY");
