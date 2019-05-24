@@ -219,16 +219,16 @@ module.exports = env => {
 
                 // { test: /\.js$/, loader: 'react-hot!jsx-loader!transform/cacheable?envify' },
 
-                {
-                    test: /\.js(x?)$/,
-                    exclude: /node_modules/,
-                    use: babelLoader,
-                },
+                // {
+                //     test: /\.js(x?)$/,
+                //     exclude: /node_modules/,
+                //     use: babelLoader,
+                // },
 
                 {
                     test: /\.ts(x?)$/,
                     use: [
-                        babelLoader,
+                        // babelLoader,
                         {
                             loader: "ts-loader",
                             options: {
@@ -317,8 +317,8 @@ module.exports = env => {
     if (hmr) {
         const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
         console.log(`tsconfigPath: ${tsconfigPath}`);
-        config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
-        config.plugins.push(new webpack.NamedModulesPlugin());
+        // config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
+        // config.plugins.push(new webpack.NamedModulesPlugin());
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 

@@ -21,19 +21,81 @@ if((module as any).hot) {
 
 import * as React from "react";
 import * as application from "tns-core-modules/application";
-import { run } from "tns-core-modules/application";
+import { run, hasLaunched, getRootView } from "tns-core-modules/application";
 import * as ReactNativeScript from "react-nativescript/dist/index";
+import { render } from "react-nativescript/dist/index";
 import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./testComponents/gestures";
 import { GameLoopTest } from "./testComponents/stateful";
 import { NestedHub, NestedModalTest, HubTest, SimpleHub, ActionBarTest, TabViewTest } from "./testComponents/navigation";
-import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
+import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./testComponents/list";
 import HotApp from "./testComponents/HotApp";
+import { topmost } from "tns-core-modules/ui/frame/frame";
 
-ReactNativeScript.startWithView(
+global.__onLiveSyncCore = () => {
+    console.log(`on liveSync Core YOYO OOY! OH`);
+
+    const frame = topmost();
+    if(frame){
+        if(frame.currentPage && frame.currentPage.modal){
+            frame.currentPage.modal.closeModal();
+        }
+  
+        if(frame.currentPage){
+            frame.currentPage.addCssFile(application.getCssFileName())
+       }
+    }
+}
+
+function startWithView(
+    app: any,
+    providedRootView: View = new ContentView(),
+): void
+{
+    if(
+        !(providedRootView instanceof TabView || providedRootView instanceof Frame)
+    ){
+        console.warn(
+            `Support for root view components other than Frame or TabView is limited.`
+        );
+    }
+
+    console.log(`[app.ts] startWithView(). hasLaunched(): ${hasLaunched()} rootView was: ${getRootView()}`);
+    const rootView: View = getRootView() || providedRootView;
+
+    const renderIntoRootView = () => {
+        render(
+            app,
+            rootView,
+            () => {
+                console.log(`Container updated!`);
+            }
+        );
+    }
+
+    // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
+    if(hasLaunched() || getRootView()){
+        console.log(`[renderIntoRootView] without run()`);
+        renderIntoRootView();
+    } else {
+        console.log(`[renderIntoRootView] with run()`);
+        run({
+            create: () => {
+                // Due to HMR, there may already be an existing rootView.
+    
+                renderIntoRootView();
+    
+                return rootView;
+            }
+        });
+    }
+}
+
+
+startWithView(
     React.createElement(
         HotApp,
         {
@@ -43,6 +105,8 @@ ReactNativeScript.startWithView(
     ),
     new StackLayout()
 );
+
+// console.log("BOO HISS OY EY");
 
 // const frame = new Frame();
 // const page = new Page();
