@@ -6,30 +6,22 @@ You can use this file to perform app-level initialization, but the primary
 purpose of the file is to pass control to the app’s first module.
 */
 
-declare const module: any;
-if(module.hot) {
+if((module as any).hot) {
     // self accept.
-    module.hot.accept(
-        function(error){
-            console.error(`[app.ts] Error in accepting self update.`, error);
+    (module as any).hot.accept(
+        function() {
+            console.log(`Error in accepting self update for app.ts.`);
         }
     );
 
-    module.hot.dispose(() => {
-        console.log(`[app.ts] Optional disposal step`);
-        // modulePromise.then(appModule => appModule.destroy());
+    (module as any).hot.addStatusHandler(status => {
+        console.log(`Change in status for app.ts.`, status);
     });
-
-    console.log(`[app.ts] Log of module.hot:`, module.hot);
-
-    // module.hot.addStatusHandler(status => {
-    //     console.log(`[app.ts] Change in status for app.ts.`, status);
-    // });
 }
 
 import * as React from "react";
 import * as application from "tns-core-modules/application";
-import { run, getRootView } from "tns-core-modules/application";
+import { run } from "tns-core-modules/application";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { RCTContentView, RCTLabel } from "react-nativescript/dist/index";
 import { FormattedStringLabel } from "./testComponents/testComponents";
@@ -40,9 +32,6 @@ import { Frame, Page, StackLayout, ProxyViewContainer } from "react-nativescript
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./testComponents/list";
 import HotApp from "./testComponents/HotApp";
-
-console.log(`[app.ts] rootView was: ${getRootView()}`);
-
 
 ReactNativeScript.startWithView(
     React.createElement(

@@ -15,7 +15,7 @@ import { reactReconcilerInst, Container } from "./HostConfig";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
-import { run, getRootView, hasLaunched } from "tns-core-modules/application";
+import { run } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
 import { ActionBar as RCTActionBar } from "../components/ActionBar";
@@ -178,47 +178,33 @@ export function startWithFrameAndPage(
  * 
  *  
  * @param app - Your <App/> component.
- * @param providedRootView - The root view for your NativeScript app
+ * @param rootView - The root view for your NativeScript app
  */
 export function startWithView(
     app: ReactReconciler.ReactNodeList,
-    providedRootView: View = new ContentView(),
+    rootView: View = new ContentView(),
 ): void {
     if(
-        !(providedRootView instanceof TabView || providedRootView instanceof Frame)
+        !(rootView instanceof TabView || rootView instanceof Frame)
     ){
         console.warn(
             `Support for root view components other than Frame or TabView is limited.`
         );
     }
 
-    console.log(`[app.ts] startWithView(). hasLaunched(): ${hasLaunched()} rootView was: ${getRootView()}`);
-    const rootView: View = getRootView() || providedRootView;
+    run({
+        create: () => {
+            render(
+                app,
+                rootView,
+                () => {
+                    console.log(`Container updated!`);
+                }
+            );
 
-    const renderIntoRootView = () => {
-        render(
-            app,
-            rootView,
-            () => {
-                console.log(`Container updated!`);
-            }
-        );
-    }
-
-    // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
-    if(hasLaunched || getRootView()){
-        renderIntoRootView();
-    } else {
-        run({
-            create: () => {
-                // Due to HMR, there may already be an existing rootView.
-    
-                renderIntoRootView();
-    
-                return rootView;
-            }
-        });
-    }
+            return rootView;
+        }
+    });
 }
 
 export {
