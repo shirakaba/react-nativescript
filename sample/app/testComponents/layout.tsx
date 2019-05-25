@@ -78,7 +78,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 RCTButton,
                 {
                     // dock: "bottom",
-                    text: "OYOY YO BOO",
+                    text: "Fill",
                     // 'grey' is invalid! D:
                     color: new Color("gray"),
                     backgroundColor: "#CCFFFF",
@@ -151,12 +151,12 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
 export class HMRTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            RCTLabel,
-            {
-                text: "OYOY YO BOO"
-            },
+            // FlexboxLayoutTest,
+            // AbsoluteLayoutTest,
+            DockLayoutTest,
+            {},
             null
-        );
+        )
     }
 }
 

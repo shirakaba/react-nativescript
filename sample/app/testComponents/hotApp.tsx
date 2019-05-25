@@ -14,5 +14,5 @@ import * as React from "react";
 import { DynamicListViewWithImages } from "./list";
 import { DockLayoutTest, HMRTest } from './layout';
 
-export default HMRTest; /* */
-// export default hot(module)(HMRTest); /* */
+// export default HMRTest; /* */
+export default hot(module)(HMRTest); /* */
