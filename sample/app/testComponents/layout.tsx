@@ -27,65 +27,18 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 
 export class DockLayoutTest extends React.Component<{}, {}> {
     render(){
-        return React.createElement(
-            RCTDockLayout,
-            {
-                width: { value: 100, unit: "%" },
-                height: { value: 100, unit: "%" },
-                stretchLastChild: true,
-            },
-            React.createElement(
-                RCTButton,
-                {
-                    dock: "left",
-                    text: "Left",
-                    backgroundColor: "#0099CC",
-                    onTap: () => {}
-                },
-                null
-            ),
-            React.createElement(
-                RCTButton,
-                {
-                    dock: "top",
-                    text: "Top",
-                    backgroundColor: "#AA0078",
-                    onTap: () => {}
-                },
-                null
-            ),
-            React.createElement(
-                RCTButton,
-                {
-                    dock: "right",
-                    text: "Right",
-                    backgroundColor: "#8C489F",
-                    onTap: () => {}
-                },
-                null
-            ),
-            React.createElement(
-                RCTButton,
-                {
-                    dock: "bottom",
-                    text: "Bottom",
-                    backgroundColor: "#B3B3D7",
-                    onTap: () => {}
-                },
-                null
-            ),
-            React.createElement(
-                RCTButton,
-                {
-                    // dock: "bottom",
-                    text: "Fill",
-                    // 'grey' is invalid! D:
-                    color: new Color("gray"),
-                    backgroundColor: "#CCFFFF",
-                    onTap: () => {}
-                },
-                null
-            ),
+        return (
+            <RCTDockLayout
+                width={{ value: 100, unit: "%" }}
+                height={{ value: 100, unit: "%" }}
+                stretchLastChild={true}
+            >
+                <RCTButton dock={"left"} backgroundColor={"#0099CC"}>Left</RCTButton>
+                <RCTButton dock={"top"} backgroundColor={"#AA0078"}>Top</RCTButton>
+                <RCTButton dock={"right"} backgroundColor={"#8C489F"}>Right</RCTButton>
+                <RCTButton dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</RCTButton>
+                <RCTButton backgroundColor={"#CCFFFF"} color={new Color("gray")}>GRILL</RCTButton>
+            </RCTDockLayout>
         );
     }
 }
@@ -150,13 +103,9 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
 
 export class HMRTest extends React.Component<{}, {}> {
     render(){
-        return React.createElement(
-            // FlexboxLayoutTest,
-            // AbsoluteLayoutTest,
-            DockLayoutTest,
-            {},
-            null
-        )
+        // return <DockLayoutTest/>;
+        // return <FlexboxLayoutTest/>;
+        return <AbsoluteLayoutTest/>;
     }
 }
 
