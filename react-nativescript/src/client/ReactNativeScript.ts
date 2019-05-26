@@ -192,9 +192,9 @@ export function startWithView(
 
     // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
     if(_hasLaunched || existingRootView){
-        console.log(`[renderIntoRootView] without run().`);
+        console.log(`[renderIntoRootView] without run() (shan't run render() again at all).`);
 
-        render(app, rootView, () => console.log(`Container updated!`));
+        // render(app, rootView, () => console.log(`Container updated!`));
     } else {
         console.log(`[renderIntoRootView] with run()`);
 
