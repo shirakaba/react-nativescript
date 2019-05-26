@@ -154,13 +154,7 @@ export function startWithFrameAndPage(
         create: () => {
             frame.navigate({
                 create: () => {
-                    render(
-                        app,
-                        page,
-                        () => {
-                            console.log(`Container updated!`);
-                        }
-                    );
+                    render(app, page, () => console.log(`Container updated!`));
     
                     return page;
                 }
@@ -188,9 +182,7 @@ export function startWithView(
     if(
         !(providedRootView instanceof TabView || providedRootView instanceof Frame)
     ){
-        console.warn(
-            `Support for root view components other than Frame or TabView is limited.`
-        );
+        console.warn(`Support for root view components other than Frame or TabView is limited.`);
     }
 
     const existingRootView: View|undefined = getRootView();
@@ -198,27 +190,17 @@ export function startWithView(
     console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
     const rootView: View = existingRootView || providedRootView;
 
-    const renderIntoRootView = () => {
-        render(
-            app,
-            rootView,
-            () => {
-                console.log(`Container updated!`);
-            }
-        );
-    }
-
     // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
     if(_hasLaunched || existingRootView){
         console.log(`[renderIntoRootView] without run().`);
-        renderIntoRootView();
+
+        render(app, rootView, () => console.log(`Container updated!`));
     } else {
         console.log(`[renderIntoRootView] with run()`);
+
         run({
             create: () => {
-                // Due to HMR, there may already be an existing rootView.
-    
-                renderIntoRootView();
+                render(app, rootView, () => console.log(`Container updated!`));
     
                 return rootView;
             }
