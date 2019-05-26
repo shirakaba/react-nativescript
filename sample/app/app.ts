@@ -33,69 +33,8 @@ import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabVie
 import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./testComponents/list";
 import HotApp from "./testComponents/HotApp";
-import { topmost } from "tns-core-modules/ui/frame/frame";
 
-global.__onLiveSyncCore = () => {
-    console.log(`on liveSync Core YOYO OOY! OH`);
-
-    const frame = topmost();
-    if(frame){
-        if(frame.currentPage && frame.currentPage.modal){
-            frame.currentPage.modal.closeModal();
-        }
-  
-        if(frame.currentPage){
-            frame.currentPage.addCssFile(application.getCssFileName())
-       }
-    }
-}
-
-function startWithView(
-    app: any,
-    providedRootView: View = new ContentView(),
-): void
-{
-    if(
-        !(providedRootView instanceof TabView || providedRootView instanceof Frame)
-    ){
-        console.warn(
-            `Support for root view components other than Frame or TabView is limited.`
-        );
-    }
-
-    console.log(`[app.ts] startWithView(). hasLaunched(): ${hasLaunched()} rootView was: ${getRootView()}`);
-    const rootView: View = getRootView() || providedRootView;
-
-    const renderIntoRootView = () => {
-        render(
-            app,
-            rootView,
-            () => {
-                console.log(`Container updated!`);
-            }
-        );
-    }
-
-    // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
-    if(hasLaunched() || getRootView()){
-        console.log(`[renderIntoRootView] without run(). Content of container: ${(rootView as ContentView).content}`);
-        renderIntoRootView();
-    } else {
-        console.log(`[renderIntoRootView] with run()`);
-        run({
-            create: () => {
-                // Due to HMR, there may already be an existing rootView.
-    
-                renderIntoRootView();
-    
-                return rootView;
-            }
-        });
-    }
-}
-
-
-startWithView(
+ReactNativeScript.startWithView(
     React.createElement(
         HotApp,
         {
