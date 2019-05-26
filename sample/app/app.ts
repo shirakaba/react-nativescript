@@ -9,8 +9,8 @@ purpose of the file is to pass control to the app’s first module.
 if((module as any).hot) {
     // self accept.
     (module as any).hot.accept(
-        function() {
-            console.log(`Error in accepting self update for app.ts.`);
+        function(error) {
+            console.error(`Error in accepting self update for app.ts.`, error);
         }
     );
 
