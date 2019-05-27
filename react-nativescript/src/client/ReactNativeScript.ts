@@ -15,7 +15,7 @@ import { reactReconcilerInst, Container } from "./HostConfig";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
-import { run } from "tns-core-modules/application";
+import { run, hasLaunched, getRootView } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
 import { ActionBar as RCTActionBar } from "../components/ActionBar";
@@ -154,13 +154,7 @@ export function startWithFrameAndPage(
         create: () => {
             frame.navigate({
                 create: () => {
-                    render(
-                        app,
-                        page,
-                        () => {
-                            console.log(`Container updated!`);
-                        }
-                    );
+                    render(app, page, () => console.log(`Container updated!`));
     
                     return page;
                 }
@@ -181,30 +175,37 @@ export function startWithFrameAndPage(
  * @param rootView - The root view for your NativeScript app
  */
 export function startWithView(
-    app: ReactReconciler.ReactNodeList,
-    rootView: View = new ContentView(),
-): void {
-    if(
-        !(rootView instanceof TabView || rootView instanceof Frame)
-    ){
-        console.warn(
-            `Support for root view components other than Frame or TabView is limited.`
-        );
+    app: any,
+    providedRootView: View = new ContentView(),
+): void
+{
+    // if(
+    //     !(providedRootView instanceof TabView || providedRootView instanceof Frame)
+    // ){
+    //     console.warn(`Support for root view components other than Frame or TabView is limited.`);
+    // }
+
+    const existingRootView: View|undefined = getRootView();
+    const _hasLaunched: boolean = hasLaunched();
+    console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
+    const rootView: View = existingRootView || providedRootView;
+
+    // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
+    if(_hasLaunched || existingRootView){
+        console.log(`[renderIntoRootView] no-op (hot reload)`);
+
+        // render(app, rootView, () => console.log(`Container updated!`));
+    } else {
+        console.log(`[renderIntoRootView] calling run() method`);
+
+        run({
+            create: () => {
+                render(app, rootView, () => console.log(`Container updated!`));
+    
+                return rootView;
+            }
+        });
     }
-
-    run({
-        create: () => {
-            render(
-                app,
-                rootView,
-                () => {
-                    console.log(`Container updated!`);
-                }
-            );
-
-            return rootView;
-        }
-    });
 }
 
 export {
