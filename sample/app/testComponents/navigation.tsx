@@ -257,7 +257,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                 <RCTActionBar title="Navigation Hub" className="action-bar" />
                 <RCTStackLayout>
                     <RCTButton
-                        text={"Navigate to AbsoluteLayout"}
+                        text={"Navigate to AbsoluteLayout HEY"}
                         onTap={() => {
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
@@ -432,6 +432,39 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<F
                 <PortalToPageWithActionBar forwardedRef={this.bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
                     <RCTLabel>You're viewing the blue page!</RCTLabel>
                 </PortalToPageWithActionBar>
+            </RCTFrame>
+        );
+    }
+}
+
+export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
+    private readonly hubTestPageRef = React.createRef<Page>();
+
+    componentDidMount(){
+        const node: Frame|null = this.props.forwardedRef.current;
+        if(node){
+            node.navigate({
+                create: () => {
+                    return this.hubTestPageRef.current;
+                }
+            });
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
+
+    render(){
+        return (
+            <RCTFrame ref={this.props.forwardedRef}>
+                {(
+                    ReactNativeScript.createPortal(
+                        (
+                            <HubTest forwardedRef={this.hubTestPageRef}/>
+                        ),
+                        null,
+                        `Portal('Navigation Hub')`
+                    )
+                )}
             </RCTFrame>
         );
     }
