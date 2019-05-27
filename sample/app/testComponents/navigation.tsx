@@ -239,7 +239,7 @@ const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<Page>, actionBarTi
                 {children}
             </PageWithActionBar>
         ),
-        forwardedRef.current,
+        null,
         `Portal('${actionBarTitle}')`
     );
 }
@@ -257,8 +257,9 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                 <RCTActionBar title="Navigation Hub" className="action-bar" />
                 <RCTStackLayout>
                     <RCTButton
-                        text={"Navigate to AbsoluteLayout YO"}
+                        text={"Navigate to AbsoluteLayout"}
                         onTap={() => {
+                            
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
@@ -443,14 +444,21 @@ export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObje
     componentDidMount(){
         const node: Frame|null = this.props.forwardedRef.current;
         if(node){
+            console.log(`[FramedHubTest] componentDidMount; shall navigate to page within.`);
             node.navigate({
                 create: () => {
-                    return this.hubTestPageRef.current;
+                    const hubTestPage: Page|undefined = this.hubTestPageRef.current
+                    console.log(`[FramedHubTest] create(); shall return ref to page: ${hubTestPage}`);
+                    return hubTestPage;
                 }
             });
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            console.warn(`[FramedHubTest] React ref to NativeScript View lost, so unable to update event listeners.`);
         }
+    }
+
+    componentWillUnmount(){
+        console.log(`[FramedHubTest] componentWillUnmount`);
     }
 
     render(){
