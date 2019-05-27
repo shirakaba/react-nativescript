@@ -171,6 +171,10 @@ export function startWithFrameAndPage(
  * This should be placed as the final line of your app.ts file, as no
  * code will run after it (at least on iOS).
  * 
+ * Construct a non-React-managed container, call run.create(), and return
+ * the container whilst rendering may still be in process.
+ * 
+ * Supports HMR (for whatever reason)!
  *  
  * @param app - Your <App/> component.
  * @param rootView - The root view for your NativeScript app
@@ -214,6 +218,11 @@ export function startWithView(
  * This should be placed as the final line of your app.ts file, as no
  * code will run after it (at least on iOS).
  * 
+ * Construct a non-React-managed container, render into it, and upon
+ * render completion, return the ref to the React tree root in run.create().
+ * 
+ * WARNING: it seems that this approach does not support hot reloading!
+ * Neither does returning the constructed container instead!
  *  
  * @param app - Your <App/> component.
  * @param refToApp - Reference to the root component of your React app's tree.
@@ -227,11 +236,18 @@ export function startWithAnyView(
     const _hasLaunched: boolean = hasLaunched();
     console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
     if(_hasLaunched || existingRootView){
-        console.log(`[renderIntoRootView] no-op (hot reload)`);
+        console.log(`[renderIntoRootView] hot reload: no-op`);
+        
+        if(existingRootView instanceof Frame){
+            console.log(`[renderIntoRootView] hot reload: calling reloadPage() on root frame`);
+            if(existingRootView.currentPage){
+                (existingRootView as any).reloadPage();
+            }
+        }
         return;
     };
 
-    const rootView = new ProxyViewContainer();
+    const rootView = new ContentView();
     render(app, rootView, () => {
         console.log(`Container updated!`);
 
@@ -239,8 +255,8 @@ export function startWithAnyView(
     
         run({
             create: () => {
-                /* Shall be non-null at this point (container has mounted) */
                 return refToApp.current;
+                // return rootView;
             }
         });
     });

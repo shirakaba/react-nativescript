@@ -37,7 +37,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 <RCTButton dock={"top"} backgroundColor={"#AA0078"}>Top</RCTButton>
                 <RCTButton dock={"right"} backgroundColor={"#8C489F"}>Right</RCTButton>
                 <RCTButton dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</RCTButton>
-                <RCTButton backgroundColor={"#CCFFFF"} color={new Color("gray")}>GRILL</RCTButton>
+                <RCTButton backgroundColor={"#CCFFFF"} color={new Color("gray")}>THRILLHOUSE</RCTButton>
             </RCTDockLayout>
         );
     }

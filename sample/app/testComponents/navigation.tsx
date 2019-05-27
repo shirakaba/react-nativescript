@@ -257,7 +257,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                 <RCTActionBar title="Navigation Hub" className="action-bar" />
                 <RCTStackLayout>
                     <RCTButton
-                        text={"Navigate to AbsoluteLayout HEY"}
+                        text={"Navigate to AbsoluteLayout YO"}
                         onTap={() => {
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
@@ -463,6 +463,41 @@ export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObje
                         ),
                         null,
                         `Portal('Navigation Hub')`
+                    )
+                )}
+            </RCTFrame>
+        );
+    }
+}
+
+export class FramedLayoutTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
+    private readonly layoutTestPageRef = React.createRef<Page>();
+
+    componentDidMount(){
+        const node: Frame|null = this.props.forwardedRef.current;
+        if(node){
+            node.navigate({
+                create: () => {
+                    return this.layoutTestPageRef.current;
+                }
+            });
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
+
+    render(){
+        return (
+            <RCTFrame ref={this.props.forwardedRef}>
+                {(
+                    ReactNativeScript.createPortal(
+                        (
+                            <RCTContentView ref={this.layoutTestPageRef}>
+                                <DockLayoutTest/>
+                            </RCTContentView>
+                        ),
+                        null,
+                        `Portal('Dock Layout Test')`
                     )
                 )}
             </RCTFrame>

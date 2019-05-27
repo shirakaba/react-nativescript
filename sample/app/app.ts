@@ -25,6 +25,7 @@ import * as ReactNativeScript from "react-nativescript/dist/index";
 import HotApp, { rootRef } from "./testComponents/HotApp";
 
 ReactNativeScript.startWithAnyView(React.createElement(HotApp, {}, null), rootRef);
+// ReactNativeScript.startWithView(React.createElement(HotApp, {}, null));
 
 /*
 Do not place any code after the application has been started as it will not
