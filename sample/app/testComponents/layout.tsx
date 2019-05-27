@@ -104,8 +104,8 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
 export class HMRTest extends React.Component<{}, {}> {
     render(){
         // return <DockLayoutTest/>;
-        // return <FlexboxLayoutTest/>;
-        return <AbsoluteLayoutTest/>;
+        return <FlexboxLayoutTest/>;
+        // return <AbsoluteLayoutTest/>;
     }
 }
 

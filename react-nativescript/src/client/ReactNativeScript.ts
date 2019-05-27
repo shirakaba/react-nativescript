@@ -179,11 +179,11 @@ export function startWithView(
     providedRootView: View = new ContentView(),
 ): void
 {
-    if(
-        !(providedRootView instanceof TabView || providedRootView instanceof Frame)
-    ){
-        console.warn(`Support for root view components other than Frame or TabView is limited.`);
-    }
+    // if(
+    //     !(providedRootView instanceof TabView || providedRootView instanceof Frame)
+    // ){
+    //     console.warn(`Support for root view components other than Frame or TabView is limited.`);
+    // }
 
     const existingRootView: View|undefined = getRootView();
     const _hasLaunched: boolean = hasLaunched();
@@ -192,11 +192,11 @@ export function startWithView(
 
     // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
     if(_hasLaunched || existingRootView){
-        console.log(`[renderIntoRootView] without run() (shan't run render() again at all).`);
+        console.log(`[renderIntoRootView] no-op (hot reload)`);
 
         // render(app, rootView, () => console.log(`Container updated!`));
     } else {
-        console.log(`[renderIntoRootView] with run()`);
+        console.log(`[renderIntoRootView] calling run() method`);
 
         run({
             create: () => {
