@@ -31,6 +31,7 @@
     "nativescript-dev-typescript": "~0.9.0",
     "nativescript-dev-webpack": "~0.21.2",
     "react-hot-loader": "^4.8.5",
+    "react-nativescript-hot-loader": "git+https://github.com/shirakaba/react-nativescript-hot-loader.git",
     "tns-platform-declarations": "^5.3.1"
   },
   "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",

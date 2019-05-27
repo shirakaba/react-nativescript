@@ -22,7 +22,7 @@ const babelLoader = {
         plugins: [
             /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
             // ["@babel/plugin-proposal-decorators", { legacy: true }],
-            "react-hot-loader/babel",
+            "react-nativescript-hot-loader/babel",
             ["@babel/plugin-proposal-class-properties", { loose: true }],
         ]
     }
