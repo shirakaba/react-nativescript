@@ -6,15 +6,16 @@ You can use this file to perform app-level initialization, but the primary
 purpose of the file is to pass control to the app’s first module.
 */
 
-if((module as any).hot) {
+declare var module: any;
+if(module.hot){
     // self accept.
-    (module as any).hot.accept(
+    module.hot.accept(
         function(error) {
             console.error(`Error in accepting self update for app.ts.`, error);
         }
     );
 
-    // (module as any).hot.addStatusHandler(status => {
+    // module.hot.addStatusHandler(status => {
     //     console.log(`Change in status for app.ts.`, status);
     // });
 }
