@@ -13,6 +13,7 @@ import * as React from "react";
 
 import { DynamicListViewWithImages } from "./list";
 import { DockLayoutTest, HMRTest } from './layout';
+import { FrameTest } from './navigation';
 
 // export default HMRTest; /* */
-export default hot(module)(HMRTest); /* */
+export default hot(module)(FrameTest); /* */

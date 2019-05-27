@@ -35,16 +35,30 @@ import { SpriteKitGameTest } from "./testComponents/spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./testComponents/list";
 import HotApp from "./testComponents/HotApp";
 
-ReactNativeScript.startWithView(
+// ReactNativeScript.startWithView(
+//     React.createElement(
+//         HotApp,
+//         {
+            
+//         },
+//         null
+//     ),
+//     new ContentView()
+// );
+
+const appRef = React.createRef<Frame>();
+/* Do any Frame setup here */
+ReactNativeScript.startWithAnyView(
     React.createElement(
         HotApp,
         {
-            
+            forwardedRef: appRef
         },
         null
     ),
-    new ContentView()
+    appRef
 );
+
 
 // console.log("BOO HISS OY EY");
 

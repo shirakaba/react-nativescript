@@ -176,7 +176,7 @@ export function startWithFrameAndPage(
  * @param rootView - The root view for your NativeScript app
  */
 export function startWithView(
-    app: any,
+    app: ReactReconciler.ReactNodeList,
     providedRootView: View = new ContentView(),
 ): void
 {
@@ -207,6 +207,43 @@ export function startWithView(
             }
         });
     }
+}
+
+/**
+ * Convenience function to start your React NativeScript app.
+ * This should be placed as the final line of your app.ts file, as no
+ * code will run after it (at least on iOS).
+ * 
+ *  
+ * @param app - Your <App/> component.
+ * @param refToApp - Reference to the root component of your React app's tree.
+ */
+export function startWithAnyView(
+    app: ReactReconciler.ReactNodeList,
+    refToApp: React.RefObject<View>
+): void
+{
+    const existingRootView: View|undefined = getRootView();
+    const _hasLaunched: boolean = hasLaunched();
+    console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
+    if(_hasLaunched || existingRootView){
+        console.log(`[renderIntoRootView] no-op (hot reload)`);
+        return;
+    };
+
+    const rootView = new ProxyViewContainer();
+    render(app, rootView, () => {
+        console.log(`Container updated!`);
+
+        console.log(`[renderIntoRootView] calling run() method`);
+    
+        run({
+            create: () => {
+                /* Shall be non-null at this point (container has mounted) */
+                return refToApp.current;
+            }
+        });
+    });
 }
 
 export {

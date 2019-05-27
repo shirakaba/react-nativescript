@@ -2,11 +2,12 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, Frame } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
     RCTButton,
+    RCTFrame,
     RCTContentView,
     RCTTextView,
     RCTLabel,
@@ -24,6 +25,7 @@ import {
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
+import { FrameComponentProps } from "react-nativescript/dist/components/Frame";
 import { DockLayoutTest, FlexboxLayoutTest, AbsoluteLayoutTest } from "./layout";
 
 export class NestedHub extends React.Component<{
@@ -406,3 +408,31 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
     }
 }
 
+export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<Frame> } & FrameComponentProps<Frame>, {}> {
+    private readonly bluePageRef = React.createRef<Page>();
+
+    componentDidMount(){
+        const node: Frame|null = this.props.forwardedRef.current;
+        if(node){
+            node.navigate({
+                create: () => {
+                    return this.bluePageRef.current;
+                }
+            });
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
+
+    render(){
+        const { forwardedRef, ...rest } = this.props;
+
+        return (
+            <RCTFrame ref={forwardedRef} {...rest}>
+                <PortalToPageWithActionBar forwardedRef={this.bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
+                    <RCTLabel>You're viewing the blue page!</RCTLabel>
+                </PortalToPageWithActionBar>
+            </RCTFrame>
+        );
+    }
+}
