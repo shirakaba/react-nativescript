@@ -20,6 +20,7 @@ import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
 import { ActionBar as RCTActionBar } from "../components/ActionBar";
 import { Button as RCTButton } from "../components/Button";
+import { Frame as RCTFrame } from "../components/Frame";
 import { ActivityIndicator as RCTActivityIndicator } from "../components/ActivityIndicator";
 import { DatePicker as RCTDatePicker } from "../components/DatePicker";
 import { Progress as RCTProgress } from "../components/Progress";
@@ -209,31 +210,33 @@ export function startWithView(
 }
 
 export {
+    // RCTDialogs,
+    // RCTGestures,
     RCTAbsoluteLayout,
     RCTActionBar,
+    RCTActivityIndicator,
     RCTButton,
-    // RCTDialogs,
+    RCTContentView,
+    RCTDatePicker,
     RCTDockLayout,
     RCTFlexboxLayout,
-    // RCTGestures,
-    RCTDatePicker,
-    RCTProgress,
-    RCTScrollView,
-    RCTSearchBar,
-    RCTSegmentedBar,
-    RCTSlider,
+    RCTFrame,
     RCTGridLayout,
     RCTHtmlView,
     RCTImage,
     RCTLabel,
     RCTListView,
     RCTPage,
+    RCTProgress,
+    RCTScrollView,
+    RCTSearchBar,
+    RCTSegmentedBar,
+    RCTSlider,
     RCTStackLayout,
     RCTTabView,
     RCTTabViewItem,
     RCTTextField,
     RCTTextView,
-    RCTContentView,
     RCTWebView,
     RCTWrapLayout,
 };

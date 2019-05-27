@@ -183,6 +183,15 @@ export type PageProps = ContentViewProps & Pick<Page,
     "enableSwipeBackNavigation"
 >
 
+export type FrameProps = ViewProps & Pick<Frame,
+    "actionBarVisibility"|
+    "backStack"|
+    "currentPage"|
+    "currentEntry"|
+    "animated"|
+    "transition"
+>
+
 export type TabViewProps = ViewProps & Pick<TabView,
     "items"|
     "selectedIndex"|
