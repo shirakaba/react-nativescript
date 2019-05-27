@@ -259,7 +259,6 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                     <RCTButton
                         text={"Navigate to AbsoluteLayout"}
                         onTap={() => {
-                            
                             const page: Page = forwardedRef.current!;
                             page.frame.navigate({
                                 create: () => {
