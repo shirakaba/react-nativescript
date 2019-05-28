@@ -1,14 +1,4 @@
-// if((module as any).hot) {
-//     console.log(`module as any hot is true.`);
-//     (module as any).hot.accept(
-//         ['./list', './layout'],
-//         function() {
-//             // Do something with the updated library module...
-//         }
-//     );
-// }
-
-import { hot } from 'react-hot-loader';
+import { hot } from 'react-hot-loader/root';
 import * as React from "react";
 
 import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
@@ -32,5 +22,4 @@ const app = () => <FramedHubTest forwardedRef={rootRef}/>
 //         <DockLayoutTest/>
 //     </RCTContentView>
 // );
-
-export default hot(module)(app);
+export default hot(app);
