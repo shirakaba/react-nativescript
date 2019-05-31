@@ -17,11 +17,11 @@ export const rootRef = React.createRef<any>();
 // const app = () => <FramedLayoutTest forwardedRef={rootRef}/>
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
 // const app = () => <HubTest forwardedRef={rootRef}/>
-// const app = () => <DockLayoutTest/>
+const app = () => <RNTesterApp exampleFromAppetizeParams={`rntester://example/${"Button"}Example`}/>
 
-const app = () => (
-    <RCTContentView ref={rootRef}>
-        <RNTesterApp exampleFromAppetizeParams={`rntester://example/${"Button"}Example`}/>
-    </RCTContentView>
-);
+// const app = () => (
+//     <RCTContentView ref={rootRef}>
+//         <RNTesterApp exampleFromAppetizeParams={`rntester://example/${"Button"}Example`}/>
+//     </RCTContentView>
+// );
 export default hot(app);
