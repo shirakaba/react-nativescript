@@ -566,37 +566,35 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             container._addView(child, beforeChildIndex);
         }
     },
-    removeChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        if(child instanceof ActionBar && parentInstance instanceof Page){
+    removeChild(parent: Instance, child: Instance | TextInstance): void {
+        if(child instanceof ActionBar && parent instanceof Page){
+            console.log(`[removeChild()] Page > ActionBar removal: ${parent} x ${child}`);
             // FIXME: determine the best way to implement this for ActionBar. Will have to figure out potential scenarios.
-            // parentInstance.actionBar = null;
-        if(parentInstance instanceof TabView && child instanceof TabViewItem){
-                if(!parentInstance.items){
-                    parentInstance.items = [];
-                }
-                // TODO: remove from array without creating new one.
-                parentInstance.items = parentInstance.items.filter(i => i !== child);
+            // parent.actionBar = null;
+        } else if(parent instanceof TabView && child instanceof TabViewItem){
+            console.log(`[removeChild()] TabView > TabViewItem removal: ${parent} x ${child}`);
+            if(!parent.items){
+                parent.items = [];
             }
-         } else {
-            parentInstance._removeView(child);
-            // TODO: check whether a property/event change should be fired.
-         }
-    },
-    removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        if(isASingleChildContainer(container)){
-            console.log(`[removeChild()] instance of single-child container: ${container} x ${child}`);
+            // TODO: remove from array without creating new one.
+            parent.items = parent.items.filter(i => i !== child);
+        } else if(isASingleChildContainer(parent)){
+            console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
-             // console.warn(`[removeChild()] TODO: Check whether "container.content = null" will indeed remove the content.`);
-            container.content = null;
-        } else if(container instanceof LayoutBase){
-            console.log(`[removeChild()] instance of LayoutBase: ${container} x ${child}`);
-            container.removeChild(child as View);
+             console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
+            parent.content = null;
+        } else if(parent instanceof LayoutBase){
+            console.log(`[removeChild()] parent instance of LayoutBase: ${parent} x ${child}`);
+            parent.removeChild(child as View);
         } else {
-            console.log(`[removeChild()] default clause.`);
-            container._removeView(child);
+            console.log(`[removeChild()] default clause: ${parent} x ${child}`);
+            parent._removeView(child);
         }
-        // TODO: check whether a property/event change should be fired.
+    },
+    removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
+        console.log(`[removeChildToContainer()] deferring to removeChild(): ${container} > ${child}`);
+        return hostConfig.removeChild(container, child);
     },
     resetTextContent(instance: Instance): void {
         if(instance instanceof TextBase){
