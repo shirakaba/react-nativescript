@@ -10,6 +10,7 @@ import { NestedHub, NestedModalTest, HubTest, FramedHubTest, SimpleHub, ActionBa
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { RCTContentView } from 'react-nativescript';
+import { RNTesterFramed } from '../RNTester/components/RNTesterFramed';
 const RNTesterApp = require('../RNTester/RNTesterApp').RNTesterApp;
 
 export const rootRef = React.createRef<any>();
@@ -18,6 +19,7 @@ export const rootRef = React.createRef<any>();
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
 // const app = () => <HubTest forwardedRef={rootRef}/>
 const app = () => <RNTesterApp exampleFromAppetizeParams={`rntester://example/${"Button"}Example`}/>
+// const app = () => <RNTesterFramed forwardedRef={rootRef}/>
 
 // const app = () => (
 //     <RCTContentView ref={rootRef}>
