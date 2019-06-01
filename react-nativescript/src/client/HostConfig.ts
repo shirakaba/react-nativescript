@@ -143,6 +143,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         };
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
+        /*
+         * Given the following, wrapped in a Page: 
+            <RCTFlexboxLayout flexDirection={"row"}>
+                <RCTLabel text={"LABEL"}/>
+                <RCTButton text={"BUTTON"}/>
+            </RCTFlexboxLayout>
+         * 
+         * 'type' evidently refers to the type of the child:
+         * 
+         * When type 'flexboxLayout' passes into here, it will have parentHostContext.isInAFlexboxLayout: false.
+         * We return a HostContext with `"isInAFlexboxLayout": true`.
+         * 
+         * When type 'label' or 'button' passes into here, they will then find that
+         * parentHostContext.isInAFlexboxLayout === true.
+         */
+        console.log(`[getChildHostContext] type: ${type}; parentHostContext.isInAFlexboxLayout: ${parentHostContext.isInAFlexboxLayout}`);
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
