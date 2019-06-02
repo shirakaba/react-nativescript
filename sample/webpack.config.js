@@ -155,6 +155,7 @@ module.exports = env => {
                             comments: false,
                         },
                         compress: {
+                            // drop_console: true,
                             // The Android SBG has problems parsing the output
                             // when these options are enabled
                             'collapse_vars': platform !== "android",
