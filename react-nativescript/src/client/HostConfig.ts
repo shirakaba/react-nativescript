@@ -534,25 +534,60 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         updateProperties(instance, updatePayload.updates, type, oldProps, newProps, updatePayload.hostContext);
     },
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
-        /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
-        if(parentInstance instanceof GridLayout){
-            console.warn(`HostConfig.insertBefore() not implemented for GridLayout!`);
-            // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
+        console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
+
+        if(parentInstance instanceof LayoutBase){
+            /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
+            if(parentInstance instanceof GridLayout){
+                console.warn(`HostConfig.insertBefore() LayoutBase implementation has not been tested specifically for GridLayout!`);
+                // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
+            }
+
+            /* Implementation from:
+             * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L164
+             * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/utils.js#L32
+             */
+            if(child.parent === parentInstance){
+                const index: number = parentInstance.getChildIndex(child as View);
+                if (index !== -1) {
+                    console.log(`[HostConfig.insertBefore] Provisionally calling ${parentInstance}.removeChild(${child}).`);
+                    parentInstance.removeChild(child as View);
+                }
+            }
+
+            const atIndex: number = parentInstance.getChildIndex(beforeChild as View);
+            if (atIndex === -1){
+                console.log(`[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.addChild(${child})`);
+                parentInstance.addChild(child as View);
+            } else {
+                console.log(`[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`);
+                parentInstance.insertChild(child as View, atIndex);
+            }
+        } else if(isASingleChildContainer(parentInstance)){
+            parentInstance.content = child as View;
+        } else {
+            console.warn(`[HostConfig.insertBefore] Unable to handle ${parentInstance} > ${child} beforeChild ${beforeChild}; shall no-op.`);
         }
 
-        // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
-        let beforeChildIndex: number = 0;
-        parentInstance.eachChild((viewBase: ViewBase) => {
-            if(viewBase === beforeChild){
-                return false;
-            } else {
-                beforeChildIndex++;
-                return true;
-            }
-        });
-        // NOTE: Untested. Potentially has an off-by-one error.
-        // TODO: fire child._parentChanged()?
-        parentInstance._addView(child, beforeChildIndex);
+        // /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
+        // if(parentInstance instanceof GridLayout){
+        //     console.warn(`HostConfig.insertBefore() not implemented for GridLayout!`);
+        //     // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
+        // }
+        
+        // // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
+        // let beforeChildIndex: number = 0;
+        // parentInstance.eachChild((viewBase: ViewBase) => {
+        //     if(viewBase === beforeChild){
+        //         return false;
+        //     } else {
+        //         beforeChildIndex++;
+        //         return true;
+        //     }
+        // });
+        
+        // console.log(`[HostConfig.insertBefore] calculated beforeChildIndex as ${beforeChildIndex}; shall call: ${parentInstance}._addView(${child}, ${beforeChildIndex})`);
+        // parentInstance._addView(child, beforeChildIndex);
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-3/
