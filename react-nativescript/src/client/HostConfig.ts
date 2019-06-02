@@ -28,6 +28,7 @@ import {
     TabView,
     TabViewItem,
     SegmentedBar,
+    ScrollView,
 } from './ElementRegistry';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
@@ -59,8 +60,8 @@ type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
 
-function isASingleChildContainer(view: Instance): view is Page|ContentView {
-    return view instanceof Page || view instanceof ContentView;
+function isASingleChildContainer(view: Instance): view is Page|ContentView|ScrollView {
+    return view instanceof ContentView || view instanceof Page || view instanceof ScrollView;
 }
 
 // function handleChildrenProp(
