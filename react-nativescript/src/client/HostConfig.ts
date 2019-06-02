@@ -601,8 +601,27 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
              console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
             parent.content = null;
         } else if(parent instanceof LayoutBase){
-            console.log(`[removeChild()] parent instance of LayoutBase: ${parent} x ${child}`);
+
+            /** For logging purposes only **/
+            const childrenBefore = [];
+            parent.eachChild((viewBase: ViewBase) => {
+                childrenBefore.push(viewBase);
+                return true;
+            });
+            console.log(`[removeChild()] parent instance of LayoutBase. Current children: [${childrenBefore}]: ${parent} x ${child}`);
+            /*******************************/
+
             parent.removeChild(child as View);
+
+            /** For logging purposes only **/
+            const childrenAfter = [];
+            parent.eachChild((viewBase: ViewBase) => {
+                childrenAfter.push(viewBase);
+                return true;
+            });
+            console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
+            /*******************************/
+
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
