@@ -657,7 +657,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             });
             console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
             /*******************************/
-
+        } else if(parent === null){
+            // TODO: consult React expert here!
+            console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
