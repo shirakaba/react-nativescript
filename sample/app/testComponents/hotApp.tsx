@@ -1,4 +1,4 @@
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-nativescript-hot-loader/root';
 import * as React from "react";
 
 import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
