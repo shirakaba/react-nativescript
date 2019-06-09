@@ -337,6 +337,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle,
     ): TextInstance {
+        console.log(`[createTextInstance] with text: "${text}"`);
         if(!hostContext.isInAParentText){
             throw new Error('Text strings must be rendered within a component extending <TextBase>.');
         }
