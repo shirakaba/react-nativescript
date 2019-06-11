@@ -21,7 +21,6 @@ if(module.hot){
 }
 
 import 'nativescript-websockets';
-console.log(`BrowserWebSocket was:`, (global as any).WebSocket);
 
 Object.defineProperty(global, 'WebSocket', {
     // value: require('ws')
@@ -33,25 +32,41 @@ Object.defineProperty(global, 'window', {
     value: global
 });
 
-console.log(`window.WebSocket was:`, (window as any).WebSocket);
-
-// [Upon importing react-devtools] JS ERROR ReferenceError: Can't find variable: window
+// const mySocket = new WebSocket("ws://echo.websocket.org", []);
+// const mySocket = new WebSocket("http://localhost:8097", []);
+// mySocket.onopen = function(ev: Event) {
+//     const socket = ev.target as WebSocket;
+//     console.log("[SOCKET] Hey I'm open");
+//     socket.send("Hello");
+// };
+// mySocket.onmessage = function(ev: MessageEvent){
+//     console.log("[SOCKET] Got a message", ev.data);
+// };
+// mySocket.onclose = function(ev: CloseEvent){
+//     console.log("[SOCKET] Socket was closed because: ", ev.reason, " code: ", ev.code);
+// };
+// mySocket.onerror = function(ev: Event){
+//     console.error("[SOCKET] Socket had an error", ev);
+// };
 
 /* https://github.com/facebook/react-devtools/issues/601#issuecomment-290611996
  * https://github.com/sidorares/react-x11/blob/master/src/DevToolsIntegration.js */
 (global as any).__DEV__ = true;
 const {connectToDevTools} = require('react-devtools-core');
-connectToDevTools({
+const wsInstance = connectToDevTools({
     host: 'localhost',
-    // Maybe: /usr/local/lib/node_modules/nativescript/lib/device-sockets/ios/app-debug-socket-proxy-factory.js
     port: 8097,
-    websocket: (global as any).WebSocket,
+    /* This does NOT work */
+    // websocket: (global as any).WebSocket,
     resolveRNStyle: null,
     isAppActive: () => true,
 });
 
+console.log(`[app.ts] Got wsInstance:`, wsInstance);
+console.log(`[app.ts] wsInstance's onopen was:`, wsInstance.onopen);
+
 (window as any).__REACT_DEVTOOLS_GLOBAL_HOOK__.on('react-devtools', (agent: any) => {
-    console.log(`Got 'react-devtools' callback! Agent:`, agent);
+    console.log(`Got 'react-devtools' callback!`);
     // let highlightedNodes: any[] = [];
     // agent.on('highlight', data => {
     //     highlight(data.node, data.name);
