@@ -51,8 +51,6 @@ import { Image as RCTImage } from "../components/Image";
 //     var __DEV__: boolean|undefined;
 // }
 
-(global as any).__DEV__ = false;
-
 // https://blog.atulr.com/react-custom-renderer-1/
 export function createPortal(
     children: ReactReconciler.ReactNodeList,
