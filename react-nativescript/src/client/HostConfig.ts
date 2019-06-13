@@ -43,7 +43,7 @@ export type Container = View; // The root node of the app. Typically Frame, but 
 export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
 type TextInstance = TextBase;
 type HydratableInstance = any;
-type PublicInstance = any;
+export type PublicInstance = any;
 export type HostContext = {
     isInAParentText: boolean,
     isInADockLayout: boolean,

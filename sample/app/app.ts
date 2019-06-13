@@ -52,6 +52,12 @@ Object.defineProperty(global, 'window', {
 /* https://github.com/facebook/react-devtools/issues/601#issuecomment-290611996
  * https://github.com/sidorares/react-x11/blob/master/src/DevToolsIntegration.js */
 (global as any).__DEV__ = true;
+
+// import * as React from "react";
+// Object.defineProperty(window, 'React', {
+//     value: React
+// });
+
 const {connectToDevTools} = require('react-devtools-core');
 const wsInstance = connectToDevTools({
     host: 'localhost',
@@ -78,7 +84,7 @@ console.log(`[app.ts] wsInstance's onopen was:`, wsInstance.onopen);
     //     })
     //     highlightedNodes = [];
     // });
-})
+});
 
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";

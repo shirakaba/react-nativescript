@@ -11,7 +11,7 @@
  */
 
 import * as ReactReconciler from 'react-reconciler';
-import { reactReconcilerInst, Container } from "./HostConfig";
+import { reactReconcilerInst, Container, PublicInstance } from "./HostConfig";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from './ReactPortal';
@@ -75,22 +75,57 @@ export function createPortal(
  * @param reactElement - Your <App/> component.
  * @param domElement - Your root component; typically Page, but can be any View.
  * @param callback - A callback to run after the component (typically <App/>) is rendered.
+ * https://github.com/sidorares/react-x11/blob/master/src/Reconciler.js#L256
  */
+let latestContainerKey: number = 0;
 export function render(
     reactElement: ReactReconciler.ReactNodeList,
     domElement: Container,
     callback: () => void|null|undefined = () => undefined
 ){
     // console.log("Creating container from domElement", domElement);
-    const container = reactReconcilerInst.createContainer(domElement, false, false);
 
-    return reactReconcilerInst.updateContainer(
+
+    const containerKey = latestContainerKey++;
+    let root = roots.get(containerKey);
+    if (!root){
+        root = reactReconcilerInst.createContainer(domElement, false, false);
+        roots.set(containerKey, root);
+    }
+
+    reactReconcilerInst.updateContainer(
         reactElement,
-        container,
+        root,
         null,
         callback
     );
+
+    const publicInstance: PublicInstance = reactReconcilerInst.getPublicRootInstance(root);
+
+    callback && callback();
+
+    /* 
+     * https://github.com/nitin42/Making-a-custom-React-renderer/blob/master/part-one.md#injecting-third-party-renderers-into-devtools */
+    // if ((process as any).env.NODE_ENV !== 'production') {
+        const injectIntoDevTools = reactReconcilerInst.injectIntoDevTools;
+        console.log(ReactReconciler);
+        injectIntoDevTools({
+            bundleType: 1, // 0 for PROD, 1 for DEV
+            version: '0.1.0', // version for your renderer
+            rendererPackageName: 'react-nativescript', // package name
+            // findFiberByHostInstance: instance => {
+            //   console.log('!!! findFiberByHostInstance', instance);
+            //   return instance._reactFiber;
+            //   // TODO: implement this
+            //   // not sure yet how to get ref to component or internal
+            //   // instance from HostConfig handlers
+            // },
+            // findHostInstanceByFiber: reactReconcilerInst.findHostInstance
+        });
+    // }
 }
+
+const roots = new Map();
 
 /**
  * Convenience function to start your React NativeScript app.
