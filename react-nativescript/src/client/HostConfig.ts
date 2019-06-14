@@ -382,6 +382,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        if(parentInstance === null){
+            console.warn(`[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`);
+            return;
+        }
         if(child instanceof Page){
             console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
             return;
@@ -661,6 +665,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         } else if(parent === null){
             // TODO: consult React expert here!
             console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
+            return;
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
