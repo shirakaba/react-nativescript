@@ -10,6 +10,7 @@ import { ListViewCell } from "./ListViewCell";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
 import { shallowEqual } from "../client/shallowEqual";
+import { RCTContentView, RCTLabel } from "../client/ReactNativeScript";
 
 export type CellViewContainer = ContentView;
 
@@ -77,47 +78,61 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
         let view: View|undefined = args.view;
         if(!view){
-            const contentView = new ContentView();
-            if(onCellFirstLoad) onCellFirstLoad(contentView);
-            args.view = contentView;
-
-            if(logLevel === "debug"){
-                console.log(`'onItemLoading': <empty> -> ${args.index}`);
-                if(this.state.itemIndexToNativeCell!.has(args.index)){
-                    console.warn(`WARNING: list index already registered yet args.view was falsy!`);
+            const detachedRootRef = React.createRef<any>();
+            const rootRef: any = ReactNativeScript.render(
+                React.createElement<any>(RCTLabel, { text: "RENDERED LABEL", ref: detachedRootRef }, null),
+                null,
+                () => {
+                    console.log(`Rendered into cell! detachedRootRef:`, detachedRootRef);
                 }
-            }
+            );
 
-            this.setState((prev: State) => {
-                const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
-                nativeCellToItemIndex.set(contentView, args.index);
+            console.log(`Rendered into cell. Got the detachedRootRef:`, detachedRootRef);
 
-                let itemIndexToNativeCell: Map<NumberKey, CellViewContainer>|undefined;
-                if(logLevel === "debug"){
-                    itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
-                    itemIndexToNativeCell!.set(args.index, contentView);
-                }
+            // return detachedRootRef.current;
+            args.view = detachedRootRef.current;
 
-                return {
-                    ...prev,
-                    ...(
-                        logLevel === "debug" ? 
-                        {
-                            nativeCells: {
-                                ...prev.nativeCells,
-                                [args.index]: contentView
-                            },
-                            itemIndexToNativeCell
-                        } :
-                        {
+            // const contentView = new ContentView();
+            // if(onCellFirstLoad) onCellFirstLoad(contentView);
+            // args.view = contentView;
 
-                        }
-                    ),
-                    nativeCellToItemIndex,
-                };
-            }, () => {
-                if(logLevel === "debug") console.log(`setState() completed for <empty> -> ${args.index}`);
-            });
+            // if(logLevel === "debug"){
+            //     console.log(`'onItemLoading': <empty> -> ${args.index}`);
+            //     if(this.state.itemIndexToNativeCell!.has(args.index)){
+            //         console.warn(`WARNING: list index already registered yet args.view was falsy!`);
+            //     }
+            // }
+
+            // this.setState((prev: State) => {
+            //     const nativeCellToItemIndex = new Map(prev.nativeCellToItemIndex);
+            //     nativeCellToItemIndex.set(contentView, args.index);
+
+            //     let itemIndexToNativeCell: Map<NumberKey, CellViewContainer>|undefined;
+            //     if(logLevel === "debug"){
+            //         itemIndexToNativeCell = new Map(prev.itemIndexToNativeCell);
+            //         itemIndexToNativeCell!.set(args.index, contentView);
+            //     }
+
+            //     return {
+            //         ...prev,
+            //         ...(
+            //             logLevel === "debug" ? 
+            //             {
+            //                 nativeCells: {
+            //                     ...prev.nativeCells,
+            //                     [args.index]: contentView
+            //                 },
+            //                 itemIndexToNativeCell
+            //             } :
+            //             {
+
+            //             }
+            //         ),
+            //         nativeCellToItemIndex,
+            //     };
+            // }, () => {
+            //     if(logLevel === "debug") console.log(`setState() completed for <empty> -> ${args.index}`);
+            // });
         } else {
             if(onCellRecycle) onCellRecycle(args.view as CellViewContainer);
             // const filledIndices: string[] = Object.keys(this.state.nativeCells);
