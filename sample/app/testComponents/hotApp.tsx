@@ -48,4 +48,5 @@ const app = () => <RNTesterFramed forwardedRef={rootRef}/>
 //         <RNTesterApp exampleFromAppetizeParams={`rntester://example/${"Button"}Example`}/>
 //     </RCTContentView>
 // );
-export default hot(app);
+// export default hot(app);
+export default app;
