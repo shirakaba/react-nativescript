@@ -56,6 +56,7 @@ import { Image as RCTImage } from "../components/Image";
 // https://blog.atulr.com/react-custom-renderer-1/
 export function createPortal(
     children: ReactReconciler.ReactNodeList,
+    // ReactFabric passes in a containerTag rather than a container; hope it can figure out how to re-use a root when the container is null :/
     container: Container,
     key: string|null = null,
 ): ReactPortal {
@@ -69,6 +70,8 @@ export function createPortal(
     return portal;
 }
 
+const roots = new Map<Container, ReactReconciler.FiberRoot>();
+
 /**
  * React NativeScript can render into any container that extends View,
  * but it makes sense to use the Frame > Page model if your whole app
@@ -77,21 +80,28 @@ export function createPortal(
  * @param reactElement - Your <App/> component.
  * @param domElement - Your root component; typically Page, but can be any View.
  * @param callback - A callback to run after the component (typically <App/>) is rendered.
+ * 'roots' with reference to: https://github.com/facebook/react/blob/ef4ac42f8893afd0240d2679db7438f1b599bbd4/packages/react-native-renderer/src/ReactFabric.js#L119
+ * @returns a ref to the container.
  */
 export function render(
     reactElement: ReactReconciler.ReactNodeList,
     domElement: Container,
     callback: () => void|null|undefined = () => undefined
 ){
-    // console.log("Creating container from domElement", domElement);
-    const container = reactReconcilerInst.createContainer(domElement, false, false);
+    let root: ReactReconciler.FiberRoot = roots.get(domElement);
+    if(!root){
+        root = reactReconcilerInst.createContainer(domElement, false, false);
+        roots.set(domElement, root);
+    }
 
-    return reactReconcilerInst.updateContainer(
+    reactReconcilerInst.updateContainer(
         reactElement,
-        container,
+        root,
         null,
         callback
     );
+
+    return reactReconcilerInst.getPublicRootInstance(root);
 }
 
 /**
