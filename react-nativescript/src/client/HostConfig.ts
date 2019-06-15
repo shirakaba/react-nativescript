@@ -672,7 +672,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         }
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        console.log(`[removeChildToContainer()] deferring to removeChild(): ${container} > ${child}`);
+        console.log(`[removeChildFromContainer()] deferring to removeChild(): ${container} > ${child}`);
         return hostConfig.removeChild(container, child);
     },
     resetTextContent(instance: Instance): void {

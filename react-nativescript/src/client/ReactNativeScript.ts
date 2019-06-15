@@ -70,7 +70,8 @@ export function createPortal(
     return portal;
 }
 
-const roots = new Map<Container, ReactReconciler.FiberRoot>();
+type RootKey = Container|string|null;
+const roots = new Map<RootKey, ReactReconciler.FiberRoot>();
 
 /**
  * React NativeScript can render into any container that extends View,
@@ -78,20 +79,23 @@ const roots = new Map<Container, ReactReconciler.FiberRoot>();
  * (rather than a portion of it) will be described using React NativeScript.
  * 
  * @param reactElement - Your <App/> component.
- * @param domElement - Your root component; typically Page, but can be any View.
+ * @param domElement - Your root component; typically Page, but can be any View. Accepts null for a detached tree.
  * @param callback - A callback to run after the component (typically <App/>) is rendered.
+ * @param containerTag - A unique key by which to keep track of the root (useful when the domElement is null).
  * 'roots' with reference to: https://github.com/facebook/react/blob/ef4ac42f8893afd0240d2679db7438f1b599bbd4/packages/react-native-renderer/src/ReactFabric.js#L119
  * @returns a ref to the container.
  */
 export function render(
     reactElement: ReactReconciler.ReactNodeList,
-    domElement: Container,
-    callback: () => void|null|undefined = () => undefined
+    domElement: Container|null,
+    callback: () => void|null|undefined = () => undefined,
+    containerTag: string|null = null
 ){
-    let root: ReactReconciler.FiberRoot = roots.get(domElement);
+    const key: RootKey = containerTag || domElement;
+    let root: ReactReconciler.FiberRoot = roots.get(key);
     if(!root){
         root = reactReconcilerInst.createContainer(domElement, false, false);
-        roots.set(domElement, root);
+        roots.set(key, root);
     }
 
     reactReconcilerInst.updateContainer(
