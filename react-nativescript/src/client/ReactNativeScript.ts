@@ -108,6 +108,22 @@ export function render(
     return reactReconcilerInst.getPublicRootInstance(root);
 }
 
+// https://github.com/facebook/react/blob/61f62246c8cfb76a4a19d1661eeaa5822ec37b36/packages/react-native-renderer/src/ReactNativeRenderer.js#L139
+/**
+ * Calls removeChildFromContainer() to make the container remove its immediate child.
+ * If said container is null (i.e. a detached tree), note that null.removeChild() doesn't exist, so it's a no-op.
+ * Either way, it'll delete our reference to the root and thus should remove the React association from it.
+ * @param containerTag - the key uniquely identifying this root (either the container itself, or a string).
+ */
+export function unmountComponentAtNode(containerTag: RootKey): void {
+    const root: ReactReconciler.FiberRoot = roots.get(containerTag);
+    if(!root) return;
+    // TODO (from FB): Is it safe to reset this now or should I wait since this unmount could be deferred?
+    reactReconcilerInst.updateContainer(null, root, null, () => {
+        roots.delete(containerTag);
+    });
+}
+
 /**
  * Convenience function to start your React NativeScript app.
  * This should be placed as the final line of your app.ts file, as no
