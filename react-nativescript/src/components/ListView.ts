@@ -3,16 +3,18 @@ import { ListViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptC
 import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsSource } from "tns-core-modules/ui/list-view/list-view";
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
-import { ContentView, Observable, Color } from "tns-core-modules/ui/page/page";
+import { ContentView, Observable, Color, KeyedTemplate } from "tns-core-modules/ui/page/page";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
 import { Label as NativeScriptLabel } from "../client/ElementRegistry";
 
 export type CellViewContainer = ContentView;
+type CellFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement);
 
 interface Props {
     items: ListViewProps["items"],
-    cellFactory: (item: any, ref: React.RefObject<any>) => React.ReactElement,
+    cellFactories?: Map<string, CellFactory>,
+    cellFactory?: CellFactory,
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
@@ -29,6 +31,7 @@ interface Props {
 }
 
 type NumberKey = number|string;
+type RootKeyAndRef = { rootKey: string, ref: React.RefObject<any> };
 
 interface State {
     nativeCells: Record<NumberKey, CellViewContainer>;
@@ -66,36 +69,42 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } as Readonly<S>; // No idea why I need to assert as Readonly<S> when using generics with State :(
     }
 
-    private readonly argsViewToRootKeyAndRef: Map<View, { rootKey: string, ref: any }> = new Map();
+    private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
     private roots: Set<string> = new Set();
 
     /* Referring to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
-        const items: ListViewProps["items"] = this.props.items;
+        const { items, itemTemplateSelector } = this.props; 
         const item: any = _ListView.isItemsSource(items) ? items.getItem(args.index) : items[args.index];
+        const template: string|null = itemTemplateSelector ? 
+            (
+                typeof itemTemplateSelector === "string" ? 
+                    itemTemplateSelector : 
+                    (itemTemplateSelector as ((item: any, index: number, items: any) => string))(item, args.index, items)
+            ) :
+            null;
+        const cellFactory: CellFactory|undefined = template === null ? 
+            this.props.cellFactory : 
+           (this.props.cellFactories ? this.props.cellFactories.get(template) : this.props.cellFactory);
+        
+        if(typeof cellFactory === "undefined"){
+            console.warn(`ListView: No cell factory found, given template ${template}!`);
+            return;
+        }
         
         let view: View|undefined = args.view;
         if(!view){
             console.log(`[ListView] no existing view.`);
-            const detachedRootRef: React.RefObject<any> = React.createRef<any>();
-            const key: string = "ListView-" + (this.roots.size).toString();
 
-            ReactNativeScript.render(
-                this.props.cellFactory(item, detachedRootRef),
-                null,
-                () => {
-                    // console.log(`Rendered into cell! detachedRootRef:`);
-                },
-                key
-            );
-            this.roots.add(key);
+            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory);
 
-            args.view = detachedRootRef.current;
+            args.view = rootKeyAndRef.ref.current;
+
             /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
-            this.argsViewToRootKeyAndRef.set(args.view, { rootKey: key, ref: detachedRootRef });
+            this.argsViewToRootKeyAndRef.set(args.view, rootKeyAndRef);
 
-            if(onCellFirstLoad) onCellFirstLoad(detachedRootRef.current);
+            if(onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.ref.current);
         } else {
             console.log(`[ListView] existing view: `, view);
             if(onCellRecycle) onCellRecycle(view as CellViewContainer);
@@ -111,7 +120,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             }
 
             ReactNativeScript.render(
-                this.props.cellFactory(item, ref),
+                cellFactory(item, ref),
                 null,
                 () => {
                     // console.log(`Rendered into cell! detachedRootRef:`);
@@ -151,46 +160,25 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         }
     }
 
-    componentDidMount(){
-        super.componentDidMount();
+    private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
+        console.log(`[ListView] no existing view.`);
+        const ref: React.RefObject<any> = React.createRef<any>();
+        const rootKey: string = "ListView-" + (this.roots.size).toString();
 
-        const ref = this.props.forwardedRef || this.myRef;
+        ReactNativeScript.render(
+            cellFactory(item, ref),
+            null,
+            () => {
+                // console.log(`Rendered into cell! ref:`);
+            },
+            rootKey
+        );
+        this.roots.add(rootKey);
 
-        const node: E|null = ref.current;
-        if(node){
-            ref.current.itemTemplates = [
-                {
-                    key: "even",
-                    createView: () => {
-                        const label = new NativeScriptLabel();
-                        label.text = "From first template";
-                        return label;
-                        /* This will be fed in as the beginning args.view (rather than undefined).
-                         * So we need a strategy for allowing consumers to render in this block and produce a rootKey to it. */
-                    }
-                },
-                {
-                    key: "odd",
-                    createView: () => {
-                        const label = new NativeScriptLabel();
-                        label.text = "From second template";
-                        return label;
-                        /* This will be fed in as the beginning args.view (rather than undefined).
-                         * So we need a strategy for allowing consumers to render in this block and produce a rootKey to it. */
-                    }
-                }
-            ];
-            ref.current.itemTemplateSelector = (item: any, index: number, items: any) => {
-                return index % 2 === 0 ? "even" : "odd";
-            };
-        } else {
-            console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
-        }
-
-        console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
-        console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
-        console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
-        console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
+        return {
+            rootKey,
+            ref
+        };
     }
 
     componentWillUnmount(){
