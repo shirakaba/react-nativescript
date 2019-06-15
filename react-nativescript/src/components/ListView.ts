@@ -72,7 +72,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } as Readonly<S>; // No idea why I need to assert as Readonly<S> when using generics with State :(
     }
 
-    private readonly argsViewToRootKey: Map<View, string> = new Map();
+    private readonly argsViewToRootKeyAndRef: Map<View, { rootKey: string, ref: any }> = new Map();
 
     private roots: string[] = [];
 
@@ -98,26 +98,30 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             this.roots.push(key);
 
             args.view = detachedRootRef.current;
-            this.argsViewToRootKey.set(args.view, key);
+            /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
+            this.argsViewToRootKeyAndRef.set(args.view, { rootKey: key, ref: detachedRootRef });
 
             if(onCellFirstLoad) onCellFirstLoad(detachedRootRef.current);
         } else {
             if(onCellRecycle) onCellRecycle(view as CellViewContainer);
 
-            const key: string|undefined = this.argsViewToRootKey.get(view);
-            if(typeof key === "undefined"){
+            const { rootKey, ref } = this.argsViewToRootKeyAndRef.get(view);
+            if(typeof rootKey === "undefined"){
                 console.error(`Unable to find root key that args.view corresponds to!`, view);
                 return;
             }
+            if(typeof ref === "undefined"){
+                console.error(`Unable to find ref that args.view corresponds to!`, view);
+                return;
+            }
 
-            const detachedRootRef: React.RefObject<any> = React.createRef<any>();
             ReactNativeScript.render(
-                this.props.cellFactory(item, detachedRootRef),
+                this.props.cellFactory(item, ref),
                 null,
                 () => {
                     // console.log(`Rendered into cell! detachedRootRef:`);
                 },
-                key
+                rootKey
             );
         }
     }
