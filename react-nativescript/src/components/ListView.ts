@@ -16,7 +16,7 @@ export type CellViewContainer = ContentView;
 
 interface Props {
     items: ListViewProps["items"],
-    cellFactory: (item: any, container: CellViewContainer) => React.ReactElement,
+    cellFactory: (item: any, ref: React.RefObject<any>) => React.ReactElement,
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
@@ -77,21 +77,16 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
-
+        const items: ListViewProps["items"] = this.props.items;
+        const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(args.index) : items[args.index];
+        
         let view: View|undefined = args.view;
         if(!view){
-            const detachedRootRef = React.createRef<any>();
+            const detachedRootRef: React.RefObject<any> = React.createRef<any>();
             const key: string = "ListView-" + (this.roots.length).toString();
-            const rootRef: any = ReactNativeScript.render(
-                React.createElement<any>(
-                    RCTContentView,
-                    { backgroundColor: new Color('red'), ref: detachedRootRef },
-                    React.createElement<any>(
-                        RCTLabel,
-                        { text: "RENDERED LABEL"},
-                        null
-                    )
-                ),
+
+            ReactNativeScript.render(
+                this.props.cellFactory(item, detachedRootRef),
                 null,
                 () => {
                     console.log(`Rendered into cell! detachedRootRef:`);
@@ -102,17 +97,9 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
             console.log(`Rendered into cell. Got the detachedRootRef:`);
 
-            /* This will cause detachedRootRef.current to become null. */
-            // ReactNativeScript.unmountComponentAtNode(key);
-            // console.log(`Immediately unmounted same cell!`);
-
             args.view = detachedRootRef.current;
 
-            /* This will remove the React association with the root, but the tree cannot be erased by React as there is no null.removeChild() */
-            // ReactNativeScript.unmountComponentAtNode(key);
-            // console.log(`Immediately unmounted same cell!`);
-
-
+            if(onCellFirstLoad) onCellFirstLoad(detachedRootRef.current);
 
             // const contentView = new ContentView();
             // if(onCellFirstLoad) onCellFirstLoad(contentView);
@@ -157,6 +144,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             // });
         } else {
             if(onCellRecycle) onCellRecycle(args.view as CellViewContainer);
+            
             // const filledIndices: string[] = Object.keys(this.state.nativeCells);
             // const sparseIndex: number|-1 = filledIndices.findIndex((index: string) => {
             //     return view === this.state.nativeCells[index];
@@ -275,6 +263,11 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         }
     }
 
+    componentWillUnmount(){
+        super.componentWillUnmount();
+        this.roots.forEach(root => ReactNativeScript.unmountComponentAtNode(root));
+    }
+
     static mapToKV<K, V>(map: Map<K, V>): [K, V][] {
         const arr: [K, V][] = [];
         map.forEach((value: V, key: K) => {
@@ -357,29 +350,30 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         const portals: React.ReactPortal[] = [];
 
         if(_debug.logLevel === "debug") console.log(`RENDERING nativeCellToItemIndex:`, _ListView.serialiseNativeCellToItemIndex(this.state.nativeCellToItemIndex));
-        this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: CellViewContainer) => {
-            const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
-            if(_debug.logLevel === "debug") console.log(`Rendering CV(${view._domId})`);
 
-            const portal = ReactNativeScript.createPortal(
-                this.props.cellFactory(item, view),
-                view,
-                `Portal(${view._domId})`,
-            );
+        // this.state.nativeCellToItemIndex.forEach((itemIndex: number, view: CellViewContainer) => {
+        //     const item: any = this.state.isItemsSource ? (items as ItemsSource).getItem(itemIndex) : items[itemIndex];
+        //     if(_debug.logLevel === "debug") console.log(`Rendering CV(${view._domId})`);
 
-            // const identifier: string = `Portal(${itemIndex}-${view._domId})`;
+        //     const portal = ReactNativeScript.createPortal(
+        //         this.props.cellFactory(item, view),
+        //         view,
+        //         `Portal(${view._domId})`,
+        //     );
 
-            // const portal = React.createElement(
-            //     ListViewCell,
-            //     {
-            //         key: identifier,
-            //         nativeElement: view,
-            //         identifier: `Portal(${itemIndex}-${view._domId})`,
-            //     },
-            //     this.props.cellFactory(item, view)
-            // )
-            portals.push(portal as React.ReactPortal);
-        });
+        //     // const identifier: string = `Portal(${itemIndex}-${view._domId})`;
+
+        //     // const portal = React.createElement(
+        //     //     ListViewCell,
+        //     //     {
+        //     //         key: identifier,
+        //     //         nativeElement: view,
+        //     //         identifier: `Portal(${itemIndex}-${view._domId})`,
+        //     //     },
+        //     //     this.props.cellFactory(item, view)
+        //     // )
+        //     portals.push(portal as React.ReactPortal);
+        // });
 
         return React.createElement(
             'listView',
@@ -402,7 +396,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 items,
                 ref: forwardedRef || this.myRef
             },
-            portals,
+            // portals,
         );
     }
 }

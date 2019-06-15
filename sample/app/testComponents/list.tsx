@@ -62,10 +62,11 @@ export class ListViewTest extends React.Component<{}, {}> {
                 }}
                 height={{ unit: "%", value: 100 }}
                 items={[...items.map((val: Item) => val)]}
-                cellFactory={(item: Item, container: CellViewContainer) => {
+                cellFactory={(item: Item, ref: React.RefObject<any>) => {
                     return (
                         <RCTLabel
-                            key={container._domId}
+                            ref={ref}
+                            // key={container._domId}
                             fontSize={24}
                         >
                             {`#${item}`}
@@ -77,6 +78,7 @@ export class ListViewTest extends React.Component<{}, {}> {
         );
     }
 }
+
 
 /**
  * Code below here ported to React NativeScript from React Native's RNTester app:
@@ -188,13 +190,14 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 width={{ unit: "%", value: 100 }}
                 items={this.items}
                 onLoadMoreItems={this.onLoadMoreItems}
-                cellFactory={(item: IndexToContentItem, container: CellViewContainer) => {
+                cellFactory={(item: IndexToContentItem, ref: React.RefObject<any>) => {
                     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
 
                     /* TODO: maybe provide a hash for each Cell to inform shouldComponentUpdate()? */
                     return (
                         <RCTGridLayout
+                            ref={ref}
                             rows={[new ItemSpec(1, "star")]}
                             columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                         >
@@ -208,7 +211,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                             <RCTLabel
                                 row={0}
                                 col={1}
-                                key={container._domId}
+                                // key={container._domId}
                                 text={item.index.toString()}
                                 fontSize={12}
                             >
