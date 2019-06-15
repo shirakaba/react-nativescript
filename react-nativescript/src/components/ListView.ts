@@ -66,8 +66,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     }
 
     private readonly argsViewToRootKeyAndRef: Map<View, { rootKey: string, ref: any }> = new Map();
-
-    private roots: string[] = [];
+    private roots: Set<string> = new Set();
 
     /* Referring to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
@@ -78,7 +77,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         let view: View|undefined = args.view;
         if(!view){
             const detachedRootRef: React.RefObject<any> = React.createRef<any>();
-            const key: string = "ListView-" + (this.roots.length).toString();
+            const key: string = "ListView-" + (this.roots.size).toString();
 
             ReactNativeScript.render(
                 this.props.cellFactory(item, detachedRootRef),
@@ -88,7 +87,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 },
                 key
             );
-            this.roots.push(key);
+            this.roots.add(key);
 
             args.view = detachedRootRef.current;
             /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
