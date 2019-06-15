@@ -4,7 +4,7 @@ import { ListView as NativeScriptListView, ItemEventData, knownTemplates, ItemsS
 import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
 import { Label } from "tns-core-modules/ui/label/label";
-import { ContentView, Observable } from "tns-core-modules/ui/page/page";
+import { ContentView, Observable, Color } from "tns-core-modules/ui/page/page";
 import { getInstanceFromNode } from "../client/ComponentTree";
 import { ListViewCell } from "./ListViewCell";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
@@ -72,6 +72,8 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } as Readonly<S>; // No idea why I need to assert as Readonly<S> when using generics with State :(
     }
 
+    private roots: string[] = [];
+
     /* TODO: refer to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
@@ -79,18 +81,38 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         let view: View|undefined = args.view;
         if(!view){
             const detachedRootRef = React.createRef<any>();
+            const key: string = "ListView-" + (this.roots.length).toString();
             const rootRef: any = ReactNativeScript.render(
-                React.createElement<any>(RCTLabel, { text: "RENDERED LABEL", ref: detachedRootRef }, null),
+                React.createElement<any>(
+                    RCTContentView,
+                    { backgroundColor: new Color('red'), ref: detachedRootRef },
+                    React.createElement<any>(
+                        RCTLabel,
+                        { text: "RENDERED LABEL"},
+                        null
+                    )
+                ),
                 null,
                 () => {
-                    console.log(`Rendered into cell! detachedRootRef:`, detachedRootRef);
-                }
+                    console.log(`Rendered into cell! detachedRootRef:`);
+                },
+                key
             );
+            this.roots.push(key);
 
-            console.log(`Rendered into cell. Got the detachedRootRef:`, detachedRootRef);
+            console.log(`Rendered into cell. Got the detachedRootRef:`);
 
-            // return detachedRootRef.current;
+            /* This will cause detachedRootRef.current to become null. */
+            // ReactNativeScript.unmountComponentAtNode(key);
+            // console.log(`Immediately unmounted same cell!`);
+
             args.view = detachedRootRef.current;
+
+            /* This will remove the React association with the root, but the tree cannot be erased by React as there is no null.removeChild() */
+            // ReactNativeScript.unmountComponentAtNode(key);
+            // console.log(`Immediately unmounted same cell!`);
+
+
 
             // const contentView = new ContentView();
             // if(onCellFirstLoad) onCellFirstLoad(contentView);
