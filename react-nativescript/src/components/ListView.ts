@@ -6,6 +6,7 @@ import { updateListener } from "../client/EventHandling";
 import { ContentView, Observable, Color } from "tns-core-modules/ui/page/page";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
+import { Label as NativeScriptLabel } from "../client/ElementRegistry";
 
 export type CellViewContainer = ContentView;
 
@@ -76,6 +77,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         
         let view: View|undefined = args.view;
         if(!view){
+            console.log(`[ListView] no existing view.`);
             const detachedRootRef: React.RefObject<any> = React.createRef<any>();
             const key: string = "ListView-" + (this.roots.size).toString();
 
@@ -95,6 +97,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
             if(onCellFirstLoad) onCellFirstLoad(detachedRootRef.current);
         } else {
+            console.log(`[ListView] existing view: `, view);
             if(onCellRecycle) onCellRecycle(view as CellViewContainer);
 
             const { rootKey, ref } = this.argsViewToRootKeyAndRef.get(view);
@@ -146,6 +149,48 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
         }
+    }
+
+    componentDidMount(){
+        super.componentDidMount();
+
+        const ref = this.props.forwardedRef || this.myRef;
+
+        const node: E|null = ref.current;
+        if(node){
+            ref.current.itemTemplates = [
+                {
+                    key: "even",
+                    createView: () => {
+                        const label = new NativeScriptLabel();
+                        label.text = "From first template";
+                        return label;
+                        /* This will be fed in as the beginning args.view (rather than undefined).
+                         * So we need a strategy for allowing consumers to render in this block and produce a rootKey to it. */
+                    }
+                },
+                {
+                    key: "odd",
+                    createView: () => {
+                        const label = new NativeScriptLabel();
+                        label.text = "From second template";
+                        return label;
+                        /* This will be fed in as the beginning args.view (rather than undefined).
+                         * So we need a strategy for allowing consumers to render in this block and produce a rootKey to it. */
+                    }
+                }
+            ];
+            ref.current.itemTemplateSelector = (item: any, index: number, items: any) => {
+                return index % 2 === 0 ? "even" : "odd";
+            };
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
+        }
+
+        console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
+        console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
+        console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
+        console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
     }
 
     componentWillUnmount(){
