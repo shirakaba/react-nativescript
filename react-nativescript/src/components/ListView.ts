@@ -6,15 +6,13 @@ import { updateListener } from "../client/EventHandling";
 import { ContentView, Observable, Color, KeyedTemplate } from "tns-core-modules/ui/page/page";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
-import { Label as NativeScriptLabel, StackLayout } from "../client/ElementRegistry";
-import { Instance, Container } from "../client/HostConfig";
+import { Label as NativeScriptLabel } from "../client/ElementRegistry";
 
 export type CellViewContainer = ContentView;
 type CellFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement);
 
 interface Props {
     items: ListViewProps["items"],
-    containerFactory?: () => Container|null,
     cellFactories?: Map<string, CellFactory>,
     cellFactory?: CellFactory,
     /* For now, we don't support custom onItemLoading event handlers. */
@@ -33,11 +31,7 @@ interface Props {
 }
 
 type NumberKey = number|string;
-type RootKeyAndAssociates = {
-    rootKey: string,
-    ref: React.RefObject<any>,
-    container: Container|null,
-};
+type RootKeyAndRef = { rootKey: string, ref: React.RefObject<any> };
 
 interface State {
     nativeCells: Record<NumberKey, CellViewContainer>;
@@ -75,7 +69,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } as Readonly<S>; // No idea why I need to assert as Readonly<S> when using generics with State :(
     }
 
-    private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndAssociates> = new Map();
+    private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
     private roots: Set<string> = new Set();
 
     /* Referring to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
@@ -103,8 +97,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         if(!view){
             console.log(`[ListView] no existing view.`);
 
-            const container: Container|null = this.props.containerFactory ? this.props.containerFactory() : new StackLayout();
-            const rootKeyAndRef: RootKeyAndAssociates = this.renderNewRoot(item, cellFactory, container);
+            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory);
 
             args.view = rootKeyAndRef.ref.current;
 
@@ -116,7 +109,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             console.log(`[ListView] existing view: `, view);
             if(onCellRecycle) onCellRecycle(view as CellViewContainer);
 
-            const { rootKey, ref, container } = this.argsViewToRootKeyAndRef.get(view);
+            const { rootKey, ref } = this.argsViewToRootKeyAndRef.get(view);
             if(typeof rootKey === "undefined"){
                 console.error(`Unable to find root key that args.view corresponds to!`, view);
                 return;
@@ -128,7 +121,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
             ReactNativeScript.render(
                 cellFactory(item, ref),
-                container,
+                null,
                 () => {
                     // console.log(`Rendered into cell! detachedRootRef:`);
                 },
@@ -167,14 +160,14 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         }
     }
 
-    private readonly renderNewRoot = (item: any, cellFactory: CellFactory, container: Container|null): RootKeyAndAssociates => {
+    private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
         console.log(`[ListView] no existing view.`);
         const ref: React.RefObject<any> = React.createRef<any>();
         const rootKey: string = "ListView-" + (this.roots.size).toString();
 
         ReactNativeScript.render(
             cellFactory(item, ref),
-            container,
+            null,
             () => {
                 // console.log(`Rendered into cell! ref:`);
             },
@@ -184,8 +177,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
 
         return {
             rootKey,
-            ref,
-            container,
+            ref
         };
     }
 
