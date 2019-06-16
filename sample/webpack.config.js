@@ -58,6 +58,7 @@ module.exports = env => {
         hmr, // --env.hmr,
         unitTesting, // --env.unitTesting
     } = env;
+    console.log(`Got env:`, env);
     const externals = nsWebpack.getConvertedExternals(env.externals);
 
     const appFullPath = resolve(projectRoot, appPath);
@@ -151,7 +152,7 @@ module.exports = env => {
                             comments: false,
                         },
                         compress: {
-                            // drop_console: true,
+                            drop_console: true,
                             // The Android SBG has problems parsing the output
                             // when these options are enabled
                             'collapse_vars': platform !== "android",
