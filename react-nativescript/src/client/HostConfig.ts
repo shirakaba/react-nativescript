@@ -39,9 +39,15 @@ import { SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar/segmented-ba
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
-export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
+export interface DetachedTree {
+    __isDetachedTree: true,
+    appendChild(child: View): void;
+    removeChild(child: View): void;
+    insertBefore(child: Instance | TextInstance, beforeChild: Instance | TextInstance): void;
+}
+export type Container = View|DetachedTree; // The root node of the app. Typically Frame, but View is more flexible.
 export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
-type TextInstance = TextBase;
+export type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
 export type HostContext = {
@@ -62,6 +68,10 @@ const noTimeoutValue: NoTimeout = undefined;
 
 function isASingleChildContainer(view: Instance): view is Page|ContentView|ScrollView {
     return view instanceof ContentView || view instanceof Page || view instanceof ScrollView;
+}
+
+function isADetachedTree(container: Container): container is DetachedTree {
+    return (container as DetachedTree).__isDetachedTree === true;
 }
 
 // function handleChildrenProp(
@@ -427,12 +437,15 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
         }
-        // TODO: check whether a property/event change should be fired. 
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-        console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
-        hostConfig.appendChild(container, child);
-        // TODO: check whether a property/event change should be fired.
+        if(isADetachedTree(container)){
+            console.log(`[appendChildToContainer()] handling detached tree: ${container} > ${child}`);
+            container.appendChild(child as View);
+        } else {
+            console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
+            hostConfig.appendChild(container, child);
+        }
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
         console.log(`[commitTextUpdate()]`, textInstance);
@@ -542,6 +555,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
 
+        // if(container instanceof Page || container instanceof ContentView){
+        //     console.warn(`[insertInContainerBefore] not supported because Page/ContentView only support a single child.`);
+        // }
+
         if(parentInstance instanceof LayoutBase){
             /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
             if(parentInstance instanceof GridLayout){
@@ -607,20 +624,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance,
     ): void {
-        if(container instanceof Page || container instanceof ContentView){
-            console.warn(`[insertInContainerBefore] not supported because Page/ContentView only support a single child.`);
+        if(isADetachedTree(container)){
+            console.log(`[insertInContainerBefore()] handling detached tree: ${container} > ${child}`);
+            container.insertBefore(child, beforeChild);
         } else {
-            let beforeChildIndex: number = 0;
-            container.eachChild((viewBase: ViewBase) => {
-                if(viewBase === beforeChild){
-                    return false;
-                } else {
-                    beforeChildIndex++;
-                    return true;
-                }
-            });
-            // NOTE: Untested. Potentially has an off-by-one error.
-            container._addView(child, beforeChildIndex);
+            console.log(`[insertInContainerBefore()] deferring to insertBefore(): ${container} > ${child}`);
+            hostConfig.insertBefore(container, child, beforeChild);
         }
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
@@ -666,14 +675,29 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             // TODO: consult React expert here!
             console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
             return;
+
+            // const surrogateParent = child.parent;
+            // if(surrogateParent){
+            //     console.log(`[removeChild()] parent was null, but surrogate was found, so deferring to removeChild(): ${surrogateParent} x ${child}`);
+            //     // Interestingly, Label(5) gets the surrogateParent ListView, but it has no effect.
+            //     return hostConfig.removeChild(surrogateParent, child);
+            // } else {
+            //     console.log(`[removeChild()] parent was null; no surrogate was found: ${parent} x ${child}`);
+            //     return;
+            // }
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
         }
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        console.log(`[removeChildFromContainer()] deferring to removeChild(): ${container} > ${child}`);
-        return hostConfig.removeChild(container, child);
+        if(isADetachedTree(container)){
+            console.log(`[removeChildFromContainer()] handling detached tree: ${container} x ${child}`);
+            container.removeChild(child as View);
+        } else {
+            console.log(`[removeChildFromContainer()] deferring to removeChild(): ${container} x ${child}`);
+            hostConfig.removeChild(container, child);
+        }
     },
     resetTextContent(instance: Instance): void {
         if(instance instanceof TextBase){
