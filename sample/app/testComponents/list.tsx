@@ -171,7 +171,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
     //     return dataBlob;
     // };
 
-    private readonly itemsToLoad: number = 20;
+    private readonly itemsToLoad: number = 25;
 
     /* Optimisation note: at list initialisation, Portals SHALL be rendered for each item in the starting list. */
     private readonly items: ObservableArray<IndexToContentItem> = new ObservableArray(
@@ -179,23 +179,41 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
         .map((value: number) => ({ index: value, content: value.toString() }))
     );
 
+    private loadMore: boolean = true;
+    private loadMoreTimeout?:any;
+
     /* Making this no-op is sufficient to restore this to being a static list view. */
     private readonly onLoadMoreItems = (args: ItemEventData) => {
-        console.log(`[onLoadMoreItems]`);
-
-        const itemsToPush = [];
-
-        for(let i = this.items.length; i < + this.items.length + this.itemsToLoad; i++){
-            const lastValueIncremented: number = i;
-    
-            itemsToPush.push({
-                index: lastValueIncremented,
-                content: lastValueIncremented.toString()
-            });
+        if(!this.loadMore){
+            console.log(`[onLoadMoreItems] debouncing.`);
+            return;
         }
 
-        this.items.push(itemsToPush);
+        console.log(`[onLoadMoreItems] permitted.`);
+
+        this.loadMoreTimeout = setTimeout(() => {
+            const itemsToPush = [];
+    
+            for(let i = this.items.length; i < + this.items.length + this.itemsToLoad; i++){
+                const lastValueIncremented: number = i;
+        
+                itemsToPush.push({
+                    index: lastValueIncremented,
+                    content: lastValueIncremented.toString()
+                });
+            }
+    
+            this.items.push(itemsToPush);
+            this.loadMore = true;
+        }, 750);
+        /* Ample time for a (typical) scroll action's inertia to settle, to avoid list jumpiness. */
+
+        this.loadMore = false;
     };
+
+    componentWillUnmount(){
+        if(this.loadMoreTimeout) clearTimeout(this.loadMoreTimeout);
+    }
 
     private readonly styles = {
         row: {
