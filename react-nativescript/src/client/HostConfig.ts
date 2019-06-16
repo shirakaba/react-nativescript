@@ -40,7 +40,8 @@ import { SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar/segmented-ba
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
 export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
-export type Instance = ViewBase; // We may extend this to Observable in future, to allow the tree to contain non-visual components. More likely ViewBase anyway?
+/* Of which only LayoutBase|ContentView can take child Views (e.g. TextBase can't, but CAN take child texts; and there are special cases like ActionBar). */
+export type Instance = ViewBase;
 type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
