@@ -73,36 +73,42 @@ export class ListViewTest extends React.Component<{}, {}> {
                 //         </RCTLabel>
                 //     );
                 // }}
-                itemTemplateSelector={(item: any, index: number, items: any): string => {
+                itemTemplateSelector={(item: Item, index: number, items: any): string => {
                     return index % 2 === 0 ? "even" : "odd";
                 }}
                 cellFactories={new Map([
                     [
                         "odd",
-                        (item: Item, ref: React.RefObject<any>) => {
-                            return (
-                                <RCTLabel
-                                    ref={ref}
-                                    // key={container._domId}
-                                    fontSize={24}
-                                >
-                                    {`ODD #${item}`}
-                                </RCTLabel>
-                            );
+                        {
+                            placeholderItem: 1,
+                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                                return (
+                                    <RCTLabel
+                                        ref={ref}
+                                        // key={container._domId}
+                                        fontSize={24}
+                                    >
+                                        {`ODD #${item}`}
+                                    </RCTLabel>
+                                );
+                            }
                         }
                     ],
                     [
                         "even",
-                        (item: Item, ref: React.RefObject<any>) => {
-                            return (
-                                <RCTLabel
-                                    ref={ref}
-                                    // key={container._domId}
-                                    fontSize={24}
-                                >
-                                    {`EVEN #${item}`}
-                                </RCTLabel>
-                            );
+                        {
+                            placeholderItem: 0,
+                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                                return (
+                                    <RCTTextView
+                                        ref={ref}
+                                        // key={container._domId}
+                                        fontSize={24}
+                                    >
+                                        {`EVEN #${item}`}
+                                    </RCTTextView>
+                                );
+                            }
                         }
                     ],
                 ])}
