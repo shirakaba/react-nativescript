@@ -72,7 +72,14 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
     private roots: Set<string> = new Set();
 
-    /* Referring to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
+    /* ListView code-behind:
+     *   https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts
+     * ListView item templates:
+     *   https://medium.com/@alexander.vakrilov/faster-nativescript-listview-with-multiple-item-templates-8f903a32e48f
+     * Cell state in ListView:
+     *   https://medium.com/@alexander.vakrilov/managing-component-state-in-nativescript-listview-b139e45d899b
+     *   https://github.com/NativeScript/nativescript-angular/issues/1245#issuecomment-393465035
+     */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
         const { items, itemTemplateSelector } = this.props; 
@@ -211,10 +218,10 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
         }
 
-        console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
-        console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
-        console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
-        console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
+        // console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
+        // console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
+        // console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
+        // console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
     }
 
 

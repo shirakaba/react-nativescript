@@ -229,11 +229,53 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 width={{ unit: "%", value: 100 }}
                 items={this.items}
                 onLoadMoreItems={this.onLoadMoreItems}
+                /* If you only have one template, there's no advantage in setting up a templated list (it's actually wasteful: one extra reconciliation). */
+                // itemTemplateSelector={(item: IndexToContentItem, index: number, items: any): string => {
+                //     return "every";
+                // }}
+                // cellFactories={new Map([
+                //     [
+                //         "every",
+                //         {
+                //             placeholderItem: { index: 1, content: "PLACEHOLDER" },
+                //             cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
+                //                 const rowHash: number = Math.abs(hashCode(item.index.toString()));
+                //                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
+            
+                //                 /* TODO: maybe provide a hash for each Cell to inform shouldComponentUpdate()? */
+                //                 return (
+                //                     <RCTGridLayout
+                //                         ref={ref}
+                //                         rows={[new ItemSpec(1, "star")]}
+                //                         columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
+                //                     >
+                //                         <RCTImage
+                //                             row={0}
+                //                             col={0}
+                //                             src={imgSource}
+                //                             style={this.styles.thumb}
+                //                             stretch={"aspectFill"}
+                //                         />
+                //                         <RCTLabel
+                //                             row={0}
+                //                             col={1}
+                //                             // key={container._domId}
+                //                             text={item.index.toString()}
+                //                             fontSize={12}
+                //                         >
+                //                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
+                //                         </RCTLabel>
+                //                     </RCTGridLayout>
+                //                 );
+                //             }
+                //         }
+                //     ]
+                // ])}
+
                 cellFactory={(item: IndexToContentItem, ref: React.RefObject<any>) => {
                     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
-
-                    /* TODO: maybe provide a hash for each Cell to inform shouldComponentUpdate()? */
+                    
                     return (
                         <RCTGridLayout
                             ref={ref}
