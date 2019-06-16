@@ -171,7 +171,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
     //     return dataBlob;
     // };
 
-    private readonly itemsToLoad: number = 25;
+    private readonly itemsToLoad: number = 100;
 
     /* Optimisation note: at list initialisation, Portals SHALL be rendered for each item in the starting list. */
     private readonly items: ObservableArray<IndexToContentItem> = new ObservableArray(
@@ -228,6 +228,10 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
             width: { value: 64, unit: "px" as "px" },
             height: { value: 64, unit: "px" as "px" },
         },
+        bigThumb: {
+            width: { value: 128, unit: "px" as "px" },
+            height: { value: 128, unit: "px" as "px" },
+        },
         text: {
             flexGrow: 1
         }
@@ -249,79 +253,115 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 width={{ unit: "%", value: 100 }}
                 items={this.items}
                 onLoadMoreItems={this.onLoadMoreItems}
-                
-                /* If you only have one template, there's no advantage in setting up a templated list (it's actually wasteful: one extra reconciliation). */
-                // itemTemplateSelector={(item: IndexToContentItem, index: number, items: any): string => {
-                //     return "every";
-                // }}
-                // cellFactories={new Map([
-                //     [
-                //         "every",
-                //         {
-                //             placeholderItem: { index: 1, content: "PLACEHOLDER" },
-                //             cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
-                //                 const rowHash: number = Math.abs(hashCode(item.index.toString()));
-                //                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
-            
-                //                 /* TODO: maybe provide a hash for each Cell to inform shouldComponentUpdate()? */
-                //                 return (
-                //                     <RCTGridLayout
-                //                         ref={ref}
-                //                         rows={[new ItemSpec(1, "star")]}
-                //                         columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
-                //                     >
-                //                         <RCTImage
-                //                             row={0}
-                //                             col={0}
-                //                             src={imgSource}
-                //                             style={this.styles.thumb}
-                //                             stretch={"aspectFill"}
-                //                         />
-                //                         <RCTLabel
-                //                             row={0}
-                //                             col={1}
-                //                             // key={container._domId}
-                //                             text={item.index.toString()}
-                //                             fontSize={12}
-                //                         >
-                //                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                //                         </RCTLabel>
-                //                     </RCTGridLayout>
-                //                 );
-                //             }
-                //         }
-                //     ]
-                // ])}
 
-                cellFactory={(item: IndexToContentItem, ref: React.RefObject<any>) => {
-                    const rowHash: number = Math.abs(hashCode(item.index.toString()));
-                    const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
-                    
-                    return (
-                        <RCTGridLayout
-                            ref={ref}
-                            rows={[new ItemSpec(1, "star")]}
-                            columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
-                        >
-                            <RCTImage
-                                row={0}
-                                col={0}
-                                src={imgSource}
-                                style={this.styles.thumb}
-                                stretch={"aspectFill"}
-                            />
-                            <RCTLabel
-                                row={0}
-                                col={1}
-                                // key={container._domId}
-                                text={item.index.toString()}
-                                fontSize={12}
-                            >
-                                {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                            </RCTLabel>
-                        </RCTGridLayout>
-                    );
+                /* If you only have one template, there's no advantage in setting up a templated list (it's actually wasteful: one extra reconciliation). */
+                itemTemplateSelector={(item: IndexToContentItem, index: number, items: any): string => {
+                    return index % 2 === 0 ? "even" : "odd";
                 }}
+                cellFactories={new Map([
+                    [
+                        "even",
+                        {
+                            placeholderItem: { index: 1, content: "PLACEHOLDER" },
+                            cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
+                                const rowHash: number = Math.abs(hashCode(item.index.toString()));
+                                const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
+            
+                                return (
+                                    <RCTGridLayout
+                                        ref={ref}
+                                        rows={[new ItemSpec(1, "star")]}
+                                        columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
+                                    >
+                                        <RCTImage
+                                            row={0}
+                                            col={0}
+                                            src={imgSource}
+                                            style={this.styles.thumb}
+                                            stretch={"aspectFill"}
+                                        />
+                                        <RCTLabel
+                                            row={0}
+                                            col={1}
+                                            // key={container._domId}
+                                            text={item.index.toString()}
+                                            fontSize={12}
+                                            paddingRight={8}
+                                        >
+                                            {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
+                                        </RCTLabel>
+                                    </RCTGridLayout>
+                                );
+                            }
+                        }
+                    ],
+                    [
+                        "odd",
+                        {
+                            placeholderItem: { index: 1, content: "PLACEHOLDER" },
+                            cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
+                                const rowHash: number = Math.abs(hashCode(item.index.toString()));
+                                const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
+            
+                                return (
+                                    <RCTGridLayout
+                                        ref={ref}
+                                        backgroundColor={new Color("yellow")}
+                                        rows={[new ItemSpec(1, "star")]}
+                                        columns={[new ItemSpec(1, "star"), new ItemSpec(64, "pixel")]}
+                                    >
+                                        <RCTLabel
+                                            paddingLeft={8}
+                                            row={0}
+                                            col={0}
+                                            // key={container._domId}
+                                            text={item.index.toString()}
+                                            fontSize={12}
+                                        >
+                                            {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
+                                        </RCTLabel>
+                                        <RCTImage
+                                            row={0}
+                                            col={1}
+                                            src={imgSource}
+                                            style={this.styles.bigThumb}
+                                            stretch={"aspectFill"}
+                                        />
+                                    </RCTGridLayout>
+                                );
+                            }
+                        }
+                    ]
+                ])}
+
+                // cellFactory={(item: IndexToContentItem, ref: React.RefObject<any>) => {
+                //     const rowHash: number = Math.abs(hashCode(item.index.toString()));
+                //     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
+                //     return (
+                //         <RCTGridLayout
+                //             ref={ref}
+                //             rows={[new ItemSpec(1, "star")]}
+                //             columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
+                //         >
+                //             <RCTImage
+                //                 row={0}
+                //                 col={0}
+                //                 src={imgSource}
+                //                 style={this.styles.thumb}
+                //                 stretch={"aspectFill"}
+                //             />
+                //             <RCTLabel
+                //                 row={0}
+                //                 col={1}
+                //                 // key={container._domId}
+                //                 text={item.index.toString()}
+                //                 fontSize={12}
+                //             >
+                //                 {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
+                //             </RCTLabel>
+                //         </RCTGridLayout>
+                //     );
+                // }}
             />
         );
     }
