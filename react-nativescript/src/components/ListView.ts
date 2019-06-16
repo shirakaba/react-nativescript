@@ -13,7 +13,7 @@ type CellFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement
 
 interface Props {
     items: ListViewProps["items"],
-    cellFactories?: Map<string, CellFactory>,
+    cellFactories?: Map<string, { placeholderItem: any, cellFactory: CellFactory }>,
     cellFactory?: CellFactory,
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
@@ -86,7 +86,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             null;
         const cellFactory: CellFactory|undefined = template === null ? 
             this.props.cellFactory : 
-           (this.props.cellFactories ? this.props.cellFactories.get(template) : this.props.cellFactory);
+           (this.props.cellFactories ? this.props.cellFactories.get(template).cellFactory : this.props.cellFactory);
         
         if(typeof cellFactory === "undefined"){
             console.warn(`ListView: No cell factory found, given template ${template}!`);
@@ -119,6 +119,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 return;
             }
 
+            // args.view = null;
             ReactNativeScript.render(
                 cellFactory(item, ref),
                 null,
@@ -180,6 +181,42 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             ref
         };
     }
+
+    componentDidMount(){
+        super.componentDidMount();
+
+        const ref = this.props.forwardedRef || this.myRef;
+
+        const node: E|null = ref.current;
+        if(node){
+            /* NOTE: does not support updating of this.props.cellFactories upon Props update. */
+            if(this.props.cellFactories){
+                const itemTemplates: KeyedTemplate[] = [];
+                this.props.cellFactories.forEach((info, key: string) => {
+                    const { placeholderItem, cellFactory } = info;
+                    itemTemplates.push({
+                        key,
+                        createView: () => {
+                            console.log(`[ListView] item template "${key}"`);
+                            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(placeholderItem, cellFactory);
+                            this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+
+                            return rootKeyAndRef.ref.current;
+                        }
+                    });
+                });
+                ref.current.itemTemplates = itemTemplates;
+            }
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
+        }
+
+        console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
+        console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
+        console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
+        console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
+    }
+
 
     componentWillUnmount(){
         super.componentWillUnmount();
