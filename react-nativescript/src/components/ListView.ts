@@ -6,15 +6,15 @@ import { updateListener } from "../client/EventHandling";
 import { ContentView, Observable, Color, KeyedTemplate } from "tns-core-modules/ui/page/page";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
-import { Label as NativeScriptLabel } from "../client/ElementRegistry";
 
 export type CellViewContainer = ContentView;
 type CellFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement);
 
 interface Props {
     items: ListViewProps["items"],
-    cellFactories?: Map<string, { placeholderItem: any, cellFactory: CellFactory }>,
+    /* User may specify cellFactory for single-template or cellFactories for multi-template. */
     cellFactory?: CellFactory,
+    cellFactories?: Map<string, { placeholderItem: any, cellFactory: CellFactory }>,
     /* For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void,
@@ -79,6 +79,8 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
      * Cell state in ListView:
      *   https://medium.com/@alexander.vakrilov/managing-component-state-in-nativescript-listview-b139e45d899b
      *   https://github.com/NativeScript/nativescript-angular/issues/1245#issuecomment-393465035
+     * loadMoreItems:
+     *   https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/events/events-ts-page.ts
      */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
@@ -102,8 +104,6 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         
         let view: View|undefined = args.view;
         if(!view){
-            console.log(`[ListView] no existing view.`);
-
             const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory);
 
             args.view = rootKeyAndRef.ref.current;
@@ -217,11 +217,6 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
         }
-
-        // console.log(`[ListView] items.length: ${(this.props.forwardedRef || this.myRef).current.items.length}`);
-        // console.log(`[ListView] itemTemplates: ${(this.props.forwardedRef || this.myRef).current.itemTemplates}`);
-        // console.log(`[ListView] itemTemplate: ${(this.props.forwardedRef || this.myRef).current.itemTemplate}`);
-        // console.log(`[ListView] itemTemplateSelector: ${(this.props.forwardedRef || this.myRef).current.itemTemplateSelector}`);
     }
 
 
@@ -236,7 +231,7 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     }
 
     render(){
-        // console.log(`ListView's render()`);
+        console.log(`ListView's render()`);
         const {
             forwardedRef,
 
@@ -272,19 +267,6 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             'listView',
             {
                 className: "list-group",
-                /* Maybe we need to supply a template to map each item to a NativeScript View? */
-                // itemTemplate: knownTemplates.itemTemplate,
-
-                /* This seems to make the initial template; not too useful as it receives no args with which to customise it */
-                // _itemTemplatesInternal: [{
-                //     key: 'default',
-                //     createView: (args: undefined) => {
-                //         const label = new Label();
-                //         label.text = "test";
-                //         return label;
-                //     }
-                // }],
-
                 ...rest,
                 items,
                 ref: forwardedRef || this.myRef

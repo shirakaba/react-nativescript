@@ -249,6 +249,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 width={{ unit: "%", value: 100 }}
                 items={this.items}
                 onLoadMoreItems={this.onLoadMoreItems}
+                
                 /* If you only have one template, there's no advantage in setting up a templated list (it's actually wasteful: one extra reconciliation). */
                 // itemTemplateSelector={(item: IndexToContentItem, index: number, items: any): string => {
                 //     return "every";
