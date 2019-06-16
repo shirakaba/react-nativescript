@@ -7,7 +7,6 @@ import { ContentView, Observable, Color, KeyedTemplate } from "tns-core-modules/
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
 import * as ReactNativeScript from "../client/ReactNativeScript"
 import { Label as NativeScriptLabel } from "../client/ElementRegistry";
-import { Instance, TextInstance, DetachedTree } from "../client/HostConfig";
 
 export type CellViewContainer = ContentView;
 type CellFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement);
@@ -73,25 +72,6 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
     private roots: Set<string> = new Set();
 
-    private readonly detachedTree = (args: ItemEventData): DetachedTree => ({
-        __isDetachedTree: true,
-        appendChild(child: View): void {
-            console.log(`[DetachedTree] appendChild() - setting args.view to child.`);
-            args.view = child;
-        },
-        removeChild(child: View): void {
-            console.log(`[DetachedTree] swapping existing child over to sacrificial parent`);
-            (child.parent as NativeScriptListView)._removeView(child);
-            const cv = new ContentView();
-            cv.content = child;
-            args.view = null;
-        },
-        insertBefore(child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
-            console.log(`[DetachedTree] insertBefore() - setting args.view to child.`);
-            args.view = child as View;
-        },
-    });
-
     /* Referring to: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
@@ -112,23 +92,12 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
             console.warn(`ListView: No cell factory found, given template ${template}!`);
             return;
         }
-
-        /* As far as I understand, the template merely dictates what to set up rather than an undefined args.view.
-         * There's no way in here to coordinate our cell factory with the view recycler (i.e. for the cell factory
-         * to be given only cells in which the existing tree already follows the same template).
-         * 
-         * Thus, the view recycler may pass us views from either template. This is troublesome if the detached roots
-         * do not match, because when the detached root goes `null > Label(43)`, the reconciler has no way to perform 
-         * `null x Label(43)` -> `null > TextView(60)`.
-         * 
-         * ... That is, unless we add a case in the Host Config to check for a parent first..?
-         *  */
         
         let view: View|undefined = args.view;
         if(!view){
             console.log(`[ListView] no existing view.`);
 
-            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory, args);
+            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory);
 
             args.view = rootKeyAndRef.ref.current;
 
@@ -150,12 +119,9 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
                 return;
             }
 
-            // console.log(`SANITY TEST: Just nulling args.view.`);
-            // args.view = null;
-
             ReactNativeScript.render(
                 cellFactory(item, ref),
-                this.detachedTree(args),
+                null,
                 () => {
                     // console.log(`Rendered into cell! detachedRootRef:`);
                 },
@@ -194,14 +160,14 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
         }
     }
 
-    private readonly renderNewRoot = (item: any, cellFactory: CellFactory, args: ItemEventData): RootKeyAndRef => {
+    private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
         console.log(`[ListView] no existing view.`);
         const ref: React.RefObject<any> = React.createRef<any>();
         const rootKey: string = "ListView-" + (this.roots.size).toString();
 
         ReactNativeScript.render(
             cellFactory(item, ref),
-            this.detachedTree(args),
+            null,
             () => {
                 // console.log(`Rendered into cell! ref:`);
             },
