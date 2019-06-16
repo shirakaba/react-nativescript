@@ -20,10 +20,6 @@ const babelLoader = {
             "@babel/preset-react"
         ],
         plugins: [
-            /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
-            // ["@babel/plugin-proposal-decorators", { legacy: true }],
-            "react-nativescript-hot-loader/babel",
-            ["@babel/plugin-proposal-class-properties", { loose: true }],
         ]
     }
 };
@@ -321,6 +317,12 @@ module.exports = env => {
         // config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
         config.plugins.push(new webpack.NamedModulesPlugin());
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
+        babelLoader.options.plugins.push(
+            /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
+            // ["@babel/plugin-proposal-decorators", { legacy: true }],
+            "react-nativescript-hot-loader/babel",
+            ["@babel/plugin-proposal-class-properties", { loose: true }],
+        )
     }
 
 
