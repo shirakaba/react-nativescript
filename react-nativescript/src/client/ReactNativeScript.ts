@@ -38,6 +38,7 @@ import { ListPicker as RCTListPicker } from "../components/ListPicker";
 import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
 // import { Portal as RCTPortal } from "../components/Portal";
 import { StackLayout as RCTStackLayout } from "../components/StackLayout";
+import { Switch as RCTSwitch } from "../components/Switch";
 import { TextField as RCTTextField } from "../components/TextField";
 import { TextView as RCTTextView } from "../components/TextView";
 import { TabView as RCTTabView } from "../components/TabView";
@@ -319,6 +320,7 @@ export {
     RCTSegmentedBar,
     RCTSlider,
     RCTStackLayout,
+    RCTSwitch,
     RCTTabView,
     RCTTabViewItem,
     RCTTextField,
