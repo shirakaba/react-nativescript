@@ -382,6 +382,11 @@ export type ListPickerProps = ViewProps & Pick<
     "items"
 >;
 
+export type SwitchProps = ViewProps & Pick<
+    Switch,
+    "checked"
+>;
+
 export type TimePickerProps = ViewProps & Pick<
     TimePicker,
     "hour"|

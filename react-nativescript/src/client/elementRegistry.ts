@@ -94,7 +94,7 @@ export const elementMap = {
     "segmentedBar": SegmentedBar, // √
     "segmentedBarItem": SegmentedBarItem,
     "slider": Slider, // √
-    "switch": Switch,
+    "switch": Switch, // √
     "tabView": TabView, // √
     "tabViewItem": TabViewItem,
     "textView": TextView, // √
