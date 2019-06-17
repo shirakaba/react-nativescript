@@ -2,12 +2,14 @@ import * as React from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
 import { TabViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { TabViewItem } from "./TabViewItem";
-import { TabView as NativeScriptTabView, TabViewItem as NativeScriptTabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { TabView as NativeScriptTabView, TabViewItem as NativeScriptTabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
 import { StackLayout, Color, Label } from "../client/ElementRegistry";
 import { ViewComponentProps, RCTView } from "./View";
+import { updateListener } from "../client/EventHandling";
 
 interface Props {
     // items: NativeScriptTabViewItem[],
+    onSelectedIndexChanged?(args: SelectedIndexChangedEventData): void;
 }
 
 // export type TabViewComponentProps = Props & Partial<TabViewProps>;
@@ -25,6 +27,30 @@ export type TabViewComponentProps<E extends NativeScriptTabView = NativeScriptTa
  * See: https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/tab-view/code-behind/code-behind-ts-page.ts
  */
 export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extends NativeScriptTabView> extends RCTView<P, S, E> {
+
+    /**
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(attach, nextProps);
+
+        const ref = this.props.forwardedRef || this.myRef;
+        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
+
+        const node: E|null = ref.current;
+        if(node){
+            if(attach === null){
+                updateListener(node, "selectedIndexChanged", this.props.onSelectedIndexChanged, nextProps.onSelectedIndexChanged);
+            } else {
+                const method = (attach ? node.on : node.off).bind(node);
+
+                if(this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
+            }
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
+
     render(){
         const {
             forwardedRef,
