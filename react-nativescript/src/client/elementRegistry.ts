@@ -100,7 +100,7 @@ export const elementMap = {
     "textView": TextView, // √
     // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
     "textField": TextField, // √
-    "timePicker": TimePicker,
+    "timePicker": TimePicker, // √
     // "transition": Transition,
     // "fadeTransition": FadeTransition,
     // "flipTransition": FlipTransition,

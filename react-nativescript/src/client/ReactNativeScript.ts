@@ -42,6 +42,7 @@ import { TextField as RCTTextField } from "../components/TextField";
 import { TextView as RCTTextView } from "../components/TextView";
 import { TabView as RCTTabView } from "../components/TabView";
 import { TabViewItem as RCTTabViewItem } from "../components/TabViewItem";
+import { TimePicker as RCTTimePicker } from "../components/TimePicker";
 import { ContentView as RCTContentView } from "../components/ContentView";
 import { WebView as RCTWebView } from "../components/WebView";
 import { WrapLayout as RCTWrapLayout } from "../components/WrapLayout";
@@ -322,6 +323,7 @@ export {
     RCTTabViewItem,
     RCTTextField,
     RCTTextView,
+    RCTTimePicker,
     RCTWebView,
     RCTWrapLayout,
 };

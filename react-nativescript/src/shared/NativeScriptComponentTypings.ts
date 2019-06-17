@@ -382,6 +382,18 @@ export type ListPickerProps = ViewProps & Pick<
     "items"
 >;
 
+export type TimePickerProps = ViewProps & Pick<
+    TimePicker,
+    "hour"|
+    "minute"|
+    "time"|
+    "maxHour"|
+    "maxMinute"|
+    "minHour"|
+    "minMinute"|
+    "minuteInterval"
+>;
+
 export type ProgressProps = ViewProps & Pick<
     Progress,
     "value"|
