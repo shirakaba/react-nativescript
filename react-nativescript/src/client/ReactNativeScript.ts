@@ -34,6 +34,7 @@ import { GridLayout as RCTGridLayout } from "../components/GridLayout";
 import { HtmlView as RCTHtmlView } from "../components/HtmlView";
 import { Label as RCTLabel } from "../components/Label";
 import { ListView as RCTListView } from "../components/ListView";
+import { ListPicker as RCTListPicker } from "../components/ListPicker";
 import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
 // import { Portal as RCTPortal } from "../components/Portal";
 import { StackLayout as RCTStackLayout } from "../components/StackLayout";
@@ -309,6 +310,7 @@ export {
     RCTImage,
     RCTLabel,
     RCTListView,
+    RCTListPicker,
     RCTPage,
     RCTProgress,
     RCTScrollView,

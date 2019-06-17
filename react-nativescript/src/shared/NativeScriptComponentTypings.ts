@@ -376,6 +376,12 @@ export type DatePickerProps = ViewProps & Pick<
     "minDate"
 >;
 
+export type ListPickerProps = ViewProps & Pick<
+    ListPicker,
+    "selectedIndex"|
+    "items"
+>;
+
 export type ProgressProps = ViewProps & Pick<
     Progress,
     "value"|

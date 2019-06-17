@@ -62,18 +62,18 @@ export type TNSElements = keyof typeof elementMap;
 // FIXME: provide list of keys (TNSElements) without losing type-safety of Record<string, ConcreteViewConstructor>.
 // export const elementMap: Record<string, ConcreteViewConstructor> = {
 export const elementMap = {
-    "actionBar": ActionBar,
-    "activityIndicator": ActivityIndicator,
+    "actionBar": ActionBar, // √
+    "activityIndicator": ActivityIndicator, // √
     // "animation": Animation,
     // "border": Border
     // "builder": Builder,
     "button": Button, // √ Pending event listeners.
     "contentView": ContentView, // √ Pending event listeners.
-    "datePicker": DatePicker,
+    "datePicker": DatePicker, // √
     // "dialogs": Dialogs, // No components in here.
-    "editableTextBase": EditableTextBase,
+    // "editableTextBase": EditableTextBase,
     "htmlView": HtmlView, // √
-    "image": Image,
+    "image": Image, // √
     // "cache": Cache, // Observable.observable, but doesn't extend View.
     "label": Label, // √
     // "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
@@ -83,19 +83,19 @@ export const elementMap = {
     "gridLayout": GridLayout, // √
     "stackLayout": StackLayout, // √
     "wrapLayout": WrapLayout, // √
-    "listPicker": ListPicker,
+    "listPicker": ListPicker, // √
     "listView": ListView, // √
     "placeholder": Placeholder,
-    "progress": Progress,
+    "progress": Progress, // √
     "proxyViewContainer": ProxyViewContainer,
     "repeater": Repeater,
-    "scrollView": ScrollView,
-    "searchBar": SearchBar,
-    "segmentedBar": SegmentedBar,
+    "scrollView": ScrollView, // √
+    "searchBar": SearchBar, // √
+    "segmentedBar": SegmentedBar, // √
     "segmentedBarItem": SegmentedBarItem,
-    "slider": Slider,
+    "slider": Slider, // √
     "switch": Switch,
-    "tabView": TabView,
+    "tabView": TabView, // √
     "tabViewItem": TabViewItem,
     "textView": TextView, // √
     // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
@@ -107,9 +107,9 @@ export const elementMap = {
     // "slideTransition": SlideTransition,
     "webView": WebView, // √ Pending event listeners.
     // There's a whole "styling" folder, but nothing is a component.
-    "frame": Frame,
+    "frame": Frame, // √
     // "view": View,
-    "page": Page,
+    "page": Page, // √
 };
 
 export {
