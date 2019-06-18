@@ -24,7 +24,6 @@ import { Button as RCTButton } from "../components/Button";
 import { Frame as RCTFrame } from "../components/Frame";
 import { ActivityIndicator as RCTActivityIndicator } from "../components/ActivityIndicator";
 import { DatePicker as RCTDatePicker } from "../components/DatePicker";
-import { Progress as RCTProgress } from "../components/Progress";
 import { ScrollView as RCTScrollView } from "../components/ScrollView";
 import { SearchBar as RCTSearchBar } from "../components/SearchBar";
 import { SegmentedBar as RCTSegmentedBar } from "../components/SegmentedBar";
@@ -39,6 +38,8 @@ import { ListPicker as RCTListPicker } from "../components/ListPicker";
 import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
 // import { Portal as RCTPortal } from "../components/Portal";
 import { NavigationButton as RCTNavigationButton } from "../components/NavigationButton";
+import { Placeholder as RCTPlaceholder } from "../components/Placeholder";
+import { Progress as RCTProgress } from "../components/Progress";
 import { StackLayout as RCTStackLayout } from "../components/StackLayout";
 import { Switch as RCTSwitch } from "../components/Switch";
 import { TextField as RCTTextField } from "../components/TextField";
@@ -318,6 +319,7 @@ export {
     RCTListPicker,
     RCTNavigationButton,
     RCTPage,
+    RCTPlaceholder,
     RCTProgress,
     RCTScrollView,
     RCTSearchBar,

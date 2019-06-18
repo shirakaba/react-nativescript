@@ -176,6 +176,9 @@ export type ContentViewProps = ViewProps & Pick<ContentView,
     "layoutView"
 >
 
+/* No further props on Placeholder. */
+export type PlaceholderProps = ViewProps; // & Pick<Placeholder>
+
 export type PageProps = ContentViewProps & Pick<Page,
     "backgroundSpanUnderStatusBar"|
     "statusBarStyle"|

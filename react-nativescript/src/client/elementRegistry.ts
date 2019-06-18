@@ -87,7 +87,7 @@ export const elementMap = {
     "listPicker": ListPicker, // √
     "listView": ListView, // √
     "navigationButton": NavigationButton, // √
-    "placeholder": Placeholder,
+    "placeholder": Placeholder, // √
     "progress": Progress, // √
     "proxyViewContainer": ProxyViewContainer,
     "repeater": Repeater,
@@ -98,7 +98,7 @@ export const elementMap = {
     "slider": Slider, // √
     "switch": Switch, // √
     "tabView": TabView, // √
-    "tabViewItem": TabViewItem,
+    "tabViewItem": TabViewItem, // √
     "textView": TextView, // √
     // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
     "textField": TextField, // √
