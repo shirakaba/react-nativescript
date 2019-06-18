@@ -271,6 +271,13 @@ export type ContainerViewProps = ViewProps & Pick<
 
 export type CustomLayoutViewProps = ContainerViewProps;
 
+export type RepeaterProps = ViewProps & Pick<
+    Repeater,
+    "items"|
+    "itemTemplate"|
+    "itemsLayout"
+>
+
 export type LayoutBaseProps = CustomLayoutViewProps & Pick<
     LayoutBase,
     "padding"|

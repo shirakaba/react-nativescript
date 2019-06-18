@@ -90,7 +90,7 @@ export const elementMap = {
     "placeholder": Placeholder, // √
     "progress": Progress, // √
     "proxyViewContainer": ProxyViewContainer,
-    "repeater": Repeater,
+    // "repeater": Repeater, // Doesn't translate to React properly. Just use a regular LayoutBase instead :)
     "scrollView": ScrollView, // √
     "searchBar": SearchBar, // √
     "segmentedBar": SegmentedBar, // √
