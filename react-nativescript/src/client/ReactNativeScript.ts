@@ -19,6 +19,7 @@ import { run, hasLaunched, getRootView } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
 import { ActionBar as RCTActionBar } from "../components/ActionBar";
+import { ActionItem as RCTActionItem } from "../components/ActionItem";
 import { Button as RCTButton } from "../components/Button";
 import { Frame as RCTFrame } from "../components/Frame";
 import { ActivityIndicator as RCTActivityIndicator } from "../components/ActivityIndicator";
@@ -37,6 +38,7 @@ import { ListView as RCTListView } from "../components/ListView";
 import { ListPicker as RCTListPicker } from "../components/ListPicker";
 import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
 // import { Portal as RCTPortal } from "../components/Portal";
+import { NavigationButton as RCTNavigationButton } from "../components/NavigationButton";
 import { StackLayout as RCTStackLayout } from "../components/StackLayout";
 import { Switch as RCTSwitch } from "../components/Switch";
 import { TextField as RCTTextField } from "../components/TextField";
@@ -300,6 +302,7 @@ export {
     // RCTGestures,
     RCTAbsoluteLayout,
     RCTActionBar,
+    RCTActionItem,
     RCTActivityIndicator,
     RCTButton,
     RCTContentView,
@@ -313,6 +316,7 @@ export {
     RCTLabel,
     RCTListView,
     RCTListPicker,
+    RCTNavigationButton,
     RCTPage,
     RCTProgress,
     RCTScrollView,

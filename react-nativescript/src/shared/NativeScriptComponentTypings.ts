@@ -50,6 +50,7 @@ import {
 } from "../client/ElementRegistry";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { ObservableComponentProps } from "../components/Observable";
+import { ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
@@ -215,6 +216,16 @@ export type TabViewItemProps = ViewBaseProps & Pick<TabViewItem,
     "textTransform"
     // "canBeLoaded"
 >
+
+export type ActionItemProps = ViewBaseProps & Pick<ActionItem,
+    "text"|
+    "icon"|
+    // "actionView"| /* We provide a StackLayout and implicitly map children into it */
+    "visibility"
+>
+
+/* No extra props on NavigationButton. */
+export type NavigationButtonProps = ActionItemProps; // & Pick<NavigationButton>
 
 export type TextBaseProps = ViewProps & Pick<
     TextBase,

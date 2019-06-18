@@ -1,5 +1,5 @@
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
-import { ActionBar } from "tns-core-modules/ui/action-bar/action-bar";
+import { ActionBar, ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActivityIndicator } from "tns-core-modules/ui/activity-indicator/activity-indicator";
 import { Animation } from "tns-core-modules/ui/animation/animation";
 import { Button } from "tns-core-modules/ui/button/button";
@@ -63,6 +63,7 @@ export type TNSElements = keyof typeof elementMap;
 // export const elementMap: Record<string, ConcreteViewConstructor> = {
 export const elementMap = {
     "actionBar": ActionBar, // √
+    "actionItem": ActionItem, // √
     "activityIndicator": ActivityIndicator, // √
     // "animation": Animation,
     // "border": Border
@@ -85,6 +86,7 @@ export const elementMap = {
     "wrapLayout": WrapLayout, // √
     "listPicker": ListPicker, // √
     "listView": ListView, // √
+    "navigationButton": NavigationButton, // √
     "placeholder": Placeholder,
     "progress": Progress, // √
     "proxyViewContainer": ProxyViewContainer,
@@ -115,6 +117,7 @@ export const elementMap = {
 export {
     AbsoluteLayout,
     ActionBar,
+    ActionItem,
     ActivityIndicator,
     Animation,
     Button,
@@ -138,6 +141,7 @@ export {
     LayoutBase,
     ListPicker,
     ListView,
+    NavigationButton,
     Observable,
     Page,
     Placeholder,

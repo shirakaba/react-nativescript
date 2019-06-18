@@ -29,6 +29,8 @@ import {
     TabViewItem,
     SegmentedBar,
     ScrollView,
+    ActionItem,
+    NavigationButton,
 } from './ElementRegistry';
 import { precacheFiberNode, updateFiberProps } from './ComponentTree';
 import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
@@ -392,7 +394,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             return;
         }
         if(child instanceof ActionBar){
-            // console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
+            console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
             if(parentInstance instanceof Page){
                 parentInstance.actionBar = child;
             } else {
@@ -414,6 +416,14 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         } else if(parentInstance instanceof LayoutBase){
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
+        } else if(parentInstance instanceof ActionBar && child instanceof ActionItem){
+            if(child instanceof NavigationButton){
+                console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
+                parentInstance.navigationButton = child;
+            } else if(child instanceof ActionItem){
+                console.log(`[appendChild()] (instance of ActionItem) ${parentInstance} > ${child}`);
+                parentInstance.actionItems.addItem(child);
+            }
         } else if(parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem){
             // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             const newItems = [...(parentInstance.items || []), child];
@@ -611,17 +621,10 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return hostConfig.insertInContainerBefore(container, child, beforeChild);
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
-        if(child instanceof ActionBar && parent instanceof Page){
-            console.log(`[removeChild()] Page > ActionBar removal: ${parent} x ${child}`);
-            // FIXME: determine the best way to implement this for ActionBar. Will have to figure out potential scenarios.
-            // parent.actionBar = null;
-        } else if(parent instanceof TabView && child instanceof TabViewItem){
-            console.log(`[removeChild()] TabView > TabViewItem removal: ${parent} x ${child}`);
-            if(!parent.items){
-                parent.items = [];
-            }
-            // TODO: remove from array without creating new one.
-            parent.items = parent.items.filter(i => i !== child);
+        if(parent === null){
+            // TODO: consult React expert here!
+            console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
+            return;
         } else if(isASingleChildContainer(parent)){
             console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
             /* These elements were originally designed to hold one element only:
@@ -629,7 +632,6 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
              console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
             parent.content = null;
         } else if(parent instanceof LayoutBase){
-
             /** For logging purposes only **/
             const childrenBefore = [];
             parent.eachChild((viewBase: ViewBase) => {
@@ -649,10 +651,28 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             });
             console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
             /*******************************/
-        } else if(parent === null){
-            // TODO: consult React expert here!
-            console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
+        } else if(child instanceof ActionBar && parent instanceof Page){
+            console.log(`[removeChild()] Forbidden in NativeScript, so no-op: ${parent} x ${child}`);
             return;
+        } else if(parent instanceof ActionBar && child instanceof ActionItem){
+            console.log(`[removeChild()] ${parent} x ${child}`);
+            if(child instanceof NavigationButton){
+                parent.navigationButton = null; // Anything falsy should work.
+            } else if(child instanceof ActionItem){
+                parent.actionItems.removeItem(child);
+            }
+        } else if(parent instanceof SegmentedBar && child instanceof SegmentedBarItem){
+            console.log(`[removeChild()] ${parent} x ${child}`);
+            if(!parent.items){
+                parent.items = [];
+            }
+            parent.items = parent.items.filter(i => i !== child);
+        } else if(parent instanceof TabView && child instanceof TabViewItem){
+            console.log(`[removeChild()] ${parent} x ${child}`);
+            if(!parent.items){
+                parent.items = [];
+            }
+            parent.items = parent.items.filter(i => i !== child);
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
