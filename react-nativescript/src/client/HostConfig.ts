@@ -570,10 +570,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 console.log(`[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`);
                 parentInstance.insertChild(child as View, atIndex);
             }
-        } else if(isASingleChildContainer(parentInstance)){
-            parentInstance.content = child as View;
         } else {
-            console.warn(`[HostConfig.insertBefore] Unable to handle ${parentInstance} > ${child} beforeChild ${beforeChild}; shall no-op.`);
+            console.warn(`[HostConfig.insertBefore] parentInstance was not a LayoutBase, so deferring to hostConfig.appendChild() with: ${parentInstance} > ${child} beforeChild ${beforeChild}`);
+            hostConfig.appendChild(parentInstance, child);
         }
 
         // /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
@@ -608,21 +607,8 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance,
     ): void {
-        if(container instanceof Page || container instanceof ContentView){
-            console.warn(`[insertInContainerBefore] not supported because Page/ContentView only support a single child.`);
-        } else {
-            let beforeChildIndex: number = 0;
-            container.eachChild((viewBase: ViewBase) => {
-                if(viewBase === beforeChild){
-                    return false;
-                } else {
-                    beforeChildIndex++;
-                    return true;
-                }
-            });
-            // NOTE: Untested. Potentially has an off-by-one error.
-            container._addView(child, beforeChildIndex);
-        }
+        console.log(`[insertInContainerBefore()] deferring to insertBefore(): ${container} > ${child}`);
+        return hostConfig.insertInContainerBefore(container, child, beforeChild);
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
         if(child instanceof ActionBar && parent instanceof Page){
