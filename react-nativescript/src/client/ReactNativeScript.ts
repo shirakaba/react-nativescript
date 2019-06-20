@@ -274,27 +274,34 @@ export function startWithAnyView(
     if(_hasLaunched || existingRootView){
         console.log(`[renderIntoRootView] hot reload: no-op`);
         
-        if(existingRootView instanceof Frame){
-            console.log(`[renderIntoRootView] hot reload: calling reloadPage() on root frame`);
-            if(existingRootView.currentPage){
-                (existingRootView as any).reloadPage();
-            }
-        }
+        /* As typings say, indeed reloadPage() doesn't exist. Maybe it's just a Vue thing. */
+        // if(existingRootView instanceof Frame){
+        //     console.log(`[renderIntoRootView] hot reload: calling reloadPage() on root frame`);
+        //     if(existingRootView.currentPage){
+        //         (existingRootView as any).reloadPage();
+        //     }
+        // }
         return;
     };
 
-    const rootView = new ContentView();
-    render(app, rootView, () => {
-        console.log(`Container updated!`);
+    // render(app, null, () => {
+    //     console.log(`Container updated!`);
+    //
+    //     console.log(`[renderIntoRootView] calling run() method`);
+    //
+    //     run({
+    //         create: () => {
+    //             return refToApp.current;
+    //         }
+    //     });
+    // });
 
-        console.log(`[renderIntoRootView] calling run() method`);
-    
-        run({
-            create: () => {
-                return refToApp.current;
-                // return rootView;
-            }
-        });
+    run({
+        create: () => {
+            render(app, null, () => console.log(`Container updated!`), "__APP_ROOT__");
+
+            return refToApp.current;
+        }
     });
 }
 
