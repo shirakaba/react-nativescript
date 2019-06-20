@@ -13,7 +13,7 @@ import { RCTContentView, RCTStackLayout, RCTLabel, RCTFlexboxLayout, RCTButton }
 import { RNTesterFramed } from '../RNTester/components/RNTesterFramed';
 const RNTesterApp = require('../RNTester/RNTesterApp').RNTesterApp;
 
-export const rootRef = React.createRef<any>();
+export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const app = () => (
 //     <RCTFlexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>

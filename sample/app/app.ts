@@ -10,7 +10,7 @@ declare var module: any;
 if(module.hot){
     // self accept.
     module.hot.accept(
-        function(error) {
+        function(error: any) {
             console.error(`Error in accepting self update for app.ts.`, error);
         }
     );
@@ -24,8 +24,7 @@ import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import HotApp, { rootRef } from "./testComponents/HotApp";
 
-ReactNativeScript.startWithAnyView(React.createElement(HotApp, {}, null), rootRef);
-// ReactNativeScript.startWithView(React.createElement(HotApp, {}, null));
+ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
 
 /*
 Do not place any code after the application has been started as it will not

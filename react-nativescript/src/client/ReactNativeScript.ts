@@ -134,145 +134,23 @@ export function unmountComponentAtNode(containerTag: RootKey): void {
  * Convenience function to start your React NativeScript app.
  * This should be placed as the final line of your app.ts file, as no
  * code will run after it (at least on iOS).
- *  
- * @param app - Your <App/> component (must have a <Page> as its outermost
- *              component).
- * @param frame - The top frame for your NativeScript app (optional).
- * @param refToPage - Reference to the host Page of your outermost component.
- */
-export function startWithFrame(
-    app: ReactReconciler.ReactNodeList,
-    frame: Frame = new Frame(),
-    refToPage: React.RefObject<Page>
-): void {
-    run({
-        create: () => {
-            frame.navigate({
-                create: () => {
-                    console.log(`[frame.navigate() -> create()] Rendering app. refToPage.current:`, refToPage.current);
-
-                    render(
-                        app,
-                        /* Any view would do here - ProxyViewContainer is not being used for anything clever;
-                         * I prevent the HostConfig from calling appendChild() when the child is a Page. */
-                        new ProxyViewContainer(),
-                        () => {
-                            console.log(`Container updated!`);
-                        }
-                    );
-
-                    console.log(`render() hopefully complete; refToPage.current:`, refToPage.current);
-
-                    return refToPage.current;
-                }
-            });
-
-            return frame;
-        }
-    });
-}
-
-/**
- * Convenience function to start your React NativeScript app.
- * This should be placed as the final line of your app.ts file, as no
- * code will run after it (at least on iOS).
- *  
- * @param app - Your <App/> component. Outermost component must be a View
- *              of some kind, but strictly not Page or Frame.
- * @param frame - The top frame for your NativeScript app (optional).
- * @param page - A custom Page for your NativeScript app (optional).
- */
-export function startWithFrameAndPage(
-    app: ReactReconciler.ReactNodeList,
-    frame: Frame = new Frame(),
-    page: Page = new Page(),
-): void {
-    run({
-        create: () => {
-            frame.navigate({
-                create: () => {
-                    render(app, page, () => console.log(`Container updated!`));
-    
-                    return page;
-                }
-            });
-
-            return frame;
-        }
-    });
-}
-
-/**
- * Convenience function to start your React NativeScript app.
- * This should be placed as the final line of your app.ts file, as no
- * code will run after it (at least on iOS).
  * 
- * Construct a non-React-managed container, call run.create(), and return
- * the container whilst rendering may still be in process.
- * 
- * Supports HMR (for whatever reason)!
- *  
  * @param app - Your <App/> component.
- * @param rootView - The root view for your NativeScript app
- */
-export function startWithView(
-    app: ReactReconciler.ReactNodeList,
-    providedRootView: View = new ContentView(),
-): void
-{
-    // if(
-    //     !(providedRootView instanceof TabView || providedRootView instanceof Frame)
-    // ){
-    //     console.warn(`Support for root view components other than Frame or TabView is limited.`);
-    // }
-
-    const existingRootView: View|undefined = getRootView();
-    const _hasLaunched: boolean = hasLaunched();
-    console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
-    const rootView: View = existingRootView || providedRootView;
-
-    // hasLaunched seems to always be false (don't ask me why) so we take a truthy rootView to mean the same thing.
-    if(_hasLaunched || existingRootView){
-        console.log(`[renderIntoRootView] no-op (hot reload)`);
-
-        // render(app, rootView, () => console.log(`Container updated!`));
-    } else {
-        console.log(`[renderIntoRootView] calling run() method`);
-
-        run({
-            create: () => {
-                render(app, rootView, () => console.log(`Container updated!`));
-    
-                return rootView;
-            }
-        });
-    }
-}
-
-/**
- * Convenience function to start your React NativeScript app.
- * This should be placed as the final line of your app.ts file, as no
- * code will run after it (at least on iOS).
+ * @param refToApp - ref to the root element of <App/>.
  * 
- * Construct a non-React-managed container, render into it, and upon
- * render completion, return the ref to the React tree root in run.create().
- * 
- * WARNING: it seems that this approach does not support hot reloading!
- * Neither does returning the constructed container instead!
- *  
- * @param app - Your <App/> component.
- * @param refToApp - Reference to the root component of your React app's tree.
+ * You can create a ref like so:
+ *   const refToApp: React.RefObject<any> = React.createRef<any>();
  */
-export function startWithAnyView(
+export function start(
     app: ReactReconciler.ReactNodeList,
     refToApp: React.RefObject<View>
 ): void
 {
     const existingRootView: View|undefined = getRootView();
     const _hasLaunched: boolean = hasLaunched();
-    console.log(`[app.ts] startWithView(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
+    console.log(`[ReactNativeScript.ts] start(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
     if(_hasLaunched || existingRootView){
-        console.log(`[renderIntoRootView] hot reload: no-op`);
+        console.log(`[ReactNativeScript.ts] start() called again - hot reload, so shall no-op`);
         
         /* As typings say, indeed reloadPage() doesn't exist. Maybe it's just a Vue thing. */
         // if(existingRootView instanceof Frame){
@@ -283,18 +161,6 @@ export function startWithAnyView(
         // }
         return;
     };
-
-    // render(app, null, () => {
-    //     console.log(`Container updated!`);
-    //
-    //     console.log(`[renderIntoRootView] calling run() method`);
-    //
-    //     run({
-    //         create: () => {
-    //             return refToApp.current;
-    //         }
-    //     });
-    // });
 
     run({
         create: () => {

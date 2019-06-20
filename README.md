@@ -76,9 +76,9 @@ Until then, you'll have to write your entry file in JS/TS. Here is how to make a
 // In app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import ColdApp from "./ColdApp";
+import ColdApp, { rootRef } from "./ColdApp";
 
-ReactNativeScript.startWithView(React.createElement(ColdApp, {}, null));
+ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
 ```
 
 ```typescript
@@ -86,13 +86,16 @@ ReactNativeScript.startWithView(React.createElement(ColdApp, {}, null));
 import * as React from "react";
 import { App } from "./AppContainer.ts"
 
-// See the testComponents directory for many examples of components.
-const app = () => (<AppContainer/>);
+export const rootRef: React.RefObject<any> = React.createRef<any>();
+
+// See the testComponents directory for many examples of components (and ref-forwarding).
+const app = () => (<AppContainer forwardedRef={rootRef}/>);
 
 export default app;
 ```
 
 ```sh
+# Ensure that nsconfig.json has: "useLegacyWorkflow": true
 tns run ios --bundle --syncAllFiles --emulator
 ```
 
@@ -102,9 +105,9 @@ tns run ios --bundle --syncAllFiles --emulator
 // In app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import HotApp from "./HotApp";
+import HotApp, { rootRef } from "./HotApp";
 
-ReactNativeScript.startWithView(React.createElement(HotApp, {}, null));
+ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
 ```
 
 ```typescript
@@ -113,14 +116,17 @@ import { hot } from "react-nativescript-hot-loader/root";
 import * as React from "react";
 import { App } from "./AppContainer.ts"
 
-// See the testComponents directory for many examples of components.
-const app = () => (<AppContainer/>);
+export const rootRef: React.RefObject<any> = React.createRef<any>();
+
+// See the testComponents directory for many examples of components (and ref-forwarding).
+const app = () => (<AppContainer forwardedRef={rootRef}/>);
 
 export default hot(app);
 ```
 
 ```sh
-tns run ios --bundle --syncAllFiles --emulator --env.hmr
+# Ensure that nsconfig.json has: "useLegacyWorkflow": false
+tns run ios --bundle --syncAllFiles --emulator
 ```
 
 ---
