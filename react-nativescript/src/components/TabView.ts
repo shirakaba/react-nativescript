@@ -31,23 +31,15 @@ export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extend
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        super.updateListeners(attach, nextProps);
-
-        const ref = this.props.forwardedRef || this.myRef;
-        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                updateListener(node, "selectedIndexChanged", this.props.onSelectedIndexChanged, nextProps.onSelectedIndexChanged);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-
-                if(this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
-            }
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+        
+        if(attach === null){
+            updateListener(node, "selectedIndexChanged", this.props.onSelectedIndexChanged, nextProps.onSelectedIndexChanged);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+
+            if(this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
         }
     }
 

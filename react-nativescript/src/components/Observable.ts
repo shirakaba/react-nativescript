@@ -23,31 +23,38 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
     //     forwardedRef: React.createRef<NativeScriptObservable>()
     // };
 
+    protected getCurrentRef(): E|null {
+        return (this.props.forwardedRef || this.myRef).current;
+    }
+
+    /**
+     * Helper method for updateListeners: simply gets the current ref to pass on to it.
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListenersHelper(attach: boolean|null, nextProps?: P): void {
+        const node: E|null = this.getCurrentRef();
+        if(node === null){
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        this.updateListeners(node, attach, nextProps);
+    }
+
     /**
      * 
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        // console.log(`Observable's updateListeners()`);
-        const ref = this.props.forwardedRef || this.myRef;
-        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-                if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
-            }
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        if(attach === null){
+            updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+            if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
         }
     }
 
     componentDidMount(){
-        this.updateListeners(true);
-        // console.log(`Observable's componentDidMount`);
+        this.updateListenersHelper(true);
     }
 
     /**
@@ -60,14 +67,14 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
         const shouldUpdate: boolean = !shallowEqual(this.props, nextProps) || !shallowEqual(this.state, nextState);
         // console.log(`[shouldComponentUpdate] shouldUpdate: ${shouldUpdate}.`);
 
-        this.updateListeners(null, nextProps);
+        this.updateListenersHelper(null, nextProps);
         
         // https://lucybain.com/blog/2018/react-js-pure-component/
         return shouldUpdate;
     }
 
     componentWillUnmount(){
-        this.updateListeners(false);
+        this.updateListenersHelper(false);
     }
 
     abstract render(): React.ReactNode;

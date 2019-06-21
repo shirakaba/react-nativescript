@@ -24,23 +24,15 @@ class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        super.updateListeners(attach, nextProps);
-
-        const ref = this.props.forwardedRef || this.myRef;
-        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                updateListener(node, "scroll", this.props.onScroll, nextProps.onScroll);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-
-                if(this.props.onScroll) method("scroll", this.props.onScroll);
-            }
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+        
+        if(attach === null){
+            updateListener(node, "scroll", this.props.onScroll, nextProps.onScroll);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+
+            if(this.props.onScroll) method("scroll", this.props.onScroll);
         }
     }
 

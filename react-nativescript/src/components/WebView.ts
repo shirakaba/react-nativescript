@@ -20,24 +20,16 @@ class _WebView<P extends WebViewComponentProps<E>, S extends {}, E extends Nativ
      * 
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        super.updateListeners(attach, nextProps);
-
-        const ref = this.props.forwardedRef || this.myRef;
-        // console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                updateListener(node, "loadFinished", this.props.onLoadFinished, nextProps.onLoadFinished);
-                updateListener(node, "loadStarted", this.props.onLoadStarted, nextProps.onLoadStarted);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-                if(this.props.onLoadFinished) method("loadFinished", this.props.onLoadFinished);
-                if(this.props.onLoadStarted) method("loadStarted", this.props.onLoadStarted);
-            }
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+        
+        if(attach === null){
+            updateListener(node, "loadFinished", this.props.onLoadFinished, nextProps.onLoadFinished);
+            updateListener(node, "loadStarted", this.props.onLoadStarted, nextProps.onLoadStarted);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+            if(this.props.onLoadFinished) method("loadFinished", this.props.onLoadFinished);
+            if(this.props.onLoadStarted) method("loadStarted", this.props.onLoadStarted);
         }
     }
 

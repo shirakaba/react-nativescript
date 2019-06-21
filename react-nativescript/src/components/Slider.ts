@@ -27,8 +27,7 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
     componentDidMount(){
         super.componentDidMount();
 
-        const ref = this.props.forwardedRef || this.myRef;
-        const node: E|null = ref.current;
+        const node: E|null = this.getCurrentRef();
         if(node){
             node.on("valueChange", this.onValueChange);
         } else {
@@ -39,8 +38,7 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
     componentWillUnmount(){
         super.componentWillUnmount();
 
-        const ref = this.props.forwardedRef || this.myRef;
-        const node: E|null = ref.current;
+        const node: E|null = this.getCurrentRef();
         if(node){
             node.off("valueChange", this.onValueChange);
         } else {

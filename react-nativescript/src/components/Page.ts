@@ -29,29 +29,21 @@ class _Page<P extends PageComponentProps<E>, S extends {}, E extends NativeScrip
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        super.updateListeners(attach, nextProps);
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
 
-        const ref = this.props.forwardedRef || this.myRef;
-        console.log(`[updateListeners()] using ${ref === this.myRef ? "default ref" : "forwarded ref"}`);
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                updateListener(node, "navigatedFrom", this.props.onNavigatedFrom, nextProps.onNavigatedFrom);
-                updateListener(node, "navigatedTo", this.props.onNavigatedTo, nextProps.onNavigatedTo);
-                updateListener(node, "navigatingFrom", this.props.onNavigatingFrom, nextProps.onNavigatingFrom);
-                updateListener(node, "navigatingTo", this.props.onNavigatingTo, nextProps.onNavigatingTo);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-
-                if(this.props.onNavigatedFrom) method("navigatedFrom", this.props.onNavigatedFrom);
-                if(this.props.onNavigatedTo) method("navigatedTo", this.props.onNavigatedTo);
-                if(this.props.onNavigatingFrom) method("navigatingFrom", this.props.onNavigatingFrom);
-                if(this.props.onNavigatingTo) method("navigatingTo", this.props.onNavigatingTo);
-            }
+        if(attach === null){
+            updateListener(node, "navigatedFrom", this.props.onNavigatedFrom, nextProps.onNavigatedFrom);
+            updateListener(node, "navigatedTo", this.props.onNavigatedTo, nextProps.onNavigatedTo);
+            updateListener(node, "navigatingFrom", this.props.onNavigatingFrom, nextProps.onNavigatingFrom);
+            updateListener(node, "navigatingTo", this.props.onNavigatingTo, nextProps.onNavigatingTo);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+
+            if(this.props.onNavigatedFrom) method("navigatedFrom", this.props.onNavigatedFrom);
+            if(this.props.onNavigatedTo) method("navigatedTo", this.props.onNavigatedTo);
+            if(this.props.onNavigatingFrom) method("navigatingFrom", this.props.onNavigatingFrom);
+            if(this.props.onNavigatingTo) method("navigatingTo", this.props.onNavigatingTo);
         }
     }
 

@@ -35,7 +35,6 @@ import { HtmlView as RCTHtmlView } from "../components/HtmlView";
 import { Label as RCTLabel } from "../components/Label";
 import { ListView as RCTListView } from "../components/ListView";
 import { ListPicker as RCTListPicker } from "../components/ListPicker";
-import { ListViewCell as RCTListViewCell } from "../components/ListViewCell";
 // import { Portal as RCTPortal } from "../components/Portal";
 import { NavigationButton as RCTNavigationButton } from "../components/NavigationButton";
 import { Placeholder as RCTPlaceholder } from "../components/Placeholder";

@@ -142,29 +142,21 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
      * 
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(attach: boolean|null, nextProps?: P): void {
-        // console.log(`ListView's updateListeners()`);
-        super.updateListeners(attach, nextProps);
+    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+        
+        if(attach === null){
+            /* We won't support non-default onItemLoading event handlers. */
+            // updateListener(node, NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading, nextProps.onLoaded);
 
-        const ref = this.props.forwardedRef || this.myRef;
-
-        const node: E|null = ref.current;
-        if(node){
-            if(attach === null){
-                /* We won't support non-default onItemLoading event handlers. */
-                // updateListener(node, NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading, nextProps.onLoaded);
-
-                updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
-                updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
-            } else {
-                const method = (attach ? node.on : node.off).bind(node);
-                /* if(this.props.onItemLoadingEvent) */ method(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
-
-                if(this.props.onItemTap) method(NativeScriptListView.itemTapEvent, this.props.onItemTap);
-                if(this.props.onLoadMoreItems) method(NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems);
-            }
+            updateListener(node, NativeScriptListView.itemTapEvent, this.props.onItemTap, nextProps.onItemTap);
+            updateListener(node, NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems, nextProps.onLoadMoreItems);
         } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            const method = (attach ? node.on : node.off).bind(node);
+            /* if(this.props.onItemLoadingEvent) */ method(NativeScriptListView.itemLoadingEvent, this.defaultOnItemLoading);
+
+            if(this.props.onItemTap) method(NativeScriptListView.itemTapEvent, this.props.onItemTap);
+            if(this.props.onLoadMoreItems) method(NativeScriptListView.loadMoreItemsEvent, this.props.onLoadMoreItems);
         }
     }
 
@@ -192,30 +184,29 @@ export class _ListView<P extends ListViewComponentProps<E>, S extends ListViewCo
     componentDidMount(){
         super.componentDidMount();
 
-        const ref = this.props.forwardedRef || this.myRef;
-
-        const node: E|null = ref.current;
-        if(node){
-            /* NOTE: does not support updating of this.props.cellFactories upon Props update. */
-            if(this.props.cellFactories){
-                const itemTemplates: KeyedTemplate[] = [];
-                this.props.cellFactories.forEach((info, key: string) => {
-                    const { placeholderItem, cellFactory } = info;
-                    itemTemplates.push({
-                        key,
-                        createView: () => {
-                            console.log(`[ListView] item template "${key}"`);
-                            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(placeholderItem, cellFactory);
-                            this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
-
-                            return rootKeyAndRef.ref.current;
-                        }
-                    });
-                });
-                ref.current.itemTemplates = itemTemplates;
-            }
-        } else {
+        const node: E|null = this.getCurrentRef();
+        if(!node){
             console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
+            return;
+        }
+        
+        /* NOTE: does not support updating of this.props.cellFactories upon Props update. */
+        if(this.props.cellFactories){
+            const itemTemplates: KeyedTemplate[] = [];
+            this.props.cellFactories.forEach((info, key: string) => {
+                const { placeholderItem, cellFactory } = info;
+                itemTemplates.push({
+                    key,
+                    createView: () => {
+                        console.log(`[ListView] item template "${key}"`);
+                        const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(placeholderItem, cellFactory);
+                        this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+
+                        return rootKeyAndRef.ref.current;
+                    }
+                });
+            });
+            node.itemTemplates = itemTemplates;
         }
     }
 
