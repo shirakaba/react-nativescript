@@ -3,12 +3,17 @@ import { TimePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScrip
 import { TimePicker as NativeScriptTimePicker } from "tns-core-modules/ui/time-picker/time-picker";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type TimePickerComponentProps<E extends NativeScriptTimePicker = NativeScriptTimePicker> = Props /* & typeof TimePicker.defaultProps */ & Partial<TimePickerProps> & ViewComponentProps<E>;
+export type TimePickerComponentProps<
+    E extends NativeScriptTimePicker = NativeScriptTimePicker
+> = Props /* & typeof TimePicker.defaultProps */ & Partial<TimePickerProps> & ViewComponentProps<E>;
 
-export class _TimePicker<P extends TimePickerComponentProps<E>, S extends {}, E extends NativeScriptTimePicker> extends RCTView<P, S, E> {
+export class _TimePicker<
+    P extends TimePickerComponentProps<E>,
+    S extends {},
+    E extends NativeScriptTimePicker
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptTimePicker>()
     // };
@@ -22,7 +27,7 @@ export class _TimePicker<P extends TimePickerComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -39,10 +44,10 @@ export class _TimePicker<P extends TimePickerComponentProps<E>, S extends {}, E 
         } = this.props;
 
         return React.createElement(
-            'timePicker',
+            "timePicker",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -51,7 +56,9 @@ export class _TimePicker<P extends TimePickerComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TimePickerComponentProps<NativeScriptTimePicker>>;
 
-export const TimePicker: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTimePicker>> = React.forwardRef<NativeScriptTimePicker, OwnPropsWithoutForwardedRef>(
+export const TimePicker: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTimePicker>
+> = React.forwardRef<NativeScriptTimePicker, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTimePicker>) => {
         const { children, ...rest } = props;
 
@@ -64,4 +71,4 @@ export const TimePicker: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

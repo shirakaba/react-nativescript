@@ -11,24 +11,29 @@ interface Props {
     // onPress
 }
 
-export type ButtonComponentProps<E extends NativeScriptButton = NativeScriptButton> = Props /* & typeof _Button.defaultProps */ & Partial<ButtonProps> & TextBaseComponentProps<E>;
+export type ButtonComponentProps<
+    E extends NativeScriptButton = NativeScriptButton
+> = Props /* & typeof _Button.defaultProps */ & Partial<ButtonProps> & TextBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript Button component.
  * https://facebook.github.io/react-native/docs/button#color
  */
-export class _Button<P extends ButtonComponentProps<E>, S extends {}, E extends NativeScriptButton = NativeScriptButton> extends RCTTextBase<P, S, E> {
-
-    render(){
+export class _Button<
+    P extends ButtonComponentProps<E>,
+    S extends {},
+    E extends NativeScriptButton = NativeScriptButton
+> extends RCTTextBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
-            
+
             onLoaded,
             onUnloaded,
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -46,30 +51,32 @@ export class _Button<P extends ButtonComponentProps<E>, S extends {}, E extends 
             ...rest
         } = this.props;
 
-        if(text && formattedText){
+        if (text && formattedText) {
             console.warn(`Both text and formattedText provided; shall use formattedText.`);
         }
 
         const textContent = {
-            [formattedText ? "formattedText" : "text"] : formattedText || text
+            [formattedText ? "formattedText" : "text"]: formattedText || text,
         };
 
         return React.createElement(
-                'button',
-                {
-                    className: "btn btn-primary btn-active", // NativeScript defaults from documentation
-                    ...rest,
-                    ...textContent,
-                    ref: forwardedRef || this.myRef
-                },
-                children // Weird that a button may contain children, but what do I know.
-            );
+            "button",
+            {
+                className: "btn btn-primary btn-active", // NativeScript defaults from documentation
+                ...rest,
+                ...textContent,
+                ref: forwardedRef || this.myRef,
+            },
+            children // Weird that a button may contain children, but what do I know.
+        );
     }
 }
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ButtonComponentProps<NativeScriptButton>>;
 
-export const Button: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptButton>> = React.forwardRef<NativeScriptButton, OwnPropsWithoutForwardedRef>(
+export const Button: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptButton>
+> = React.forwardRef<NativeScriptButton, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptButton>) => {
         const { children, ...rest } = props;
 
@@ -82,4 +89,4 @@ export const Button: React.ComponentType<OwnPropsWithoutForwardedRef & React.Cla
             children
         );
     }
-)
+);

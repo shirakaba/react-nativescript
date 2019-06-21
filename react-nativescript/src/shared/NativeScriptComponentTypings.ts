@@ -52,10 +52,10 @@ import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { ObservableComponentProps } from "../components/Observable";
 import { ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
-export type StylePropContents = Omit<Style, "PropertyBag"|keyof Observable>
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type StylePropContents = Omit<Style, "PropertyBag" | keyof Observable>;
 interface PartialStyleProp {
-    style: Partial<StylePropContents>
+    style: Partial<StylePropContents>;
 }
 
 export type PropsWithoutForwardedRef<P extends ObservableComponentProps> = Omit<P, "forwardedRef">;
@@ -65,261 +65,242 @@ export type ObservableProps = {};
 /**
  * This is very naive: I just picked all the public properties that weren't readonly.
  */
-export type ViewBaseProps = ObservableProps & PartialStyleProp & Pick<
-    ViewBase,
-    "left"|
-    "top"|
-    "effectiveLeft"|
-    "effectiveTop"|
-    "dock"|
-    "row"|
-    "col"|
-    "rowSpan"|
-    "colSpan"|
-    "domNode"|
-    "order"|
-    "flexGrow"|
-    "flexShrink"|
-    "flexWrapBefore"|
-    "alignSelf"|
-    "effectiveMinWidth"|
-    "effectiveMinHeight"|
-    "effectiveWidth"|
-    "effectiveHeight"|
-    "effectiveMarginTop"|
-    "effectiveMarginRight"|
-    "effectiveMarginBottom"|
-    "effectiveMarginLeft"|
-    "effectivePaddingTop"|
-    "effectivePaddingRight"|
-    "effectivePaddingBottom"|
-    "effectivePaddingLeft"|
-    "effectiveBorderTopWidth"|
-    "effectiveBorderRightWidth"|
-    "effectiveBorderBottomWidth"|
-    "effectiveBorderLeftWidth"|
-    "ios"|
-    "android"|
-    "viewController"|
-    "nativeViewProtected"|
-    "nativeView"|
-    "bindingContext"|
-    "typeName"|
-    "parentNode"|
-    "id"|
-    "className"|
-    "isCollapsed"|
-    "_domId"|
-    "_cssState"|
-    "cssClasses"|
-    "cssPseudoClasses"|
-    "_context"
->
+export type ViewBaseProps = ObservableProps &
+    PartialStyleProp &
+    Pick<
+        ViewBase,
+        | "left"
+        | "top"
+        | "effectiveLeft"
+        | "effectiveTop"
+        | "dock"
+        | "row"
+        | "col"
+        | "rowSpan"
+        | "colSpan"
+        | "domNode"
+        | "order"
+        | "flexGrow"
+        | "flexShrink"
+        | "flexWrapBefore"
+        | "alignSelf"
+        | "effectiveMinWidth"
+        | "effectiveMinHeight"
+        | "effectiveWidth"
+        | "effectiveHeight"
+        | "effectiveMarginTop"
+        | "effectiveMarginRight"
+        | "effectiveMarginBottom"
+        | "effectiveMarginLeft"
+        | "effectivePaddingTop"
+        | "effectivePaddingRight"
+        | "effectivePaddingBottom"
+        | "effectivePaddingLeft"
+        | "effectiveBorderTopWidth"
+        | "effectiveBorderRightWidth"
+        | "effectiveBorderBottomWidth"
+        | "effectiveBorderLeftWidth"
+        | "ios"
+        | "android"
+        | "viewController"
+        | "nativeViewProtected"
+        | "nativeView"
+        | "bindingContext"
+        | "typeName"
+        | "parentNode"
+        | "id"
+        | "className"
+        | "isCollapsed"
+        | "_domId"
+        | "_cssState"
+        | "cssClasses"
+        | "cssPseudoClasses"
+        | "_context"
+    >;
 
-export type ViewProps = ViewBaseProps & Pick<View,
-    "android"|
-    "ios"|
-    "bindingContext"|
-    "borderColor"|
-    "borderTopColor"|
-    "borderRightColor"|
-    "borderBottomColor"|
-    "borderLeftColor"|
-    "borderWidth"|
-    "borderTopWidth"|
-    "borderRightWidth"|
-    "borderBottomWidth"|
-    "borderLeftWidth"|
-    "borderRadius"|
-    "borderTopLeftRadius"|
-    "borderTopRightRadius"|
-    "borderBottomRightRadius"|
-    "borderBottomLeftRadius"|
-    "color"|
-    "background"|
-    "backgroundColor"|
-    "backgroundImage"|
-    "minWidth"|
-    "minHeight"|
-    "width"|
-    "height"|
-    "margin"|
-    "marginLeft"|
-    "marginTop"|
-    "marginRight"|
-    "marginBottom"|
-    "horizontalAlignment"|
-    "verticalAlignment"|
-    "visibility"|
-    "opacity"|
-    "rotate"|
-    "translateX"|
-    "translateY"|
-    "scaleX"|
-    "scaleY"|
-    "automationText"|
-    "originX"|
-    "originY"|
-    "isEnabled"|
-    "isUserInteractionEnabled"|
-    "iosOverflowSafeArea"|
-    "iosOverflowSafeAreaEnabled"|
-    "isLayoutValid"|
-    "cssType"|
-    "cssClasses"|
-    "cssPseudoClasses"|
-    "modal"
->;
+export type ViewProps = ViewBaseProps &
+    Pick<
+        View,
+        | "android"
+        | "ios"
+        | "bindingContext"
+        | "borderColor"
+        | "borderTopColor"
+        | "borderRightColor"
+        | "borderBottomColor"
+        | "borderLeftColor"
+        | "borderWidth"
+        | "borderTopWidth"
+        | "borderRightWidth"
+        | "borderBottomWidth"
+        | "borderLeftWidth"
+        | "borderRadius"
+        | "borderTopLeftRadius"
+        | "borderTopRightRadius"
+        | "borderBottomRightRadius"
+        | "borderBottomLeftRadius"
+        | "color"
+        | "background"
+        | "backgroundColor"
+        | "backgroundImage"
+        | "minWidth"
+        | "minHeight"
+        | "width"
+        | "height"
+        | "margin"
+        | "marginLeft"
+        | "marginTop"
+        | "marginRight"
+        | "marginBottom"
+        | "horizontalAlignment"
+        | "verticalAlignment"
+        | "visibility"
+        | "opacity"
+        | "rotate"
+        | "translateX"
+        | "translateY"
+        | "scaleX"
+        | "scaleY"
+        | "automationText"
+        | "originX"
+        | "originY"
+        | "isEnabled"
+        | "isUserInteractionEnabled"
+        | "iosOverflowSafeArea"
+        | "iosOverflowSafeAreaEnabled"
+        | "isLayoutValid"
+        | "cssType"
+        | "cssClasses"
+        | "cssPseudoClasses"
+        | "modal"
+    >;
 
-export type ContentViewProps = ViewProps & Pick<ContentView,
-    "content"|
-    "layoutView"
->
+export type ContentViewProps = ViewProps & Pick<ContentView, "content" | "layoutView">;
 
 /* No further props on Placeholder. */
 export type PlaceholderProps = ViewProps; // & Pick<Placeholder>
 
-export type PageProps = ContentViewProps & Pick<Page,
-    "backgroundSpanUnderStatusBar"|
-    "statusBarStyle"|
-    "androidStatusBarBackground"|
-    "actionBarHidden"|
-    "enableSwipeBackNavigation"
->
+export type PageProps = ContentViewProps &
+    Pick<
+        Page,
+        | "backgroundSpanUnderStatusBar"
+        | "statusBarStyle"
+        | "androidStatusBarBackground"
+        | "actionBarHidden"
+        | "enableSwipeBackNavigation"
+    >;
 
-export type FrameProps = ViewProps & Pick<Frame,
-    "actionBarVisibility"|
-    "backStack"|
-    "currentPage"|
-    "currentEntry"|
-    "animated"|
-    "transition"
->
+export type FrameProps = ViewProps &
+    Pick<Frame, "actionBarVisibility" | "backStack" | "currentPage" | "currentEntry" | "animated" | "transition">;
 
-export type TabViewProps = ViewProps & Pick<TabView,
-    "items"|
-    "selectedIndex"|
-    "tabTextFontSize"|
-    "tabTextColor"|
-    "tabBackgroundColor"|
-    "selectedTabTextColor"|
-    "androidSelectedTabHighlightColor"|
-    "android"|
-    "ios"|
-    "iosIconRenderingMode"|
-    "androidOffscreenTabLimit"|
-    "androidTabsPosition"|
-    "androidSwipeEnabled"
->
+export type TabViewProps = ViewProps &
+    Pick<
+        TabView,
+        | "items"
+        | "selectedIndex"
+        | "tabTextFontSize"
+        | "tabTextColor"
+        | "tabBackgroundColor"
+        | "selectedTabTextColor"
+        | "androidSelectedTabHighlightColor"
+        | "android"
+        | "ios"
+        | "iosIconRenderingMode"
+        | "androidOffscreenTabLimit"
+        | "androidTabsPosition"
+        | "androidSwipeEnabled"
+    >;
 
-export type TabViewItemProps = ViewBaseProps & Pick<TabViewItem,
-    "title"|
-    // "view"| /* We provide a StackLayout and implicitly map children into it */
-    "iconSource"|
-    "textTransform"
-    // "canBeLoaded"
->
+export type TabViewItemProps = ViewBaseProps &
+    Pick<
+        TabViewItem,
+        | "title"
+        // "view"| /* We provide a StackLayout and implicitly map children into it */
+        | "iconSource"
+        | "textTransform"
+        // "canBeLoaded"
+    >;
 
-export type ActionItemProps = ViewBaseProps & Pick<ActionItem,
-    "text"|
-    "icon"|
-    // "actionView"| /* We provide a StackLayout and implicitly map children into it */
-    "visibility"
->
+export type ActionItemProps = ViewBaseProps &
+    Pick<
+        ActionItem,
+        | "text"
+        | "icon"
+        // "actionView"| /* We provide a StackLayout and implicitly map children into it */
+        | "visibility"
+    >;
 
 /* No extra props on NavigationButton. */
 export type NavigationButtonProps = ActionItemProps; // & Pick<NavigationButton>
 
-export type TextBaseProps = ViewProps & Pick<
-    TextBase,
-    "text"|
-    "formattedText"|
-    "fontSize"|
-    "letterSpacing"|
-    "lineHeight"|
-    "textAlignment"|
-    "textDecoration"|
-    "textTransform"|
-    "whiteSpace"|
-    "padding"|
-    "paddingBottom"|
-    "paddingLeft"|
-    "paddingRight"|
-    "paddingTop"
->
+export type TextBaseProps = ViewProps &
+    Pick<
+        TextBase,
+        | "text"
+        | "formattedText"
+        | "fontSize"
+        | "letterSpacing"
+        | "lineHeight"
+        | "textAlignment"
+        | "textDecoration"
+        | "textTransform"
+        | "whiteSpace"
+        | "padding"
+        | "paddingBottom"
+        | "paddingLeft"
+        | "paddingRight"
+        | "paddingTop"
+    >;
 
-export type EditableTextBaseProps = TextBaseProps & Pick<
-EditableTextBase,
-    "keyboardType"|
-    "returnKeyType"|
-    "updateTextTrigger"|
-    "autocapitalizationType"|
-    "editable"|
-    "autocorrect"|
-    "hint"|
-    "maxLength"
->;
+export type EditableTextBaseProps = TextBaseProps &
+    Pick<
+        EditableTextBase,
+        | "keyboardType"
+        | "returnKeyType"
+        | "updateTextTrigger"
+        | "autocapitalizationType"
+        | "editable"
+        | "autocorrect"
+        | "hint"
+        | "maxLength"
+    >;
 
-export type TextViewProps = EditableTextBaseProps & Pick<TextView, "android"|"ios">
-export type TextFieldProps = EditableTextBaseProps & Pick<TextField, "android"|"ios"|"secure">
-export type LabelProps = TextBaseProps & Pick<Label, "android"|"ios"|"textWrap">
+export type TextViewProps = EditableTextBaseProps & Pick<TextView, "android" | "ios">;
+export type TextFieldProps = EditableTextBaseProps & Pick<TextField, "android" | "ios" | "secure">;
+export type LabelProps = TextBaseProps & Pick<Label, "android" | "ios" | "textWrap">;
 
-export type ContainerViewProps = ViewProps & Pick<
-    ContainerView,
-    "iosOverflowSafeArea"
->
+export type ContainerViewProps = ViewProps & Pick<ContainerView, "iosOverflowSafeArea">;
 
 export type CustomLayoutViewProps = ContainerViewProps;
 
-export type RepeaterProps = ViewProps & Pick<
-    Repeater,
-    "items"|
-    "itemTemplate"|
-    "itemsLayout"
->
+export type RepeaterProps = ViewProps & Pick<Repeater, "items" | "itemTemplate" | "itemsLayout">;
 
-export type LayoutBaseProps = CustomLayoutViewProps & Pick<
-    LayoutBase,
-    "padding"|
-    "paddingBottom"|
-    "paddingLeft"|
-    "paddingRight"|
-    "paddingTop"|
-    "clipToBounds"|
-    "isPassThroughParentEnabled"    
->;
+export type LayoutBaseProps = CustomLayoutViewProps &
+    Pick<
+        LayoutBase,
+        | "padding"
+        | "paddingBottom"
+        | "paddingLeft"
+        | "paddingRight"
+        | "paddingTop"
+        | "clipToBounds"
+        | "isPassThroughParentEnabled"
+    >;
 
-export type FlexboxLayoutProps = LayoutBaseProps & Pick<
-    FlexboxLayout,
-    "flexDirection"|
-    "flexWrap"|
-    "justifyContent"|
-    "alignItems"|
-    "alignContent"
->;
+export type FlexboxLayoutProps = LayoutBaseProps &
+    Pick<FlexboxLayout, "flexDirection" | "flexWrap" | "justifyContent" | "alignItems" | "alignContent">;
 
-export type DockLayoutProps = LayoutBaseProps & Pick<
-    DockLayout,
-    "stretchLastChild"
->;
+export type DockLayoutProps = LayoutBaseProps & Pick<DockLayout, "stretchLastChild">;
 
 /* No props on GridLayout; just getters and setters. */
-export type GridLayoutProps = LayoutBaseProps; 
+export type GridLayoutProps = LayoutBaseProps;
 // & Pick<
 //     GridLayout,
 // >;
 
-export type StackLayoutProps = LayoutBaseProps & Pick<
-    StackLayout,
-    "orientation"
->;
+export type StackLayoutProps = LayoutBaseProps & Pick<StackLayout, "orientation">;
 
-export type WrapLayoutProps = LayoutBaseProps & Pick<
-    WrapLayout,
-    "orientation"|
-    "itemWidth"|
-    "itemHeight"
->;
+export type WrapLayoutProps = LayoutBaseProps & Pick<WrapLayout, "orientation" | "itemWidth" | "itemHeight">;
 
 /* No props on AbsoluteLayout; just getters and setters. */
 export type AbsoluteLayoutProps = LayoutBaseProps;
@@ -327,137 +308,66 @@ export type AbsoluteLayoutProps = LayoutBaseProps;
 //     AbsoluteLayout,
 // >;
 
-export type ListViewProps = ViewProps & Pick<
-    ListView,
-    "android"|
-    "ios"|
-    "items"|
-    "itemTemplate"|
-    "itemTemplates"|
-    "itemTemplateSelector"|
-    "itemIdGenerator"|
-    "separatorColor"|
-    "rowHeight"|
-    "iosEstimatedRowHeight"
->;
+export type ListViewProps = ViewProps &
+    Pick<
+        ListView,
+        | "android"
+        | "ios"
+        | "items"
+        | "itemTemplate"
+        | "itemTemplates"
+        | "itemTemplateSelector"
+        | "itemIdGenerator"
+        | "separatorColor"
+        | "rowHeight"
+        | "iosEstimatedRowHeight"
+    >;
 
-export type HtmlViewProps = ViewProps & Pick<
-    HtmlView,
-    "android"|
-    "ios"|
-    "html"
->;
+export type HtmlViewProps = ViewProps & Pick<HtmlView, "android" | "ios" | "html">;
 
-export type WebViewProps = ViewProps & Pick<
-    WebView,
-    "android"|
-    "ios"|
-    "src"|
-    "canGoBack"|
-    "canGoForward"
->;
+export type WebViewProps = ViewProps & Pick<WebView, "android" | "ios" | "src" | "canGoBack" | "canGoForward">;
 
-export type ActionBarProps = LayoutBaseProps & Pick<
-    ActionBar,
-    "title"|
-    "titleView"|
-    "navigationButton"|
-    "flat"
->;
+export type ActionBarProps = LayoutBaseProps & Pick<ActionBar, "title" | "titleView" | "navigationButton" | "flat">;
 
-export type ButtonProps = TextBaseProps & Pick<
-    Button,
-    "textWrap"
->;
+export type ButtonProps = TextBaseProps & Pick<Button, "textWrap">;
 
-export type ImageProps = ViewProps & Pick<
-    Image,
-    "imageSource"|
-    "src"|
-    "isLoading"|
-    "stretch"|
-    "loadMode"|
-    "tintColor"|
-    "decodeHeight"|
-    "decodeWidth"
->;
+export type ImageProps = ViewProps &
+    Pick<
+        Image,
+        "imageSource" | "src" | "isLoading" | "stretch" | "loadMode" | "tintColor" | "decodeHeight" | "decodeWidth"
+    >;
 
-export type ActivityIndicatorProps = ViewProps & Pick<
-    ActivityIndicator,
-    "busy"
->;
+export type ActivityIndicatorProps = ViewProps & Pick<ActivityIndicator, "busy">;
 
-export type DatePickerProps = ViewProps & Pick<
-    DatePicker,
-    "year"|
-    "month"|
-    "day"|
-    "date"|
-    "maxDate"|
-    "minDate"
->;
+export type DatePickerProps = ViewProps & Pick<DatePicker, "year" | "month" | "day" | "date" | "maxDate" | "minDate">;
 
-export type ListPickerProps = ViewProps & Pick<
-    ListPicker,
-    "selectedIndex"|
-    "items"
->;
+export type ListPickerProps = ViewProps & Pick<ListPicker, "selectedIndex" | "items">;
 
-export type SwitchProps = ViewProps & Pick<
-    Switch,
-    "checked"
->;
+export type SwitchProps = ViewProps & Pick<Switch, "checked">;
 
-export type TimePickerProps = ViewProps & Pick<
-    TimePicker,
-    "hour"|
-    "minute"|
-    "time"|
-    "maxHour"|
-    "maxMinute"|
-    "minHour"|
-    "minMinute"|
-    "minuteInterval"
->;
+export type TimePickerProps = ViewProps &
+    Pick<TimePicker, "hour" | "minute" | "time" | "maxHour" | "maxMinute" | "minHour" | "minMinute" | "minuteInterval">;
 
-export type ProgressProps = ViewProps & Pick<
-    Progress,
-    "value"|
-    "maxValue"
->;
+export type ProgressProps = ViewProps & Pick<Progress, "value" | "maxValue">;
 
-export type ScrollViewProps = ContentViewProps & Pick<
-    ScrollView,
-    "isScrollEnabled"|
-    "verticalOffset"|
-    "horizontalOffset"|
-    "scrollableHeight"|
-    "scrollableWidth"|
-    "scrollBarIndicatorVisible"|
-    "orientation"
->;
+export type ScrollViewProps = ContentViewProps &
+    Pick<
+        ScrollView,
+        | "isScrollEnabled"
+        | "verticalOffset"
+        | "horizontalOffset"
+        | "scrollableHeight"
+        | "scrollableWidth"
+        | "scrollBarIndicatorVisible"
+        | "orientation"
+    >;
 
-export type SearchBarProps = ViewProps & Pick<
-    SearchBar,
-    "text"|
-    "hint"|
-    "textFieldBackgroundColor"|
-    "textFieldHintColor"
->;
+export type SearchBarProps = ViewProps &
+    Pick<SearchBar, "text" | "hint" | "textFieldBackgroundColor" | "textFieldHintColor">;
 
-export type SegmentedBarProps = ViewProps & Pick<
-    SegmentedBar,
-    "selectedIndex"|
-    "selectedBackgroundColor"|
-    "items"
->;
+export type SegmentedBarProps = ViewProps & Pick<SegmentedBar, "selectedIndex" | "selectedBackgroundColor" | "items">;
 
-export type SliderProps = ViewProps & Pick<
-    Slider,
-    "value"|
-    "minValue"|
-    "maxValue"
->;
+export type SliderProps = ViewProps & Pick<Slider, "value" | "minValue" | "maxValue">;
 
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];

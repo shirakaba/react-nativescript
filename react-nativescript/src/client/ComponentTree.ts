@@ -4,15 +4,17 @@
  *
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
-import * as ReactReconciler from 'react-reconciler';
+import * as ReactReconciler from "react-reconciler";
 import { Instance } from "./HostConfig";
 
-const randomKey: string = Math.random().toString(36).slice(2);
-const internalInstanceKey: string = '__reactInternalInstance$' + randomKey;
-const internalEventHandlersKey: string = '__reactEventHandlers$' + randomKey;
+const randomKey: string = Math.random()
+    .toString(36)
+    .slice(2);
+const internalInstanceKey: string = "__reactInternalInstance$" + randomKey;
+const internalEventHandlersKey: string = "__reactEventHandlers$" + randomKey;
 
 export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance): void {
-  node.set(internalInstanceKey, hostInst);
+    node.set(internalInstanceKey, hostInst);
 }
 
 /**
@@ -20,30 +22,30 @@ export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: 
  * ReactDOMTextComponent instance ancestor.
  */
 export function getClosestInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-  if (node.get(internalInstanceKey)) {
-    return node.get(internalInstanceKey);
-  }
-
-  while (!node.get(internalInstanceKey)) {
-    if (node.parent) {
-      // if(!node.parent){
-      //   console.warn(`node.parent was null; meanwhile, node.parentNode was:`, node.parentNode);
-      // }
-      node = node.parent;
-    } else {
-      // Top of the tree. This node must not be part of a React tree (or is
-      // unmounted, potentially).
-      return null;
+    if (node.get(internalInstanceKey)) {
+        return node.get(internalInstanceKey);
     }
-  }
 
-  const inst = node.get(internalInstanceKey);
-  // if (inst.tag === HostComponent || inst.tag === HostText) {
+    while (!node.get(internalInstanceKey)) {
+        if (node.parent) {
+            // if(!node.parent){
+            //   console.warn(`node.parent was null; meanwhile, node.parentNode was:`, node.parentNode);
+            // }
+            node = node.parent;
+        } else {
+            // Top of the tree. This node must not be part of a React tree (or is
+            // unmounted, potentially).
+            return null;
+        }
+    }
+
+    const inst = node.get(internalInstanceKey);
+    // if (inst.tag === HostComponent || inst.tag === HostText) {
     // In Fiber, this will always be the deepest root.
     return inst;
-  // }
+    // }
 
-  // return null;
+    // return null;
 }
 
 /**
@@ -51,16 +53,16 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
  * instance, or null if the node was not rendered by this React.
  */
 export function getInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-  const inst = node.get(internalInstanceKey);
-  if (inst) {
-    return inst;
-    // if (inst.tag === HostComponent || inst.tag === HostText) {
-    //   return inst;
-    // } else {
-    //   return null;
-    // }
-  }
-  return null;
+    const inst = node.get(internalInstanceKey);
+    if (inst) {
+        return inst;
+        // if (inst.tag === HostComponent || inst.tag === HostText) {
+        //   return inst;
+        // } else {
+        //   return null;
+        // }
+    }
+    return null;
 }
 
 /**
@@ -68,23 +70,23 @@ export function getInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandl
  * DOM node.
  */
 export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instance {
-  // if (inst.tag === HostComponent || inst.tag === HostText) {
-  //   // In Fiber this, is just the state node right now. We assume it will be
-  //   // a host component or host text.
-  //   return inst.stateNode;
-  // }
-  return inst.stateNode;
+    // if (inst.tag === HostComponent || inst.tag === HostText) {
+    //   // In Fiber this, is just the state node right now. We assume it will be
+    //   // a host component or host text.
+    //   return inst.stateNode;
+    // }
+    return inst.stateNode;
 
-  // Without this first invariant, passing a non-DOM-component triggers the next
-  // invariant for a missing parent, which is super confusing.
-  // invariant(false, 'getNodeFromInstance: Invalid argument.');
-  // throw new Error('getNodeFromInstance: Invalid argument.');
+    // Without this first invariant, passing a non-DOM-component triggers the next
+    // invariant for a missing parent, which is super confusing.
+    // invariant(false, 'getNodeFromInstance: Invalid argument.');
+    // throw new Error('getNodeFromInstance: Invalid argument.');
 }
 
-export function getFiberCurrentPropsFromNode(node: Instance): object|null {
-  return node.get(internalEventHandlersKey) || null;
+export function getFiberCurrentPropsFromNode(node: Instance): object | null {
+    return node.get(internalEventHandlersKey) || null;
 }
 
 export function updateFiberProps(node: Instance, props: object): void {
-  node.set(internalEventHandlersKey, props);
+    node.set(internalEventHandlersKey, props);
 }

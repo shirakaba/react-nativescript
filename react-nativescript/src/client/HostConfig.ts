@@ -3,7 +3,7 @@
  * https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMHostConfig.js
  * https://github.com/facebook/react/blob/6a1e6b2f78da3a56aa497902951c6e9ce654eafc/packages/react-native-renderer/src/ReactNativeHostConfig.js
  * ... which both carry the following copyright:
- * 
+ *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the
@@ -11,8 +11,8 @@
  */
 
 // import ReactReconciler = require('react-reconciler');
-import * as ReactReconciler from 'react-reconciler';
-import { 
+import * as ReactReconciler from "react-reconciler";
+import {
     ActionBar,
     TNSElements,
     elementMap,
@@ -31,13 +31,13 @@ import {
     ScrollView,
     ActionItem,
     NavigationButton,
-} from './ElementRegistry';
-import { precacheFiberNode, updateFiberProps } from './ComponentTree';
-import { diffProperties, updateProperties, setInitialProperties } from './ReactNativeScriptComponent';
-import { validateDOMNesting, updatedAncestorInfo } from './validateDOMNesting';
-import { setValueForStyles } from '../shared/CSSPropertyOperations';
-import { setValueForProperty } from './NativeScriptPropertyOperations';
-import { SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar/segmented-bar';
+} from "./ElementRegistry";
+import { precacheFiberNode, updateFiberProps } from "./ComponentTree";
+import { diffProperties, updateProperties, setInitialProperties } from "./ReactNativeScriptComponent";
+import { validateDOMNesting, updatedAncestorInfo } from "./validateDOMNesting";
+import { setValueForStyles } from "../shared/CSSPropertyOperations";
+import { setValueForProperty } from "./NativeScriptPropertyOperations";
+import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;
@@ -48,22 +48,22 @@ type TextInstance = TextBase;
 type HydratableInstance = any;
 type PublicInstance = any;
 export type HostContext = {
-    isInAParentText: boolean,
-    isInADockLayout: boolean,
-    isInAGridLayout: boolean,
-    isInAnAbsoluteLayout: boolean,
-    isInAFlexboxLayout: boolean,
+    isInAParentText: boolean;
+    isInADockLayout: boolean;
+    isInAGridLayout: boolean;
+    isInAnAbsoluteLayout: boolean;
+    isInAFlexboxLayout: boolean;
 };
 type UpdatePayload = {
-    hostContext: HostContext,
-    updates: Array<any>
+    hostContext: HostContext;
+    updates: Array<any>;
 };
 type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
 
-function isASingleChildContainer(view: Instance): view is Page|ContentView|ScrollView {
+function isASingleChildContainer(view: Instance): view is Page | ContentView | ScrollView {
     return view instanceof ContentView || view instanceof Page || view instanceof ScrollView;
 }
 
@@ -94,7 +94,7 @@ function isASingleChildContainer(view: Instance): view is Page|ContentView|Scrol
 //                 console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
 //             } else {
 //                 const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
-    
+
 //                 console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
 //                 hostConfig.appendChild(view, tv);
 //             }
@@ -111,12 +111,12 @@ function isASingleChildContainer(view: Instance): view is Page|ContentView|Scrol
 //                 const { children, ...rest } = prospectiveChild.props;
 //                 console.warn(`Support for nesting children is experimental. child type: ${prospectiveChild.type}. props:`, { ...rest });
 //             })();
-    
+
 //             if(!prospectiveChild.type){
 //                 console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
 //                 return;
 //             }
-    
+
 //             const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
 //                 prospectiveChild.type as Type,
 //                 prospectiveChild.props,
@@ -125,14 +125,27 @@ function isASingleChildContainer(view: Instance): view is Page|ContentView|Scrol
 //                 internalInstanceHandle
 //             );
 //             hostConfig.appendChild(view, instanceFromChild);
-            
+
 //             // hostConfig.appendChild(view, value);
 //         }
 //     });
 // }
 
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
-const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout> = {
+const hostConfig: ReactReconciler.HostConfig<
+    Type,
+    Props,
+    Container,
+    Instance,
+    TextInstance,
+    HydratableInstance,
+    PublicInstance,
+    HostContext,
+    UpdatePayload,
+    ChildSet,
+    TimeoutHandle,
+    NoTimeout
+> = {
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
         // TODO (this was a complete guess).
         return instance;
@@ -162,35 +175,34 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
          * When type 'label' or 'button' passes into here, they will then find that
          * parentHostContext.isInAFlexboxLayout === true.
          */
-        console.log(`[getChildHostContext] type: ${type}; parentHostContext.isInAFlexboxLayout: ${parentHostContext.isInAFlexboxLayout}`);
+        console.log(
+            `[getChildHostContext] type: ${type}; parentHostContext.isInAFlexboxLayout: ${parentHostContext.isInAFlexboxLayout}`
+        );
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
         const prevIsInAFlexboxLayout: boolean = parentHostContext.isInAFlexboxLayout;
 
         const isInAParentText: boolean =
-            type === 'label' ||
-            type === 'textView' ||
-            type === 'textField' ||
-            type === 'button';
-        const isInADockLayout: boolean = type === 'dockLayout';
-        const isInAGridLayout: boolean = type === 'gridLayout';
-        const isInAnAbsoluteLayout: boolean = type === 'absoluteLayout';
-        const isInAFlexboxLayout: boolean = type === 'flexboxLayout';
-      
+            type === "label" || type === "textView" || type === "textField" || type === "button";
+        const isInADockLayout: boolean = type === "dockLayout";
+        const isInAGridLayout: boolean = type === "gridLayout";
+        const isInAnAbsoluteLayout: boolean = type === "absoluteLayout";
+        const isInAFlexboxLayout: boolean = type === "flexboxLayout";
+
         /* We do have the option here in future to force ancestry based on a previous ancestor
          * (e.g. if we want text styles to cascade to all ancestors). Layout props are only with
          * respect to the immediate parent, however, so no need to do anything special for those.
          *
          * Here we avoid recreating an object that happens to deep-equal parentHostContext.
          */
-        if(
-            prevIsInAParentText === isInAParentText
-            && prevIsInADockLayout === isInADockLayout
-            && prevIsInADockLayout === isInAGridLayout
-            && prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout
-            && prevIsInAFlexboxLayout === isInAFlexboxLayout
-        ){
+        if (
+            prevIsInAParentText === isInAParentText &&
+            prevIsInADockLayout === isInADockLayout &&
+            prevIsInADockLayout === isInAGridLayout &&
+            prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout &&
+            prevIsInAFlexboxLayout === isInAFlexboxLayout
+        ) {
             return parentHostContext;
         } else {
             return {
@@ -198,7 +210,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
                 isInADockLayout,
                 isInAGridLayout,
                 isInAnAbsoluteLayout,
-                isInAFlexboxLayout
+                isInAFlexboxLayout,
             };
         }
     },
@@ -225,30 +237,37 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         props: Props,
         rootContainerInstance: Container,
         hostContext: HostContext,
-        internalInstanceHandle: ReactReconciler.OpaqueHandle,
+        internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): Instance {
-        (()=>{
+        (() => {
             const { children, ...rest } = props;
-            console.log(`[createInstance() 1a] type: ${type}. props:`, { ...rest });
+            console.log(`[createInstance() 1a] type: ${type}. props:`, {
+                ...rest,
+            });
         })();
         console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
 
         let view: View;
-        const viewConstructor: ConcreteViewConstructor|null = typeof type === "string" ? elementMap[type] : null;
-        if(viewConstructor){
-            if(type === 'contentView' && hostContext.isInAParentText){
-                throw new Error('Nesting of <ContentView> within a TextBase is not currently supported.');
-            };
+        const viewConstructor: ConcreteViewConstructor | null = typeof type === "string" ? elementMap[type] : null;
+        if (viewConstructor) {
+            if (type === "contentView" && hostContext.isInAParentText) {
+                throw new Error("Nesting of <ContentView> within a TextBase is not currently supported.");
+            }
             view = new viewConstructor() as View;
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
-            if(typeof type === "undefined"){
+            if (typeof type === "undefined") {
                 throw new Error(`HostConfig received undefined type in createInstance.`);
             }
-            console.log(`Type not found in element registry, so must be custom instance; recursing until we get a type in the element registry.`);
+            console.log(
+                `Type not found in element registry, so must be custom instance; recursing until we get a type in the element registry.`
+            );
             const componentFunction: React.Component<Props, {}> = new (type as any)(props);
-            const createdElement = componentFunction.render() as React.ReactElement<Props, React.JSXElementConstructor<any> | TNSElements>;
+            const createdElement = componentFunction.render() as React.ReactElement<
+                Props,
+                React.JSXElementConstructor<any> | TNSElements
+            >;
 
             return hostConfig.createInstance(
                 createdElement.type,
@@ -259,14 +278,20 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             );
         }
 
-        if(hostContext.isInADockLayout && !props.dock){
-            console.warn(`Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`);
+        if (hostContext.isInADockLayout && !props.dock) {
+            console.warn(
+                `Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`
+            );
         }
-        if(hostContext.isInAGridLayout && (typeof props.row === "undefined" || typeof props.col === "undefined")){
-            console.warn(`Components in a GridLayout should bear both the 'row' and 'col' properties. Undefined behaviour if they don't!`);
+        if (hostContext.isInAGridLayout && (typeof props.row === "undefined" || typeof props.col === "undefined")) {
+            console.warn(
+                `Components in a GridLayout should bear both the 'row' and 'col' properties. Undefined behaviour if they don't!`
+            );
         }
-        if(hostContext.isInAnAbsoluteLayout && (!props.left || !props.top)){
-            console.warn(`Components in a GridLayout should bear both the 'top' and 'left' properties, passed as a property rather than a style. Undefined behaviour if they don't!`);
+        if (hostContext.isInAnAbsoluteLayout && (!props.left || !props.top)) {
+            console.warn(
+                `Components in a GridLayout should bear both the 'top' and 'left' properties, passed as a property rather than a style. Undefined behaviour if they don't!`
+            );
         }
 
         // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
@@ -316,7 +341,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         type: Type,
         props: Props,
         rootContainerInstance: Container,
-        hostContext: HostContext,
+        hostContext: HostContext
     ): boolean {
         console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         setInitialProperties(parentInstance, type, props, rootContainerInstance, hostContext);
@@ -324,7 +349,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return false;
     },
     shouldSetTextContent(type: Type, props: Props): boolean {
-        return typeof props.children === 'string' || typeof props.children === 'number';
+        return typeof props.children === "string" || typeof props.children === "number";
     },
     /**
      * This function is used to deprioritize rendering of some subtrees. Mostly used in cases where the subtree is hidden or offscreen.
@@ -338,11 +363,11 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         text: string,
         rootContainerInstance: Container,
         hostContext: HostContext,
-        internalInstanceHandle: ReactReconciler.OpaqueHandle,
+        internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): TextInstance {
         console.log(`[createTextInstance] with text: "${text}"`);
-        if(!hostContext.isInAParentText){
-            throw new Error('Text strings must be rendered within a component extending <TextBase>.');
+        if (!hostContext.isInAParentText) {
+            throw new Error("Text strings must be rendered within a component extending <TextBase>.");
         }
         // See createInstance().
 
@@ -358,12 +383,9 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
         return textView;
     },
-    scheduleDeferredCallback(
-        callback: () => any,
-        options?: { timeout: number },
-    ): any {
+    scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
         // TODO: check whether default timeout should be 0.
-        if(!options) options = { timeout: 0 };
+        if (!options) options = { timeout: 0 };
 
         return setTimeout(callback, options.timeout);
     },
@@ -385,20 +407,22 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        if(parentInstance === null){
-            console.warn(`[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`);
+        if (parentInstance === null) {
+            console.warn(
+                `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`
+            );
             return;
         }
-        if(child instanceof Page){
+        if (child instanceof Page) {
             console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
             return;
         }
-        if(child instanceof ActionBar){
+        if (child instanceof ActionBar) {
             console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
-            if(parentInstance instanceof Page){
+            if (parentInstance instanceof Page) {
                 parentInstance.actionBar = child;
             } else {
-                if(parentInstance.page){
+                if (parentInstance.page) {
                     parentInstance.page.actionBar = child;
                 }
             }
@@ -407,28 +431,28 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
 
         // console.log(`[appendChild()] child's page was: `, child.page);
         // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
-        if(isASingleChildContainer(parentInstance)){
+        if (isASingleChildContainer(parentInstance)) {
             console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
 
             parentInstance.content = child as View;
-        } else if(parentInstance instanceof LayoutBase){
+        } else if (parentInstance instanceof LayoutBase) {
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
-        } else if(parentInstance instanceof ActionBar && child instanceof ActionItem){
-            if(child instanceof NavigationButton){
+        } else if (parentInstance instanceof ActionBar && child instanceof ActionItem) {
+            if (child instanceof NavigationButton) {
                 console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
                 parentInstance.navigationButton = child;
-            } else if(child instanceof ActionItem){
+            } else if (child instanceof ActionItem) {
                 console.log(`[appendChild()] (instance of ActionItem) ${parentInstance} > ${child}`);
                 parentInstance.actionItems.addItem(child);
             }
-        } else if(parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem){
+        } else if (parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             const newItems = [...(parentInstance.items || []), child];
             parentInstance.items = newItems;
-        } else if(parentInstance instanceof TabView && child instanceof TabViewItem){
+        } else if (parentInstance instanceof TabView && child instanceof TabViewItem) {
             // console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             /* We must go through the setter rather than simply mutate the existing array. */
             const newItems = [...(parentInstance.items || []), child];
@@ -438,7 +462,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
         }
-        // TODO: check whether a property/event change should be fired. 
+        // TODO: check whether a property/event change should be fired.
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
         console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
@@ -455,16 +479,16 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
      * From: https://blog.atulr.com/react-custom-renderer-2/
      * This function is called for every element that has set the return value of finalizeInitialChildren() to true. This method is called after all the steps are done (ie after resetAfterCommit), meaning the entire tree has been attached to the dom.
      * This method is mainly used in react-dom for implementing autofocus. This method exists in react-dom only and not in react-native.
-     * @param instance 
-     * @param type 
-     * @param newProps 
-     * @param internalInstanceHandle 
+     * @param instance
+     * @param type
+     * @param newProps
+     * @param internalInstanceHandle
      */
     commitMount(
         instance: Instance,
         type: Type,
         newProps: Props,
-        internalInstanceHandle: ReactReconciler.OpaqueHandle,
+        internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): void {
         console.log(`commitMount() with type: ${type}`, instance);
         (instance as View).focus();
@@ -486,7 +510,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         oldProps: Props,
         newProps: Props,
         rootContainerInstance: Container,
-        hostContext: HostContext,
+        hostContext: HostContext
     ): null | UpdatePayload {
         console.log(`prepareUpdate() with type: ${type}`, instance);
 
@@ -520,15 +544,17 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             type,
             oldProps,
             newProps,
-            rootContainerInstance,
+            rootContainerInstance
         );
 
         // console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
 
-        return diffed === null ? null : {
-            hostContext,
-            updates: diffed
-        }
+        return diffed === null
+            ? null
+            : {
+                  hostContext,
+                  updates: diffed,
+              };
 
         // return {}; // Simply return a non-null value to permit commitUpdate();
         // return null;
@@ -539,7 +565,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         type: Type,
         oldProps: Props,
         newProps: Props,
-        internalInstanceHandle: ReactReconciler.OpaqueHandle,
+        internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): void {
         // console.log(`commitUpdate() with type: ${type}`, instance);
 
@@ -553,10 +579,12 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
 
-        if(parentInstance instanceof LayoutBase){
+        if (parentInstance instanceof LayoutBase) {
             /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
-            if(parentInstance instanceof GridLayout){
-                console.warn(`HostConfig.insertBefore() LayoutBase implementation has not been tested specifically for GridLayout!`);
+            if (parentInstance instanceof GridLayout) {
+                console.warn(
+                    `HostConfig.insertBefore() LayoutBase implementation has not been tested specifically for GridLayout!`
+                );
                 // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
             }
 
@@ -564,24 +592,32 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
              * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L164
              * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/utils.js#L32
              */
-            if(child.parent === parentInstance){
+            if (child.parent === parentInstance) {
                 const index: number = parentInstance.getChildIndex(child as View);
                 if (index !== -1) {
-                    console.log(`[HostConfig.insertBefore] Provisionally calling ${parentInstance}.removeChild(${child}).`);
+                    console.log(
+                        `[HostConfig.insertBefore] Provisionally calling ${parentInstance}.removeChild(${child}).`
+                    );
                     parentInstance.removeChild(child as View);
                 }
             }
 
             const atIndex: number = parentInstance.getChildIndex(beforeChild as View);
-            if (atIndex === -1){
-                console.log(`[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.addChild(${child})`);
+            if (atIndex === -1) {
+                console.log(
+                    `[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.addChild(${child})`
+                );
                 parentInstance.addChild(child as View);
             } else {
-                console.log(`[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`);
+                console.log(
+                    `[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`
+                );
                 parentInstance.insertChild(child as View, atIndex);
             }
         } else {
-            console.warn(`[HostConfig.insertBefore] parentInstance was not a LayoutBase, so deferring to hostConfig.appendChild() with: ${parentInstance} > ${child} beforeChild ${beforeChild}`);
+            console.warn(
+                `[HostConfig.insertBefore] parentInstance was not a LayoutBase, so deferring to hostConfig.appendChild() with: ${parentInstance} > ${child} beforeChild ${beforeChild}`
+            );
             hostConfig.appendChild(parentInstance, child);
         }
 
@@ -590,7 +626,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         //     console.warn(`HostConfig.insertBefore() not implemented for GridLayout!`);
         //     // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
         // }
-        
+
         // // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
         // let beforeChildIndex: number = 0;
         // parentInstance.eachChild((viewBase: ViewBase) => {
@@ -601,7 +637,7 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         //         return true;
         //     }
         // });
-        
+
         // console.log(`[HostConfig.insertBefore] calculated beforeChildIndex as ${beforeChildIndex}; shall call: ${parentInstance}._addView(${child}, ${beforeChildIndex})`);
         // parentInstance._addView(child, beforeChildIndex);
     },
@@ -615,30 +651,34 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
     insertInContainerBefore(
         container: Container,
         child: Instance | TextInstance,
-        beforeChild: Instance | TextInstance,
+        beforeChild: Instance | TextInstance
     ): void {
         console.log(`[insertInContainerBefore()] deferring to insertBefore(): ${container} > ${child}`);
         return hostConfig.insertInContainerBefore(container, child, beforeChild);
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
-        if(parent === null){
+        if (parent === null) {
             // TODO: consult React expert here!
-            console.warn(`[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`);
+            console.warn(
+                `[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`
+            );
             return;
-        } else if(isASingleChildContainer(parent)){
+        } else if (isASingleChildContainer(parent)) {
             console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
-             console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
+            console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
             parent.content = null;
-        } else if(parent instanceof LayoutBase){
+        } else if (parent instanceof LayoutBase) {
             /** For logging purposes only **/
             const childrenBefore = [];
             parent.eachChild((viewBase: ViewBase) => {
                 childrenBefore.push(viewBase);
                 return true;
             });
-            console.log(`[removeChild()] parent instance of LayoutBase. Current children: [${childrenBefore}]: ${parent} x ${child}`);
+            console.log(
+                `[removeChild()] parent instance of LayoutBase. Current children: [${childrenBefore}]: ${parent} x ${child}`
+            );
             /*******************************/
 
             parent.removeChild(child as View);
@@ -651,25 +691,25 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
             });
             console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
             /*******************************/
-        } else if(child instanceof ActionBar && parent instanceof Page){
+        } else if (child instanceof ActionBar && parent instanceof Page) {
             console.log(`[removeChild()] Forbidden in NativeScript, so no-op: ${parent} x ${child}`);
             return;
-        } else if(parent instanceof ActionBar && child instanceof ActionItem){
+        } else if (parent instanceof ActionBar && child instanceof ActionItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);
-            if(child instanceof NavigationButton){
+            if (child instanceof NavigationButton) {
                 parent.navigationButton = null; // Anything falsy should work.
-            } else if(child instanceof ActionItem){
+            } else if (child instanceof ActionItem) {
                 parent.actionItems.removeItem(child);
             }
-        } else if(parent instanceof SegmentedBar && child instanceof SegmentedBarItem){
+        } else if (parent instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);
-            if(!parent.items){
+            if (!parent.items) {
                 parent.items = [];
             }
             parent.items = parent.items.filter(i => i !== child);
-        } else if(parent instanceof TabView && child instanceof TabViewItem){
+        } else if (parent instanceof TabView && child instanceof TabViewItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);
-            if(!parent.items){
+            if (!parent.items) {
                 parent.items = [];
             }
             parent.items = parent.items.filter(i => i !== child);
@@ -683,14 +723,29 @@ const hostConfig: ReactReconciler.HostConfig<Type, Props, Container, Instance, T
         return hostConfig.removeChild(container, child);
     },
     resetTextContent(instance: Instance): void {
-        if(instance instanceof TextBase){
+        if (instance instanceof TextBase) {
             const oldText: string = instance.text;
             instance.text = "";
             instance.notifyPropertyChange("text", "", oldText);
         } else {
-            console.warn(`resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase.`);
+            console.warn(
+                `resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase.`
+            );
         }
     },
-}
+};
 
-export const reactReconcilerInst = ReactReconciler<Type, Props, Container, Instance, TextInstance, HydratableInstance, PublicInstance, HostContext, UpdatePayload, ChildSet, TimeoutHandle, NoTimeout>(hostConfig);
+export const reactReconcilerInst = ReactReconciler<
+    Type,
+    Props,
+    Container,
+    Instance,
+    TextInstance,
+    HydratableInstance,
+    PublicInstance,
+    HostContext,
+    UpdatePayload,
+    ChildSet,
+    TimeoutHandle,
+    NoTimeout
+>(hostConfig);

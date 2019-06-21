@@ -6,19 +6,25 @@ import { LayoutBaseComponentProps, RCTLayoutBase } from "./LayoutBase";
 interface Props {
     /* Each constituent view passed in must bear "row" and "col" Props. */
     /* rows and columns will be added in order specified. */
-    rows: ItemSpec[],
-    columns: ItemSpec[],
+    rows: ItemSpec[];
+    columns: ItemSpec[];
     // TODO: Should we enforce that children must only be Views?
 }
 
-export type GridLayoutComponentProps<E extends NativeScriptGridLayout = NativeScriptGridLayout> = Props /* & typeof RCTGridLayout.defaultProps */ & Partial<GridLayoutProps> & LayoutBaseComponentProps<E>;
+export type GridLayoutComponentProps<
+    E extends NativeScriptGridLayout = NativeScriptGridLayout
+> = Props /* & typeof RCTGridLayout.defaultProps */ & Partial<GridLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript GridLayout component.
  * See: ui/layouts/grid-layout
  */
-export class _GridLayout<P extends GridLayoutComponentProps<E>, S extends {}, E extends NativeScriptGridLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _GridLayout<
+    P extends GridLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptGridLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -27,7 +33,7 @@ export class _GridLayout<P extends GridLayoutComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -38,17 +44,17 @@ export class _GridLayout<P extends GridLayoutComponentProps<E>, S extends {}, E 
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'gridLayout',
+            "gridLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -57,7 +63,9 @@ export class _GridLayout<P extends GridLayoutComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<GridLayoutComponentProps<NativeScriptGridLayout>>;
 
-export const GridLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptGridLayout>> = React.forwardRef<NativeScriptGridLayout, OwnPropsWithoutForwardedRef>(
+export const GridLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptGridLayout>
+> = React.forwardRef<NativeScriptGridLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptGridLayout>) => {
         const { children, ...rest } = props;
 
@@ -70,4 +78,4 @@ export const GridLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

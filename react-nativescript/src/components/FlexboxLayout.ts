@@ -7,14 +7,20 @@ interface Props {
     // No mandatory props.
 }
 
-export type FlexboxLayoutComponentProps<E extends NativeScriptFlexboxLayout = NativeScriptFlexboxLayout> = Props /* & typeof RCTFlexboxLayout.defaultProps */ & Partial<FlexboxLayoutProps> & LayoutBaseComponentProps<E>;
+export type FlexboxLayoutComponentProps<
+    E extends NativeScriptFlexboxLayout = NativeScriptFlexboxLayout
+> = Props /* & typeof RCTFlexboxLayout.defaultProps */ & Partial<FlexboxLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript FlexboxLayout component.
  * See: ui/layouts/flexbox-layout
  */
-export class _FlexboxLayout<P extends FlexboxLayoutComponentProps<E>, S extends {}, E extends NativeScriptFlexboxLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _FlexboxLayout<
+    P extends FlexboxLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptFlexboxLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -23,7 +29,7 @@ export class _FlexboxLayout<P extends FlexboxLayoutComponentProps<E>, S extends 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -34,17 +40,17 @@ export class _FlexboxLayout<P extends FlexboxLayoutComponentProps<E>, S extends 
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'flexboxLayout',
+            "flexboxLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -53,7 +59,9 @@ export class _FlexboxLayout<P extends FlexboxLayoutComponentProps<E>, S extends 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<FlexboxLayoutComponentProps<NativeScriptFlexboxLayout>>;
 
-export const FlexboxLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFlexboxLayout>> = React.forwardRef<NativeScriptFlexboxLayout, OwnPropsWithoutForwardedRef>(
+export const FlexboxLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFlexboxLayout>
+> = React.forwardRef<NativeScriptFlexboxLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptFlexboxLayout>) => {
         const { children, ...rest } = props;
 
@@ -66,4 +74,4 @@ export const FlexboxLayout: React.ComponentType<OwnPropsWithoutForwardedRef & Re
             children
         );
     }
-)
+);

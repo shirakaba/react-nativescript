@@ -3,13 +3,17 @@ import { ContainerViewProps } from "../shared/NativeScriptComponentTypings";
 import { ContainerView as NativeScriptContainerView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type ContainerViewComponentProps<E extends NativeScriptContainerView = NativeScriptContainerView> = Props /* & typeof ContainerView.defaultProps */ & Partial<ContainerViewProps> & ViewComponentProps<E>;
+export type ContainerViewComponentProps<
+    E extends NativeScriptContainerView = NativeScriptContainerView
+> = Props /* & typeof ContainerView.defaultProps */ & Partial<ContainerViewProps> & ViewComponentProps<E>;
 
 /**
  * Base class for all UI components that are containers.
  */
-export abstract class RCTContainerView<P extends ContainerViewComponentProps<E>, S extends {}, E extends NativeScriptContainerView> extends RCTView<P, S, E> {
-}
+export abstract class RCTContainerView<
+    P extends ContainerViewComponentProps<E>,
+    S extends {},
+    E extends NativeScriptContainerView
+> extends RCTView<P, S, E> {}

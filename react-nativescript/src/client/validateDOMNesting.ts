@@ -13,36 +13,32 @@ function getCurrentFiberStackInDev(): string {
 }
 // : AncestorInfo
 let validateDOMNesting: (
-    childTag: string|undefined|void|null,
-    childText: string|undefined|void|null,
-    ancestorInfo: AncestorInfo|undefined|void|null
-) => AncestorInfo|void = (
-    childTag: string|undefined|void|null,
-    childText: string|undefined|void|null,
-    ancestorInfo: AncestorInfo|undefined|void|null
-    ) => {};
-let updatedAncestorInfo: (
-    oldInfo: AncestorInfo|undefined|void|null,
+    childTag: string | undefined | void | null,
+    childText: string | undefined | void | null,
+    ancestorInfo: AncestorInfo | undefined | void | null
+) => AncestorInfo | void = (
+    childTag: string | undefined | void | null,
+    childText: string | undefined | void | null,
+    ancestorInfo: AncestorInfo | undefined | void | null
+) => {};
+let updatedAncestorInfo: (oldInfo: AncestorInfo | undefined | void | null, tag: string) => void = (
+    oldInfo: AncestorInfo | undefined | void | null,
     tag: string
-) => void = (
-        oldInfo: AncestorInfo|undefined|void|null,
-        tag: string
-    ) => {};
+) => {};
 
 type AncestorInfoTagObj = { tag: string };
 interface AncestorInfo {
-    current: null | AncestorInfoTagObj,
+    current: null | AncestorInfoTagObj;
 
-    formTag: null | AncestorInfoTagObj,
-    aTagInScope: null | AncestorInfoTagObj,
-    buttonTagInScope: null | AncestorInfoTagObj,
-    nobrTagInScope: null | AncestorInfoTagObj,
-    pTagInButtonScope: null | AncestorInfoTagObj,
+    formTag: null | AncestorInfoTagObj;
+    aTagInScope: null | AncestorInfoTagObj;
+    buttonTagInScope: null | AncestorInfoTagObj;
+    nobrTagInScope: null | AncestorInfoTagObj;
+    pTagInButtonScope: null | AncestorInfoTagObj;
 
-    listItemTagAutoclosing: null | AncestorInfoTagObj,
-    dlItemTagAutoclosing: null | AncestorInfoTagObj,
-};
-
+    listItemTagAutoclosing: null | AncestorInfoTagObj;
+    dlItemTagAutoclosing: null | AncestorInfoTagObj;
+}
 
 if ((global as any).__DEV__) {
     // This validation code was written based on the HTML5 parsing spec:
@@ -58,125 +54,116 @@ if ((global as any).__DEV__) {
 
     // https://html.spec.whatwg.org/multipage/syntax.html#special
     const specialTags = [
-        'address',
-        'applet',
-        'area',
-        'article',
-        'aside',
-        'base',
-        'basefont',
-        'bgsound',
-        'blockquote',
-        'body',
-        'br',
-        'button',
-        'caption',
-        'center',
-        'col',
-        'colgroup',
-        'dd',
-        'details',
-        'dir',
-        'div',
-        'dl',
-        'dt',
-        'embed',
-        'fieldset',
-        'figcaption',
-        'figure',
-        'footer',
-        'form',
-        'frame',
-        'frameset',
-        'h1',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6',
-        'head',
-        'header',
-        'hgroup',
-        'hr',
-        'html',
-        'iframe',
-        'img',
-        'input',
-        'isindex',
-        'li',
-        'link',
-        'listing',
-        'main',
-        'marquee',
-        'menu',
-        'menuitem',
-        'meta',
-        'nav',
-        'noembed',
-        'noframes',
-        'noscript',
-        'object',
-        'ol',
-        'p',
-        'param',
-        'plaintext',
-        'pre',
-        'script',
-        'section',
-        'select',
-        'source',
-        'style',
-        'summary',
-        'table',
-        'tbody',
-        'td',
-        'template',
-        'textarea',
-        'tfoot',
-        'th',
-        'thead',
-        'title',
-        'tr',
-        'track',
-        'ul',
-        'wbr',
-        'xmp',
+        "address",
+        "applet",
+        "area",
+        "article",
+        "aside",
+        "base",
+        "basefont",
+        "bgsound",
+        "blockquote",
+        "body",
+        "br",
+        "button",
+        "caption",
+        "center",
+        "col",
+        "colgroup",
+        "dd",
+        "details",
+        "dir",
+        "div",
+        "dl",
+        "dt",
+        "embed",
+        "fieldset",
+        "figcaption",
+        "figure",
+        "footer",
+        "form",
+        "frame",
+        "frameset",
+        "h1",
+        "h2",
+        "h3",
+        "h4",
+        "h5",
+        "h6",
+        "head",
+        "header",
+        "hgroup",
+        "hr",
+        "html",
+        "iframe",
+        "img",
+        "input",
+        "isindex",
+        "li",
+        "link",
+        "listing",
+        "main",
+        "marquee",
+        "menu",
+        "menuitem",
+        "meta",
+        "nav",
+        "noembed",
+        "noframes",
+        "noscript",
+        "object",
+        "ol",
+        "p",
+        "param",
+        "plaintext",
+        "pre",
+        "script",
+        "section",
+        "select",
+        "source",
+        "style",
+        "summary",
+        "table",
+        "tbody",
+        "td",
+        "template",
+        "textarea",
+        "tfoot",
+        "th",
+        "thead",
+        "title",
+        "tr",
+        "track",
+        "ul",
+        "wbr",
+        "xmp",
     ];
 
     // https://html.spec.whatwg.org/multipage/syntax.html#has-an-element-in-scope
     const inScopeTags = [
-        'applet',
-        'caption',
-        'html',
-        'table',
-        'td',
-        'th',
-        'marquee',
-        'object',
-        'template',
+        "applet",
+        "caption",
+        "html",
+        "table",
+        "td",
+        "th",
+        "marquee",
+        "object",
+        "template",
 
         // https://html.spec.whatwg.org/multipage/syntax.html#html-integration-point
         // TODO: Distinguish by namespace here -- for <title>, including it here
         // errs on the side of fewer warnings
-        'foreignObject',
-        'desc',
-        'title',
+        "foreignObject",
+        "desc",
+        "title",
     ];
 
     // https://html.spec.whatwg.org/multipage/syntax.html#has-an-element-in-button-scope
-    const buttonScopeTags = inScopeTags.concat(['button']);
+    const buttonScopeTags = inScopeTags.concat(["button"]);
 
     // https://html.spec.whatwg.org/multipage/syntax.html#generate-implied-end-tags
-    const impliedEndTags = [
-        'dd',
-        'dt',
-        'li',
-        'option',
-        'optgroup',
-        'p',
-        'rp',
-        'rt',
-    ];
+    const impliedEndTags = ["dd", "dt", "li", "option", "optgroup", "p", "rp", "rt"];
 
     const emptyAncestorInfo: AncestorInfo = {
         current: null,
@@ -191,7 +178,7 @@ if ((global as any).__DEV__) {
         dlItemTagAutoclosing: null,
     };
 
-    updatedAncestorInfo = function(oldInfo: AncestorInfo|undefined|null, tag: string): AncestorInfo {
+    updatedAncestorInfo = function(oldInfo: AncestorInfo | undefined | null, tag: string): AncestorInfo {
         let ancestorInfo: AncestorInfo = { ...(oldInfo || emptyAncestorInfo) };
         let info: AncestorInfoTagObj = { tag };
 
@@ -206,37 +193,32 @@ if ((global as any).__DEV__) {
 
         // See rules for 'li', 'dd', 'dt' start tags in
         // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inbody
-        if (
-            specialTags.indexOf(tag) !== -1 &&
-            tag !== 'address' &&
-            tag !== 'div' &&
-            tag !== 'p'
-        ) {
+        if (specialTags.indexOf(tag) !== -1 && tag !== "address" && tag !== "div" && tag !== "p") {
             ancestorInfo.listItemTagAutoclosing = null;
             ancestorInfo.dlItemTagAutoclosing = null;
         }
 
         ancestorInfo.current = info;
 
-        if (tag === 'form') {
+        if (tag === "form") {
             ancestorInfo.formTag = info;
         }
-        if (tag === 'a') {
+        if (tag === "a") {
             ancestorInfo.aTagInScope = info;
         }
-        if (tag === 'button') {
+        if (tag === "button") {
             ancestorInfo.buttonTagInScope = info;
         }
-        if (tag === 'nobr') {
+        if (tag === "nobr") {
             ancestorInfo.nobrTagInScope = info;
         }
-        if (tag === 'p') {
+        if (tag === "p") {
             ancestorInfo.pTagInButtonScope = info;
         }
-        if (tag === 'li') {
+        if (tag === "li") {
             ancestorInfo.listItemTagAutoclosing = info;
         }
-        if (tag === 'dd' || tag === 'dt') {
+        if (tag === "dd" || tag === "dt") {
             ancestorInfo.dlItemTagAutoclosing = info;
         }
 
@@ -246,118 +228,107 @@ if ((global as any).__DEV__) {
     /**
      * Returns whether
      */
-    const isTagValidWithParent = function(tag: string|undefined|null, parentTag: string|undefined|null) {
+    const isTagValidWithParent = function(tag: string | undefined | null, parentTag: string | undefined | null) {
         // First, let's check if we're in an unusual parsing mode...
         switch (parentTag) {
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inselect
-            case 'select':
-                return tag === 'option' || tag === 'optgroup' || tag === '#text';
-            case 'optgroup':
-                return tag === 'option' || tag === '#text';
+            case "select":
+                return tag === "option" || tag === "optgroup" || tag === "#text";
+            case "optgroup":
+                return tag === "option" || tag === "#text";
             // Strictly speaking, seeing an <option> doesn't mean we're in a <select>
             // but
-            case 'option':
-                return tag === '#text';
+            case "option":
+                return tag === "#text";
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intd
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-incaption
             // No special behavior since these rules fall back to "in body" mode for
             // all except special table nodes which cause bad parsing behavior anyway.
 
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intr
-            case 'tr':
-                return (
-                    tag === 'th' ||
-                    tag === 'td' ||
-                    tag === 'style' ||
-                    tag === 'script' ||
-                    tag === 'template'
-                );
+            case "tr":
+                return tag === "th" || tag === "td" || tag === "style" || tag === "script" || tag === "template";
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intbody
-            case 'tbody':
-            case 'thead':
-            case 'tfoot':
-                return (
-                    tag === 'tr' ||
-                    tag === 'style' ||
-                    tag === 'script' ||
-                    tag === 'template'
-                );
+            case "tbody":
+            case "thead":
+            case "tfoot":
+                return tag === "tr" || tag === "style" || tag === "script" || tag === "template";
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-incolgroup
-            case 'colgroup':
-                return tag === 'col' || tag === 'template';
+            case "colgroup":
+                return tag === "col" || tag === "template";
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intable
-            case 'table':
+            case "table":
                 return (
-                    tag === 'caption' ||
-                    tag === 'colgroup' ||
-                    tag === 'tbody' ||
-                    tag === 'tfoot' ||
-                    tag === 'thead' ||
-                    tag === 'style' ||
-                    tag === 'script' ||
-                    tag === 'template'
+                    tag === "caption" ||
+                    tag === "colgroup" ||
+                    tag === "tbody" ||
+                    tag === "tfoot" ||
+                    tag === "thead" ||
+                    tag === "style" ||
+                    tag === "script" ||
+                    tag === "template"
                 );
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inhead
-            case 'head':
+            case "head":
                 return (
-                    tag === 'base' ||
-                    tag === 'basefont' ||
-                    tag === 'bgsound' ||
-                    tag === 'link' ||
-                    tag === 'meta' ||
-                    tag === 'title' ||
-                    tag === 'noscript' ||
-                    tag === 'noframes' ||
-                    tag === 'style' ||
-                    tag === 'script' ||
-                    tag === 'template'
+                    tag === "base" ||
+                    tag === "basefont" ||
+                    tag === "bgsound" ||
+                    tag === "link" ||
+                    tag === "meta" ||
+                    tag === "title" ||
+                    tag === "noscript" ||
+                    tag === "noframes" ||
+                    tag === "style" ||
+                    tag === "script" ||
+                    tag === "template"
                 );
             // https://html.spec.whatwg.org/multipage/semantics.html#the-html-element
-            case 'html':
-                return tag === 'head' || tag === 'body' || tag === 'frameset';
-            case 'frameset':
-                return tag === 'frame';
-            case '#document':
-                return tag === 'html';
+            case "html":
+                return tag === "head" || tag === "body" || tag === "frameset";
+            case "frameset":
+                return tag === "frame";
+            case "#document":
+                return tag === "html";
         }
 
         // Probably in the "in body" parsing mode, so we outlaw only tag combos
         // where the parsing rules cause implicit opens or closes to be added.
         // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inbody
         switch (tag) {
-            case 'h1':
-            case 'h2':
-            case 'h3':
-            case 'h4':
-            case 'h5':
-            case 'h6':
+            case "h1":
+            case "h2":
+            case "h3":
+            case "h4":
+            case "h5":
+            case "h6":
                 return (
-                    parentTag !== 'h1' &&
-                    parentTag !== 'h2' &&
-                    parentTag !== 'h3' &&
-                    parentTag !== 'h4' &&
-                    parentTag !== 'h5' &&
-                    parentTag !== 'h6'
+                    parentTag !== "h1" &&
+                    parentTag !== "h2" &&
+                    parentTag !== "h3" &&
+                    parentTag !== "h4" &&
+                    parentTag !== "h5" &&
+                    parentTag !== "h6"
                 );
 
-            case 'rp':
-            case 'rt':
+            case "rp":
+            case "rt":
                 return impliedEndTags.indexOf(parentTag) === -1;
 
-            case 'body':
-            case 'caption':
-            case 'col':
-            case 'colgroup':
-            case 'frameset':
-            case 'frame':
-            case 'head':
-            case 'html':
-            case 'tbody':
-            case 'td':
-            case 'tfoot':
-            case 'th':
-            case 'thead':
-            case 'tr':
+            case "body":
+            case "caption":
+            case "col":
+            case "colgroup":
+            case "frameset":
+            case "frame":
+            case "head":
+            case "html":
+            case "tbody":
+            case "td":
+            case "tfoot":
+            case "th":
+            case "thead":
+            case "tr":
                 // These tags are only valid with a few parents that have special child
                 // parsing rules -- if we're down here, then none of those matched and
                 // so we allow it only if we don't know what the parent is, as all other
@@ -373,62 +344,62 @@ if ((global as any).__DEV__) {
      */
     const findInvalidAncestorForTag = function(tag: string, ancestorInfo: AncestorInfo) {
         switch (tag) {
-            case 'address':
-            case 'article':
-            case 'aside':
-            case 'blockquote':
-            case 'center':
-            case 'details':
-            case 'dialog':
-            case 'dir':
-            case 'div':
-            case 'dl':
-            case 'fieldset':
-            case 'figcaption':
-            case 'figure':
-            case 'footer':
-            case 'header':
-            case 'hgroup':
-            case 'main':
-            case 'menu':
-            case 'nav':
-            case 'ol':
-            case 'p':
-            case 'section':
-            case 'summary':
-            case 'ul':
-            case 'pre':
-            case 'listing':
-            case 'table':
-            case 'hr':
-            case 'xmp':
-            case 'h1':
-            case 'h2':
-            case 'h3':
-            case 'h4':
-            case 'h5':
-            case 'h6':
+            case "address":
+            case "article":
+            case "aside":
+            case "blockquote":
+            case "center":
+            case "details":
+            case "dialog":
+            case "dir":
+            case "div":
+            case "dl":
+            case "fieldset":
+            case "figcaption":
+            case "figure":
+            case "footer":
+            case "header":
+            case "hgroup":
+            case "main":
+            case "menu":
+            case "nav":
+            case "ol":
+            case "p":
+            case "section":
+            case "summary":
+            case "ul":
+            case "pre":
+            case "listing":
+            case "table":
+            case "hr":
+            case "xmp":
+            case "h1":
+            case "h2":
+            case "h3":
+            case "h4":
+            case "h5":
+            case "h6":
                 return ancestorInfo.pTagInButtonScope;
 
-            case 'form':
+            case "form":
                 return ancestorInfo.formTag || ancestorInfo.pTagInButtonScope;
 
-            case 'li':
+            case "li":
                 return ancestorInfo.listItemTagAutoclosing;
 
-            case 'dd':
-            case 'dt':
+            case "dd":
+            case "dt":
                 return ancestorInfo.dlItemTagAutoclosing;
 
-            case 'button':
+            case "button":
                 return ancestorInfo.buttonTagInScope;
 
-            case 'a':
+            case "a":
                 // Spec says something about storing a list of markers, but it sounds
                 // equivalent to this check.
                 return ancestorInfo.aTagInScope;
 
-            case 'nobr':
+            case "nobr":
                 return ancestorInfo.nobrTagInScope;
         }
 
@@ -437,24 +408,24 @@ if ((global as any).__DEV__) {
 
     const didWarn = {};
 
-    validateDOMNesting = function(childTag: string|undefined|null, childText: string|undefined|null, ancestorInfo: AncestorInfo|undefined|null) {
+    validateDOMNesting = function(
+        childTag: string | undefined | null,
+        childText: string | undefined | null,
+        ancestorInfo: AncestorInfo | undefined | null
+    ) {
         ancestorInfo = ancestorInfo || emptyAncestorInfo;
         const parentInfo: AncestorInfoTagObj = ancestorInfo.current;
         const parentTag = parentInfo && parentInfo.tag;
 
         if (childText != null) {
-            if(childTag != null){
-                console.warn('validateDOMNesting: when childText is passed, childTag should be null');
+            if (childTag != null) {
+                console.warn("validateDOMNesting: when childText is passed, childTag should be null");
             }
-            childTag = '#text';
+            childTag = "#text";
         }
 
-        const invalidParent = isTagValidWithParent(childTag, parentTag)
-            ? null
-            : parentInfo;
-        const invalidAncestor = invalidParent
-            ? null
-            : findInvalidAncestorForTag(childTag, ancestorInfo);
+        const invalidParent = isTagValidWithParent(childTag, parentTag) ? null : parentInfo;
+        const invalidAncestor = invalidParent ? null : findInvalidAncestorForTag(childTag, ancestorInfo);
         const invalidParentOrAncestor = invalidParent || invalidAncestor;
         if (!invalidParentOrAncestor) {
             return;
@@ -463,50 +434,46 @@ if ((global as any).__DEV__) {
         const ancestorTag = invalidParentOrAncestor.tag;
         const addendum = getCurrentFiberStackInDev();
 
-        const warnKey =
-            !!invalidParent + '|' + childTag + '|' + ancestorTag + '|' + addendum;
+        const warnKey = !!invalidParent + "|" + childTag + "|" + ancestorTag + "|" + addendum;
         if (didWarn[warnKey]) {
             return;
         }
         didWarn[warnKey] = true;
 
         let tagDisplayName = childTag;
-        let whitespaceInfo = '';
-        if (childTag === '#text') {
+        let whitespaceInfo = "";
+        if (childTag === "#text") {
             if (/\S/.test(childText)) {
-                tagDisplayName = 'Text nodes';
+                tagDisplayName = "Text nodes";
             } else {
-                tagDisplayName = 'Whitespace text nodes';
+                tagDisplayName = "Whitespace text nodes";
                 whitespaceInfo =
                     " Make sure you don't have any extra whitespace between tags on " +
-                    'each line of your source code.';
+                    "each line of your source code.";
             }
         } else {
-            tagDisplayName = '<' + childTag + '>';
+            tagDisplayName = "<" + childTag + ">";
         }
 
         if (invalidParent) {
-            let info = '';
-            if (ancestorTag === 'table' && childTag === 'tr') {
-                info +=
-                    ' Add a <tbody> to your code to match the DOM tree generated by ' +
-                    'the browser.';
+            let info = "";
+            if (ancestorTag === "table" && childTag === "tr") {
+                info += " Add a <tbody> to your code to match the DOM tree generated by " + "the browser.";
             }
             console.warn(
-                'validateDOMNesting(...): %s cannot appear as a child of <%s>.%s%s%s',
+                "validateDOMNesting(...): %s cannot appear as a child of <%s>.%s%s%s",
                 tagDisplayName,
                 ancestorTag,
                 whitespaceInfo,
                 info,
-                addendum,
+                addendum
             );
         } else {
             console.warn(
-                'validateDOMNesting(...): %s cannot appear as a descendant of ' +
-                    '<%s>.%s',
+                "validateDOMNesting(...): %s cannot appear as a descendant of " + "<%s>.%s",
                 tagDisplayName,
                 ancestorTag,
-                addendum,
+                addendum
             );
         }
     };

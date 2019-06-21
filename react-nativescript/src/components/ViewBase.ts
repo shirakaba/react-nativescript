@@ -12,11 +12,17 @@ interface Props {
     // onUnloaded?: () => void;
 }
 
-export type ViewBaseComponentProps<E extends NativeScriptViewBase = NativeScriptViewBase> = Props /* & typeof RCTViewBase.defaultProps */ & Partial<ViewBaseProps> & ObservableComponentProps<E>;
+export type ViewBaseComponentProps<
+    E extends NativeScriptViewBase = NativeScriptViewBase
+> = Props /* & typeof RCTViewBase.defaultProps */ & Partial<ViewBaseProps> & ObservableComponentProps<E>;
 
 export type ViewBaseComponentState = {} & ObservableComponentState;
 
-export abstract class RCTViewBase<P extends ViewBaseComponentProps, S extends ViewBaseComponentState, E extends NativeScriptViewBase> extends RCTObservable<P, S, E> {
+export abstract class RCTViewBase<
+    P extends ViewBaseComponentProps,
+    S extends ViewBaseComponentState,
+    E extends NativeScriptViewBase
+> extends RCTObservable<P, S, E> {
     // static defaultProps = {
     //     innerRef: React.createRef<NativeScriptViewBase>()
     // };

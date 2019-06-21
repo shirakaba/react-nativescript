@@ -1,17 +1,26 @@
 import * as React from "react";
 import { SegmentedBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
-import { SegmentedBar as NativeScriptSegmentedBar, SelectedIndexChangedEventData } from "tns-core-modules/ui/segmented-bar/segmented-bar";
+import {
+    SegmentedBar as NativeScriptSegmentedBar,
+    SelectedIndexChangedEventData,
+} from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { ViewComponentProps, RCTView } from "./View";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
     // TODO: implement 'items' property for SegmentedBar just as done for TabView
-    onSelectedIndexChanged?: (args: SelectedIndexChangedEventData) => void,
+    onSelectedIndexChanged?: (args: SelectedIndexChangedEventData) => void;
 }
 
-export type SegmentedBarComponentProps<E extends NativeScriptSegmentedBar = NativeScriptSegmentedBar> = Props /* & typeof SegmentedBar.defaultProps */ & Partial<SegmentedBarProps> & ViewComponentProps<E>;
+export type SegmentedBarComponentProps<
+    E extends NativeScriptSegmentedBar = NativeScriptSegmentedBar
+> = Props /* & typeof SegmentedBar.defaultProps */ & Partial<SegmentedBarProps> & ViewComponentProps<E>;
 
-export class _SegmentedBar<P extends SegmentedBarComponentProps<E>, S extends {}, E extends NativeScriptSegmentedBar> extends RCTView<P, S, E> {
+export class _SegmentedBar<
+    P extends SegmentedBarComponentProps<E>,
+    S extends {},
+    E extends NativeScriptSegmentedBar
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSegmentedBar>()
     // };
@@ -19,15 +28,20 @@ export class _SegmentedBar<P extends SegmentedBarComponentProps<E>, S extends {}
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {    
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
         super.updateListeners(node, attach, nextProps);
-        
-        if(attach === null){
-            updateListener(node, "selectedIndexChanged", this.props.onSelectedIndexChanged, nextProps.onSelectedIndexChanged);
+
+        if (attach === null) {
+            updateListener(
+                node,
+                "selectedIndexChanged",
+                this.props.onSelectedIndexChanged,
+                nextProps.onSelectedIndexChanged
+            );
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if(this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
+            if (this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
         }
     }
 
@@ -42,7 +56,7 @@ export class _SegmentedBar<P extends SegmentedBarComponentProps<E>, S extends {}
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -61,10 +75,10 @@ export class _SegmentedBar<P extends SegmentedBarComponentProps<E>, S extends {}
         } = this.props;
 
         return React.createElement(
-            'segmentedBar',
+            "segmentedBar",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             /* For now, any SegmentedBarItem children will be mapped to items by our React renderer. */
             ...children
@@ -74,7 +88,9 @@ export class _SegmentedBar<P extends SegmentedBarComponentProps<E>, S extends {}
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<SegmentedBarComponentProps<NativeScriptSegmentedBar>>;
 
-export const SegmentedBar: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSegmentedBar>> = React.forwardRef<NativeScriptSegmentedBar, OwnPropsWithoutForwardedRef>(
+export const SegmentedBar: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSegmentedBar>
+> = React.forwardRef<NativeScriptSegmentedBar, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptSegmentedBar>) => {
         const { children, ...rest } = props;
 
@@ -87,4 +103,4 @@ export const SegmentedBar: React.ComponentType<OwnPropsWithoutForwardedRef & Rea
             children
         );
     }
-)
+);

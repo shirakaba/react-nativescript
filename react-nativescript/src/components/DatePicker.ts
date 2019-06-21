@@ -3,12 +3,17 @@ import { DatePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScrip
 import { DatePicker as NativeScriptDatePicker } from "tns-core-modules/ui/date-picker/date-picker";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type DatePickerComponentProps<E extends NativeScriptDatePicker = NativeScriptDatePicker> = Props /* & typeof DatePicker.defaultProps */ & Partial<DatePickerProps> & ViewComponentProps<E>;
+export type DatePickerComponentProps<
+    E extends NativeScriptDatePicker = NativeScriptDatePicker
+> = Props /* & typeof DatePicker.defaultProps */ & Partial<DatePickerProps> & ViewComponentProps<E>;
 
-export class _DatePicker<P extends DatePickerComponentProps<E>, S extends {}, E extends NativeScriptDatePicker> extends RCTView<P, S, E> {
+export class _DatePicker<
+    P extends DatePickerComponentProps<E>,
+    S extends {},
+    E extends NativeScriptDatePicker
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptDatePicker>()
     // };
@@ -22,7 +27,7 @@ export class _DatePicker<P extends DatePickerComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -39,10 +44,10 @@ export class _DatePicker<P extends DatePickerComponentProps<E>, S extends {}, E 
         } = this.props;
 
         return React.createElement(
-            'datePicker',
+            "datePicker",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -51,7 +56,9 @@ export class _DatePicker<P extends DatePickerComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<DatePickerComponentProps<NativeScriptDatePicker>>;
 
-export const DatePicker: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptDatePicker>> = React.forwardRef<NativeScriptDatePicker, OwnPropsWithoutForwardedRef>(
+export const DatePicker: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptDatePicker>
+> = React.forwardRef<NativeScriptDatePicker, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptDatePicker>) => {
         const { children, ...rest } = props;
 
@@ -64,4 +71,4 @@ export const DatePicker: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

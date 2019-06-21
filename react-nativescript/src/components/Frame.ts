@@ -8,9 +8,15 @@ interface Props {
     onOptionSelected?: (args: EventData) => void;
 }
 
-export type FrameComponentProps<E extends NativeScriptFrame = NativeScriptFrame> = Props /* & typeof Frame.defaultProps */ & Partial<FrameProps> & ViewComponentProps<E>;
+export type FrameComponentProps<
+    E extends NativeScriptFrame = NativeScriptFrame
+> = Props /* & typeof Frame.defaultProps */ & Partial<FrameProps> & ViewComponentProps<E>;
 
-export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends NativeScriptFrame> extends RCTView<P, S, E> {
+export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends NativeScriptFrame> extends RCTView<
+    P,
+    S,
+    E
+> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptFrame>()
     // };
@@ -18,15 +24,15 @@ export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends Na
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
         super.updateListeners(node, attach, nextProps);
 
-        if(attach === null){
+        if (attach === null) {
             updateListener(node, "optionSelected", this.props.onOptionSelected, nextProps.onOptionSelected);
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if(this.props.onOptionSelected) method("optionSelected", this.props.onOptionSelected);
+            if (this.props.onOptionSelected) method("optionSelected", this.props.onOptionSelected);
         }
     }
 
@@ -39,7 +45,7 @@ export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends Na
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -56,10 +62,10 @@ export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends Na
         } = this.props;
 
         return React.createElement(
-            'frame',
+            "frame",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -68,7 +74,9 @@ export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends Na
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<FrameComponentProps<NativeScriptFrame>>;
 
-export const Frame: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFrame>> = React.forwardRef<NativeScriptFrame, OwnPropsWithoutForwardedRef>(
+export const Frame: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFrame>
+> = React.forwardRef<NativeScriptFrame, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptFrame>) => {
         const { children, ...rest } = props;
 
@@ -81,4 +89,4 @@ export const Frame: React.ComponentType<OwnPropsWithoutForwardedRef & React.Clas
             children
         );
     }
-)
+);

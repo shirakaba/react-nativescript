@@ -6,24 +6,31 @@ import { shallowEqual } from "../client/shallowEqual";
 import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
 
 interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
-    forwardedRef?: React.RefObject<E>,
+    forwardedRef?: React.RefObject<E>;
 
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
 }
 
-export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<E> /* & typeof RCTObservable.defaultProps */ & Partial<ObservableProps>;
+export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<
+    E
+> /* & typeof RCTObservable.defaultProps */ &
+    Partial<ObservableProps>;
 
 export type ObservableComponentState = {};
 
-export abstract class RCTObservable<P extends ObservableComponentProps<E>, S extends ObservableComponentState, E extends NativeScriptObservable> extends React.Component<P, S> {
+export abstract class RCTObservable<
+    P extends ObservableComponentProps<E>,
+    S extends ObservableComponentState,
+    E extends NativeScriptObservable
+> extends React.Component<P, S> {
     protected readonly myRef: React.RefObject<E> = React.createRef<E>();
 
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptObservable>()
     // };
 
-    protected getCurrentRef(): E|null {
+    protected getCurrentRef(): E | null {
         return (this.props.forwardedRef || this.myRef).current;
     }
 
@@ -31,9 +38,9 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
      * Helper method for updateListeners: simply gets the current ref to pass on to it.
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListenersHelper(attach: boolean|null, nextProps?: P): void {
-        const node: E|null = this.getCurrentRef();
-        if(node === null){
+    protected updateListenersHelper(attach: boolean | null, nextProps?: P): void {
+        const node: E | null = this.getCurrentRef();
+        if (node === null) {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
@@ -41,19 +48,19 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
     }
 
     /**
-     * 
+     *
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
-        if(attach === null){
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        if (attach === null) {
             updateListener(node, "propertyChange", this.props.onPropertyChange, nextProps.onPropertyChange);
         } else {
             const method = (attach ? node.on : node.off).bind(node);
-            if(this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
+            if (this.props.onPropertyChange) method("propertyChange", this.props.onPropertyChange);
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.updateListenersHelper(true);
     }
 
@@ -68,12 +75,12 @@ export abstract class RCTObservable<P extends ObservableComponentProps<E>, S ext
         // console.log(`[shouldComponentUpdate] shouldUpdate: ${shouldUpdate}.`);
 
         this.updateListenersHelper(null, nextProps);
-        
+
         // https://lucybain.com/blog/2018/react-js-pure-component/
         return shouldUpdate;
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.updateListenersHelper(false);
     }
 

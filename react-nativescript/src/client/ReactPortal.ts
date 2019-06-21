@@ -8,23 +8,23 @@ import { ReactPortal } from "react";
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
 
-const hasSymbol = typeof Symbol === 'function' && Symbol.for;
+const hasSymbol = typeof Symbol === "function" && Symbol.for;
 
 export function createPortal(
-  children: ReactNodeList,
-  containerInfo: any,
-  // TODO: figure out the API for cross-renderer implementation.
-  implementation: any|null,
-  key: string|null = null,
+    children: ReactNodeList,
+    containerInfo: any,
+    // TODO: figure out the API for cross-renderer implementation.
+    implementation: any | null,
+    key: string | null = null
 ): ReactPortal {
-  return {
-    // This tag allow us to uniquely identify this as a React Portal
-    //@ts-ignore
-    // $$typeof: (global as any).REACT_PORTAL_TYPE,
-    $$typeof: hasSymbol ? Symbol.for('react.portal') : 0xeaca,
-    key: key == null ? null : '' + key,
-    children,
-    containerInfo,
-    implementation,
-  };
+    return {
+        // This tag allow us to uniquely identify this as a React Portal
+        //@ts-ignore
+        // $$typeof: (global as any).REACT_PORTAL_TYPE,
+        $$typeof: hasSymbol ? Symbol.for("react.portal") : 0xeaca,
+        key: key == null ? null : "" + key,
+        children,
+        containerInfo,
+        implementation,
+    };
 }

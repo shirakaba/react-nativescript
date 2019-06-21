@@ -6,13 +6,19 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
-    onSubmit?: (args: EventData) => void,
-    onClose?: (args: EventData) => void,
+    onSubmit?: (args: EventData) => void;
+    onClose?: (args: EventData) => void;
 }
 
-export type SearchBarComponentProps<E extends NativeScriptSearchBar = NativeScriptSearchBar> = Props /* & typeof SearchBar.defaultProps */ & Partial<SearchBarProps> & ViewComponentProps<E>;
+export type SearchBarComponentProps<
+    E extends NativeScriptSearchBar = NativeScriptSearchBar
+> = Props /* & typeof SearchBar.defaultProps */ & Partial<SearchBarProps> & ViewComponentProps<E>;
 
-export class _SearchBar<P extends SearchBarComponentProps<E>, S extends {}, E extends NativeScriptSearchBar> extends RCTView<P, S, E> {
+export class _SearchBar<
+    P extends SearchBarComponentProps<E>,
+    S extends {},
+    E extends NativeScriptSearchBar
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSearchBar>()
     // };
@@ -20,17 +26,17 @@ export class _SearchBar<P extends SearchBarComponentProps<E>, S extends {}, E ex
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
         super.updateListeners(node, attach, nextProps);
-        
-        if(attach === null){
+
+        if (attach === null) {
             updateListener(node, "submit", this.props.onSubmit, nextProps.onSubmit);
             updateListener(node, "close", this.props.onClose, nextProps.onClose);
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if(this.props.onSubmit) method("submit", this.props.onSubmit);
-            if(this.props.onClose) method("close", this.props.onClose);
+            if (this.props.onSubmit) method("submit", this.props.onSubmit);
+            if (this.props.onClose) method("close", this.props.onClose);
         }
     }
 
@@ -46,7 +52,7 @@ export class _SearchBar<P extends SearchBarComponentProps<E>, S extends {}, E ex
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -63,10 +69,10 @@ export class _SearchBar<P extends SearchBarComponentProps<E>, S extends {}, E ex
         } = this.props;
 
         return React.createElement(
-            'searchBar',
+            "searchBar",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -75,7 +81,9 @@ export class _SearchBar<P extends SearchBarComponentProps<E>, S extends {}, E ex
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<SearchBarComponentProps<NativeScriptSearchBar>>;
 
-export const SearchBar: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSearchBar>> = React.forwardRef<NativeScriptSearchBar, OwnPropsWithoutForwardedRef>(
+export const SearchBar: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSearchBar>
+> = React.forwardRef<NativeScriptSearchBar, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptSearchBar>) => {
         const { children, ...rest } = props;
 
@@ -88,4 +96,4 @@ export const SearchBar: React.ComponentType<OwnPropsWithoutForwardedRef & React.
             children
         );
     }
-)
+);

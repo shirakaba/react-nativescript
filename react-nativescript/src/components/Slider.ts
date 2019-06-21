@@ -5,15 +5,20 @@ import { ViewComponentProps, RCTView } from "./View";
 import { Observable, EventData } from "tns-core-modules/data/observable/observable";
 
 interface Props {
-    onValueChange?: (args: number) => void,
+    onValueChange?: (args: number) => void;
 }
 
-export type SliderComponentProps<E extends NativeScriptSlider = NativeScriptSlider> = Props /* & typeof Slider.defaultProps */ & Partial<SliderProps> & ViewComponentProps<E>;
+export type SliderComponentProps<
+    E extends NativeScriptSlider = NativeScriptSlider
+> = Props /* & typeof Slider.defaultProps */ & Partial<SliderProps> & ViewComponentProps<E>;
 
-interface State {
-}
+interface State {}
 
-export class _Slider<P extends SliderComponentProps<E>, S extends State, E extends NativeScriptSlider> extends RCTView<P, S, E> {
+export class _Slider<P extends SliderComponentProps<E>, S extends State, E extends NativeScriptSlider> extends RCTView<
+    P,
+    S,
+    E
+> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSlider>()
     // };
@@ -24,22 +29,22 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
         this.props.onValueChange && this.props.onValueChange(sliderValue);
     };
 
-    componentDidMount(){
+    componentDidMount() {
         super.componentDidMount();
 
-        const node: E|null = this.getCurrentRef();
-        if(node){
+        const node: E | null = this.getCurrentRef();
+        if (node) {
             node.on("valueChange", this.onValueChange);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
         }
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         super.componentWillUnmount();
 
-        const node: E|null = this.getCurrentRef();
-        if(node){
+        const node: E | null = this.getCurrentRef();
+        if (node) {
             node.off("valueChange", this.onValueChange);
         } else {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
@@ -57,7 +62,7 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -74,10 +79,10 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
         } = this.props;
 
         return React.createElement(
-            'slider',
+            "slider",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -86,7 +91,9 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<SliderComponentProps<NativeScriptSlider>>;
 
-export const Slider: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSlider>> = React.forwardRef<NativeScriptSlider, OwnPropsWithoutForwardedRef>(
+export const Slider: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSlider>
+> = React.forwardRef<NativeScriptSlider, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptSlider>) => {
         const { children, ...rest } = props;
 
@@ -99,4 +106,4 @@ export const Slider: React.ComponentType<OwnPropsWithoutForwardedRef & React.Cla
             children
         );
     }
-)
+);

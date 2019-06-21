@@ -3,12 +3,17 @@ import { ActivityIndicatorProps, PropsWithoutForwardedRef } from "../shared/Nati
 import { ActivityIndicator as NativeScriptActivityIndicator } from "tns-core-modules/ui/activity-indicator/activity-indicator";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type ActivityIndicatorComponentProps<E extends NativeScriptActivityIndicator = NativeScriptActivityIndicator> = Props /* & typeof ActivityIndicator.defaultProps */ & Partial<ActivityIndicatorProps> & ViewComponentProps<E>;
+export type ActivityIndicatorComponentProps<
+    E extends NativeScriptActivityIndicator = NativeScriptActivityIndicator
+> = Props /* & typeof ActivityIndicator.defaultProps */ & Partial<ActivityIndicatorProps> & ViewComponentProps<E>;
 
-export class _ActivityIndicator<P extends ActivityIndicatorComponentProps<E>, S extends {}, E extends NativeScriptActivityIndicator> extends RCTView<P, S, E> {
+export class _ActivityIndicator<
+    P extends ActivityIndicatorComponentProps<E>,
+    S extends {},
+    E extends NativeScriptActivityIndicator
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptActivityIndicator>()
     // };
@@ -22,7 +27,7 @@ export class _ActivityIndicator<P extends ActivityIndicatorComponentProps<E>, S 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -39,20 +44,27 @@ export class _ActivityIndicator<P extends ActivityIndicatorComponentProps<E>, S 
         } = this.props;
 
         return React.createElement(
-            'activityIndicator',
+            "activityIndicator",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ActivityIndicatorComponentProps<NativeScriptActivityIndicator>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<
+    ActivityIndicatorComponentProps<NativeScriptActivityIndicator>
+>;
 
-export const ActivityIndicator: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptActivityIndicator>> = React.forwardRef<NativeScriptActivityIndicator, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptActivityIndicator>) => {
+export const ActivityIndicator: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptActivityIndicator>
+> = React.forwardRef<NativeScriptActivityIndicator, OwnPropsWithoutForwardedRef>(
+    (
+        props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>,
+        ref: React.RefObject<NativeScriptActivityIndicator>
+    ) => {
         const { children, ...rest } = props;
 
         return React.createElement(
@@ -64,4 +76,4 @@ export const ActivityIndicator: React.ComponentType<OwnPropsWithoutForwardedRef 
             children
         );
     }
-)
+);

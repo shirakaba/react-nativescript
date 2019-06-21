@@ -5,18 +5,23 @@ import { ViewComponentProps, RCTView } from "./View";
 // import { Observable } from "../client/ElementRegistry";
 // import { EventData } from "tns-core-modules/data/observable/observable";
 
-interface Props {
-}
+interface Props {}
 
-export type ProgressComponentProps<E extends NativeScriptProgress = NativeScriptProgress> = Props /* & typeof Progress.defaultProps */ & Partial<ProgressProps> & ViewComponentProps<E>;
+export type ProgressComponentProps<
+    E extends NativeScriptProgress = NativeScriptProgress
+> = Props /* & typeof Progress.defaultProps */ & Partial<ProgressProps> & ViewComponentProps<E>;
 
-export class _Progress<P extends ProgressComponentProps<E>, S extends {}, E extends NativeScriptProgress> extends RCTView<P, S, E> {
+export class _Progress<
+    P extends ProgressComponentProps<E>,
+    S extends {},
+    E extends NativeScriptProgress
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptProgress>()
     // };
 
     /* Not sure there's really a use-case for Observable here, given that we're using React.
-    * Was replicating: https://docs.nativescript.org/ui/ns-ui-widgets/progress */
+     * Was replicating: https://docs.nativescript.org/ui/ns-ui-widgets/progress */
     // private readonly vm = new Observable();
     // componentDidMount(){
     //     super.componentDidMount();
@@ -43,7 +48,7 @@ export class _Progress<P extends ProgressComponentProps<E>, S extends {}, E exte
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -60,10 +65,10 @@ export class _Progress<P extends ProgressComponentProps<E>, S extends {}, E exte
         } = this.props;
 
         return React.createElement(
-            'progress',
+            "progress",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -72,7 +77,9 @@ export class _Progress<P extends ProgressComponentProps<E>, S extends {}, E exte
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ProgressComponentProps<NativeScriptProgress>>;
 
-export const Progress: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptProgress>> = React.forwardRef<NativeScriptProgress, OwnPropsWithoutForwardedRef>(
+export const Progress: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptProgress>
+> = React.forwardRef<NativeScriptProgress, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptProgress>) => {
         const { children, ...rest } = props;
 
@@ -85,4 +92,4 @@ export const Progress: React.ComponentType<OwnPropsWithoutForwardedRef & React.C
             children
         );
     }
-)
+);

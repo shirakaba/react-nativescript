@@ -9,14 +9,20 @@ interface Props {
      * Unlike other layouts, constituent views require no properties. */
 }
 
-export type WrapLayoutComponentProps<E extends NativeScriptWrapLayout = NativeScriptWrapLayout> = Props /* & typeof RCTWrapLayout.defaultProps */ & Partial<WrapLayoutProps> & LayoutBaseComponentProps<E>;
+export type WrapLayoutComponentProps<
+    E extends NativeScriptWrapLayout = NativeScriptWrapLayout
+> = Props /* & typeof RCTWrapLayout.defaultProps */ & Partial<WrapLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript WrapLayout component.
  * See: ui/layouts/wrap-layout
  */
-export class _WrapLayout<P extends WrapLayoutComponentProps<E>, S extends {}, E extends NativeScriptWrapLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _WrapLayout<
+    P extends WrapLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptWrapLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -25,7 +31,7 @@ export class _WrapLayout<P extends WrapLayoutComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -36,17 +42,17 @@ export class _WrapLayout<P extends WrapLayoutComponentProps<E>, S extends {}, E 
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'wrapLayout',
+            "wrapLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -55,7 +61,9 @@ export class _WrapLayout<P extends WrapLayoutComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<WrapLayoutComponentProps<NativeScriptWrapLayout>>;
 
-export const WrapLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptWrapLayout>> = React.forwardRef<NativeScriptWrapLayout, OwnPropsWithoutForwardedRef>(
+export const WrapLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptWrapLayout>
+> = React.forwardRef<NativeScriptWrapLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptWrapLayout>) => {
         const { children, ...rest } = props;
 
@@ -68,4 +76,4 @@ export const WrapLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

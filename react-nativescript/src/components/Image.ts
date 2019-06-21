@@ -3,13 +3,17 @@ import { ImageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComp
 import { Image as NativeScriptImage } from "tns-core-modules/ui/image/image";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type ImageComponentProps<E extends NativeScriptImage = NativeScriptImage> = Props /* & typeof Image.defaultProps */ & Partial<ImageProps> & ViewComponentProps<E>;
+export type ImageComponentProps<
+    E extends NativeScriptImage = NativeScriptImage
+> = Props /* & typeof Image.defaultProps */ & Partial<ImageProps> & ViewComponentProps<E>;
 
-export class _Image<P extends ImageComponentProps<E>, S extends {}, E extends NativeScriptImage> extends RCTView<P, S, E> {
-
+export class _Image<P extends ImageComponentProps<E>, S extends {}, E extends NativeScriptImage> extends RCTView<
+    P,
+    S,
+    E
+> {
     render(): React.ReactNode {
         const {
             forwardedRef,
@@ -19,7 +23,7 @@ export class _Image<P extends ImageComponentProps<E>, S extends {}, E extends Na
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -36,10 +40,10 @@ export class _Image<P extends ImageComponentProps<E>, S extends {}, E extends Na
         } = this.props;
 
         return React.createElement(
-            'image',
+            "image",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -48,7 +52,9 @@ export class _Image<P extends ImageComponentProps<E>, S extends {}, E extends Na
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ImageComponentProps<NativeScriptImage>>;
 
-export const Image: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptImage>> = React.forwardRef<NativeScriptImage, OwnPropsWithoutForwardedRef>(
+export const Image: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptImage>
+> = React.forwardRef<NativeScriptImage, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptImage>) => {
         const { children, ...rest } = props;
 
@@ -61,4 +67,4 @@ export const Image: React.ComponentType<OwnPropsWithoutForwardedRef & React.Clas
             children
         );
     }
-)
+);

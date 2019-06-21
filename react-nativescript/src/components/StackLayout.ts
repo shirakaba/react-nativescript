@@ -8,14 +8,20 @@ interface Props {
      * Unlike other layouts, constituent views require no properties. */
 }
 
-export type StackLayoutComponentProps<E extends NativeScriptStackLayout = NativeScriptStackLayout> = Props /* & typeof RCTStackLayout.defaultProps */ & Partial<StackLayoutProps> & LayoutBaseComponentProps<E>;
+export type StackLayoutComponentProps<
+    E extends NativeScriptStackLayout = NativeScriptStackLayout
+> = Props /* & typeof RCTStackLayout.defaultProps */ & Partial<StackLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript StackLayout component.
  * See: ui/layouts/grid-layout
  */
-export class _StackLayout<P extends StackLayoutComponentProps<E>, S extends {}, E extends NativeScriptStackLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _StackLayout<
+    P extends StackLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptStackLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -24,7 +30,7 @@ export class _StackLayout<P extends StackLayoutComponentProps<E>, S extends {}, 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -35,17 +41,17 @@ export class _StackLayout<P extends StackLayoutComponentProps<E>, S extends {}, 
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'stackLayout',
+            "stackLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -54,7 +60,9 @@ export class _StackLayout<P extends StackLayoutComponentProps<E>, S extends {}, 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<StackLayoutComponentProps<NativeScriptStackLayout>>;
 
-export const StackLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptStackLayout>> = React.forwardRef<NativeScriptStackLayout, OwnPropsWithoutForwardedRef>(
+export const StackLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptStackLayout>
+> = React.forwardRef<NativeScriptStackLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptStackLayout>) => {
         const { children, ...rest } = props;
 
@@ -67,4 +75,4 @@ export const StackLayout: React.ComponentType<OwnPropsWithoutForwardedRef & Reac
             children
         );
     }
-)
+);

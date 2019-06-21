@@ -4,7 +4,7 @@ import { ActivityIndicator } from "tns-core-modules/ui/activity-indicator/activi
 import { Animation } from "tns-core-modules/ui/animation/animation";
 import { Button } from "tns-core-modules/ui/button/button";
 import { Cache } from "tns-core-modules/ui/image-cache/image-cache";
-import { Color } from 'tns-core-modules/color/color';
+import { Color } from "tns-core-modules/color/color";
 import { ContainerView } from "tns-core-modules/ui/core/view/view";
 import { ContentView } from "tns-core-modules/ui/content-view";
 import { DatePicker } from "tns-core-modules/ui/date-picker/date-picker";
@@ -52,7 +52,7 @@ import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout"
 // type ConcreteView<T extends View> = T;
 
 // https://stackoverflow.com/questions/36886082/abstract-constructor-type-in-typescript
-export type ConcreteViewConstructor = new (...args: any[]) => View|ViewBase;
+export type ConcreteViewConstructor = new (...args: any[]) => View | ViewBase;
 
 export type TNSElements = keyof typeof elementMap;
 // const el: TNSElements =  "h9";
@@ -62,56 +62,56 @@ export type TNSElements = keyof typeof elementMap;
 // FIXME: provide list of keys (TNSElements) without losing type-safety of Record<string, ConcreteViewConstructor>.
 // export const elementMap: Record<string, ConcreteViewConstructor> = {
 export const elementMap = {
-    "actionBar": ActionBar, // √
-    "actionItem": ActionItem, // √
-    "activityIndicator": ActivityIndicator, // √
+    actionBar: ActionBar, // √
+    actionItem: ActionItem, // √
+    activityIndicator: ActivityIndicator, // √
     // "animation": Animation,
     // "border": Border
     // "builder": Builder,
-    "button": Button, // √ Pending event listeners.
-    "contentView": ContentView, // √ Pending event listeners.
-    "datePicker": DatePicker, // √
+    button: Button, // √ Pending event listeners.
+    contentView: ContentView, // √ Pending event listeners.
+    datePicker: DatePicker, // √
     // "dialogs": Dialogs, // No components in here.
     // "editableTextBase": EditableTextBase,
-    "htmlView": HtmlView, // √
-    "image": Image, // √
+    htmlView: HtmlView, // √
+    image: Image, // √
     // "cache": Cache, // Observable.observable, but doesn't extend View.
-    "label": Label, // √
+    label: Label, // √
     // "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
-    "absoluteLayout": AbsoluteLayout, // √
-    "dockLayout": DockLayout, // √
-    "flexboxLayout": FlexboxLayout, // √
-    "gridLayout": GridLayout, // √
-    "stackLayout": StackLayout, // √
-    "wrapLayout": WrapLayout, // √
-    "listPicker": ListPicker, // √
-    "listView": ListView, // √
-    "navigationButton": NavigationButton, // √
-    "placeholder": Placeholder, // √
-    "progress": Progress, // √
-    "proxyViewContainer": ProxyViewContainer,
+    absoluteLayout: AbsoluteLayout, // √
+    dockLayout: DockLayout, // √
+    flexboxLayout: FlexboxLayout, // √
+    gridLayout: GridLayout, // √
+    stackLayout: StackLayout, // √
+    wrapLayout: WrapLayout, // √
+    listPicker: ListPicker, // √
+    listView: ListView, // √
+    navigationButton: NavigationButton, // √
+    placeholder: Placeholder, // √
+    progress: Progress, // √
+    proxyViewContainer: ProxyViewContainer,
     // "repeater": Repeater, // Doesn't translate to React properly. Just use a regular LayoutBase instead :)
-    "scrollView": ScrollView, // √
-    "searchBar": SearchBar, // √
-    "segmentedBar": SegmentedBar, // √
-    "segmentedBarItem": SegmentedBarItem,
-    "slider": Slider, // √
-    "switch": Switch, // √
-    "tabView": TabView, // √
-    "tabViewItem": TabViewItem, // √
-    "textView": TextView, // √
+    scrollView: ScrollView, // √
+    searchBar: SearchBar, // √
+    segmentedBar: SegmentedBar, // √
+    segmentedBarItem: SegmentedBarItem,
+    slider: Slider, // √
+    switch: Switch, // √
+    tabView: TabView, // √
+    tabViewItem: TabViewItem, // √
+    textView: TextView, // √
     // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
-    "textField": TextField, // √
-    "timePicker": TimePicker, // √
+    textField: TextField, // √
+    timePicker: TimePicker, // √
     // "transition": Transition,
     // "fadeTransition": FadeTransition,
     // "flipTransition": FlipTransition,
     // "slideTransition": SlideTransition,
-    "webView": WebView, // √ Pending event listeners.
+    webView: WebView, // √ Pending event listeners.
     // There's a whole "styling" folder, but nothing is a component.
-    "frame": Frame, // √
+    frame: Frame, // √
     // "view": View,
-    "page": Page, // √
+    page: Page, // √
 };
 
 export {

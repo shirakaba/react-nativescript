@@ -5,24 +5,29 @@ import { StackLayout } from "../client/ElementRegistry";
 import { ActionItem as NativeScriptActionItem } from "tns-core-modules/ui/action-bar/action-bar";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
-interface Props {
-}
+interface Props {}
 
-export type ActionItemComponentProps<E extends NativeScriptActionItem = NativeScriptActionItem> = Props /* & typeof RCTActionItem.defaultProps */ & Partial<ActionItemProps> & ViewBaseComponentProps<E>;
+export type ActionItemComponentProps<
+    E extends NativeScriptActionItem = NativeScriptActionItem
+> = Props /* & typeof RCTActionItem.defaultProps */ & Partial<ActionItemProps> & ViewBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript ActionItem component.
- * 
+ *
  * Renders the child passed into it into a StackLayout, via a React Portal.
- * 
+ *
  * See: ui/action-bar/action-bar
  * See: https://docs.nativescript.org/ui/action-bar#action-items
  * See: https://github.com/NativeScript/nativescript-sdk-examples-js/tree/master/app/ns-ui-widgets-category/action-bar/items-actionbar
  */
-export class _ActionItem<P extends ActionItemComponentProps<E>, S extends {}, E extends NativeScriptActionItem> extends RCTViewBase<P, S, E> {
+export class _ActionItem<
+    P extends ActionItemComponentProps<E>,
+    S extends {},
+    E extends NativeScriptActionItem
+> extends RCTViewBase<P, S, E> {
     protected readonly container = new StackLayout();
 
-    render(){
+    render() {
         const {
             forwardedRef,
 
@@ -33,30 +38,30 @@ export class _ActionItem<P extends ActionItemComponentProps<E>, S extends {}, E 
             ...rest
         } = this.props;
 
-        if(Array.isArray(children) || typeof children === "string" || typeof children === "number"){
-            throw new Error(`'children' property passed into ActionItem must be a single child node, which must not be a number or string`);
+        if (Array.isArray(children) || typeof children === "string" || typeof children === "number") {
+            throw new Error(
+                `'children' property passed into ActionItem must be a single child node, which must not be a number or string`
+            );
         }
 
         return React.createElement(
-            'actionItem',
+            "actionItem",
             {
                 ...rest,
                 // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
                 actionView: this.container,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
-            ReactNativeScript.createPortal(
-                children,
-                this.container,
-                `Portal(ActionItem(${this.container._domId}))`
-            )
+            ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`)
         );
-    }   
+    }
 }
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ActionItemComponentProps<NativeScriptActionItem>>;
 
-export const ActionItem: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptActionItem>> = React.forwardRef<NativeScriptActionItem, OwnPropsWithoutForwardedRef>(
+export const ActionItem: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptActionItem>
+> = React.forwardRef<NativeScriptActionItem, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptActionItem>) => {
         const { children, ...rest } = props;
 
@@ -69,4 +74,4 @@ export const ActionItem: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

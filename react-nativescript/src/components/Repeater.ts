@@ -60,7 +60,7 @@
 //             onAndroidBackPressed,
 //             onShowingModally,
 //             onShownModally,
-            
+
 //             onTap,
 //             onDoubleTap,
 //             onPinch,
@@ -71,7 +71,7 @@
 //             onTouch,
 
 //             onPropertyChange,
-            
+
 //             children,
 
 //             ...rest

@@ -3,12 +3,17 @@ import { ListPickerProps, PropsWithoutForwardedRef } from "../shared/NativeScrip
 import { ListPicker as NativeScriptListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type ListPickerComponentProps<E extends NativeScriptListPicker = NativeScriptListPicker> = Props /* & typeof ListPicker.defaultProps */ & Partial<ListPickerProps> & ViewComponentProps<E>;
+export type ListPickerComponentProps<
+    E extends NativeScriptListPicker = NativeScriptListPicker
+> = Props /* & typeof ListPicker.defaultProps */ & Partial<ListPickerProps> & ViewComponentProps<E>;
 
-export class _ListPicker<P extends ListPickerComponentProps<E>, S extends {}, E extends NativeScriptListPicker> extends RCTView<P, S, E> {
+export class _ListPicker<
+    P extends ListPickerComponentProps<E>,
+    S extends {},
+    E extends NativeScriptListPicker
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptListPicker>()
     // };
@@ -22,7 +27,7 @@ export class _ListPicker<P extends ListPickerComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -39,10 +44,10 @@ export class _ListPicker<P extends ListPickerComponentProps<E>, S extends {}, E 
         } = this.props;
 
         return React.createElement(
-            'listPicker',
+            "listPicker",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -51,7 +56,9 @@ export class _ListPicker<P extends ListPickerComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ListPickerComponentProps<NativeScriptListPicker>>;
 
-export const ListPicker: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptListPicker>> = React.forwardRef<NativeScriptListPicker, OwnPropsWithoutForwardedRef>(
+export const ListPicker: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptListPicker>
+> = React.forwardRef<NativeScriptListPicker, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptListPicker>) => {
         const { children, ...rest } = props;
 
@@ -64,4 +71,4 @@ export const ListPicker: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

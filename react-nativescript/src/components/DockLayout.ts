@@ -8,14 +8,20 @@ interface Props {
     /* Each constituent view passed in must bear a "dock" Prop. */
 }
 
-export type DockLayoutComponentProps<E extends NativeScriptDockLayout = NativeScriptDockLayout> = Props /* & typeof RCTDockLayout.defaultProps */ & Partial<DockLayoutProps> & LayoutBaseComponentProps<E>;
+export type DockLayoutComponentProps<
+    E extends NativeScriptDockLayout = NativeScriptDockLayout
+> = Props /* & typeof RCTDockLayout.defaultProps */ & Partial<DockLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript DockLayout component.
  * See: ui/layouts/dock-layout
  */
-export class _DockLayout<P extends DockLayoutComponentProps<E>, S extends {}, E extends NativeScriptDockLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _DockLayout<
+    P extends DockLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptDockLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -24,7 +30,7 @@ export class _DockLayout<P extends DockLayoutComponentProps<E>, S extends {}, E 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -35,17 +41,17 @@ export class _DockLayout<P extends DockLayoutComponentProps<E>, S extends {}, E 
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'dockLayout',
+            "dockLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -54,7 +60,9 @@ export class _DockLayout<P extends DockLayoutComponentProps<E>, S extends {}, E 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<DockLayoutComponentProps<NativeScriptDockLayout>>;
 
-export const DockLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptDockLayout>> = React.forwardRef<NativeScriptDockLayout, OwnPropsWithoutForwardedRef>(
+export const DockLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptDockLayout>
+> = React.forwardRef<NativeScriptDockLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptDockLayout>) => {
         const { children, ...rest } = props;
 
@@ -67,4 +75,4 @@ export const DockLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

@@ -7,23 +7,28 @@ interface Props {
     // No mandatory props.
 }
 
-export type LabelComponentProps<E extends NativeScriptLabel = NativeScriptLabel> = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
+export type LabelComponentProps<
+    E extends NativeScriptLabel = NativeScriptLabel
+> = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
 
 /**
  * Represents a text label.
  */
-export class _Label<P extends LabelComponentProps<E>, S extends {}, E extends NativeScriptLabel = NativeScriptLabel> extends RCTTextBase<P, S, E> {
-
-    render(){
+export class _Label<
+    P extends LabelComponentProps<E>,
+    S extends {},
+    E extends NativeScriptLabel = NativeScriptLabel
+> extends RCTTextBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
-            
+
             onLoaded,
             onUnloaded,
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -41,29 +46,31 @@ export class _Label<P extends LabelComponentProps<E>, S extends {}, E extends Na
             ...rest
         } = this.props;
 
-        if(text && formattedText){
+        if (text && formattedText) {
             console.warn(`Both text and formattedText provided; shall use formattedText.`);
         }
 
         const textContent = {
-            [formattedText ? "formattedText" : "text"] : formattedText || text
+            [formattedText ? "formattedText" : "text"]: formattedText || text,
         };
 
         return React.createElement(
-                'label',
-                {
-                    ...rest,
-                    ...textContent,
-                    ref: forwardedRef || this.myRef
-                },
-                children // Weird that a Label may contain children, but what do I know.
-            );
+            "label",
+            {
+                ...rest,
+                ...textContent,
+                ref: forwardedRef || this.myRef,
+            },
+            children // Weird that a Label may contain children, but what do I know.
+        );
     }
 }
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<LabelComponentProps<NativeScriptLabel>>;
 
-export const Label: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptLabel>> = React.forwardRef<NativeScriptLabel, OwnPropsWithoutForwardedRef>(
+export const Label: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptLabel>
+> = React.forwardRef<NativeScriptLabel, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptLabel>) => {
         const { children, ...rest } = props;
 

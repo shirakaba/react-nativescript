@@ -5,16 +5,22 @@ import { _ContentView, ContentViewComponentProps } from "./ContentView";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
-    onScroll?: (args: ScrollEventData) => void,
+    onScroll?: (args: ScrollEventData) => void;
 }
 
-export type ScrollViewComponentProps<E extends NativeScriptScrollView = NativeScriptScrollView> = Props /* & typeof _ScrollView.defaultProps */ & Partial<ScrollViewProps> & ContentViewComponentProps<E>;
+export type ScrollViewComponentProps<
+    E extends NativeScriptScrollView = NativeScriptScrollView
+> = Props /* & typeof _ScrollView.defaultProps */ & Partial<ScrollViewProps> & ContentViewComponentProps<E>;
 
 /**
  * A React wrapper around the NativeScript ScrollView component.
  * See: ui/scroll-view/scroll-view
  */
-class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends NativeScriptScrollView = NativeScriptScrollView> extends _ContentView<P, S, E> {
+class _ScrollView<
+    P extends ScrollViewComponentProps<E>,
+    S extends {},
+    E extends NativeScriptScrollView = NativeScriptScrollView
+> extends _ContentView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptScrollView>()
     // };
@@ -24,15 +30,15 @@ class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends
     /**
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
         super.updateListeners(node, attach, nextProps);
-        
-        if(attach === null){
+
+        if (attach === null) {
             updateListener(node, "scroll", this.props.onScroll, nextProps.onScroll);
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if(this.props.onScroll) method("scroll", this.props.onScroll);
+            if (this.props.onScroll) method("scroll", this.props.onScroll);
         }
     }
 
@@ -47,7 +53,7 @@ class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -64,10 +70,10 @@ class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends
         } = this.props;
 
         return React.createElement(
-            'scrollView',
+            "scrollView",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -76,7 +82,9 @@ class _ScrollView<P extends ScrollViewComponentProps<E>, S extends {}, E extends
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ScrollViewComponentProps<NativeScriptScrollView>>;
 
-export const ScrollView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptScrollView>> = React.forwardRef<NativeScriptScrollView, OwnPropsWithoutForwardedRef>(
+export const ScrollView: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptScrollView>
+> = React.forwardRef<NativeScriptScrollView, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptScrollView>) => {
         const { children, ...rest } = props;
 
@@ -89,4 +97,4 @@ export const ScrollView: React.ComponentType<OwnPropsWithoutForwardedRef & React
             children
         );
     }
-)
+);

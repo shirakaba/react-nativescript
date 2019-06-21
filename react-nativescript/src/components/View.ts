@@ -2,7 +2,15 @@ import * as React from "react";
 import { ViewBaseProps, ViewProps } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData, Observable } from "tns-core-modules/data/observable/observable";
-import { GestureEventData, GestureTypes, TouchGestureEventData, SwipeGestureEventData, RotationGestureEventData, PinchGestureEventData, PanGestureEventData } from "tns-core-modules/ui/gestures/gestures";
+import {
+    GestureEventData,
+    GestureTypes,
+    TouchGestureEventData,
+    SwipeGestureEventData,
+    RotationGestureEventData,
+    PinchGestureEventData,
+    PanGestureEventData,
+} from "tns-core-modules/ui/gestures/gestures";
 import { ViewBaseComponentProps, RCTViewBase, ViewBaseComponentState } from "./ViewBase";
 import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "src/client/shallowEqual";
@@ -30,23 +38,29 @@ interface Props {
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
 
-export type ViewComponentProps<E extends NativeScriptView = NativeScriptView> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
+export type ViewComponentProps<
+    E extends NativeScriptView = NativeScriptView
+> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
-export abstract class RCTView<P extends ViewComponentProps<E>, S extends ViewComponentState, E extends NativeScriptView> extends RCTViewBase<P, S, E> {
+export abstract class RCTView<
+    P extends ViewComponentProps<E>,
+    S extends ViewComponentState,
+    E extends NativeScriptView
+> extends RCTViewBase<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptView>()
     // };
 
     /**
-     * 
+     *
      * @param attach true: attach; false: detach; null: update
      */
-    protected updateListeners(node: E, attach: boolean|null, nextProps?: P): void {
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
         super.updateListeners(node, attach, nextProps);
 
-        if(attach === null){
+        if (attach === null) {
             updateListener(node, "loaded", this.props.onLoaded, nextProps.onLoaded);
             updateListener(node, "unloaded", this.props.onUnloaded, nextProps.onUnloaded);
             updateListener(node, "androidBackPressed", this.props.onAndroidBackPressed, nextProps.onAndroidBackPressed);
@@ -62,19 +76,19 @@ export abstract class RCTView<P extends ViewComponentProps<E>, S extends ViewCom
             updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch, "touch");
         } else {
             const method = (attach ? node.on : node.off).bind(node);
-            if(this.props.onLoaded) method("loaded", this.props.onLoaded);
-            if(this.props.onUnloaded) method("unloaded", this.props.onUnloaded);
-            if(this.props.onAndroidBackPressed) method("androidBackPressed", this.props.onAndroidBackPressed);
-            if(this.props.onShowingModally) method("showingModally", this.props.onShowingModally);
-            if(this.props.onShownModally) method("shownModally", this.props.onShownModally);
-            if(this.props.onTap) method(GestureTypes.tap, this.props.onTap);
-            if(this.props.onDoubleTap) method(GestureTypes.doubleTap, this.props.onDoubleTap);
-            if(this.props.onPinch) method(GestureTypes.pinch, this.props.onPinch);
-            if(this.props.onPan) method(GestureTypes.pan, this.props.onPan);
-            if(this.props.onSwipe) method(GestureTypes.swipe, this.props.onSwipe);
-            if(this.props.onRotation) method(GestureTypes.rotation, this.props.onRotation);
-            if(this.props.onLongPress) method(GestureTypes.longPress, this.props.onLongPress);
-            if(this.props.onTouch) method(GestureTypes.touch, this.props.onTouch);
+            if (this.props.onLoaded) method("loaded", this.props.onLoaded);
+            if (this.props.onUnloaded) method("unloaded", this.props.onUnloaded);
+            if (this.props.onAndroidBackPressed) method("androidBackPressed", this.props.onAndroidBackPressed);
+            if (this.props.onShowingModally) method("showingModally", this.props.onShowingModally);
+            if (this.props.onShownModally) method("shownModally", this.props.onShownModally);
+            if (this.props.onTap) method(GestureTypes.tap, this.props.onTap);
+            if (this.props.onDoubleTap) method(GestureTypes.doubleTap, this.props.onDoubleTap);
+            if (this.props.onPinch) method(GestureTypes.pinch, this.props.onPinch);
+            if (this.props.onPan) method(GestureTypes.pan, this.props.onPan);
+            if (this.props.onSwipe) method(GestureTypes.swipe, this.props.onSwipe);
+            if (this.props.onRotation) method(GestureTypes.rotation, this.props.onRotation);
+            if (this.props.onLongPress) method(GestureTypes.longPress, this.props.onLongPress);
+            if (this.props.onTouch) method(GestureTypes.touch, this.props.onTouch);
         }
     }
 

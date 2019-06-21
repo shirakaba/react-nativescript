@@ -3,12 +3,17 @@ import { ContentViewProps, PropsWithoutForwardedRef } from "../shared/NativeScri
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, RCTView } from "./View";
 
-interface Props {
-}
+interface Props {}
 
-export type ContentViewComponentProps<E extends NativeScriptContentView = NativeScriptContentView> = Props /* & typeof ContentView.defaultProps */ & Partial<ContentViewProps> & ViewComponentProps<E>;
+export type ContentViewComponentProps<
+    E extends NativeScriptContentView = NativeScriptContentView
+> = Props /* & typeof ContentView.defaultProps */ & Partial<ContentViewProps> & ViewComponentProps<E>;
 
-export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, E extends NativeScriptContentView> extends RCTView<P, S, E> {
+export class _ContentView<
+    P extends ContentViewComponentProps<E>,
+    S extends {},
+    E extends NativeScriptContentView
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptContentView>()
     // };
@@ -22,7 +27,7 @@ export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, 
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -39,10 +44,10 @@ export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, 
         } = this.props;
 
         return React.createElement(
-            'contentView',
+            "contentView",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -51,7 +56,9 @@ export class _ContentView<P extends ContentViewComponentProps<E>, S extends {}, 
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ContentViewComponentProps<NativeScriptContentView>>;
 
-export const ContentView: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>> = React.forwardRef<NativeScriptContentView, OwnPropsWithoutForwardedRef>(
+export const ContentView: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>
+> = React.forwardRef<NativeScriptContentView, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptContentView>) => {
         const { children, ...rest } = props;
 
@@ -64,4 +71,4 @@ export const ContentView: React.ComponentType<OwnPropsWithoutForwardedRef & Reac
             children
         );
     }
-)
+);

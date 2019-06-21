@@ -6,15 +6,15 @@
  * This source code is licensed under the BSD-style license found in the
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
- * 
+ *
  * They have since moved to a MIT-style licence, which is reproduced in React-LICENSE.txt.
  */
 
-import * as ReactReconciler from 'react-reconciler';
+import * as ReactReconciler from "react-reconciler";
 import { reactReconcilerInst, Container } from "./HostConfig";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
-import { createPortal as _createPortal } from './ReactPortal';
+import { createPortal as _createPortal } from "./ReactPortal";
 import { run, hasLaunched, getRootView } from "tns-core-modules/application";
 import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
 import { AbsoluteLayout as RCTAbsoluteLayout } from "../components/AbsoluteLayout";
@@ -63,7 +63,7 @@ export function createPortal(
     children: ReactReconciler.ReactNodeList,
     // ReactFabric passes in a containerTag rather than a container; hope it can figure out how to re-use a root when the container is null :/
     container: Container,
-    key: string|null = null,
+    key: string | null = null
 ): ReactPortal {
     // invariant(
     //   isValidContainer(container),
@@ -75,14 +75,14 @@ export function createPortal(
     return portal;
 }
 
-type RootKey = Container|string|null;
+type RootKey = Container | string | null;
 const roots = new Map<RootKey, ReactReconciler.FiberRoot>();
 
 /**
  * React NativeScript can render into any container that extends View,
  * but it makes sense to use the Frame > Page model if your whole app
  * (rather than a portion of it) will be described using React NativeScript.
- * 
+ *
  * @param reactElement - Your <App/> component.
  * @param domElement - Your root component; typically Page, but can be any View. Accepts null for a detached tree.
  * @param callback - A callback to run after the component (typically <App/>) is rendered.
@@ -92,23 +92,18 @@ const roots = new Map<RootKey, ReactReconciler.FiberRoot>();
  */
 export function render(
     reactElement: ReactReconciler.ReactNodeList,
-    domElement: Container|null,
-    callback: () => void|null|undefined = () => undefined,
-    containerTag: string|null = null
-){
+    domElement: Container | null,
+    callback: () => void | null | undefined = () => undefined,
+    containerTag: string | null = null
+) {
     const key: RootKey = containerTag || domElement;
     let root: ReactReconciler.FiberRoot = roots.get(key);
-    if(!root){
+    if (!root) {
         root = reactReconcilerInst.createContainer(domElement, false, false);
         roots.set(key, root);
     }
 
-    reactReconcilerInst.updateContainer(
-        reactElement,
-        root,
-        null,
-        callback
-    );
+    reactReconcilerInst.updateContainer(reactElement, root, null, callback);
 
     return reactReconcilerInst.getPublicRootInstance(root);
 }
@@ -122,7 +117,7 @@ export function render(
  */
 export function unmountComponentAtNode(containerTag: RootKey): void {
     const root: ReactReconciler.FiberRoot = roots.get(containerTag);
-    if(!root) return;
+    if (!root) return;
     // TODO (from FB): Is it safe to reset this now or should I wait since this unmount could be deferred?
     reactReconcilerInst.updateContainer(null, root, null, () => {
         roots.delete(containerTag);
@@ -133,24 +128,22 @@ export function unmountComponentAtNode(containerTag: RootKey): void {
  * Convenience function to start your React NativeScript app.
  * This should be placed as the final line of your app.ts file, as no
  * code will run after it (at least on iOS).
- * 
+ *
  * @param app - Your <App/> component.
  * @param refToApp - ref to the root element of <App/>.
- * 
+ *
  * You can create a ref like so:
  *   const refToApp: React.RefObject<any> = React.createRef<any>();
  */
-export function start(
-    app: ReactReconciler.ReactNodeList,
-    refToApp: React.RefObject<View>
-): void
-{
-    const existingRootView: View|undefined = getRootView();
+export function start(app: ReactReconciler.ReactNodeList, refToApp: React.RefObject<View>): void {
+    const existingRootView: View | undefined = getRootView();
     const _hasLaunched: boolean = hasLaunched();
-    console.log(`[ReactNativeScript.ts] start(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`);
-    if(_hasLaunched || existingRootView){
+    console.log(
+        `[ReactNativeScript.ts] start(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`
+    );
+    if (_hasLaunched || existingRootView) {
         console.log(`[ReactNativeScript.ts] start() called again - hot reload, so shall no-op`);
-        
+
         /* As typings say, indeed reloadPage() doesn't exist. Maybe it's just a Vue thing. */
         // if(existingRootView instanceof Frame){
         //     console.log(`[renderIntoRootView] hot reload: calling reloadPage() on root frame`);
@@ -159,14 +152,14 @@ export function start(
         //     }
         // }
         return;
-    };
+    }
 
     run({
         create: () => {
             render(app, null, () => console.log(`Container updated!`), "__APP_ROOT__");
 
             return refToApp.current;
-        }
+        },
     });
 }
 

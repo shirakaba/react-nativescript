@@ -9,14 +9,20 @@ interface Props {
      * Unlike other layouts, constituent views require no properties. */
 }
 
-export type AbsoluteLayoutComponentProps<E extends NativeScriptAbsoluteLayout = NativeScriptAbsoluteLayout> = Props /* & typeof RCTAbsoluteLayout.defaultProps */ & Partial<AbsoluteLayoutProps> & LayoutBaseComponentProps<E>;
+export type AbsoluteLayoutComponentProps<
+    E extends NativeScriptAbsoluteLayout = NativeScriptAbsoluteLayout
+> = Props /* & typeof RCTAbsoluteLayout.defaultProps */ & Partial<AbsoluteLayoutProps> & LayoutBaseComponentProps<E>;
 
 /**
  * A React Absoluteper around the NativeScript AbsoluteLayout component.
  * See: ui/layouts/absolute-layout
  */
-export class _AbsoluteLayout<P extends AbsoluteLayoutComponentProps<E>, S extends {}, E extends NativeScriptAbsoluteLayout> extends RCTLayoutBase<P, S, E> {
-    render(){
+export class _AbsoluteLayout<
+    P extends AbsoluteLayoutComponentProps<E>,
+    S extends {},
+    E extends NativeScriptAbsoluteLayout
+> extends RCTLayoutBase<P, S, E> {
+    render() {
         const {
             forwardedRef,
 
@@ -25,7 +31,7 @@ export class _AbsoluteLayout<P extends AbsoluteLayoutComponentProps<E>, S extend
             onAndroidBackPressed,
             onShowingModally,
             onShownModally,
-            
+
             onTap,
             onDoubleTap,
             onPinch,
@@ -36,17 +42,17 @@ export class _AbsoluteLayout<P extends AbsoluteLayoutComponentProps<E>, S extend
             onTouch,
 
             onPropertyChange,
-            
+
             children,
 
             ...rest
         } = this.props;
 
         return React.createElement(
-            'absoluteLayout',
+            "absoluteLayout",
             {
                 ...rest,
-                ref: forwardedRef || this.myRef
+                ref: forwardedRef || this.myRef,
             },
             children
         );
@@ -55,7 +61,9 @@ export class _AbsoluteLayout<P extends AbsoluteLayoutComponentProps<E>, S extend
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<AbsoluteLayoutComponentProps<NativeScriptAbsoluteLayout>>;
 
-export const AbsoluteLayout: React.ComponentType<OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptAbsoluteLayout>> = React.forwardRef<NativeScriptAbsoluteLayout, OwnPropsWithoutForwardedRef>(
+export const AbsoluteLayout: React.ComponentType<
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptAbsoluteLayout>
+> = React.forwardRef<NativeScriptAbsoluteLayout, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptAbsoluteLayout>) => {
         const { children, ...rest } = props;
 
@@ -68,4 +76,4 @@ export const AbsoluteLayout: React.ComponentType<OwnPropsWithoutForwardedRef & R
             children
         );
     }
-)
+);
