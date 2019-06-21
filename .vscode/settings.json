@@ -1,0 +1,5 @@
+{
+    "eslint.alwaysShowStatus": true,
+    "eslint.enable": true,
+    "eslint.workingDirectories": ["./react-nativescript/src"]
+}

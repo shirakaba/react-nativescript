@@ -8,6 +8,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
+    "lint": "eslint --ext .js,.ts src",
     "build": "tsc --project ./tsconfig.json",
     "prepublish": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,6 +36,9 @@
   "devDependencies": {
     "@types/react": "^16.8.8",
     "@types/react-reconciler": "^0.18.0",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "eslint": "^5.16.0",
     "react": "^16.8.5",
     "tns-core-modules": "^5.3.1",
     "typescript": "^3.3.4000"
