@@ -249,6 +249,21 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
     private readonly dockLayoutPageRef = React.createRef<Page>();
     private readonly flexboxLayoutPageRef = React.createRef<Page>();
 
+    private navigateToPage(targetPage: Page, title: string){
+        const page: Page = this.props.forwardedRef.current!;
+        const frame: Frame|undefined = page.frame;
+        if(!frame){
+            console.error(`No frame found for page ${page}. Ensure that HubTest is embedded in a Frame (e.g. via FramedHubTest).`);
+            return;
+        }
+        frame.navigate({
+            create: () => {
+                console.log(`Navigating from ${page} to ${title} page. Ref:`, targetPage);
+                return targetPage;
+            }
+        });
+    }
+
     render(){
         const { forwardedRef } = this.props;
 
@@ -259,38 +274,19 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                     <RCTButton
                         text={"Navigate to AbsoluteLayout"}
                         onTap={() => {
-                            const page: Page = forwardedRef.current!;
-                            console.log(`Got page ${page} from forwardedRef:`, forwardedRef);
-                            page.frame.navigate({
-                                create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to AbsoluteLayout page. Ref:`, this.absoluteLayoutPageRef.current);
-                                    return this.absoluteLayoutPageRef.current;
-                                }
-                            });
+                            this.navigateToPage(this.absoluteLayoutPageRef.current, "AbsoluteLayout");
                         }}
                     />
                     <RCTButton
                         text={"Navigate to DockLayout"}
                         onTap={() => {
-                            const page: Page = forwardedRef.current!;
-                            page.frame.navigate({
-                                create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to DockLayout page. Ref:`, this.dockLayoutPageRef.current);
-                                    return this.dockLayoutPageRef.current;
-                                }
-                            });
+                            this.navigateToPage(this.dockLayoutPageRef.current, "DockLayout");
                         }}
                     />
                     <RCTButton
                         text={"Navigate to FlexboxLayout"}
                         onTap={() => {
-                            const page: Page = forwardedRef.current!;
-                            page.frame.navigate({
-                                create: () => {
-                                    console.log(`Navigating from ${forwardedRef.current} to FlexboxLayout page. Ref:`, this.flexboxLayoutPageRef.current);
-                                    return this.flexboxLayoutPageRef.current;
-                                }
-                            });
+                            this.navigateToPage(this.flexboxLayoutPageRef.current, "FlexboxLayout");
                         }}
                     />
                 </RCTStackLayout>
