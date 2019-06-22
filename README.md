@@ -135,21 +135,93 @@ There are many complex components to test (or refer to) in [`sample/app/testComp
 
 ## Why not just use React Native? 🤷‍♂️
 
-There are great benefits to being able to use React as a renderer for NativeScript, rather than React Native.
+React NativeScript shares most of the good parts of React Native, but above all gives a first-class development experience for interacting with native code. Never write another native module again – you can write your native code inline using JavaScript!
 
-* NativeScript runs on the main thread, so you avoid a lot of async dances and message-pasting between threads for achieving certain things (see particularly the next point)
-* NativeScript has complete bindings to the native APIs, so you never need to write a plugin every time you just want to access/set a property on a native view
-* NativeScript projects simply build and install much more quickly than a React Native project because the codebase is leaner
-* The NativeScript codebase is far more approachable to contributors
-* This repo is written in TypeScript from the ground up (just like NativeScript), so typings will always be in sync and correct.
+<table>
+    <tbody>
+        <tr>
+            <td align="center" valign="middle">
+            </td>
+            <td align="center" valign="middle">
+                <h3>React Native</h3>
+            </td>
+            <td align="center" valign="middle">
+                <h3>React NativeScript</h3>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>UI renderer</strong>
+            </td>
+            <td align="center" valign="middle" colspan="2">
+                <p>React</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>Platforms</strong>
+            </td>
+            <td align="center" valign="middle">
+                <p>iOS + Android + many more</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>iOS + Android</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>Codebase</strong>
+            </td>
+            <td align="center" valign="middle">
+                <p>Absolutely unfathomable</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Very approachable to new contributors</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>Javascript VM threading</strong>
+            </td>
+            <td align="center" valign="middle">
+                <p>Separate 'JS' thread</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Main (UI) thread</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>Native API access</strong>
+            </td>
+            <td align="left" valign="middle">
+                <em>"The Bridge"</em>
+                <ul>
+                    <li>asynchronous</li>
+                    <li>JS Interface (JSI) is very limited and lacks typings</li>
+                    <li>API calls must take JSON-serialisable arguments</li>
+                    <li>developer must set up bindings themself</li>
+                </ul>
+            </td>
+            <td align="left" valign="middle">
+                <em>"The platform runtime"</em>
+                <ul>
+                    <li>synchronous</li>
+                    <li>JS VM has bindings to 100% of the platform APIs with full TypeScript typings</li>
+                    <li>API calls can take native variables marshalled into JS</li>
+                    <li>developer doesn't have to write any bindings at all</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+### API compatibility with React Native 🏚
+
+Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible. See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
 
 ## Contributing 🙋‍♀️
 
 Ideally get in contact via the [Slack channel](https://nativescriptcommunity.slack.com/messages/CJ2B77CJ1/) before starting any PRs.
 
 I want to keep complex tooling down to a minimum to encourage easy on-boarding to contributors – at least until the project is stable.
-
-
-## Potential for API compatibility with React Native 🏚
-
-Never say never. See https://github.com/shirakaba/react-nativescript-compat-react-native for work towards this... 👩‍🔬👨‍🔬
