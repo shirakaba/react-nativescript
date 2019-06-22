@@ -7,3 +7,4 @@ react-nativescript/src/*.js
 react-nativescript/src/**/*.js
 *.mov
 github_img/HQ
+.npmrc
