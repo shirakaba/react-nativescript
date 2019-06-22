@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { CustomLayoutViewProps } from "../shared/NativeScriptComponentTypings";
 import { CustomLayoutView as NativeScriptCustomLayoutView } from "tns-core-modules/ui/content-view/content-view";

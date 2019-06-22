@@ -47,6 +47,7 @@ import { View } from "tns-core-modules/ui/core/view";
 import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
 import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
+import * as console from "../shared/Logger";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;

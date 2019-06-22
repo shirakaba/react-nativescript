@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { ViewBase as NativeScriptViewBase } from "tns-core-modules/ui/core/view-base/view-base";

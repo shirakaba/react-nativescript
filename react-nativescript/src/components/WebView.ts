@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { WebViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { WebView as NativeScriptWebView, LoadEventData } from "tns-core-modules/ui/web-view/web-view";

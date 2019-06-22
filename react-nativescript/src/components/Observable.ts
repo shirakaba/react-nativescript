@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ObservableProps } from "../shared/NativeScriptComponentTypings";
 import { Observable as NativeScriptObservable, EventData } from "tns-core-modules/data/observable/observable";

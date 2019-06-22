@@ -51,12 +51,13 @@ import { WebView as RCTWebView } from "../components/WebView";
 import { WrapLayout as RCTWrapLayout } from "../components/WrapLayout";
 import { Page as RCTPage } from "../components/Page";
 import { Image as RCTImage } from "../components/Image";
+import * as console from "../shared/Logger";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
 // }
 
-(global as any).__DEV__ = false;
+// declare let __DEV__: boolean|undefined;
 
 // https://blog.atulr.com/react-custom-renderer-1/
 export function createPortal(

@@ -51,6 +51,7 @@ import {
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { ObservableComponentProps } from "../components/Observable";
 import { ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
+import * as console from "./Logger";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type StylePropContents = Omit<Style, "PropertyBag" | keyof Observable>;

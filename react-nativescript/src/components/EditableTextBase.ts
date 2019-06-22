@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { EditableTextBase as NativeScriptEditableTextBase } from "../client/ElementRegistry";
 import { EditableTextBaseProps } from "../shared/NativeScriptComponentTypings";

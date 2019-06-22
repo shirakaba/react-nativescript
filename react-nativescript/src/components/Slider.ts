@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { SliderProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Slider as NativeScriptSlider } from "tns-core-modules/ui/slider/slider";

@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { LabelProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";

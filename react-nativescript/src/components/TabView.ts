@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
 import { TabViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { FrameProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Frame as NativeScriptFrame, EventData } from "tns-core-modules/ui/frame/frame";

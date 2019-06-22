@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ActivityIndicatorProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ActivityIndicator as NativeScriptActivityIndicator } from "tns-core-modules/ui/activity-indicator/activity-indicator";

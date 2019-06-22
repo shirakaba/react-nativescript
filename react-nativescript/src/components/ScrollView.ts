@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ScrollViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ScrollView as NativeScriptScrollView, ScrollEventData } from "tns-core-modules/ui/scroll-view/scroll-view";

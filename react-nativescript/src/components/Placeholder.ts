@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { PlaceholderProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import {

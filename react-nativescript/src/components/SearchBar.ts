@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { SearchBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { SearchBar as NativeScriptSearchBar } from "tns-core-modules/ui/search-bar/search-bar";

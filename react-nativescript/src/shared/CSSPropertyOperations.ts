@@ -1,5 +1,6 @@
 import { Instance } from "../client/HostConfig";
 import { Style } from "tns-core-modules/ui/styling/style/style";
+import * as console from "./Logger";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/shared/CSSPropertyOperations.js which carries the following copyright:

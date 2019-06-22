@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { TimePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { TimePicker as NativeScriptTimePicker } from "tns-core-modules/ui/time-picker/time-picker";

@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ActionBar as NativeScriptActionBar } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActionBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

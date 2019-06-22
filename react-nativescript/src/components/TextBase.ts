@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { TextBase as NativeScriptTextBase } from "../client/ElementRegistry";
 import { ContentViewProps, TextBaseProps } from "../shared/NativeScriptComponentTypings";

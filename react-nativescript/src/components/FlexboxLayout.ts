@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { FlexboxLayout as NativeScriptFlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { FlexboxLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

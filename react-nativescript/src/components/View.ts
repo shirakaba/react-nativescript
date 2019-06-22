@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ViewBaseProps, ViewProps } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";

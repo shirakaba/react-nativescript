@@ -6,7 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  */
-
+import * as console from "../shared/Logger";
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
 /**

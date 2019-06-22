@@ -6,6 +6,7 @@
  */
 import * as ReactReconciler from "react-reconciler";
 import { Instance } from "./HostConfig";
+import * as console from "../shared/Logger";
 
 const randomKey: string = Math.random()
     .toString(36)

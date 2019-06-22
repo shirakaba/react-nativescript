@@ -9,6 +9,7 @@ import { Type, Instance, Container, HostContext } from "./HostConfig";
 import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
+import * as console from "../shared/Logger";
 
 const DANGEROUSLY_SET_INNER_HTML: string = "dangerouslySetInnerHTML";
 const SUPPRESS_CONTENT_EDITABLE_WARNING: string = "suppressContentEditableWarning";

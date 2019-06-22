@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { HtmlViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { HtmlView as NativeScriptHtmlView } from "tns-core-modules/ui/html-view/html-view";

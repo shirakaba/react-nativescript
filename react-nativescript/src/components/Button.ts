@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ButtonProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button";

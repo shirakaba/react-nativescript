@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextFieldProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

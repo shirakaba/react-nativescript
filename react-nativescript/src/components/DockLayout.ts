@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { DockLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { DockLayout as NativeScriptDockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";

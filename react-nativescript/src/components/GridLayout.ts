@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { GridLayout as NativeScriptGridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { GridLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

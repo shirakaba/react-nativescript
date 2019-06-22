@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ImageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Image as NativeScriptImage } from "tns-core-modules/ui/image/image";

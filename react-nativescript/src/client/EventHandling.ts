@@ -1,5 +1,6 @@
 import { Observable, EventData } from "tns-core-modules/data/observable";
 import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
+import * as console from "../shared/Logger";
 
 // type GenericListener = (...args: any[]) => void;
 type GenericListener = (data: EventData) => void;

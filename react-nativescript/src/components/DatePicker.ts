@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { DatePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { DatePicker as NativeScriptDatePicker } from "tns-core-modules/ui/date-picker/date-picker";

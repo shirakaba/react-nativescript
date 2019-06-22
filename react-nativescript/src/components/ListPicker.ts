@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ListPickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ListPicker as NativeScriptListPicker } from "tns-core-modules/ui/list-picker/list-picker";

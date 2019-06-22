@@ -20,6 +20,9 @@ if(module.hot){
     // });
 }
 
+/* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
+(global as any).__DEV__ = false;
+
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import HotApp, { rootRef } from "./testComponents/HotApp";

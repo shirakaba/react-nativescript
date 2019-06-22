@@ -38,6 +38,7 @@ import { validateDOMNesting, updatedAncestorInfo } from "./validateDOMNesting";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
+import * as console from "../shared/Logger";
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 type Props = any;

@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { TextView as NativeScriptTextView } from "tns-core-modules/ui/text-view/text-view";
 import { TextViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";

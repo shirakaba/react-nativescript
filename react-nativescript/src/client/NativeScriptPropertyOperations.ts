@@ -7,6 +7,7 @@ import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/gr
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
+import * as console from "../shared/Logger";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:

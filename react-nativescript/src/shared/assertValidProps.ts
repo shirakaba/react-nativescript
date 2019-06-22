@@ -1,4 +1,5 @@
 import { Type } from "../client/HostConfig";
+import * as console from "./Logger";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/shared/assertValidProps.js which carries the following copyright:

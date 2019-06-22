@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { ListViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import {

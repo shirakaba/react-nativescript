@@ -4,7 +4,7 @@
  * In any case, it is a redundant component, given React's declarative nature.
  * Commenting out my investigatory attempt to dissuade others from attempting in future!
  */
-
+// import * as console from "../shared/Logger";
 // import * as React from "react";
 // import { CustomLayoutViewProps, RepeaterProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 // import { Repeater as NativeScriptRepeater } from "tns-core-modules/ui/repeater/repeater";

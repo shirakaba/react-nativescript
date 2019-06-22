@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { StackLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { StackLayout as NativeScriptStackLayout } from "tns-core-modules/ui/layouts/stack-layout/stack-layout";

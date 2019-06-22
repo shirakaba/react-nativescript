@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";

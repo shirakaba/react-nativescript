@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { WrapLayoutProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { WrapLayout as NativeScriptWrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";

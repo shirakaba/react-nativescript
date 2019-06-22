@@ -1,3 +1,4 @@
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { CustomLayoutViewProps, LayoutBaseProps } from "../shared/NativeScriptComponentTypings";
 import { LayoutBase as NativeScriptLayoutBase } from "tns-core-modules/ui/layouts/layout-base";
