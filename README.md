@@ -218,7 +218,7 @@ React NativeScript shares most of the good parts of React Native, but above all 
 
 ### API compatibility with React Native 🏚
 
-Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible. See https://github.com/shirakaba/react-nativescript-compat-react-native for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
+Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible. See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
 
 ## Contributing 🙋‍♀️
 
