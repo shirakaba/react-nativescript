@@ -42,9 +42,8 @@ git clone https://github.com/shirakaba/react-nativescript.git
 └── react-nativescript
 
 # In the root of your NativeScript project.
-npm install --save file:../react-nativescript/react-nativescript
-npm install --save react
-npm install --save-dev @types/react
+npm install --save file:../react-nativescript/react-nativescript react
+npm install --save-dev @types/react awesome-typescript-loader babel-loader @babel/core @babel/plugin-proposal-class-properties @babel/preset-react fork-ts-checker-webpack-plugin
 # OPTIONAL: Only required if you would like Hot Module Reloading:
 npm install --save-dev "git+https://github.com/shirakaba/react-nativescript-hot-loader.git"
 
@@ -61,6 +60,8 @@ Please file an Issue if you meet any problems when following these instructions.
 ## Examples
 
 ### Hello World app
+
+As React NativeScript is not yet stable, NativeScript CLI does not provide a starter template. Here is a summary of how the sample project is set up.
 
 #### No JSX/TSX in the entry file, `app.ts`
 
@@ -84,21 +85,21 @@ Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "r
 
 #### `webpack.config.js`
 
+The webpack config is bit more complex than the NativeScript Core TypeScript template. This is necessary to support HMR, JSX, and faster webpack builds (i.e. one webpack rule to transform from TSX to HMR-friendly JS, rather than two rules).
+
 Same as for the usual NativeScript Core TypeScript template, but with the following modifications:
 
 Assign this variable towards the beginning of your `webpack.config.js`:
 
 ```js
-const babelLoader = {
-    loader: "babel-loader",
-    options: {
-        cacheDirectory: true,
-        babelrc: false,
-        presets: [
-            "@babel/preset-react"
-        ],
-        plugins: []
-    }
+const babelOptions = {
+    babelrc: false,
+    presets: [
+        "@babel/preset-react"
+    ],
+    plugins: [
+        ["@babel/plugin-proposal-class-properties", { loose: true }]
+    ]
 };
 ```
 
@@ -108,27 +109,36 @@ const babelLoader = {
 extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
 ```
 
-... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`). See how we're referencing the `babelLoader` variable that we defined earlier:
+... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`). See how we're referencing the `babelOptions` variable that we defined earlier:
 
 ```js
 {
     test: /\.js(x?)$/,
     exclude: /node_modules/,
-    use: babelLoader,
+    use: {
+        loader: "babel-loader",
+        options: babelOptions
+    },
 },
 
 {
     test: /\.ts(x?)$/,
     use: [
-        babelLoader,
         {
-            loader: "ts-loader",
+            loader: "awesome-typescript-loader",
             options: {
-                configFile: "tsconfig.tns.json",
-                allowTsInNodeModules: true,
+                configFileName: "tsconfig.tns.json",
+                useBabel: true,
+                useCache: true,
+                cacheDirectory: ".awcache",
+                babelOptions: babelOptions,
+                babelCore: "@babel/core",
+                /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
+                    * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
                 compilerOptions: {
                     sourceMap
-                }
+                },
+                sourceMap
             },
         }
     ]
@@ -141,13 +151,13 @@ And if you want hot module replacement, then your `if(hmr){}` block should look 
 ```js
 if (hmr) {
     const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
+    config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
     config.plugins.push(new webpack.NamedModulesPlugin());
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
-    babelLoader.options.plugins.push(
+    babelOptions.plugins.push(
         /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
         // ["@babel/plugin-proposal-decorators", { legacy: true }],
         "react-nativescript-hot-loader/babel",
-        ["@babel/plugin-proposal-class-properties", { loose: true }],
     )
 }
 ```

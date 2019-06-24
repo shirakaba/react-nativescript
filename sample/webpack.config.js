@@ -21,11 +21,6 @@ const babelOptions = {
     ]
 };
 
-const babelLoader = {
-    loader: "babel-loader",
-    options: babelOptions
-};
-
 module.exports = env => {
     // Add your custom Activities, Services and other Android app components here.
     const appComponents = [
@@ -68,10 +63,6 @@ module.exports = env => {
 
     const entryModule = nsWebpack.getEntryModule(appFullPath);
     const entryPath = `.${sep}${entryModule}.ts`;
-    console.log(`projectRoot: ${projectRoot}`);
-    console.log(`dist: ${dist}`);
-    console.log(`appFullPath: ${appFullPath}`);
-    console.log(`entryPath: ${entryPath}`);
     const entries = { bundle: entryPath };
     if (platform === "ios") {
         entries["tns_modules/tns-core-modules/inspector_modules"] = "inspector_modules.js";
@@ -225,44 +216,6 @@ module.exports = env => {
                         options: babelOptions
                     },
                 },
-
-                /* Doesn't support tsconfig, so not worth the effort to try */
-                // {
-                //     test: /\.(ts|js)x?$/,
-                //     exclude: /node_modules/,
-                //     loader: 'babel-loader',
-                //     options: {
-                //         cacheDirectory: true,
-                //         babelrc: false,
-                //         presets: [
-                //             ['@babel/preset-typescript', {}],
-                //             '@babel/preset-react',
-                //         ],
-                //         plugins: [
-                //             // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
-                //             ['@babel/plugin-proposal-decorators', { legacy: true }],
-                //             ['@babel/plugin-proposal-class-properties', { loose: true }],
-                //             'react-hot-loader/babel',
-                //         ],
-                //     }
-                // }
-
-                // {
-                //     test: /\.ts(x?)$/,
-                //     use: [
-                //         babelLoader,
-                //         {
-                //             loader: "ts-loader",
-                //             options: {
-                //                 configFile: "tsconfig.tns.json",
-                //                 allowTsInNodeModules: true,
-                //                 compilerOptions: {
-                //                     sourceMap
-                //                 }
-                //             },
-                //         }
-                //     ]
-                // },
                 
                 {
                     test: /\.ts(x?)$/,
@@ -273,6 +226,7 @@ module.exports = env => {
                                 configFileName: "tsconfig.tns.json",
                                 useBabel: true,
                                 useCache: true,
+                                cacheDirectory: ".awcache",
                                 babelOptions: babelOptions,
                                 babelCore: "@babel/core",
                                 /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
