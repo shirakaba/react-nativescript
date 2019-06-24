@@ -158,6 +158,16 @@ If I've missed anything, just refer to [`sample/webpack.config.js`](https://gith
 
 ```typescript
 // app.ts
+declare var module: any;
+if(module.hot){
+    module.hot.accept(function(error: any){
+        console.error(`Error in accepting self-update for app.ts.`, error);
+    });
+}
+
+/* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
+(global as any).__DEV__ = false;
+
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import App, { rootRef } from "./OptionallyHotApp";
