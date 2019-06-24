@@ -11,17 +11,19 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const hashSalt = Date.now().toString();
 
+const babelOptions = {
+    babelrc: false,
+    presets: [
+        "@babel/preset-react"
+    ],
+    plugins: [
+        ["@babel/plugin-proposal-class-properties", { loose: true }]
+    ]
+};
+
 const babelLoader = {
     loader: "babel-loader",
-    options: {
-        cacheDirectory: true,
-        babelrc: false,
-        presets: [
-            "@babel/preset-react"
-        ],
-        plugins: [
-        ]
-    }
+    options: babelOptions
 };
 
 module.exports = env => {
@@ -215,26 +217,70 @@ module.exports = env => {
                     ]
                 },
 
-                // { test: /\.js$/, loader: 'react-hot!jsx-loader!transform/cacheable?envify' },
-
                 {
                     test: /\.js(x?)$/,
                     exclude: /node_modules/,
-                    use: babelLoader,
+                    use: {
+                        loader: "babel-loader",
+                        options: babelOptions
+                    },
                 },
 
+                /* Doesn't support tsconfig, so not worth the effort to try */
+                // {
+                //     test: /\.(ts|js)x?$/,
+                //     exclude: /node_modules/,
+                //     loader: 'babel-loader',
+                //     options: {
+                //         cacheDirectory: true,
+                //         babelrc: false,
+                //         presets: [
+                //             ['@babel/preset-typescript', {}],
+                //             '@babel/preset-react',
+                //         ],
+                //         plugins: [
+                //             // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+                //             ['@babel/plugin-proposal-decorators', { legacy: true }],
+                //             ['@babel/plugin-proposal-class-properties', { loose: true }],
+                //             'react-hot-loader/babel',
+                //         ],
+                //     }
+                // }
+
+                // {
+                //     test: /\.ts(x?)$/,
+                //     use: [
+                //         babelLoader,
+                //         {
+                //             loader: "ts-loader",
+                //             options: {
+                //                 configFile: "tsconfig.tns.json",
+                //                 allowTsInNodeModules: true,
+                //                 compilerOptions: {
+                //                     sourceMap
+                //                 }
+                //             },
+                //         }
+                //     ]
+                // },
+                
                 {
                     test: /\.ts(x?)$/,
                     use: [
-                        babelLoader,
                         {
-                            loader: "ts-loader",
+                            loader: "awesome-typescript-loader",
                             options: {
-                                configFile: "tsconfig.tns.json",
-                                allowTsInNodeModules: true,
+                                configFileName: "tsconfig.tns.json",
+                                useBabel: true,
+                                useCache: true,
+                                babelOptions: babelOptions,
+                                babelCore: "@babel/core",
+                                /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
+                                 * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
                                 compilerOptions: {
                                     sourceMap
-                                }
+                                },
+                                sourceMap
                             },
                         }
                     ]
@@ -314,14 +360,14 @@ module.exports = env => {
 
     if (hmr) {
         const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
-        // config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
+        config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
         config.plugins.push(new webpack.NamedModulesPlugin());
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
-        babelLoader.options.plugins.push(
+        babelOptions.plugins.push(
             /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
             // ["@babel/plugin-proposal-decorators", { legacy: true }],
             "react-nativescript-hot-loader/babel",
-            ["@babel/plugin-proposal-class-properties", { loose: true }],
+            // ["@babel/plugin-proposal-class-properties", { loose: true }],
         )
     }
 

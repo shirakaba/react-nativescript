@@ -8,3 +8,4 @@ react-nativescript/src/**/*.js
 *.mov
 github_img/HQ
 .npmrc
+sample/.awcache
