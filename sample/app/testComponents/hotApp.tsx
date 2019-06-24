@@ -9,13 +9,13 @@ import { GameLoopTest } from "./stateful";
 import { NestedHub, NestedModalTest, FramedHubTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
-import { RCTContentView, RCTStackLayout, RCTLabel, RCTFlexboxLayout, RCTButton } from 'react-nativescript';
+import { $ContentView, $StackLayout, $Label, $FlexboxLayout, $Button } from 'react-nativescript';
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const app = () => (
-//     <RCTFlexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
-//         <RCTFlexboxLayout
+//     <$FlexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
+//         <$FlexboxLayout
 //             backgroundColor={"green"}
 //             flexDirection={"column"}
 //             flexGrow={1}
@@ -23,16 +23,16 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 //             // position={"absolute"}
 //             alignItems={"center"}
 //         >
-//             <RCTLabel text={"LABEL"}/>
-//         </RCTFlexboxLayout>
-//         <RCTFlexboxLayout
+//             <$Label text={"LABEL"}/>
+//         </$FlexboxLayout>
+//         <$FlexboxLayout
 //             backgroundColor={"blue"}
 //             flexDirection={"column"}
 //         >
-//             <RCTButton text={"BUTTON"} className={""}/>
-//         </RCTFlexboxLayout>
-//         {/* <RCTButton text={"BUTTON"} className={""}/> */}
-//     </RCTFlexboxLayout>
+//             <$Button text={"BUTTON"} className={""}/>
+//         </$FlexboxLayout>
+//         {/* <$Button text={"BUTTON"} className={""}/> */}
+//     </$FlexboxLayout>
 // );
 
 // const app = () => <FramedLayoutTest forwardedRef={rootRef}/>

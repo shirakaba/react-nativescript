@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    RCTButton,
-    RCTContentView,
-    RCTTextView,
-    RCTLabel,
+    $Button,
+    $ContentView,
+    $TextView,
+    $Label,
     // StylePropContents,
-    RCTDockLayout,
-    RCTAbsoluteLayout,
-    RCTStackLayout,
-    RCTFlexboxLayout,
-    RCTListView,
-    RCTActionBar,
-    RCTTabView,
-    RCTTabViewItem,
-    RCTPage,
+    $DockLayout,
+    $AbsoluteLayout,
+    $StackLayout,
+    $FlexboxLayout,
+    $ListView,
+    $ActionBar,
+    $TabView,
+    $TabViewItem,
+    $Page,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -380,11 +380,11 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <RCTPage ref={forwardedRef} actionBarHidden={false} {...rest}>
-                <RCTActionBar title="Navigation Hub" className="action-bar" />
-                <RCTStackLayout>
-                    <RCTLabel text={`Audio loaded: ${this.state.audioLoaded}`}/>
-                    <RCTButton
+            <$Page ref={forwardedRef} actionBarHidden={false} {...rest}>
+                <$ActionBar title="Navigation Hub" className="action-bar" />
+                <$StackLayout>
+                    <$Label text={`Audio loaded: ${this.state.audioLoaded}`}/>
+                    <$Button
                         text={"Launch SpriteKit game (with audio)!"}
                         onTap={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
@@ -396,8 +396,8 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
                             nc.pushViewControllerAnimated(this.gameVC, true);
                         }}
                     />
-                </RCTStackLayout>
-            </RCTPage>
+                </$StackLayout>
+            </$Page>
         );
     }
 }

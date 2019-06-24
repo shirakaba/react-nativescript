@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    RCTButton,
-    RCTContentView,
-    RCTTextView,
-    RCTLabel,
+    $Button,
+    $ContentView,
+    $TextView,
+    $Label,
     // StylePropContents,
-    RCTDockLayout,
-    RCTAbsoluteLayout,
-    RCTStackLayout,
-    RCTFlexboxLayout,
-    RCTListView,
-    RCTActionBar,
-    RCTTabView,
-    RCTTabViewItem,
-    RCTPage,
+    $DockLayout,
+    $AbsoluteLayout,
+    $StackLayout,
+    $FlexboxLayout,
+    $ListView,
+    $ActionBar,
+    $TabView,
+    $TabViewItem,
+    $Page,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -151,7 +151,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
         const { index } = this.state;
 
         return React.createElement(
-            RCTLabel,
+            $Label,
             {
                 text: text.slice(index, text.length)
             },
@@ -222,7 +222,7 @@ export class Clock extends React.Component<{}, { date: Date }> {
         console.log(`[Clock] render()!`);
         
         return React.createElement(
-            RCTTextView,
+            $TextView,
             {
             },
             this.state.date.toLocaleTimeString()

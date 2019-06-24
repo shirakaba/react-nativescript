@@ -6,20 +6,20 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    RCTButton,
-    RCTContentView,
-    RCTTextView,
-    RCTLabel,
+    $Button,
+    $ContentView,
+    $TextView,
+    $Label,
     // StylePropContents,
-    RCTDockLayout,
-    RCTAbsoluteLayout,
-    RCTStackLayout,
-    RCTFlexboxLayout,
-    RCTListView,
-    RCTActionBar,
-    RCTTabView,
-    RCTTabViewItem,
-    RCTPage,
+    $DockLayout,
+    $AbsoluteLayout,
+    $StackLayout,
+    $FlexboxLayout,
+    $ListView,
+    $ActionBar,
+    $TabView,
+    $TabViewItem,
+    $Page,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -28,17 +28,17 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 export class DockLayoutTest extends React.Component<{}, {}> {
     render(){
         return (
-            <RCTDockLayout
+            <$DockLayout
                 width={{ value: 100, unit: "%" }}
                 height={{ value: 100, unit: "%" }}
                 stretchLastChild={true}
             >
-                <RCTButton dock={"left"} backgroundColor={"#0099CC"}>Left</RCTButton>
-                <RCTButton dock={"top"} backgroundColor={"#AA0078"}>Top</RCTButton>
-                <RCTButton dock={"right"} backgroundColor={"#8C489F"}>Right</RCTButton>
-                <RCTButton dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</RCTButton>
-                <RCTButton backgroundColor={"#CCFFFF"} color={new Color("gray")}>Fill</RCTButton>
-            </RCTDockLayout>
+                <$Button dock={"left"} backgroundColor={"#0099CC"}>Left</$Button>
+                <$Button dock={"top"} backgroundColor={"#AA0078"}>Top</$Button>
+                <$Button dock={"right"} backgroundColor={"#8C489F"}>Right</$Button>
+                <$Button dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</$Button>
+                <$Button backgroundColor={"#CCFFFF"} color={new Color("gray")}>Fill</$Button>
+            </$DockLayout>
         );
     }
 }
@@ -46,11 +46,11 @@ export class DockLayoutTest extends React.Component<{}, {}> {
 export class AbsoluteLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            RCTAbsoluteLayout,
+            $AbsoluteLayout,
             {
             },
             React.createElement(
-                RCTButton,
+                $Button,
                 {
                     dock: "left",
                     text: "Left: 10, Top: 5",
@@ -62,7 +62,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTButton,
+                $Button,
                 {
                     dock: "top",
                     text: "Left: 30, Top: 80",
@@ -74,7 +74,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTButton,
+                $Button,
                 {
                     dock: "right",
                     text: "Left: 150, Top: 25",
@@ -86,7 +86,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTButton,
+                $Button,
                 {
                     dock: "bottom",
                     text: "Left: 70, Top: 150",
@@ -112,7 +112,7 @@ export class HMRTest extends React.Component<{}, {}> {
 export class FlexboxLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            RCTFlexboxLayout,
+            $FlexboxLayout,
             {
                 flexDirection: "column-reverse",
                 justifyContent: "space-around",
@@ -124,7 +124,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 backgroundColor: "lightGray"
             },
             React.createElement(
-                RCTLabel,
+                $Label,
                 {
                     text: "Label 1",
                     width: 60,
@@ -134,7 +134,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTLabel,
+                $Label,
                 {
                     text: "Label 2",
                     alignSelf: "center",
@@ -145,7 +145,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTLabel,
+                $Label,
                 {
                     text: "Label 3",
                     alignSelf: "flex-end",
@@ -156,7 +156,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                RCTLabel,
+                $Label,
                 {
                     text: "Label 4",
                     width: 60,

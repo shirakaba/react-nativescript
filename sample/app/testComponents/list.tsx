@@ -15,23 +15,23 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    RCTButton,
-    RCTContentView,
-    RCTTextView,
-    RCTTextField,
-    RCTLabel,
-    RCTImage,
+    $Button,
+    $ContentView,
+    $TextView,
+    $TextField,
+    $Label,
+    $Image,
     // StylePropContents,
-    RCTDockLayout,
-    RCTAbsoluteLayout,
-    RCTStackLayout,
-    RCTFlexboxLayout,
-    RCTGridLayout,
-    RCTListView,
-    RCTActionBar,
-    RCTTabView,
-    RCTTabViewItem,
-    RCTPage,
+    $DockLayout,
+    $AbsoluteLayout,
+    $StackLayout,
+    $FlexboxLayout,
+    $GridLayout,
+    $ListView,
+    $ActionBar,
+    $TabView,
+    $TabViewItem,
+    $Page,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -50,7 +50,7 @@ export class ListViewTest extends React.Component<{}, {}> {
         /* There may be an argument for nesting the ListView within a LayoutBase once
          * dealing with the Safe Area (shall have to find out and see!). */
         return (
-            <RCTListView
+            <$ListView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -64,13 +64,13 @@ export class ListViewTest extends React.Component<{}, {}> {
                 items={[...items.map((val: Item) => val)]}
                 // cellFactory={(item: Item, ref: React.RefObject<any>) => {
                 //     return (
-                //         <RCTLabel
+                //         <$Label
                 //             ref={ref}
                 //             // key={container._domId}
                 //             fontSize={24}
                 //         >
                 //             {`#${item}`}
-                //         </RCTLabel>
+                //         </$Label>
                 //     );
                 // }}
                 itemTemplateSelector={(item: Item, index: number, items: any): string => {
@@ -83,13 +83,13 @@ export class ListViewTest extends React.Component<{}, {}> {
                             placeholderItem: 1,
                             cellFactory: (item: Item, ref: React.RefObject<any>) => {
                                 return (
-                                    <RCTLabel
+                                    <$Label
                                         ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
                                         {`ODD #${item}`}
-                                    </RCTLabel>
+                                    </$Label>
                                 );
                             }
                         }
@@ -100,20 +100,20 @@ export class ListViewTest extends React.Component<{}, {}> {
                             placeholderItem: 0,
                             cellFactory: (item: Item, ref: React.RefObject<any>) => {
                                 return (
-                                    <RCTTextView
+                                    <$TextView
                                         ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
                                         {`EVEN #${item}`}
-                                    </RCTTextView>
+                                    </$TextView>
                                 );
                             }
                         }
                     ],
                 ])}
             >
-            </RCTListView>
+            </$ListView>
         );
     }
 }
@@ -239,7 +239,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
 
     render(){
         return (
-            <RCTListView
+            <$ListView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -268,19 +268,19 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
-                                    <RCTGridLayout
+                                    <$GridLayout
                                         ref={ref}
                                         rows={[new ItemSpec(1, "star")]}
                                         columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                                     >
-                                        <RCTImage
+                                        <$Image
                                             row={0}
                                             col={0}
                                             src={imgSource}
                                             style={this.styles.thumb}
                                             stretch={"aspectFill"}
                                         />
-                                        <RCTLabel
+                                        <$Label
                                             row={0}
                                             col={1}
                                             // key={container._domId}
@@ -289,8 +289,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             paddingRight={8}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </RCTLabel>
-                                    </RCTGridLayout>
+                                        </$Label>
+                                    </$GridLayout>
                                 );
                             }
                         }
@@ -304,13 +304,13 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
-                                    <RCTGridLayout
+                                    <$GridLayout
                                         ref={ref}
                                         backgroundColor={new Color("yellow")}
                                         rows={[new ItemSpec(1, "star")]}
                                         columns={[new ItemSpec(1, "star"), new ItemSpec(64, "pixel")]}
                                     >
-                                        <RCTLabel
+                                        <$Label
                                             paddingLeft={8}
                                             row={0}
                                             col={0}
@@ -319,15 +319,15 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             fontSize={12}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </RCTLabel>
-                                        <RCTImage
+                                        </$Label>
+                                        <$Image
                                             row={0}
                                             col={1}
                                             src={imgSource}
                                             style={this.styles.bigThumb}
                                             stretch={"aspectFill"}
                                         />
-                                    </RCTGridLayout>
+                                    </$GridLayout>
                                 );
                             }
                         }
@@ -338,19 +338,19 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 //     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                 //     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
                 //     return (
-                //         <RCTGridLayout
+                //         <$GridLayout
                 //             ref={ref}
                 //             rows={[new ItemSpec(1, "star")]}
                 //             columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                 //         >
-                //             <RCTImage
+                //             <$Image
                 //                 row={0}
                 //                 col={0}
                 //                 src={imgSource}
                 //                 style={this.styles.thumb}
                 //                 stretch={"aspectFill"}
                 //             />
-                //             <RCTLabel
+                //             <$Label
                 //                 row={0}
                 //                 col={1}
                 //                 // key={container._domId}
@@ -358,8 +358,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 //                 fontSize={12}
                 //             >
                 //                 {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                //             </RCTLabel>
-                //         </RCTGridLayout>
+                //             </$Label>
+                //         </$GridLayout>
                 //     );
                 // }}
             />

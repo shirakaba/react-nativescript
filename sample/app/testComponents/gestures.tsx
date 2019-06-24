@@ -6,21 +6,21 @@ import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Pro
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
-    RCTButton,
-    RCTContentView,
-    RCTTextView,
-    RCTTextField,
-    RCTLabel,
+    $Button,
+    $ContentView,
+    $TextView,
+    $TextField,
+    $Label,
     // StylePropContents,
-    RCTDockLayout,
-    RCTAbsoluteLayout,
-    RCTStackLayout,
-    RCTFlexboxLayout,
-    RCTListView,
-    RCTActionBar,
-    RCTTabView,
-    RCTTabViewItem,
-    RCTPage,
+    $DockLayout,
+    $AbsoluteLayout,
+    $StackLayout,
+    $FlexboxLayout,
+    $ListView,
+    $ActionBar,
+    $TabView,
+    $TabViewItem,
+    $Page,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -32,7 +32,7 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
         return (
-                <RCTContentView
+                <$ContentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
@@ -48,8 +48,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                     onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
                     onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
                 >
-                    <RCTFlexboxLayout justifyContent="center" alignItems="center">
-                        <RCTContentView
+                    <$FlexboxLayout justifyContent="center" alignItems="center">
+                        <$ContentView
                             style={{
                                 backgroundColor: new Color("orange"),
                                 width: { unit: "px", value: 300 },
@@ -65,8 +65,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                             onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
                             onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
-                    </RCTFlexboxLayout>
-                </RCTContentView>
+                    </$FlexboxLayout>
+                </$ContentView>
         );
     }
 }
@@ -117,15 +117,15 @@ export class PanGestureTest extends React.Component<
         const { x, y } = this.state;
 
         return (
-                <RCTContentView
+                <$ContentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
                 >
-                    <RCTAbsoluteLayout>
-                        <RCTContentView
+                    <$AbsoluteLayout>
+                        <$ContentView
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
@@ -136,8 +136,8 @@ export class PanGestureTest extends React.Component<
 
                             onPan={this.onPan}
                         />
-                    </RCTAbsoluteLayout>
-                </RCTContentView>
+                    </$AbsoluteLayout>
+                </$ContentView>
         );
     }
 }
@@ -148,15 +148,15 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <RCTPage
+            <$Page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
                 onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] base Page`)}
             >
-                <RCTActionBar title="Navigation Hub" className="action-bar" />
-                <RCTStackLayout>
-                    <RCTButton
+                <$ActionBar title="Navigation Hub" className="action-bar" />
+                <$StackLayout>
+                    <$Button
                         text={"Navigate to yellow page"}
                         onTap={() => {
                             const currentPage: Page = forwardedRef.current!;
@@ -167,7 +167,7 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                             });
                         }}
                     />
-                </RCTStackLayout>
+                </$StackLayout>
                 
                 <PortalToPageWithActionBar
                     forwardedRef={this.yellowPageRef}
@@ -182,9 +182,9 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                         }
                     }}
                 >
-                    <RCTLabel>You're viewing the yellow page!</RCTLabel>
+                    <$Label>You're viewing the yellow page!</$Label>
                 </PortalToPageWithActionBar>
-            </RCTPage>
+            </$Page>
         );
     }
 }
@@ -231,22 +231,22 @@ export class StatefulPageGestureTest extends React.Component<
         // const yellowPageRef = React.createRef<Page>();
 
         return (
-            <RCTPage
+            <$Page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
                 onSwipe={this.onSwipeBasePage}
             >
-                <RCTActionBar title="Navigation Hub" className="action-bar" />
-                <RCTStackLayout>
-                    <RCTButton
+                <$ActionBar title="Navigation Hub" className="action-bar" />
+                <$StackLayout>
+                    <$Button
                         text={"Navigate to yellow page"}
                         onTap={this.onTapBasePage}
                     />
-                </RCTStackLayout>
+                </$StackLayout>
                 
                 <PortalToStatefulPage yellowPageRef={this.yellowPageRef} />
-            </RCTPage>
+            </$Page>
         );
     }
 }
@@ -336,15 +336,15 @@ export class PortalToStatefulPage extends React.Component<
                 backgroundColor={"yellow"}
                 onSwipe={this.onSwipeYellowPage}
             >
-                <RCTContentView
+                <$ContentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
                 >
-                    <RCTAbsoluteLayout>
-                        <RCTContentView
+                    <$AbsoluteLayout>
+                        <$ContentView
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
@@ -355,8 +355,8 @@ export class PortalToStatefulPage extends React.Component<
                             // onPan={this.onPan}
                             onTap={this.onTap}
                         />
-                    </RCTAbsoluteLayout>
-                </RCTContentView>
+                    </$AbsoluteLayout>
+                </$ContentView>
             </StatefulPortalToPageWithActionBar>
         );
     }
@@ -402,21 +402,21 @@ export class StatefulPageGestureTest2 extends React.Component<
         console.log(`[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current.frame.currentPage}`);
 
         return (
-            <RCTPage
+            <$Page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
             >
-                <RCTActionBar title="Navigation Hub" className="action-bar" />
-                <RCTStackLayout>
-                    <RCTButton
+                <$ActionBar title="Navigation Hub" className="action-bar" />
+                <$StackLayout>
+                    <$Button
                         text={"Navigate to yellow page"}
                         onTap={this.onTapBasePage}
                     />
-                </RCTStackLayout>
+                </$StackLayout>
                 
                 <PortalToPageWithStatefulContentView yellowPageRef={this.yellowPageRef} />
-            </RCTPage>
+            </$Page>
         );
     }
 }
@@ -498,15 +498,15 @@ export class StatefulContentView extends React.Component<
         const { x, y } = this.state;
 
         return (
-            <RCTContentView
+            <$ContentView
                 style={{
                     backgroundColor: new Color("yellow"),
                     width: { unit: "%", value: 100 },
                     height: { unit: "%", value: 100 },
                 }}
             >
-                <RCTAbsoluteLayout>
-                    <RCTContentView
+                <$AbsoluteLayout>
+                    <$ContentView
                         left={{ unit: "px", value: x }}
                         top={{ unit: "px", value: y }}
                         style={{
@@ -516,8 +516,8 @@ export class StatefulContentView extends React.Component<
                         }}
                         onTap={this.onTap}
                     />
-                </RCTAbsoluteLayout>
-            </RCTContentView>
+                </$AbsoluteLayout>
+            </$ContentView>
         );
     }
 }
