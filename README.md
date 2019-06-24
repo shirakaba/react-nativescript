@@ -62,18 +62,88 @@ Please file an Issue if you meet any problems when following these instructions.
 
 ### Hello World app
 
+#### No JSX/TSX in the entry file, `app.ts`
+
 JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-webpack` filtering it out. It's pending me signing NativeScript's CLA (see this [PR](https://github.com/NativeScript/nativescript-dev-webpack/pull/875)), but I need to get clearance from my company first.
 
-Every other file in your project **can** be in JSX/TSX, however; just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions` and refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js) (search for the character 'x'!).
+Every other file in your project **can** be in JSX/TSX, however.
 
-Until then, you'll have to write your entry file in JS/TS. Here is how to make a `<ContentView>` component (a React wrapper around a NativeScript ContentView) without JSX:
+#### `tsconfig.json`
 
-(just add `"jsx": "react"` to your `tsconfig.json`'s `compilerOptions`).
+Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "react"` added.
+
+#### `webpack.config.js`
+
+Same as for the usual NativeScript Core TypeScript template, but with the following modifications:
+
+Add this towards the beginning of your `webpack.config.js`:
+
+```js
+const babelLoader = {
+    loader: "babel-loader",
+    options: {
+        cacheDirectory: true,
+        babelrc: false,
+        presets: [
+            "@babel/preset-react"
+        ],
+        plugins: [
+        ]
+    }
+};
+```
+
+... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`):
+
+```js
+{
+    test: /\.js(x?)$/,
+    exclude: /node_modules/,
+    use: babelLoader,
+},
+
+{
+    test: /\.ts(x?)$/,
+    use: [
+        babelLoader,
+        {
+            loader: "ts-loader",
+            options: {
+                configFile: "tsconfig.tns.json",
+                allowTsInNodeModules: true,
+                compilerOptions: {
+                    sourceMap
+                }
+            },
+        }
+    ]
+},
+```
+
+And if you want hot module replacement, then your `if(hmr){}` block should look like this:
+
+
+```js
+if (hmr) {
+    const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
+    console.log(`tsconfigPath: ${tsconfigPath}`);
+    config.plugins.push(new webpack.NamedModulesPlugin());
+    config.plugins.push(new webpack.HotModuleReplacementPlugin());
+    babelLoader.options.plugins.push(
+        /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
+        // ["@babel/plugin-proposal-decorators", { legacy: true }],
+        "react-nativescript-hot-loader/babel",
+        ["@babel/plugin-proposal-class-properties", { loose: true }],
+    )
+}
+```
+
+If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what' I'm using!
 
 #### App without HMR
 
 ```typescript
-// In app.ts
+// app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import ColdApp, { rootRef } from "./ColdApp";
@@ -84,7 +154,7 @@ ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
 ```typescript
 // ColdApp.ts
 import * as React from "react";
-import { App } from "./AppContainer.ts"
+import { AppContainer } from "./AppContainer"
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
@@ -102,7 +172,7 @@ tns run ios --bundle --syncAllFiles --emulator
 #### App with HMR
 
 ```typescript
-// In app.ts
+// app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import HotApp, { rootRef } from "./HotApp";
@@ -114,7 +184,7 @@ ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
 // HotApp.ts
 import { hot } from "react-nativescript-hot-loader/root";
 import * as React from "react";
-import { App } from "./AppContainer.ts"
+import { AppContainer } from "./AppContainer"
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
