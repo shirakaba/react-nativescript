@@ -68,6 +68,16 @@ JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-web
 
 Every other file in your project **can** be in JSX/TSX, however.
 
+#### `nsconfig.json`
+
+To disable HMR (i.e. to use LiveSync as the strategy for updating the app upon any file changes), change the value of `"useLegacyWorkflow"` to `true`.
+
+```json
+{
+    "useLegacyWorkflow": false
+}
+```
+
 #### `tsconfig.json`
 
 Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "react"` added.
@@ -126,7 +136,6 @@ And if you want hot module replacement, then your `if(hmr){}` block should look 
 ```js
 if (hmr) {
     const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
-    console.log(`tsconfigPath: ${tsconfigPath}`);
     config.plugins.push(new webpack.NamedModulesPlugin());
     config.plugins.push(new webpack.HotModuleReplacementPlugin());
     babelLoader.options.plugins.push(
@@ -140,19 +149,20 @@ if (hmr) {
 
 If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what' I'm using!
 
-#### App without HMR
+#### Source code
 
 ```typescript
 // app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import ColdApp, { rootRef } from "./ColdApp";
+import App, { rootRef } from "./OptionallyHotApp";
 
-ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
+ReactNativeScript.start(React.createElement(App, {}, null), rootRef);
 ```
 
 ```typescript
-// ColdApp.ts
+// OptionallyHotApp.ts
+import { hot } from "react-nativescript-hot-loader/root"; // <- To disable HMR, comment-out.
 import * as React from "react";
 import { AppContainer } from "./AppContainer"
 
@@ -161,41 +171,13 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // See the testComponents directory for many examples of components (and ref-forwarding).
 const app = () => (<AppContainer forwardedRef={rootRef}/>);
 
-export default app;
+// export default app;
+export default hot(app); // <- To disable HMR, swap this line with the one above it.
 ```
+
+#### Running
 
 ```sh
-# Ensure that nsconfig.json has: "useLegacyWorkflow": true
-tns run ios --bundle --syncAllFiles --emulator
-```
-
-#### App with HMR
-
-```typescript
-// app.ts
-import * as React from "react";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import HotApp, { rootRef } from "./HotApp";
-
-ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
-```
-
-```typescript
-// HotApp.ts
-import { hot } from "react-nativescript-hot-loader/root";
-import * as React from "react";
-import { AppContainer } from "./AppContainer"
-
-export const rootRef: React.RefObject<any> = React.createRef<any>();
-
-// See the testComponents directory for many examples of components (and ref-forwarding).
-const app = () => (<AppContainer forwardedRef={rootRef}/>);
-
-export default hot(app);
-```
-
-```sh
-# Ensure that nsconfig.json has: "useLegacyWorkflow": false
 tns run ios --bundle --syncAllFiles --emulator
 ```
 
@@ -225,6 +207,14 @@ React NativeScript shares most of the good parts of React Native, but above all 
             </td>
             <td align="center" valign="middle" colspan="2">
                 <p>React</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <strong>Programming language</strong>
+            </td>
+            <td align="center" valign="middle" colspan="2">
+                <p>JavaScript (with TypeScript typings available)</p>
             </td>
         </tr>
         <tr>
