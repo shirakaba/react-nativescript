@@ -97,7 +97,7 @@ module.exports = env => {
             hashSalt
         },
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".scss", ".css"],
+            extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
             // Resolve {N} system modules from tns-core-modules
             modules: [
                 resolve(__dirname, "node_modules/tns-core-modules"),
@@ -314,7 +314,6 @@ module.exports = env => {
 
     if (hmr) {
         const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
-        console.log(`tsconfigPath: ${tsconfigPath}`);
         // config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
         config.plugins.push(new webpack.NamedModulesPlugin());
         config.plugins.push(new webpack.HotModuleReplacementPlugin());

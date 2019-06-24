@@ -86,7 +86,7 @@ Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "r
 
 Same as for the usual NativeScript Core TypeScript template, but with the following modifications:
 
-Add this towards the beginning of your `webpack.config.js`:
+Assign this variable towards the beginning of your `webpack.config.js`:
 
 ```js
 const babelLoader = {
@@ -97,13 +97,18 @@ const babelLoader = {
         presets: [
             "@babel/preset-react"
         ],
-        plugins: [
-        ]
+        plugins: []
     }
 };
 ```
 
-... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`):
+...ensure that the Webpack `config.resolve.extensions` includes `.tsx` and `.jsx`:
+
+```js
+extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
+```
+
+... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`). See how we're referencing the `babelLoader` variable that we defined earlier:
 
 ```js
 {
