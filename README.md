@@ -21,38 +21,27 @@ React plugin for NativeScript (*very* under construction; expect swathing refact
     </a>
 </p>
 
-Status: I'm currently gearing up towards a `v0.1.0` release.
+We now have a first release!
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
 ## Setup
 
-The library is not stable yet, so I won't be publishing it to npm anytime soon. For now, you can install the latest commit of the project directly from GitHub at any time. The following instructions assume that you'll be developing in TypeScript.
+The following instructions assume that you'll be developing in TypeScript.
 
 ```sh
 # Create a project like this (or continue from an existing one)
 tns create mycoolapp --tsc
-
-# Clone this repo, or download a zip of it, placing it beside your NativeScript project.
-git clone https://github.com/shirakaba/react-nativescript.git
-
-# Your folder hierarchy should now look like:
-.
-├── mycoolapp
-└── react-nativescript
+cd mycoolapp
 
 # In the root of your NativeScript project.
-npm install --save file:../react-nativescript/react-nativescript react
+npm install --save react-nativescript react
 npm install --save-dev @types/react awesome-typescript-loader babel-loader @babel/core @babel/plugin-proposal-class-properties @babel/preset-react fork-ts-checker-webpack-plugin
 # OPTIONAL: Only required if you would like Hot Module Reloading:
 npm install --save-dev "git+https://github.com/shirakaba/react-nativescript-hot-loader.git"
 
-# Build and run your project like so:
+# Build and run your project like so (specify 'android' instead of 'ios' if applicable):
 tns run ios --bundle --syncAllFiles --emulator
-
-# OPTIONAL (library development only): You can also update the source library:
-cd node_modules/react-nativescript
-node_modules/.bin/tsc --watch
 ```
 
 Please file an Issue if you meet any problems when following these instructions. They could well be missing something!
@@ -61,7 +50,7 @@ Please file an Issue if you meet any problems when following these instructions.
 
 ### Hello World app
 
-As React NativeScript is not yet stable, NativeScript CLI does not provide a starter template. Here is a summary of how the sample project is set up.
+NativeScript CLI does not yet provide a starter template (it's on my to-do list). Here is a summary of how the sample project is set up. It assumes having started from the NativeScript Core TypeScript template (i.e. `tns create mycoolapp --tsc`).
 
 #### No JSX/TSX in the entry file, `app.ts`
 
