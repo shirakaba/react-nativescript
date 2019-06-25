@@ -6,21 +6,34 @@
 
 ## Example Usage
 
-Here is an example of starting up a minimal app:
+Here is an example of starting up a minimal app without JSX nor HMR:
 
 ```js
 // app.ts
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { RCTFrame } from "react-nativescript/dist/index";
+import { $StackLayout, $Label } from "react-nativescript/dist/index";
 import { Color } from "tns-core-modules/color";
 
 const rootRef: React.RefObject<any> = React.createRef<any>();
 
 ReactNativeScript.start(
-    React.createElement(<RCTFrame ref={rootRef} backgroundColor={new Color('green')}/>, {}, null),
+    React.createElement(
+        $StackLayout,
+        {
+            ref: rootRef,
+            backgroundColor: new Color('green')
+        },
+        React.createElement(
+            $Label,
+            {
+                color: new Color('blue')
+            },
+            "Hello, World!"
+        ),
+    ),
     rootRef
 );
 ```
 
-More comprehensive examples can be found here: https://github.com/shirakaba/react-nativescript/tree/master/sample
+More comprehensive setup documentation can be found here: https://github.com/shirakaba/react-nativescript
