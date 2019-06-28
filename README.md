@@ -134,6 +134,8 @@ extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
 },
 ```
 
+##### Additional steps for supporting HMR
+
 And if you want hot module replacement, then your `if(hmr){}` block should look like this:
 
 
@@ -149,6 +151,15 @@ if (hmr) {
         "react-nativescript-hot-loader/babel",
     )
 }
+```
+
+...and the Webpack `config.resolve.alias` must include `react-dom`:
+
+```
+alias: {
+    '~': appFullPath,
+    "react-dom": "react-nativescript",
+},
 ```
 
 If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what' I'm using!
