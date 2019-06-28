@@ -32,7 +32,7 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
         super.componentDidMount();
 
         const node: E | null = this.getCurrentRef();
-        if(!node){
+        if (!node) {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
@@ -44,7 +44,7 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
         super.componentWillUnmount();
 
         const node: E | null = this.getCurrentRef();
-        if(!node){
+        if (!node) {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
