@@ -2,7 +2,7 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, Switch } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -10,6 +10,7 @@ import {
     $ContentView,
     $TextView,
     $Label,
+    $Switch,
     // StylePropContents,
     $DockLayout,
     $AbsoluteLayout,
@@ -245,6 +246,35 @@ export class GameLoopTest extends React.Component<{}, {}> {
                 },
                 null
             ),
+        );
+    }
+}
+
+export class SwitchTest extends React.Component<{}, { active: boolean }> {
+    private readonly ref: React.RefObject<Switch> = React.createRef();
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            active: false,
+        };
+    }
+
+    render() {
+        return (
+            React.createElement(
+                $Switch,
+                {
+                    ref: this.ref,
+                    // checked: this.state.active,
+                    onToggle: (checked: boolean) => {
+                        console.log(`Switch is now:`, checked);
+                        // this.setState({ value });
+                    }
+                },
+                null,
+            )
         );
     }
 }

@@ -3,8 +3,11 @@ import * as React from "react";
 import { SwitchProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Switch as NativeScriptSwitch } from "tns-core-modules/ui/switch/switch";
 import { ViewComponentProps, RCTView } from "./View";
+import { Observable, EventData } from "tns-core-modules/data/observable/observable";
 
-interface Props {}
+interface Props {
+    onToggle?: (checked: boolean) => void;
+}
 
 export type SwitchComponentProps<
     E extends NativeScriptSwitch = NativeScriptSwitch
@@ -18,6 +21,34 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSwitch>()
     // };
+
+    onToggle = (args: EventData) => {
+        const checked: boolean = (<NativeScriptSwitch>args.object).checked;
+
+        this.props.onToggle && this.props.onToggle(checked);
+    };
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (node) {
+            node.on("checkedChange", this.onToggle);
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (node) {
+            node.off("checkedChange", this.onToggle);
+        } else {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        }
+    }
 
     render(): React.ReactNode {
         const {
