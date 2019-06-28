@@ -2,7 +2,7 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, Switch } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, Switch, Slider } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -11,6 +11,7 @@ import {
     $TextView,
     $Label,
     $Switch,
+    $Slider,
     // StylePropContents,
     $DockLayout,
     $AbsoluteLayout,
@@ -288,6 +289,61 @@ export class SwitchTest extends React.Component<{}, { checked: boolean }> {
                         checked: this.state.checked,
                         onToggle: (checked: boolean) => {
                             console.log(`[Subordinate switch] now:`, checked);
+                        }
+                    },
+                    null,
+                ),
+            )
+        );
+    }
+}
+
+export class SliderTest extends React.Component<{}, { value: number }> {
+    // private readonly ownRef: React.RefObject<Slider> = React.createRef<Slider>();
+    private readonly minValue: number = 0;
+    private readonly maxValue: number = 1;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: this.maxValue / 2,
+        };
+    }
+
+    /* Unlike in React Native, we don't have to update the Slider's native value on each state change. */
+    render() {
+        const fraction: number = this.state.value * 255;
+
+        return (
+            React.createElement(
+                $StackLayout,
+                {},
+
+                React.createElement(
+                    $Slider,
+                    {
+                        value: this.state.value,
+                        minValue: this.minValue,
+                        maxValue: this.maxValue,
+                        color: new Color(255, fraction, fraction, fraction),
+                        onValueChange: (value: number) => {
+                            this.setState({ value });
+                        }
+                    },
+                    null,
+                ),
+
+                React.createElement(
+                    $Slider,
+                    {
+                        isEnabled: false,
+                        value: this.state.value,
+                        minValue: this.minValue,
+                        maxValue: this.maxValue,
+                        color: new Color(255, fraction, fraction, fraction),
+                        onValueChange: (value: number) => {
+                            this.setState({ value });
                         }
                     },
                     null,

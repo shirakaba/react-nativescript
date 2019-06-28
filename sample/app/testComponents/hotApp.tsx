@@ -5,7 +5,7 @@ import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabVie
 import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
-import { GameLoopTest } from "./stateful";
+import { GameLoopTest, SwitchTest, SliderTest } from "./stateful";
 import { NestedHub, NestedModalTest, FramedHubTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
@@ -37,6 +37,7 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const app = () => <FramedLayoutTest forwardedRef={rootRef}/>
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
-const app = () => <FramedHubTest forwardedRef={rootRef}/>
+// const app = () => <FramedHubTest forwardedRef={rootRef}/>
+const app = () => <$StackLayout ref={rootRef}><SliderTest/></$StackLayout>
 
 export default hot(app);

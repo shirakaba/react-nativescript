@@ -34,22 +34,23 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
         super.componentDidMount();
 
         const node: E | null = this.getCurrentRef();
-        if (node) {
-            node.on("valueChange", this.onValueChange);
-        } else {
+        if (!node) {
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
         }
+        node.value = typeof this.props.value === "number" ? this.props.value : 0;
+        node.on("valueChange", this.onValueChange);
     }
 
     componentWillUnmount() {
         super.componentWillUnmount();
 
         const node: E | null = this.getCurrentRef();
-        if (node) {
+        if (!node) {
             node.off("valueChange", this.onValueChange);
-        } else {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
         }
+        console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
     }
 
     render(): React.ReactNode {
