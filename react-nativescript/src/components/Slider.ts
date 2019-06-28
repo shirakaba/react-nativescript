@@ -24,7 +24,7 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
     //     forwardedRef: React.createRef<NativeScriptSlider>()
     // };
 
-    onValueChange = (slargs: EventData) => {
+    private readonly onValueChange = (slargs: EventData) => {
         const sliderValue: number = (<NativeScriptSlider>slargs.object).value;
 
         this.props.onValueChange && this.props.onValueChange(sliderValue);

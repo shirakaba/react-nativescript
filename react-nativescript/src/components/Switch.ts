@@ -22,7 +22,7 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
     //     forwardedRef: React.createRef<NativeScriptSwitch>()
     // };
 
-    onToggle = (args: EventData) => {
+    private readonly onToggle = (args: EventData) => {
         const checked: boolean = (<NativeScriptSwitch>args.object).checked;
 
         this.props.onToggle && this.props.onToggle(checked);
