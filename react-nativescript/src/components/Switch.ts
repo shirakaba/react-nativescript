@@ -32,22 +32,23 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
         super.componentDidMount();
 
         const node: E | null = this.getCurrentRef();
-        if (node) {
-            node.on("checkedChange", this.onToggle);
-        } else {
+        if(!node){
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
         }
+        node.checked = !!this.props.checked;
+        node.on("checkedChange", this.onToggle);
     }
 
     componentWillUnmount() {
         super.componentWillUnmount();
 
         const node: E | null = this.getCurrentRef();
-        if (node) {
-            node.off("checkedChange", this.onToggle);
-        } else {
+        if(!node){
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
         }
+        node.off("checkedChange", this.onToggle);
     }
 
     render(): React.ReactNode {

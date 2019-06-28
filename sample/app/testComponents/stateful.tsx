@@ -250,30 +250,48 @@ export class GameLoopTest extends React.Component<{}, {}> {
     }
 }
 
-export class SwitchTest extends React.Component<{}, { active: boolean }> {
-    private readonly ref: React.RefObject<Switch> = React.createRef();
-
+export class SwitchTest extends React.Component<{}, { checked: boolean }> {
     constructor(props) {
         super(props);
 
         this.state = {
-            active: false,
+            checked: true,
         };
     }
 
     render() {
+        console.log(`RENDER`);
+
         return (
             React.createElement(
-                $Switch,
-                {
-                    ref: this.ref,
-                    // checked: this.state.active,
-                    onToggle: (checked: boolean) => {
-                        console.log(`Switch is now:`, checked);
-                        // this.setState({ value });
-                    }
-                },
-                null,
+                $StackLayout,
+                {},
+
+                React.createElement(
+                    $Switch,
+                    {
+                        checked: this.state.checked,
+                        onToggle: (checked: boolean) => {
+                            console.log(`[Master switch] now:`, checked);
+                            this.setState((state) => ({ checked }), () => {
+                                console.log(`[Master switch] Synced the checked state to ${checked}.`);
+                            });
+                        }
+                    },
+                    null,
+                ),
+
+                React.createElement(
+                    $Switch,
+                    {
+                        isEnabled: false,
+                        checked: this.state.checked,
+                        onToggle: (checked: boolean) => {
+                            console.log(`[Subordinate switch] now:`, checked);
+                        }
+                    },
+                    null,
+                ),
             )
         );
     }
