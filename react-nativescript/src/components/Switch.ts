@@ -3,7 +3,7 @@ import * as React from "react";
 import { SwitchProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Switch as NativeScriptSwitch } from "tns-core-modules/ui/switch/switch";
 import { ViewComponentProps, RCTView } from "./View";
-import { Observable, EventData } from "tns-core-modules/data/observable/observable";
+import { EventData } from "tns-core-modules/data/observable/observable";
 
 interface Props {
     onToggle?: (checked: boolean) => void;

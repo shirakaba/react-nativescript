@@ -22,6 +22,7 @@ import {
     $TabView,
     $TabViewItem,
     $Page,
+    $TimePicker,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -311,7 +312,6 @@ export class SliderTest extends React.Component<{}, { value: number }> {
         };
     }
 
-    /* Unlike in React Native, we don't have to update the Slider's native value on each state change. */
     render() {
         const fraction: number = this.state.value * 255;
 
@@ -343,7 +343,71 @@ export class SliderTest extends React.Component<{}, { value: number }> {
                         maxValue: this.maxValue,
                         color: new Color(255, fraction, fraction, fraction),
                         onValueChange: (value: number) => {
-                            this.setState({ value });
+                        }
+                    },
+                    null,
+                ),
+            )
+        );
+    }
+}
+
+export class TimePickerTest extends React.Component<{}, { time: Date }> {
+    private readonly minHour: number = 0;
+    private readonly maxHour: number = 23;
+    private readonly minMinute: number = 0;
+    private readonly maxMinute: number = 59;
+    private readonly minuteInterval: number = 1;
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            time: new Date(),
+        };
+    }
+
+    render() {
+        const fraction: number = this.state.time.getHours() / 24;
+        const oppositeFraction: number = 1 - fraction;
+        const colourFraction: number = fraction * 255;
+        const oppositeColourFraction: number = oppositeFraction * 255;
+
+        return (
+            React.createElement(
+                $StackLayout,
+                {},
+
+                React.createElement(
+                    $TimePicker,
+                    {
+                        time: this.state.time,
+                        minHour: this.minHour,
+                        maxHour: this.maxHour,
+                        minMinute: this.minMinute,
+                        maxMinute: this.maxMinute,
+                        minuteInterval: this.minuteInterval,
+                        color: new Color(255, colourFraction, colourFraction, colourFraction),
+                        backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
+                        onTimeChange: (time: Date) => {
+                            this.setState({ time });
+                        }
+                    },
+                    null,
+                ),
+
+                React.createElement(
+                    $TimePicker,
+                    {
+                        isEnabled: false,
+                        time: this.state.time,
+                        minHour: this.minHour,
+                        maxHour: this.maxHour,
+                        minMinute: this.minMinute,
+                        maxMinute: this.maxMinute,
+                        color: new Color(255, colourFraction, colourFraction, colourFraction),
+                        backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
+                        onTimeChange: (time: Date) => {
                         }
                     },
                     null,

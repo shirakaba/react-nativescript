@@ -3,8 +3,11 @@ import * as React from "react";
 import { TimePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { TimePicker as NativeScriptTimePicker } from "tns-core-modules/ui/time-picker/time-picker";
 import { ViewComponentProps, RCTView } from "./View";
+import { EventData } from "tns-core-modules/data/observable/observable";
 
-interface Props {}
+interface Props {
+    onTimeChange?: (time: Date) => void;
+}
 
 export type TimePickerComponentProps<
     E extends NativeScriptTimePicker = NativeScriptTimePicker
@@ -18,6 +21,36 @@ export class _TimePicker<
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptTimePicker>()
     // };
+
+    private readonly onTimeChange = (args: EventData) => {
+        const time: Date = (<NativeScriptTimePicker>args.object).time;
+
+        this.props.onTimeChange && this.props.onTimeChange(time);
+    };
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        // Default starting value is: new Date()
+        node.time = typeof this.props.time !== "undefined" ? this.props.time : new Date();
+        node.on("timeChange", this.onTimeChange);
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.off("timeChange", this.onTimeChange);
+    }
 
     render(): React.ReactNode {
         const {
