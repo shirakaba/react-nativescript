@@ -225,6 +225,9 @@ export type TabViewItemProps = ViewBaseProps &
 export type ActionItemProps = ViewBaseProps &
     Pick<
         ActionItem,
+        /* get-only */
+        // | "ios"
+        // | "android"
         | "text"
         | "icon"
         // "actionView"| /* We provide a StackLayout and implicitly map children into it */

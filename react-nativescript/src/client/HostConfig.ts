@@ -441,13 +441,19 @@ const hostConfig: ReactReconciler.HostConfig<
         } else if (parentInstance instanceof LayoutBase) {
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
-        } else if (parentInstance instanceof ActionBar && child instanceof ActionItem) {
-            if (child instanceof NavigationButton) {
-                console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
-                parentInstance.navigationButton = child;
-            } else if (child instanceof ActionItem) {
-                console.log(`[appendChild()] (instance of ActionItem) ${parentInstance} > ${child}`);
-                parentInstance.actionItems.addItem(child);
+        } else if (parentInstance instanceof ActionBar) {
+            if(child instanceof ActionItem){
+                if (child instanceof NavigationButton) {
+                    console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
+                    parentInstance.navigationButton = child;
+                } else if (child instanceof ActionItem) {
+                    console.log(`[appendChild()] (instance of ActionItem) ${parentInstance} > ${child}`);
+                    parentInstance.actionItems.addItem(child);
+                }
+            } else {
+                // Take to be titleView
+                console.log(`[appendChild()] (not ActionItem; assumed to be titleView) ${parentInstance} > ${child}`);
+                parentInstance.titleView = child as View;
             }
         } else if (parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
@@ -695,12 +701,19 @@ const hostConfig: ReactReconciler.HostConfig<
         } else if (child instanceof ActionBar && parent instanceof Page) {
             console.log(`[removeChild()] Forbidden in NativeScript, so no-op: ${parent} x ${child}`);
             return;
-        } else if (parent instanceof ActionBar && child instanceof ActionItem) {
-            console.log(`[removeChild()] ${parent} x ${child}`);
-            if (child instanceof NavigationButton) {
-                parent.navigationButton = null; // Anything falsy should work.
-            } else if (child instanceof ActionItem) {
-                parent.actionItems.removeItem(child);
+        } else if (parent instanceof ActionBar) {
+            if(child instanceof ActionItem){
+                if (child instanceof NavigationButton) {
+                    console.log(`[removeChild()] (instance of NavigationButton) ${parent} x ${child}`);
+                    parent.navigationButton = null; // Anything falsy should work.
+                } else if (child instanceof ActionItem) {
+                    console.log(`[removeChild()] (instance of ActionItem) ${parent} x ${child}`);
+                    parent.actionItems.removeItem(child);
+                }
+            } else {
+                // Take to be titleView
+                console.log(`[removeChild()] (not ActionItem; assumed to be titleView) ${parent} x ${child}`);
+                parent.titleView = null;
             }
         } else if (parent instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);

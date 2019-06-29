@@ -1,8 +1,10 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
+import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ActionBar as NativeScriptActionBar } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActionBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, RCTView } from "./View";
+import { StackLayout } from "../client/ElementRegistry";
 
 interface Props {}
 
@@ -18,6 +20,7 @@ class _ActionBar<
     S extends {},
     E extends NativeScriptActionBar = NativeScriptActionBar
 > extends RCTView<P, S, E> {
+    private titleViewContainer: StackLayout|null = null;
     render() {
         const {
             forwardedRef,
@@ -44,8 +47,18 @@ class _ActionBar<
             ...rest
         } = this.props;
 
+        let portal: null|React.ReactPortal = null;
+
         if (children) {
-            console.warn("Ignoring 'children' prop on ActionBar; not permitted");
+            if(this.titleViewContainer === null){
+                this.titleViewContainer = new StackLayout();
+            }
+            console.log(`[ActionBar] rendering titleView into portal`);
+            portal = ReactNativeScript.createPortal(
+                children,
+                this.titleViewContainer,
+                `Portal(ActionBar.titleView${this.titleViewContainer._domId})`
+            );
         }
 
         return React.createElement(
@@ -54,7 +67,8 @@ class _ActionBar<
                 ...rest,
                 ref: forwardedRef || this.myRef,
             },
-            null
+            portal, // Any child that's not an ActionItem or NavigationButton will be set to titleView.
+            children, // We accept ActionItem and NavigationButton as children.
         );
     }
 }
