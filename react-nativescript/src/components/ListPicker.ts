@@ -7,7 +7,7 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { ItemsSource } from "tns-core-modules/ui/list-picker/list-picker";
 
 interface Props {
-    items: any[] | ItemsSource,
+    items: any[] | ItemsSource;
     onSelectedIndexChange?: (selectedIndex: number) => void;
 }
 
