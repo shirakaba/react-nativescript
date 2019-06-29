@@ -38,7 +38,6 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
-        node.value = typeof this.props.value === "number" ? this.props.value : 0;
         node.on("valueChange", this.onValueChange);
     }
 

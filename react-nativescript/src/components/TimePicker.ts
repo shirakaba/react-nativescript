@@ -36,7 +36,6 @@ export class _TimePicker<
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
-        node.time = typeof this.props.time !== "undefined" ? this.props.time : new Date();
         node.on("timeChange", this.onTimeChange);
     }
 
@@ -72,6 +71,8 @@ export class _TimePicker<
 
             onPropertyChange,
 
+            time,
+
             children,
             ...rest
         } = this.props;
@@ -80,6 +81,7 @@ export class _TimePicker<
             "timePicker",
             {
                 ...rest,
+                time: time || new Date(), // This prevents the default time from becoming Sun Dec 31st 1899!
                 ref: forwardedRef || this.myRef,
             },
             children

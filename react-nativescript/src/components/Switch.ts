@@ -36,7 +36,6 @@ export class _Switch<P extends SwitchComponentProps<E>, S extends {}, E extends 
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
-        node.checked = !!this.props.checked;
         node.on("checkedChange", this.onToggle);
     }
 
