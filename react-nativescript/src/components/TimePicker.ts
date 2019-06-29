@@ -36,7 +36,6 @@ export class _TimePicker<
             console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
-        // Default starting value is: new Date()
         node.time = typeof this.props.time !== "undefined" ? this.props.time : new Date();
         node.on("timeChange", this.onTimeChange);
     }

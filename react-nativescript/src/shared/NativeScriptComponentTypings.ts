@@ -342,7 +342,10 @@ export type ActivityIndicatorProps = ViewProps & Pick<ActivityIndicator, "busy">
 
 export type DatePickerProps = ViewProps & Pick<DatePicker, "year" | "month" | "day" | "date" | "maxDate" | "minDate">;
 
-export type ListPickerProps = ViewProps & Pick<ListPicker, "selectedIndex" | "items">;
+export type ListPickerProps = ViewProps & Pick<ListPicker,
+"selectedIndex"
+// "items" /* We redefine this as (any[] | ItemsSource) and non-optional in the $ListPicker class component */
+>;
 
 export type SwitchProps = ViewProps & Pick<Switch, "checked">;
 

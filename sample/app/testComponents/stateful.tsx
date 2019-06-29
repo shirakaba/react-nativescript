@@ -12,6 +12,7 @@ import {
     $Label,
     $Switch,
     $Slider,
+    $ListPicker,
     // StylePropContents,
     $DockLayout,
     $AbsoluteLayout,
@@ -408,6 +409,77 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
                         color: new Color(255, colourFraction, colourFraction, colourFraction),
                         backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
                         onTimeChange: (time: Date) => {
+                        }
+                    },
+                    null,
+                ),
+            )
+        );
+    }
+}
+
+export class ListPickerTest extends React.Component<{}, { selectedLocationIndex: number, selectedWeatherIndex: number, }> {
+    private readonly weathers: string[][] = [
+        ["Rainy"],
+        ["Sunny", "Cloudy", "Rainy", "Snowy"]
+    ];
+    private readonly locations: string[] = [
+        "The UK",
+        "Every other temperate country",
+    ];
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedLocationIndex: 0,
+            selectedWeatherIndex: 0,
+        };
+    }
+
+    render() {
+        return (
+            React.createElement(
+                $StackLayout,
+                {},
+
+                React.createElement(
+                    $Label,
+                    {},
+                    `Locations`
+                ),
+
+                React.createElement(
+                    $ListPicker,
+                    {
+                        backgroundColor: new Color("pink"),
+                        items: this.locations,
+                        selectedIndex: this.state.selectedLocationIndex,
+                        onSelectedIndexChange: (selectedIndex: number) => {
+                            this.setState({
+                                selectedLocationIndex: selectedIndex,
+                                selectedWeatherIndex: 0,
+                            });
+                        }
+                    },
+                    null,
+                ),
+
+                React.createElement(
+                    $Label,
+                    {},
+                    `Weathers`
+                ),
+
+                React.createElement(
+                    $ListPicker,
+                    {
+                        backgroundColor: new Color("pink"),
+                        items: this.weathers[this.state.selectedLocationIndex],
+                        // isEnabled: false, /* Has no effect on ListPicker! Arguably a bug in core. */
+                        selectedIndex: this.state.selectedWeatherIndex,
+                        onSelectedIndexChange: (selectedIndex: number) => {
+                            this.setState({ selectedWeatherIndex: selectedIndex });
                         }
                     },
                     null,
