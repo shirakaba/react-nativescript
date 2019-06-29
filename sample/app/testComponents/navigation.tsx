@@ -214,9 +214,9 @@ export class TabViewTest extends React.Component<{}, {}> {
 
 export class PageWithActionBar extends React.Component<
     {
+        actionBarTitle?: string,
         forwardedRef: React.RefObject<Page>,
-        actionBarTitle: string,
-    },
+    } & PageComponentProps<Page>,
     {}
 > {
     render(){
@@ -224,9 +224,26 @@ export class PageWithActionBar extends React.Component<
 
         return (
             <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
-                <$ActionBar title={actionBarTitle} className={"action-bar"}/>
+                <$ActionBar {...{ title: actionBarTitle }} />
                 {children}
             </$Page>
+        );
+    }
+}
+
+export class ActionBarMixedChildrenTest extends React.Component<
+    {
+        forwardedRef: React.RefObject<Page>,
+    },
+    {}
+> {
+    render(){
+        const { children, forwardedRef, ...rest } = this.props;
+
+        return (
+            <PageWithActionBar forwardedRef={forwardedRef}>
+                <$Label>OVERRIDDEN</$Label>
+            </PageWithActionBar>
         );
     }
 }
@@ -434,27 +451,33 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<F
     }
 }
 
-export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
-    private readonly hubTestPageRef = React.createRef<Page>();
-
+export class FramedPageTest extends React.Component<
+    {
+        forwardedRef: React.RefObject<Frame>,
+        childPageRef: React.RefObject<Page>,
+    },
+    {}
+>
+{
     componentDidMount(){
         const node: Frame|null = this.props.forwardedRef.current;
-        if(node){
-            console.log(`[FramedHubTest] componentDidMount; shall navigate to page within.`);
-            node.navigate({
-                create: () => {
-                    const hubTestPage: Page|undefined = this.hubTestPageRef.current
-                    console.log(`[FramedHubTest] create(); shall return ref to page: ${hubTestPage}`);
-                    return hubTestPage;
-                }
-            });
-        } else {
-            console.warn(`[FramedHubTest] React ref to NativeScript View lost, so unable to update event listeners.`);
+        if(!node){
+            console.warn(`[FramedPageTest] React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
         }
+
+        console.log(`[FramedPageTest] componentDidMount; shall navigate to page within.`);
+        node.navigate({
+            create: () => {
+                const childPage: Page|undefined = this.props.childPageRef.current
+                console.log(`[FramedPageTest] create(); shall return ref to page: ${childPage}`);
+                return childPage;
+            }
+        });
     }
 
     componentWillUnmount(){
-        console.log(`[FramedHubTest] componentWillUnmount`);
+        console.log(`[FramedPageTest] componentWillUnmount`);
     }
 
     render(){
@@ -463,13 +486,43 @@ export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObje
                 {(
                     ReactNativeScript.createPortal(
                         (
-                            <HubTest forwardedRef={this.hubTestPageRef}/>
+                            this.props.children
                         ),
                         null,
                         `Portal('Navigation Hub')`
                     )
                 )}
             </$Frame>
+        );
+    }
+}
+
+
+// export const FramedHubTest: React.SFC<{ forwardedRef: React.RefObject<Frame> }> =(props) => {
+//     const { forwardedRef, children, ...rest } = props;
+//     console.log(`[FramedHubTest] createPortal() forwardedRef.current: ${forwardedRef.current}`);
+
+//     return ReactNativeScript.createPortal(
+//         (
+//             <FramedChildTest forwardedRef={forwardedRef} {...rest} >
+//                 {children}
+//             </FramedChildTest>
+//         ),
+//         null,
+//         `Portal(FramedHubTest)`
+//     );
+// }
+
+export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
+    private readonly hubTestPageRef = React.createRef<Page>();
+
+    render(){
+        const { forwardedRef, children, ...rest } = this.props;
+
+        return (
+            <FramedPageTest forwardedRef={forwardedRef} childPageRef={this.hubTestPageRef} {...rest} >
+                <HubTest forwardedRef={this.hubTestPageRef}/>
+            </FramedPageTest>
         );
     }
 }
