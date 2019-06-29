@@ -5,7 +5,7 @@ import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabVie
 import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
-import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, ListPickerTest } from "./stateful";
+import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
 import { NestedHub, NestedModalTest, FramedHubTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";

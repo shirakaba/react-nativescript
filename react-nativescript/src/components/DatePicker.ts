@@ -3,8 +3,11 @@ import * as React from "react";
 import { DatePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { DatePicker as NativeScriptDatePicker } from "tns-core-modules/ui/date-picker/date-picker";
 import { ViewComponentProps, RCTView } from "./View";
+import { EventData } from "tns-core-modules/data/observable/observable";
 
-interface Props {}
+interface Props {
+    onDateChange?: (date: Date) => void;
+}
 
 export type DatePickerComponentProps<
     E extends NativeScriptDatePicker = NativeScriptDatePicker
@@ -18,6 +21,34 @@ export class _DatePicker<
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptDatePicker>()
     // };
+
+    private readonly onDateChange = (args: EventData) => {
+        const date: Date = (<NativeScriptDatePicker>args.object).date;
+
+        this.props.onDateChange && this.props.onDateChange(date);
+    };
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.on("dateChange", this.onDateChange);
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.off("dateChange", this.onDateChange);
+    }
 
     render(): React.ReactNode {
         const {

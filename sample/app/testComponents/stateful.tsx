@@ -24,6 +24,7 @@ import {
     $TabViewItem,
     $Page,
     $TimePicker,
+    $DatePicker,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -409,6 +410,61 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
                         color: new Color(255, colourFraction, colourFraction, colourFraction),
                         backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
                         onTimeChange: (time: Date) => {
+                        }
+                    },
+                    null,
+                ),
+            )
+        );
+    }
+}
+
+export class DatePickerTest extends React.Component<{}, { date: Date }> {
+    private readonly minDate: Date = new Date("1991-06-23T12:00:00");
+    private readonly maxDate: Date = new Date("1994-05-27T12:00:00");
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            date: new Date(),
+        };
+    }
+
+    render() {
+        return (
+            React.createElement(
+                $StackLayout,
+                {},
+
+                React.createElement(
+                    $TextView,
+                    {},
+                    `Uncontroversial calendar of good Sonic games (1991 - 1994).\n\nSelecting values beyond 27th May 1994 is prevented, because of course there were no good Sonic games after Sonic 3.\n\nBottom calendar is disabled, but inherits state.`
+                ),
+
+                React.createElement(
+                    $DatePicker,
+                    {
+                        date: this.state.date,
+                        minDate: this.minDate,
+                        maxDate: this.maxDate,
+                        onDateChange: (date: Date) => {
+                            console.log(`[onDateChange()]`, date);
+                            this.setState({ date });
+                        }
+                    },
+                    null,
+                ),
+
+                React.createElement(
+                    $DatePicker,
+                    {
+                        isEnabled: false,
+                        date: this.state.date,
+                        minDate: this.minDate,
+                        maxDate: this.maxDate,
+                        onDateChange: (date: Date) => {
                         }
                     },
                     null,
