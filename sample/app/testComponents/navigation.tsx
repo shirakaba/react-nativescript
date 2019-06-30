@@ -247,8 +247,8 @@ export class ActionBarMixedChildrenTest extends React.Component<
         return (
             <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
                 <$ActionBar>
-                    {/* <$Switch/> */}
-                    <$ActionItem iosPosition={"right"} iosSystemIcon={4}></$ActionItem>
+                    <$Switch/>
+                    <$ActionItem text={"AI"} iosPosition={"right"} iosSystemIcon={4}></$ActionItem>
                     <$NavigationButton text={"NB"}></$NavigationButton>
                 </$ActionBar>
             </$Page>

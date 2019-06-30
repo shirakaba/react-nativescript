@@ -29,34 +29,6 @@ export class _ActionItem<
     S extends {},
     E extends NativeScriptActionItem
 > extends RCTViewBase<P, S, E> {
-    protected container: StackLayout|null = null;
-
-    componentDidMount() {
-        super.componentDidMount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost.`);
-            return;
-        }
-        // if(typeof this.props.iosPosition !== "undefined"){
-        //     node.ios.position = this.props.iosPosition;
-        // }
-        // if(typeof this.props.iosSystemIcon !== "undefined"){
-        //     node.ios.systemIcon = this.props.iosSystemIcon;
-        // }
-    }
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost.`);
-            return;
-        }
-    }
-
     render() {
         const {
             forwardedRef,
@@ -71,17 +43,11 @@ export class _ActionItem<
             ...rest
         } = this.props;
 
-        if (Array.isArray(children) || typeof children === "string" || typeof children === "number") {
-            throw new Error(
-                `'children' property passed into ActionItem must be a single child node, which must not be a number or string`
-            );
-        }
-
-        let portal: React.ReactPortal|null = null;
-        if(children){
-            this.container = this.container || new StackLayout();
-            portal = ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`);
-        }
+        // let portal: React.ReactPortal|null = null;
+        // if(children){
+        //     this.container = this.container || new StackLayout();
+        //     portal = ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`);
+        // }
 
         const ios: any = {};
         if(iosPosition){
@@ -96,11 +62,12 @@ export class _ActionItem<
             {
                 ...rest,
                 ios,
-                ...(this.container ? { actionView: this.container } : {}),
+                // ...(this.container ? { actionView: this.container } : {}),
                 ref: forwardedRef || this.myRef,
             },
-            portal,
-        ) as React.ReactNode;
+            // portal,
+            children,
+        );
     }
 }
 

@@ -37,8 +37,8 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const app = () => <FramedLayoutTest forwardedRef={rootRef}/>
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
-const app = () => <WebViewTest forwardedRef={rootRef}/>
+// const app = () => <WebViewTest forwardedRef={rootRef}/>
 // const app = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
-// const app = () => <ActionBarMixedChildrenTest forwardedRef={rootRef}></ActionBarMixedChildrenTest>
+const app = () => <FramedActionBarMixedChildrenTest forwardedRef={rootRef}></FramedActionBarMixedChildrenTest>
 
 export default hot(app);

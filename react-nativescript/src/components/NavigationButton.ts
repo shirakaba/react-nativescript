@@ -43,22 +43,22 @@ export class _NavigationButton<
             ...rest
         } = this.props;
 
-        let portal: React.ReactPortal|null = null;
-        if(children){
-            this.container = this.container || new StackLayout();
-            portal = ReactNativeScript.createPortal(children, this.container, `Portal(NavigationButton(${this.container._domId}))`);
-        }
+        // let portal: React.ReactPortal|null = null;
+        // if(children){
+        //     this.container = this.container || new StackLayout();
+        //     portal = ReactNativeScript.createPortal(children, this.container, `Portal(NavigationButton(${this.container._domId}))`);
+        // }
 
         return React.createElement(
             "navigationButton",
             {
                 ...rest,
                 ios: {},
-                ...(this.container ? { actionView: this.container } : {}),
+                // ...(this.container ? { actionView: this.container } : {}),
                 ref: forwardedRef || this.myRef,
             },
-            portal
-        ) as React.ReactNode;
+            children
+        );
     }
 }
 
