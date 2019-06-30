@@ -21,7 +21,7 @@ if(module.hot){
 }
 
 /* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
-(global as any).__DEV__ = false;
+(global as any).__DEV__ = true;
 
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
