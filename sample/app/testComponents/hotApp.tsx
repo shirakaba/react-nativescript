@@ -6,7 +6,7 @@ import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel, WebViewTest, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
 import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
-import { NestedHub, NestedModalTest, FramedHubTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
+import { NestedHub, NestedModalTest, FramedHubTest, FramedActionBarMixedChildrenTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest, ActionBarMixedChildrenTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { $ContentView, $StackLayout, $Label, $FlexboxLayout, $Button } from 'react-nativescript';
@@ -37,7 +37,8 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const app = () => <FramedLayoutTest forwardedRef={rootRef}/>
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
-// const app = () => <FramedHubTest forwardedRef={rootRef}/>
-const app = () => <$StackLayout ref={rootRef}><SliderTest/></$StackLayout>
+const app = () => <WebViewTest forwardedRef={rootRef}/>
+// const app = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
+// const app = () => <ActionBarMixedChildrenTest forwardedRef={rootRef}></ActionBarMixedChildrenTest>
 
 export default hot(app);

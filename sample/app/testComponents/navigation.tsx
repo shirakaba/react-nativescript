@@ -10,6 +10,7 @@ import {
     $Frame,
     $ContentView,
     $TextView,
+    $Switch,
     $Label,
     // StylePropContents,
     $DockLayout,
@@ -21,6 +22,8 @@ import {
     $TabView,
     $TabViewItem,
     $Page,
+    $NavigationButton,
+    $ActionItem,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -233,6 +236,7 @@ export class PageWithActionBar extends React.Component<
 
 export class ActionBarMixedChildrenTest extends React.Component<
     {
+        actionBarTitle?: string,
         forwardedRef: React.RefObject<Page>,
     },
     {}
@@ -241,9 +245,27 @@ export class ActionBarMixedChildrenTest extends React.Component<
         const { children, forwardedRef, ...rest } = this.props;
 
         return (
-            <PageWithActionBar forwardedRef={forwardedRef}>
-                <$Label>OVERRIDDEN</$Label>
-            </PageWithActionBar>
+            <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
+                <$ActionBar title={"No titleView was set."}>
+                    <$Switch/>
+                    <$ActionItem iosPosition={"right"} iosSystemIcon={4}></$ActionItem>
+                    <$NavigationButton text={"NB"}></$NavigationButton>
+                </$ActionBar>
+            </$Page>
+        );
+    }
+}
+
+export class FramedActionBarMixedChildrenTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
+    private readonly pageWithActionBarRef = React.createRef<Page>();
+
+    render(){
+        const { forwardedRef, children, ...rest } = this.props;
+
+        return (
+            <FramedPageTest forwardedRef={forwardedRef} childPageRef={this.pageWithActionBarRef} {...rest} >
+                <ActionBarMixedChildrenTest forwardedRef={this.pageWithActionBarRef}/>
+            </FramedPageTest>
         );
     }
 }
@@ -496,22 +518,6 @@ export class FramedPageTest extends React.Component<
         );
     }
 }
-
-
-// export const FramedHubTest: React.SFC<{ forwardedRef: React.RefObject<Frame> }> =(props) => {
-//     const { forwardedRef, children, ...rest } = props;
-//     console.log(`[FramedHubTest] createPortal() forwardedRef.current: ${forwardedRef.current}`);
-
-//     return ReactNativeScript.createPortal(
-//         (
-//             <FramedChildTest forwardedRef={forwardedRef} {...rest} >
-//                 {children}
-//             </FramedChildTest>
-//         ),
-//         null,
-//         `Portal(FramedHubTest)`
-//     );
-// }
 
 export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
     private readonly hubTestPageRef = React.createRef<Page>();

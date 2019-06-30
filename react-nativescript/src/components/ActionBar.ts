@@ -21,6 +21,29 @@ class _ActionBar<
     E extends NativeScriptActionBar = NativeScriptActionBar
 > extends RCTView<P, S, E> {
     private titleViewContainer: StackLayout|null = null;
+
+    // componentDidMount() {
+    //     super.componentDidMount();
+
+    //     const node: E | null = this.getCurrentRef();
+    //     if (!node) {
+    //         console.warn(`React ref to NativeScript View lost, so unable to update titleView.`);
+    //         return;
+    //     }
+    //     node.titleView = this.titleViewContainer;
+    // }
+
+    // componentWillUnmount() {
+    //     super.componentWillUnmount();
+
+    //     const node: E | null = this.getCurrentRef();
+    //     if (!node) {
+    //         console.warn(`React ref to NativeScript View lost, so unable to update titleView.`);
+    //         return;
+    //     }
+    //     node.titleView = null;
+    // }
+
     render() {
         const {
             forwardedRef,

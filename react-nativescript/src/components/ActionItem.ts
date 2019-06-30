@@ -6,7 +6,10 @@ import { StackLayout } from "../client/ElementRegistry";
 import { ActionItem as NativeScriptActionItem } from "tns-core-modules/ui/action-bar/action-bar";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
-interface Props {}
+interface Props {
+    iosPosition?: "left"|"right",
+    iosSystemIcon?: number,
+}
 
 export type ActionItemComponentProps<
     E extends NativeScriptActionItem = NativeScriptActionItem
@@ -28,11 +31,40 @@ export class _ActionItem<
 > extends RCTViewBase<P, S, E> {
     protected readonly container = new StackLayout();
 
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost.`);
+            return;
+        }
+        if(typeof this.props.iosPosition !== "undefined"){
+            node.ios.position = this.props.iosPosition;
+        }
+        if(typeof this.props.iosSystemIcon !== "undefined"){
+            node.ios.systemIcon = this.props.iosSystemIcon;
+        }
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost.`);
+            return;
+        }
+    }
+
     render() {
         const {
             forwardedRef,
 
             onPropertyChange,
+
+            iosPosition,
+            iosSystemIcon,
 
             children,
             // actionView, /* We disallow this at the typings level. */
@@ -45,10 +77,19 @@ export class _ActionItem<
             );
         }
 
+        // const _ios: any = {};
+        // if(iosPosition){
+        //     _ios.position = iosPosition;
+        // }
+        // if(iosSystemIcon){
+        //     _ios.systemIcon = iosSystemIcon;
+        // }
+
         return React.createElement(
             "actionItem",
             {
                 ...rest,
+                // _ios,
                 // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
                 actionView: this.container,
                 ref: forwardedRef || this.myRef,

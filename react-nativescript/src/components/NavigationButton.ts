@@ -34,6 +34,10 @@ export class _NavigationButton<
 
             onPropertyChange,
 
+            /* Neither of these are applicable for NavigationButton */
+            iosPosition,
+            iosSystemIcon,
+
             children,
             // actionView, /* We disallow this at the typings level. */
             ...rest
@@ -49,6 +53,7 @@ export class _NavigationButton<
             "navigationButton",
             {
                 ...rest,
+                _ios: {},
                 // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
                 actionView: this.container,
                 ref: forwardedRef || this.myRef,
