@@ -39,12 +39,12 @@ export class _ActionItem<
             console.warn(`React ref to NativeScript View lost.`);
             return;
         }
-        if(typeof this.props.iosPosition !== "undefined"){
-            node.ios.position = this.props.iosPosition;
-        }
-        if(typeof this.props.iosSystemIcon !== "undefined"){
-            node.ios.systemIcon = this.props.iosSystemIcon;
-        }
+        // if(typeof this.props.iosPosition !== "undefined"){
+        //     node.ios.position = this.props.iosPosition;
+        // }
+        // if(typeof this.props.iosSystemIcon !== "undefined"){
+        //     node.ios.systemIcon = this.props.iosSystemIcon;
+        // }
     }
 
     componentWillUnmount() {
@@ -77,19 +77,19 @@ export class _ActionItem<
             );
         }
 
-        // const _ios: any = {};
-        // if(iosPosition){
-        //     _ios.position = iosPosition;
-        // }
-        // if(iosSystemIcon){
-        //     _ios.systemIcon = iosSystemIcon;
-        // }
+        const ios: any = {};
+        if(iosPosition){
+            ios.position = iosPosition;
+        }
+        if(iosSystemIcon){
+            ios.systemIcon = iosSystemIcon;
+        }
 
         return React.createElement(
             "actionItem",
             {
                 ...rest,
-                // _ios,
+                ios,
                 // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
                 actionView: this.container,
                 ref: forwardedRef || this.myRef,

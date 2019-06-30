@@ -53,7 +53,7 @@ export class _NavigationButton<
             "navigationButton",
             {
                 ...rest,
-                _ios: {},
+                ios: {},
                 // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
                 actionView: this.container,
                 ref: forwardedRef || this.myRef,
