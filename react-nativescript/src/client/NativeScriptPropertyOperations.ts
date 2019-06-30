@@ -182,18 +182,18 @@ export function setValueForProperty(
         // } else if(name === "view" && instance instanceof TabViewItem){
         //     // console.log(`[setValueForProperty] SETTING .view on ${instance}. Value:`, value);
         //     (instance as TabViewItem).view = value;
-    } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)){
+    } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)) {
         /* These props, at least in ActionItem, are read-only, so must be set recursively instead. */
-        if(typeof value === "object"){
+        if (typeof value === "object") {
             const keys: string[] = Object.keys(value);
-            if(keys.length === 0) return;
+            if (keys.length === 0) return;
             console.log(`[PropOp] got platform-specific prop of type object`);
             keys.forEach((key: string) => {
                 const subValue: any = value[key];
-                if(name === "ios"){
+                if (name === "ios") {
                     console.log(`[PropOp] Setting ${instance}.ios.${key} = ${subValue}`);
                     instance.ios[key] = subValue;
-                } else if(name === "android"){
+                } else if (name === "android") {
                     console.log(`[PropOp] Setting ${instance}.android.${key} = ${subValue}`);
                     instance.android[key] = subValue;
                 }

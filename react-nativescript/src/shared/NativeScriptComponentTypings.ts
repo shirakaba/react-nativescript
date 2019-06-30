@@ -270,12 +270,18 @@ export type EditableTextBaseProps = TextBaseProps &
     >;
 
 export type TextViewProps = EditableTextBaseProps; // & Pick<TextView, "android" | "ios">; /* no props to pick */
-export type TextFieldProps = EditableTextBaseProps & Pick<TextField, 
-// "android" | "ios" | 
-"secure">;
-export type LabelProps = TextBaseProps & Pick<Label,
-// "android" | "ios" |
-"textWrap">;
+export type TextFieldProps = EditableTextBaseProps &
+    Pick<
+        TextField,
+        // "android" | "ios" |
+        "secure"
+    >;
+export type LabelProps = TextBaseProps &
+    Pick<
+        Label,
+        // "android" | "ios" |
+        "textWrap"
+    >;
 
 export type ContainerViewProps = ViewProps & Pick<ContainerView, "iosOverflowSafeArea">;
 
@@ -335,7 +341,15 @@ export type HtmlViewProps = ViewProps & Pick<HtmlView, "html">;
 
 export type WebViewProps = ViewProps & Pick<WebView, "src" | "canGoBack" | "canGoForward">;
 
-export type ActionBarProps = LayoutBaseProps & Pick<ActionBar, "title" | "titleView" | "navigationButton" | "flat" | "android" /* get-only, but Host Config will drill inside as necessary */ >;
+export type ActionBarProps = LayoutBaseProps &
+    Pick<
+        ActionBar,
+        | "title"
+        | "titleView"
+        | "navigationButton"
+        | "flat"
+        | "android" /* get-only, but Host Config will drill inside as necessary */
+    >;
 
 export type ButtonProps = TextBaseProps & Pick<Button, "textWrap">;
 

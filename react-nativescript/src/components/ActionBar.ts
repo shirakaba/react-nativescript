@@ -52,7 +52,7 @@ class _ActionBar<
                 ...rest,
                 ref: forwardedRef || this.myRef,
             },
-            children, // Any child that's not an ActionItem or NavigationButton will be set to titleView.
+            children // Any child that's not an ActionItem or NavigationButton will be set to titleView.
         );
     }
 }

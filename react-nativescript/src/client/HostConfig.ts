@@ -442,7 +442,7 @@ const hostConfig: ReactReconciler.HostConfig<
             console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
             parentInstance.addChild(child as View);
         } else if (parentInstance instanceof ActionBar) {
-            if(child instanceof ActionItem){
+            if (child instanceof ActionItem) {
                 if (child instanceof NavigationButton) {
                     console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
                     parentInstance.navigationButton = child;
@@ -705,7 +705,7 @@ const hostConfig: ReactReconciler.HostConfig<
             console.log(`[removeChild()] Forbidden in NativeScript, so no-op: ${parent} x ${child}`);
             return;
         } else if (parent instanceof ActionBar) {
-            if(child instanceof ActionItem){
+            if (child instanceof ActionItem) {
                 if (child instanceof NavigationButton) {
                     console.log(`[removeChild()] (instance of NavigationButton) ${parent} x ${child}`);
                     parent.navigationButton = null; // Anything falsy should work.

@@ -43,7 +43,7 @@ export class _ActionItem<
                 ...rest,
                 ref: forwardedRef || this.myRef,
             },
-            children,
+            children
         );
     }
 }
