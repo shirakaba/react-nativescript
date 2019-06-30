@@ -7,6 +7,7 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
+    onTextChange?: (text: string) => void;
     onSubmit?: (args: EventData) => void;
     onClose?: (args: EventData) => void;
 }
@@ -23,6 +24,33 @@ export class _SearchBar<
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSearchBar>()
     // };
+
+    private readonly onTextChange = (args: EventData) => {
+        const text: string = (<NativeScriptSearchBar>args.object).text;
+        this.props.onTextChange && this.props.onTextChange(text);
+    };
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.on("textChange", this.onTextChange);
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.off("textChange", this.onTextChange);
+    }
 
     /**
      * @param attach true: attach; false: detach; null: update
