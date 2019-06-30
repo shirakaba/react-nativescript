@@ -29,7 +29,7 @@ export class _ActionItem<
     S extends {},
     E extends NativeScriptActionItem
 > extends RCTViewBase<P, S, E> {
-    protected readonly container = new StackLayout();
+    protected container: StackLayout|null = null;
 
     componentDidMount() {
         super.componentDidMount();
@@ -77,6 +77,12 @@ export class _ActionItem<
             );
         }
 
+        let portal: React.ReactPortal|null = null;
+        if(children){
+            this.container = this.container || new StackLayout();
+            portal = ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`);
+        }
+
         const ios: any = {};
         if(iosPosition){
             ios.position = iosPosition;
@@ -90,12 +96,11 @@ export class _ActionItem<
             {
                 ...rest,
                 ios,
-                // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
-                actionView: this.container,
+                ...(this.container ? { actionView: this.container } : {}),
                 ref: forwardedRef || this.myRef,
             },
-            ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`)
-        );
+            portal,
+        ) as React.ReactNode;
     }
 }
 
