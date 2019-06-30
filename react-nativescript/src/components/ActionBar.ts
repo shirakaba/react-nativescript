@@ -20,7 +20,7 @@ class _ActionBar<
     S extends {},
     E extends NativeScriptActionBar = NativeScriptActionBar
 > extends RCTView<P, S, E> {
-    private titleViewContainer: StackLayout|null = null;
+    private titleViewContainer: StackLayout | null = null;
     render() {
         const {
             forwardedRef,
@@ -47,10 +47,10 @@ class _ActionBar<
             ...rest
         } = this.props;
 
-        let portal: null|React.ReactPortal = null;
+        let portal: null | React.ReactPortal = null;
 
         if (children) {
-            if(this.titleViewContainer === null){
+            if (this.titleViewContainer === null) {
                 this.titleViewContainer = new StackLayout();
             }
             console.log(`[ActionBar] rendering titleView into portal`);
@@ -68,7 +68,7 @@ class _ActionBar<
                 ref: forwardedRef || this.myRef,
             },
             portal, // Any child that's not an ActionItem or NavigationButton will be set to titleView.
-            children, // We accept ActionItem and NavigationButton as children.
+            children // We accept ActionItem and NavigationButton as children.
         );
     }
 }
