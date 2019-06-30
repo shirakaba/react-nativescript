@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { DockLayoutTest, HMRTest } from './layout';
-import { FormattedStringLabel } from "./testComponents";
+import { FormattedStringLabel, WebViewTest, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
 import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
 import { NestedHub, NestedModalTest, FramedHubTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";

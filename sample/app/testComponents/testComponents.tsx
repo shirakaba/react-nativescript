@@ -1,8 +1,8 @@
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
+import { PercentLength, FormattedString, EventData } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -21,6 +21,8 @@ import {
     $TabView,
     $TabViewItem,
     $Page,
+    $WebView,
+    $SearchBar,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -42,6 +44,73 @@ export class TextViewTest extends React.Component<{ toWhat: string }, {}> {
     render(){
         // return (<ReactTextView text={`Hello ${this.props.toWhat}`}/>);
         return (<$TextView>{`Hello ${this.props.toWhat}`}</$TextView>);
+    }
+}
+
+export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject<any> }, { src: string, searchText: string }> {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            searchText: "",
+            src: "https://www.birchlabs.co.uk",
+        };
+    }
+
+    render(){
+        return (
+            <$StackLayout ref={this.props.forwardedRef}>
+                <$SearchBar
+                    text={this.state.searchText}
+                    /* componentDidMount: NativeScript wrapper views mounted. Native views not yet initialised.
+                     * onLoaded: wrappers' native views initialised. Happens AFTER componentDidMount. */
+                    onLoaded={(args: EventData) => {
+                        console.log(`[ONLOADED] Searchbar`);
+                        const sb: SearchBar = args.object as SearchBar;
+                        (sb.ios as UISearchBar).autocorrectionType = UITextAutocorrectionType.No;
+                        (sb.ios as UISearchBar).autocapitalizationType = UITextAutocapitalizationType.None;
+                    }}
+                    onTextChange={(text: string) => {
+                        console.log(`[onTextChange]`, text);
+                        this.setState({ searchText: text });
+                    }}
+                    onSubmit={(args: EventData) => {
+                        const text: string = (args.object as SearchBar).text;
+                        console.log(`[onSubmit]`, text);
+                        this.setState({ searchText: text, src: text });
+                    }}
+                />
+
+                <$WebView
+                    height={{ value: 100, unit: "%" }}
+                    width={{ value: 100, unit: "%" }}
+                    src={this.state.src}
+                    onLoaded={(args: EventData) => {
+                        console.log(`[ONLOADED] WebView`);
+                        const wv: WebView = args.object as WebView;
+                        (wv.ios as WKWebView).configuration.userContentController.addUserScript(
+                            WKUserScript.alloc().initWithSourceInjectionTimeForMainFrameOnly(
+                                `
+                                const style = document.createElement('style');
+                                style.type = 'text/css';
+                                style.innerHTML = "@keyframes infinite-rotate {  0% { -webkit-transform: rotate(0deg); } 100% { -webkit-transform: rotate(360deg); }} .infiniteRotateAnim { background-color: green; animation: infinite-rotate 2s linear infinite; }";
+                                document.getElementsByTagName('head')[0].appendChild(style);
+
+                                document.body.classList.add("infiniteRotateAnim");
+                                `,
+                                WKUserScriptInjectionTime.AtDocumentEnd,
+                                false,
+                            )
+                        );
+                        (wv.ios as WKWebView).reload();
+                    }}
+                    onUrlChange={(src: string) => {
+                        console.log(`[onUrlChange]`, src);
+                        this.setState({ src });
+                    }}
+                />
+            </$StackLayout>
+        );
     }
 }
 
