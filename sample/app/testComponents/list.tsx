@@ -229,8 +229,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
             height: { value: 64, unit: "px" as "px" },
         },
         bigThumb: {
-            width: { value: 128, unit: "px" as "px" },
-            height: { value: 128, unit: "px" as "px" },
+            width: { value: 64, unit: "px" as "px" },
+            height: { value: 64, unit: "px" as "px" },
         },
         text: {
             flexGrow: 1
@@ -280,7 +280,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             style={this.styles.thumb}
                                             stretch={"aspectFill"}
                                         />
-                                        <$Label
+                                        <$TextView
                                             row={0}
                                             col={1}
                                             // key={container._domId}
@@ -289,7 +289,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             paddingRight={8}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </$Label>
+                                        </$TextView>
                                     </$GridLayout>
                                 );
                             }
@@ -310,7 +310,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                         rows={[new ItemSpec(1, "star")]}
                                         columns={[new ItemSpec(1, "star"), new ItemSpec(64, "pixel")]}
                                     >
-                                        <$Label
+                                        <$TextView
                                             paddingLeft={8}
                                             row={0}
                                             col={0}
@@ -319,7 +319,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             fontSize={12}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </$Label>
+                                        </$TextView>
                                         <$Image
                                             row={0}
                                             col={1}
