@@ -4,8 +4,10 @@ import { WebViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptCo
 import { WebView as NativeScriptWebView, LoadEventData } from "tns-core-modules/ui/web-view/web-view";
 import { ViewComponentProps, RCTView } from "./View";
 import { updateListener } from "../client/EventHandling";
+import { EventData } from "tns-core-modules/data/observable/observable";
 
 interface Props {
+    onUrlChange?: (url: string) => void;
     onLoadFinished?: (args: LoadEventData) => void;
     onLoadStarted?: (args: LoadEventData) => void;
 }
@@ -23,6 +25,33 @@ class _WebView<
     S extends {},
     E extends NativeScriptWebView = NativeScriptWebView
 > extends RCTView<P, S, E> {
+    private readonly onUrlChange = (args: EventData) => {
+        const url: string = (<NativeScriptWebView>args.object).src;
+        this.props.onUrlChange && this.props.onUrlChange(url);
+    };
+
+    componentDidMount() {
+        super.componentDidMount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.on("urlChange", this.onUrlChange);
+    }
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+            return;
+        }
+        node.off("urlChange", this.onUrlChange);
+    }
+
     /**
      *
      * @param attach true: attach; false: detach; null: update
