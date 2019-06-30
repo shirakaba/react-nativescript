@@ -34,27 +34,15 @@ export class _NavigationButton<
 
             onPropertyChange,
 
-            /* Neither of these are applicable for NavigationButton */
-            iosPosition,
-            iosSystemIcon,
-
             children,
             // actionView, /* We disallow this at the typings level. */
             ...rest
         } = this.props;
 
-        // let portal: React.ReactPortal|null = null;
-        // if(children){
-        //     this.container = this.container || new StackLayout();
-        //     portal = ReactNativeScript.createPortal(children, this.container, `Portal(NavigationButton(${this.container._domId}))`);
-        // }
-
         return React.createElement(
             "navigationButton",
             {
                 ...rest,
-                ios: {},
-                // ...(this.container ? { actionView: this.container } : {}),
                 ref: forwardedRef || this.myRef,
             },
             children

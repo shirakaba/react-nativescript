@@ -6,10 +6,7 @@ import { StackLayout } from "../client/ElementRegistry";
 import { ActionItem as NativeScriptActionItem } from "tns-core-modules/ui/action-bar/action-bar";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
-interface Props {
-    iosPosition?: "left"|"right",
-    iosSystemIcon?: number,
-}
+interface Props {}
 
 export type ActionItemComponentProps<
     E extends NativeScriptActionItem = NativeScriptActionItem
@@ -35,37 +32,17 @@ export class _ActionItem<
 
             onPropertyChange,
 
-            iosPosition,
-            iosSystemIcon,
-
             children,
             // actionView, /* We disallow this at the typings level. */
             ...rest
         } = this.props;
 
-        // let portal: React.ReactPortal|null = null;
-        // if(children){
-        //     this.container = this.container || new StackLayout();
-        //     portal = ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`);
-        // }
-
-        const ios: any = {};
-        if(iosPosition){
-            ios.position = iosPosition;
-        }
-        if(iosSystemIcon){
-            ios.systemIcon = iosSystemIcon;
-        }
-
         return React.createElement(
             "actionItem",
             {
                 ...rest,
-                ios,
-                // ...(this.container ? { actionView: this.container } : {}),
                 ref: forwardedRef || this.myRef,
             },
-            // portal,
             children,
         );
     }

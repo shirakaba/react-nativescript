@@ -6,6 +6,7 @@ import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
 import * as console from "../shared/Logger";
 
@@ -181,7 +182,7 @@ export function setValueForProperty(
         // } else if(name === "view" && instance instanceof TabViewItem){
         //     // console.log(`[setValueForProperty] SETTING .view on ${instance}. Value:`, value);
         //     (instance as TabViewItem).view = value;
-    } else if (name === "ios" || name === "android"){
+    } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)){
         /* These props, at least in ActionItem, are read-only, so must be set recursively instead. */
         if(typeof value === "object"){
             const keys: string[] = Object.keys(value);
