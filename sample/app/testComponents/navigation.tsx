@@ -234,7 +234,7 @@ export class PageWithActionBar extends React.Component<
     }
 }
 
-export class ActionBarMixedChildrenTest extends React.Component<
+export class PageWithComplexActionBarTest extends React.Component<
     {
         actionBarTitle?: string,
         forwardedRef: React.RefObject<Page>,
@@ -247,25 +247,31 @@ export class ActionBarMixedChildrenTest extends React.Component<
         return (
             <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
                 <$ActionBar>
+                    {/* The Switch will become the titleView */}
                     <$Switch/>
+                    {/* The ActionItem will be added to the actionItems array */}
                     <$ActionItem text={"AI"} ios={{ position: "right", systemIcon: 4 }}></$ActionItem>
+                    {/* The NavigationButton will set as the NavigationButton (but won't be visible because there's no backwards navigation to do from here). */}
                     <$NavigationButton text={"NB"}></$NavigationButton>
                 </$ActionBar>
+                {children}
             </$Page>
         );
     }
 }
 
-export class FramedActionBarMixedChildrenTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
+export class FramedPageWithComplexActionBarTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
     private readonly pageWithActionBarRef = React.createRef<Page>();
 
     render(){
         const { forwardedRef, children, ...rest } = this.props;
 
         return (
-            <FramedPageTest forwardedRef={forwardedRef} childPageRef={this.pageWithActionBarRef} {...rest} >
-                <ActionBarMixedChildrenTest forwardedRef={this.pageWithActionBarRef}/>
-            </FramedPageTest>
+            <FramedChildTest forwardedRef={forwardedRef} childPageRef={this.pageWithActionBarRef} {...rest} >
+                <PageWithComplexActionBarTest forwardedRef={this.pageWithActionBarRef}>
+                    {children}
+                </PageWithComplexActionBarTest>
+            </FramedChildTest>
         );
     }
 }
@@ -473,7 +479,7 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<F
     }
 }
 
-export class FramedPageTest extends React.Component<
+export class FramedChildTest extends React.Component<
     {
         forwardedRef: React.RefObject<Frame>,
         childPageRef: React.RefObject<Page>,
@@ -484,22 +490,22 @@ export class FramedPageTest extends React.Component<
     componentDidMount(){
         const node: Frame|null = this.props.forwardedRef.current;
         if(!node){
-            console.warn(`[FramedPageTest] React ref to NativeScript View lost, so unable to update event listeners.`);
+            console.warn(`[FramedChildTest] React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
 
-        console.log(`[FramedPageTest] componentDidMount; shall navigate to page within.`);
+        console.log(`[FramedChildTest] componentDidMount; shall navigate to page within.`);
         node.navigate({
             create: () => {
                 const childPage: Page|undefined = this.props.childPageRef.current
-                console.log(`[FramedPageTest] create(); shall return ref to page: ${childPage}`);
+                console.log(`[FramedChildTest] create(); shall return ref to page: ${childPage}`);
                 return childPage;
             }
         });
     }
 
     componentWillUnmount(){
-        console.log(`[FramedPageTest] componentWillUnmount`);
+        console.log(`[FramedChildTest] componentWillUnmount`);
     }
 
     render(){
@@ -511,7 +517,7 @@ export class FramedPageTest extends React.Component<
                             this.props.children
                         ),
                         null,
-                        `Portal('Navigation Hub')`
+                        `Portal('FramedChild')`
                     )
                 )}
             </$Frame>
@@ -526,9 +532,9 @@ export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObje
         const { forwardedRef, children, ...rest } = this.props;
 
         return (
-            <FramedPageTest forwardedRef={forwardedRef} childPageRef={this.hubTestPageRef} {...rest} >
+            <FramedChildTest forwardedRef={forwardedRef} childPageRef={this.hubTestPageRef} {...rest} >
                 <HubTest forwardedRef={this.hubTestPageRef}/>
-            </FramedPageTest>
+            </FramedChildTest>
         );
     }
 }
