@@ -6,7 +6,7 @@ import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel, WebViewTest, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
 import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
-import { NestedHub, NestedModalTest, FramedHubTest, FramedActionBarMixedChildrenTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest, ActionBarMixedChildrenTest } from "./navigation";
+import { NestedHub, NestedModalTest, FramedHubTest, FramedPageWithComplexActionBarTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { $ContentView, $StackLayout, $Label, $FlexboxLayout, $Button } from 'react-nativescript';
@@ -39,6 +39,13 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // const app = () => <FramedHubTest forwardedRef={rootRef}/>
 // const app = () => <WebViewTest forwardedRef={rootRef}/>
 // const app = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
-const app = () => <FramedActionBarMixedChildrenTest forwardedRef={rootRef}></FramedActionBarMixedChildrenTest>
+
+const app = () => (
+    <FramedPageWithComplexActionBarTest forwardedRef={rootRef}>
+        <$StackLayout backgroundColor={"orange"}>
+            <$Label>Hello, World!</$Label>
+        </$StackLayout>
+    </FramedPageWithComplexActionBarTest>
+);
 
 export default hot(app);
