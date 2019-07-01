@@ -2,7 +2,7 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
 import { NavigationButtonProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
-import { ActionItem } from "../client/ElementRegistry";
+import { ActionItem, StackLayout } from "../client/ElementRegistry";
 import { NavigationButton as NativeScriptNavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActionItemComponentProps, _ActionItem } from "./ActionItem";
 
@@ -39,25 +39,13 @@ export class _NavigationButton<
             ...rest
         } = this.props;
 
-        if (Array.isArray(children) || typeof children === "string" || typeof children === "number") {
-            throw new Error(
-                `'children' property passed into NavigationButton must be a single child node, which must not be a number or string`
-            );
-        }
-
         return React.createElement(
             "navigationButton",
             {
                 ...rest,
-                // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
-                actionView: this.container,
                 ref: forwardedRef || this.myRef,
             },
-            ReactNativeScript.createPortal(
-                children,
-                this.container,
-                `Portal(NavigationButton(${this.container._domId}))`
-            )
+            children
         );
     }
 }

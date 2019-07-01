@@ -6,6 +6,7 @@ import { View } from "tns-core-modules/ui/core/view/view";
 import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
 import * as console from "../shared/Logger";
 
@@ -181,6 +182,27 @@ export function setValueForProperty(
         // } else if(name === "view" && instance instanceof TabViewItem){
         //     // console.log(`[setValueForProperty] SETTING .view on ${instance}. Value:`, value);
         //     (instance as TabViewItem).view = value;
+    } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)) {
+        /* These props, at least in ActionItem, are read-only, so must be set recursively instead. */
+        if (typeof value === "object") {
+            const keys: string[] = Object.keys(value);
+            if (keys.length === 0) return;
+            console.log(`[PropOp] got platform-specific prop of type object`);
+            keys.forEach((key: string) => {
+                const subValue: any = value[key];
+                if (name === "ios") {
+                    console.log(`[PropOp] Setting ${instance}.ios.${key} = ${subValue}`);
+                    instance.ios[key] = subValue;
+                } else if (name === "android") {
+                    console.log(`[PropOp] Setting ${instance}.android.${key} = ${subValue}`);
+                    instance.android[key] = subValue;
+                }
+            });
+        } else {
+            console.warn(`[PropOp] got platform-specific non-object prop`);
+            /* Some poor soul has probably set an ios|android prop with boolean value or something */
+            instance.set(name, value);
+        }
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */

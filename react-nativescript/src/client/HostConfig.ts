@@ -455,6 +455,9 @@ const hostConfig: ReactReconciler.HostConfig<
                 console.log(`[appendChild()] (not ActionItem; assumed to be titleView) ${parentInstance} > ${child}`);
                 parentInstance.titleView = child as View;
             }
+        } else if (parentInstance instanceof ActionItem) {
+            // Same for both ActionItem and NavigationButton.
+            parentInstance.actionView = child as View;
         } else if (parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
             const newItems = [...(parentInstance.items || []), child];
@@ -715,6 +718,9 @@ const hostConfig: ReactReconciler.HostConfig<
                 console.log(`[removeChild()] (not ActionItem; assumed to be titleView) ${parent} x ${child}`);
                 parent.titleView = null;
             }
+        } else if (parent instanceof ActionItem) {
+            // Same for both ActionItem and NavigationButton.
+            parent.actionView = null;
         } else if (parent instanceof SegmentedBar && child instanceof SegmentedBarItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);
             if (!parent.items) {

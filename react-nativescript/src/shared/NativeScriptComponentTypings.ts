@@ -122,8 +122,8 @@ export type ViewBaseProps = ObservableProps &
 export type ViewProps = ViewBaseProps &
     Pick<
         View,
-        | "android"
-        | "ios"
+        // | "android"
+        // | "ios"
         | "bindingContext"
         | "borderColor"
         | "borderTopColor"
@@ -204,8 +204,8 @@ export type TabViewProps = ViewProps &
         | "tabBackgroundColor"
         | "selectedTabTextColor"
         | "androidSelectedTabHighlightColor"
-        | "android"
-        | "ios"
+        // | "android"
+        // | "ios"
         | "iosIconRenderingMode"
         | "androidOffscreenTabLimit"
         | "androidTabsPosition"
@@ -225,9 +225,9 @@ export type TabViewItemProps = ViewBaseProps &
 export type ActionItemProps = ViewBaseProps &
     Pick<
         ActionItem,
-        /* get-only */
-        // | "ios"
-        // | "android"
+        /* android/ios are get-only, but Host Config will drill inside as necessary */
+        | "ios"
+        | "android"
         | "text"
         | "icon"
         // "actionView"| /* We provide a StackLayout and implicitly map children into it */
@@ -269,9 +269,19 @@ export type EditableTextBaseProps = TextBaseProps &
         | "maxLength"
     >;
 
-export type TextViewProps = EditableTextBaseProps & Pick<TextView, "android" | "ios">;
-export type TextFieldProps = EditableTextBaseProps & Pick<TextField, "android" | "ios" | "secure">;
-export type LabelProps = TextBaseProps & Pick<Label, "android" | "ios" | "textWrap">;
+export type TextViewProps = EditableTextBaseProps; // & Pick<TextView, "android" | "ios">; /* no props to pick */
+export type TextFieldProps = EditableTextBaseProps &
+    Pick<
+        TextField,
+        // "android" | "ios" |
+        "secure"
+    >;
+export type LabelProps = TextBaseProps &
+    Pick<
+        Label,
+        // "android" | "ios" |
+        "textWrap"
+    >;
 
 export type ContainerViewProps = ViewProps & Pick<ContainerView, "iosOverflowSafeArea">;
 
@@ -315,8 +325,8 @@ export type AbsoluteLayoutProps = LayoutBaseProps;
 export type ListViewProps = ViewProps &
     Pick<
         ListView,
-        | "android"
-        | "ios"
+        // | "android"
+        // | "ios"
         | "items"
         | "itemTemplate"
         | "itemTemplates"
@@ -327,11 +337,19 @@ export type ListViewProps = ViewProps &
         | "iosEstimatedRowHeight"
     >;
 
-export type HtmlViewProps = ViewProps & Pick<HtmlView, "android" | "ios" | "html">;
+export type HtmlViewProps = ViewProps & Pick<HtmlView, "html">;
 
-export type WebViewProps = ViewProps & Pick<WebView, "android" | "ios" | "src" | "canGoBack" | "canGoForward">;
+export type WebViewProps = ViewProps & Pick<WebView, "src" | "canGoBack" | "canGoForward">;
 
-export type ActionBarProps = LayoutBaseProps & Pick<ActionBar, "title" | "titleView" | "navigationButton" | "flat">;
+export type ActionBarProps = LayoutBaseProps &
+    Pick<
+        ActionBar,
+        | "title"
+        | "titleView"
+        | "navigationButton"
+        | "flat"
+        | "android" /* get-only, but Host Config will drill inside as necessary */
+    >;
 
 export type ButtonProps = TextBaseProps & Pick<Button, "textWrap">;
 

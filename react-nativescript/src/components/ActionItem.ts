@@ -26,8 +26,6 @@ export class _ActionItem<
     S extends {},
     E extends NativeScriptActionItem
 > extends RCTViewBase<P, S, E> {
-    protected readonly container = new StackLayout();
-
     render() {
         const {
             forwardedRef,
@@ -39,21 +37,13 @@ export class _ActionItem<
             ...rest
         } = this.props;
 
-        if (Array.isArray(children) || typeof children === "string" || typeof children === "number") {
-            throw new Error(
-                `'children' property passed into ActionItem must be a single child node, which must not be a number or string`
-            );
-        }
-
         return React.createElement(
             "actionItem",
             {
                 ...rest,
-                // TODO: assess whether this is the correct approach; just skim-reading TabViewItem, really.
-                actionView: this.container,
                 ref: forwardedRef || this.myRef,
             },
-            ReactNativeScript.createPortal(children, this.container, `Portal(ActionItem(${this.container._domId}))`)
+            children
         );
     }
 }
