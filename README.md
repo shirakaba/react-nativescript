@@ -255,6 +255,17 @@ React NativeScript shares most of the good parts of React Native, but above all 
         </tr>
         <tr>
             <td align="center" valign="middle">
+                <strong>Bundler</strong>
+            </td>
+            <td align="center" valign="middle">
+                <p>Metro</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Webpack</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
                 <strong>Codebase</strong>
             </td>
             <td align="center" valign="middle">
