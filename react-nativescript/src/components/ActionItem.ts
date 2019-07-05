@@ -15,8 +15,6 @@ export type ActionItemComponentProps<
 /**
  * A React wrapper around the NativeScript ActionItem component.
  *
- * Renders the child passed into it into a StackLayout, via a React Portal.
- *
  * See: ui/action-bar/action-bar
  * See: https://docs.nativescript.org/ui/action-bar#action-items
  * See: https://github.com/NativeScript/nativescript-sdk-examples-js/tree/master/app/ns-ui-widgets-category/action-bar/items-actionbar
