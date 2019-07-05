@@ -418,15 +418,9 @@ const hostConfig: ReactReconciler.HostConfig<
             console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
             return;
         }
-        if (child instanceof ActionBar) {
-            console.log(`[appendChild()] (child is ActionBar) ${parentInstance} > ${child}`);
-            if (parentInstance instanceof Page) {
-                parentInstance.actionBar = child;
-            } else {
-                if (parentInstance.page) {
-                    parentInstance.page.actionBar = child;
-                }
-            }
+        if (child instanceof ActionBar && parentInstance instanceof Page) {
+            console.log(`[appendChild()] (Page receiving ActionBar) ${parentInstance} > ${child}`);
+            parentInstance.actionBar = child;
             return;
         }
 
@@ -702,7 +696,7 @@ const hostConfig: ReactReconciler.HostConfig<
             console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
             /*******************************/
         } else if (child instanceof ActionBar && parent instanceof Page) {
-            console.log(`[removeChild()] Forbidden in NativeScript, so no-op: ${parent} x ${child}`);
+            console.log(`[removeChild()] Detaching ActionBar from Page forbidden in NativeScript, so no-op: ${parent} x ${child}`);
             return;
         } else if (parent instanceof ActionBar) {
             if (child instanceof ActionItem) {
