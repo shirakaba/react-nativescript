@@ -735,7 +735,7 @@ const hostConfig: ReactReconciler.HostConfig<
                 parent.items = [];
             }
             parent.items = parent.items.filter(i => i !== child);
-        } else if (parentInstance instanceof TabViewItem) {
+        } else if (parent instanceof TabViewItem) {
             console.log(
                 `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
             );
