@@ -413,20 +413,14 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`
             );
             return;
-        }
-        if (child instanceof Page) {
-            console.warn(`[appendChild()] Page cannot be appended as a child. Not appending to ${parentInstance}.`);
+        } else if (child instanceof Page) {
+            console.warn(`[appendChild()] Page cannot be appended as a true child; no-op for: ${parentInstance} > ${child}`);
             return;
-        }
-        if (child instanceof ActionBar && parentInstance instanceof Page) {
+        } else if (child instanceof ActionBar && parentInstance instanceof Page) {
             console.log(`[appendChild()] (Page receiving ActionBar) ${parentInstance} > ${child}`);
             parentInstance.actionBar = child;
             return;
-        }
-
-        // console.log(`[appendChild()] child's page was: `, child.page);
-        // console.log(`[appendChild()] parent's page was: `, parentInstance.page);
-        if (isASingleChildContainer(parentInstance)) {
+        } else if (isASingleChildContainer(parentInstance)) {
             console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
              * https://stackoverflow.com/a/55351086/5951226 */
@@ -672,6 +666,9 @@ const hostConfig: ReactReconciler.HostConfig<
             console.warn(
                 `[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`
             );
+            return;
+        } else if (child instanceof Page) {
+            console.warn(`[remove()] Page was never a real child in the first place, so no-op. ${parent} x ${child}`);
             return;
         } else if (isASingleChildContainer(parent)) {
             console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
