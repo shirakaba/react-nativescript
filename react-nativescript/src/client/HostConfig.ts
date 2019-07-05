@@ -457,11 +457,17 @@ const hostConfig: ReactReconciler.HostConfig<
             const newItems = [...(parentInstance.items || []), child];
             parentInstance.items = newItems;
         } else if (parentInstance instanceof TabView && child instanceof TabViewItem) {
-            // console.log(`[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
+            console.log(
+                `[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where the child's view was ${child.view} and the parent's items were:`,
+                parentInstance.items
+            );
             /* We must go through the setter rather than simply mutate the existing array. */
             const newItems = [...(parentInstance.items || []), child];
             parentInstance.items = newItems;
             // console.log(`[appendChild()] parentInstance.items now updated to:`, parentInstance.items);
+        } else if (parentInstance instanceof TabViewItem) {
+            console.log(`[appendChild()] (instance of TabViewItem) ${parentInstance} > ${child}`);
+            parentInstance.view = child as View;
         } else {
             console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
@@ -696,7 +702,9 @@ const hostConfig: ReactReconciler.HostConfig<
             console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
             /*******************************/
         } else if (child instanceof ActionBar && parent instanceof Page) {
-            console.log(`[removeChild()] Detaching ActionBar from Page forbidden in NativeScript, so no-op: ${parent} x ${child}`);
+            console.log(
+                `[removeChild()] Detaching ActionBar from Page forbidden in NativeScript Core, so no-op: ${parent} x ${child}`
+            );
             return;
         } else if (parent instanceof ActionBar) {
             if (child instanceof ActionItem) {
@@ -727,6 +735,11 @@ const hostConfig: ReactReconciler.HostConfig<
                 parent.items = [];
             }
             parent.items = parent.items.filter(i => i !== child);
+        } else if (parentInstance instanceof TabViewItem) {
+            console.log(
+                `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
+            );
+            return;
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);

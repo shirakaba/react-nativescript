@@ -32,8 +32,6 @@ export class _TabViewItem<
     S extends {},
     E extends NativeScriptTabViewItem
 > extends RCTViewBase<P, S, E> {
-    private readonly container = new StackLayout();
-
     render() {
         const {
             forwardedRef,
@@ -46,7 +44,7 @@ export class _TabViewItem<
             ...rest
         } = this.props;
 
-        if (Array.isArray(children) || typeof children === "string" || typeof children === "number") {
+        if (React.Children.count(children) > 1 || typeof children === "string" || typeof children === "number") {
             throw new Error(
                 `'children' property passed into TabViewItem must be a single child node, which must not be a number or string`
             );
@@ -56,10 +54,9 @@ export class _TabViewItem<
             "tabViewItem",
             {
                 ...rest,
-                view: this.container,
                 ref: forwardedRef || this.myRef,
             },
-            ReactNativeScript.createPortal(children, this.container, identifier)
+            children
         );
     }
 }
