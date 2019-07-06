@@ -414,7 +414,9 @@ const hostConfig: ReactReconciler.HostConfig<
             );
             return;
         } else if (child instanceof Page) {
-            console.warn(`[appendChild()] Page cannot be appended as a true child; no-op for: ${parentInstance} > ${child}`);
+            console.warn(
+                `[appendChild()] Page cannot be appended as a true child; no-op for: ${parentInstance} > ${child}`
+            );
             return;
         } else if (child instanceof ActionBar && parentInstance instanceof Page) {
             console.log(`[appendChild()] (Page receiving ActionBar) ${parentInstance} > ${child}`);

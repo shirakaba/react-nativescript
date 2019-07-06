@@ -10,8 +10,6 @@ import {
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
 interface Props {
-    identifier: string;
-
     // view: View
 }
 
@@ -37,7 +35,6 @@ export class _TabViewItem<
             onPropertyChange,
 
             children,
-            identifier,
             // view, /* We disallow this at the typings level. */
             ...rest
         } = this.props;

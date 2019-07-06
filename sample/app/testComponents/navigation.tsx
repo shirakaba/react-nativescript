@@ -156,7 +156,6 @@ export class TabViewTest extends React.Component<{}, {}> {
                 $TabViewItem,
                 {
                     title: "Dock",
-                    identifier: `Item 0`,
                 },
                 React.createElement(
                     DockLayoutTest,
@@ -169,7 +168,6 @@ export class TabViewTest extends React.Component<{}, {}> {
                 $TabViewItem,
                 {
                     title: "Flexbox",
-                    identifier: `Item 1`,
                 },
                 React.createElement(
                     FlexboxLayoutTest,
@@ -182,7 +180,6 @@ export class TabViewTest extends React.Component<{}, {}> {
             //     ReactTabViewItem,
             //     {
             //         title: "Clock",
-            //         identifier: `Item 2`,
             //     },
             //     React.createElement(
             //         Clock,
@@ -195,7 +192,6 @@ export class TabViewTest extends React.Component<{}, {}> {
             //     ReactTabViewItem,
             //     {
             //         title: "Marquee",
-            //         identifier: `Item 3`,
             //     },
             //     React.createElement(
             //         GameLoopComponent,
