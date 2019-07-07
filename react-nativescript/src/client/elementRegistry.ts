@@ -54,6 +54,7 @@ import * as console from "../shared/Logger";
 
 // https://stackoverflow.com/questions/36886082/abstract-constructor-type-in-typescript
 export type ConcreteViewConstructor = new (...args: any[]) => View | ViewBase;
+export type ConcreteArglessViewConstructor = new () => View | ViewBase;
 
 export type TNSElements = keyof typeof elementMap;
 // const el: TNSElements =  "h9";
@@ -114,6 +115,16 @@ export const elementMap = {
     // "view": View,
     page: Page, // √
 };
+
+export function register(key: string, viewBaseConstructor: ConcreteArglessViewConstructor): void {
+    const incumbent = elementMap[key];
+    if (incumbent) {
+        // No-op; registration may simply happen as a side-effect each time the module is imported.
+        return;
+    } else {
+        elementMap[key] = viewBaseConstructor;
+    }
+}
 
 export {
     AbsoluteLayout,
