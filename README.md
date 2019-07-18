@@ -289,9 +289,23 @@ React NativeScript shares most of the good parts of React Native, but above all 
     </tbody>
 </table>
 
-### API compatibility with React Native 🏚
+## FAQ
 
-Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible. See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
+**How far along is it?**
+
+It's feature-equivalent with NativeScript Core, but lacking the RAD (Rapid Application Development) components like RadSideDrawer. Otherwise, everything should be possible. But you'll have to bear with me while I write the documentation (there is none yet)!
+
+**What about plugins?**
+
+Only one UI plugin has been adapted for use with React NativeScript so far (`nativescript-svg`), but I haven't formally published it yet. So it's totally possible, but there are other priorities to get on with first. But any non-UI plugins will work just fine!
+
+**Can this consume React Native projects?**
+
+No, but it *could* with a lot of hard work. Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible – it would be a project on exactly the same scale as [React Native Web](https://github.com/necolas/react-native-web). See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
+
+**Can this consume React Native native modules?**
+
+Certainly not UI-based native modules. But all flavours of NativeScript can consume native code, so it can probably consume React Native native modules, though may take a small bit of refactoring 🤔
 
 ## Roadmap 🛣
 
