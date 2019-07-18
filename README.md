@@ -4,6 +4,7 @@
 A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *very* under construction; expect swathing refactors!
 
 <p align="center">
+    <a href="https://badge.fury.io/js/react-nativescript"><img src="https://badge.fury.io/js/react-nativescript.svg" alt="npm version" height="18"></a>
     <a href="https://github.com/shirakaba/nside">
         <img src="http://githubbadges.com/star.svg?user=shirakaba&repo=react-nativescript&style=flat"/>
     </a>
@@ -19,7 +20,6 @@ A React renderer for NativeScript, allowing you to write a NativeScript app usin
     <a href="https://twitter.com/intent/follow?screen_name=LinguaBrowse">
         <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter"/>
     </a>
-    <a href="https://badge.fury.io/js/react-nativescript"><img src="https://badge.fury.io/js/react-nativescript.svg" alt="npm version" height="18"></a>
 </p>
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
