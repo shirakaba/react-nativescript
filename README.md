@@ -1,7 +1,7 @@
 # React NativeScript
 ## About
 
-React plugin for NativeScript (*very* under construction; expect swathing refactors)
+A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *very* under construction; expect swathing refactors!
 
 <p align="center">
     <a href="https://github.com/shirakaba/nside">
@@ -19,13 +19,14 @@ React plugin for NativeScript (*very* under construction; expect swathing refact
     <a href="https://twitter.com/intent/follow?screen_name=LinguaBrowse">
         <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter"/>
     </a>
+    <a href="https://badge.fury.io/js/react-nativescript"><img src="https://badge.fury.io/js/react-nativescript.svg" alt="npm version" height="18"></a>
 </p>
-
-We now have a first release!
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
 ## Setup
+
+**CAUTION:** *Developed against NativeScript `v5.4`; please report if you have any problems with NativeScript `v6.0`!* ⚠️
 
 The following instructions assume that you'll be developing in TypeScript.
 
@@ -37,8 +38,6 @@ cd mycoolapp
 # In the root of your NativeScript project.
 npm install --save react-nativescript react
 npm install --save-dev @types/react awesome-typescript-loader babel-loader @babel/core @babel/plugin-proposal-class-properties @babel/preset-react fork-ts-checker-webpack-plugin
-# OPTIONAL: Only required if you would like Hot Module Reloading:
-npm install --save-dev "git+https://github.com/shirakaba/react-nativescript-hot-loader.git"
 
 # Build and run your project like so (specify 'android' instead of 'ios' if applicable):
 tns run ios --bundle --syncAllFiles --emulator
@@ -60,11 +59,11 @@ Every other file in your project **can** be in JSX/TSX, however.
 
 #### `nsconfig.json`
 
-To disable HMR (i.e. to use LiveSync as the strategy for updating the app upon any file changes), change the value of `"useLegacyWorkflow"` to `true`.
+HMR is soon changing dramatically in React, so I will no longer be documenting the soon-to-be-deprecated React Hot Loader HMR method, which is very fiddly anyway. Set this property to disable HMR (for now, HMR is only functional for other flavours of NativeScript).
 
 ```json
 {
-    "useLegacyWorkflow": false
+    "useLegacyWorkflow": true
 }
 ```
 
@@ -74,7 +73,7 @@ Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "r
 
 #### `webpack.config.js`
 
-The webpack config is bit more complex than the NativeScript Core TypeScript template. This is necessary to support HMR, JSX, and faster webpack builds (i.e. one webpack rule to transform from TSX to HMR-friendly JS, rather than two rules).
+The webpack config is bit more complex than the NativeScript Core TypeScript template. This is necessary to support JSX, the React library, and faster webpack builds (i.e. one webpack rule to transform from TSX to JS, rather than two rules).
 
 Same as for the usual NativeScript Core TypeScript template, but with the following modifications:
 
@@ -119,11 +118,11 @@ extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
                 configFileName: "tsconfig.tns.json",
                 useBabel: true,
                 useCache: true,
-                cacheDirectory: ".awcache",
+                cacheDirectory: ".awcache", /* You'll want to git-ignore this folder :) */
                 babelOptions: babelOptions,
                 babelCore: "@babel/core",
                 /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
-                    * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
+                 * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
                 compilerOptions: {
                     sourceMap
                 },
@@ -134,76 +133,54 @@ extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
 },
 ```
 
-##### Additional steps for supporting HMR
-
-And if you want hot module replacement, then your `if(hmr){}` block should look like this:
-
-
-```js
-if (hmr) {
-    const tsconfigPath = resolve(projectRoot, './tsconfig.tns.json');
-    config.plugins.push(new ForkTsCheckerWebpackPlugin({ tsconfig: tsconfigPath }));
-    config.plugins.push(new webpack.NamedModulesPlugin());
-    config.plugins.push(new webpack.HotModuleReplacementPlugin());
-    babelOptions.plugins.push(
-        /* plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript */
-        // ["@babel/plugin-proposal-decorators", { legacy: true }],
-        "react-nativescript-hot-loader/babel",
-    )
-}
-```
-
-...and the Webpack `config.resolve.alias` must include `react-dom`:
-
-```
-alias: {
-    '~': appFullPath,
-    "react-dom": "react-nativescript",
-},
-```
-
-If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what' I'm using!
+If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what I'm using!
 
 #### Source code
 
 ```typescript
 // app.ts
-declare var module: any;
-if(module.hot){
-    module.hot.accept(function(error: any){
-        console.error(`Error in accepting self-update for app.ts.`, error);
-    });
-}
 
 /* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
 (global as any).__DEV__ = false;
 
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import App, { rootRef } from "./OptionallyHotApp";
+import App, { rootRef } from "./ReactManagedApp";
 
 ReactNativeScript.start(React.createElement(App, {}, null), rootRef);
 ```
 
 ```typescript
-// OptionallyHotApp.ts
-import { hot } from "react-nativescript-hot-loader/root"; // <- To disable HMR, comment-out.
+// ReactManagedApp.ts
 import * as React from "react";
-import { AppContainer } from "./AppContainer"
+import { $TabView, $TabViewItem, $StackLayout, $Label } from "react-nativescript/dist/index";
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // See the testComponents directory for many examples of components (and ref-forwarding).
-const app = () => (<AppContainer forwardedRef={rootRef}/>);
+const App = () => (
+    // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
+    <$TabView ref={rootRef} selectedIndex={0}>
+        <$TabViewItem title={"One"}>
+            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+                <$Label>Uno</$Label>
+            </$StackLayout>
+        </$TabViewItem>
+        <$TabViewItem title={"Two"}>
+            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+                <$Label>Dos</$Label>
+            </$StackLayout>
+        </$TabViewItem>
+    </$TabView>
+);
 
-// export default app;
-export default hot(app); // <- To disable HMR, swap this line with the one above it.
+export default App;
 ```
 
 #### Running
 
 ```sh
-tns run ios --bundle --syncAllFiles --emulator
+tns run ios --bundle --emulator
 ```
 
 ---
@@ -316,8 +293,25 @@ React NativeScript shares most of the good parts of React Native, but above all 
 
 Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible. See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
 
+## Roadmap 🛣
+
+A quick list of my own plans (not necessarily in execution order):
+
+* Logo
+* Real-world sample app
+* Documentation website
+* Updated React HMR and Dev Tools (once they're released)
+* Conference talk 🤞
+
+Wishes:
+
+* Demo apps
+* Translated docs
+* Starter template in NativeScript CLI and Playground
+* Lots and lots of plugins
+* API compatibility with React Native (very long-term goal)
+* Compatibility with major React packages like React Navigation and Redux (may depend upon above)
+
 ## Contributing 🙋‍♀️
 
-Ideally get in contact via the [Slack channel](https://nativescriptcommunity.slack.com/messages/CJ2B77CJ1/) before starting any PRs.
-
-I want to keep complex tooling down to a minimum to encourage easy on-boarding to contributors – at least until the project is stable.
+Ideally get in contact via the [Slack channel](https://nativescriptcommunity.slack.com/messages/CJ2B77CJ1/) before starting any PRs!
