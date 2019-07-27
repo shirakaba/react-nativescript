@@ -40,7 +40,7 @@ npm install --save react-nativescript react
 npm install --save-dev @types/react awesome-typescript-loader babel-loader @babel/core @babel/plugin-proposal-class-properties @babel/preset-react fork-ts-checker-webpack-plugin
 
 # Build and run your project like so (specify 'android' instead of 'ios' if applicable):
-tns run ios --bundle --syncAllFiles --emulator
+tns run ios --no-hmr
 ```
 
 Please file an Issue if you meet any problems when following these instructions. They could well be missing something!
@@ -56,16 +56,6 @@ NativeScript CLI does not yet provide a starter template (it's on my to-do list)
 JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-webpack` filtering it out. It's pending me signing NativeScript's CLA (see this [PR](https://github.com/NativeScript/nativescript-dev-webpack/pull/875)), but I need to get clearance from my company first.
 
 Every other file in your project **can** be in JSX/TSX, however.
-
-#### `nsconfig.json`
-
-HMR is soon changing dramatically in React, so I will no longer be documenting the soon-to-be-deprecated React Hot Loader HMR method, which is very fiddly anyway. Set this property to disable HMR (for now, HMR is only functional for other flavours of NativeScript).
-
-```json
-{
-    "useLegacyWorkflow": true
-}
-```
 
 #### `tsconfig.json`
 
@@ -179,8 +169,10 @@ export default App;
 
 #### Running
 
+I recommend to disable HMR because it's not supported out-of-the-box in React NativeScript yet – React is changing the HMR process right now, so I'll support it as soon as it becomes available.
+
 ```sh
-tns run ios --bundle --emulator
+tns run ios --no-hmr
 ```
 
 ---
