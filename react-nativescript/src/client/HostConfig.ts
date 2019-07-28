@@ -234,13 +234,13 @@ const hostConfig: ReactReconciler.HostConfig<
         })();
         console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
 
-        let view: View;
-        const viewConstructor: ConcreteViewConstructor | null = typeof type === "string" ? elementMap[type] : null;
+        let view: Instance;
+        const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
         if (viewConstructor) {
             if (type === "contentView" && hostContext.isInAParentText) {
                 throw new Error("Nesting of <ContentView> within a TextBase is not currently supported.");
             }
-            view = new viewConstructor() as View;
+            view = viewConstructor(props, rootContainerInstance, hostContext);
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {

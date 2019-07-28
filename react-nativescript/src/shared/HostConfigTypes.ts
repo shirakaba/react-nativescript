@@ -34,9 +34,8 @@ export type HostContext = {
     isInAnAbsoluteLayout: boolean;
     isInAFlexboxLayout: boolean;
 };
-export type InstanceCreator = (
-    type: Type,
+export type InstanceCreator<T extends Instance = Instance> = (
     props: Props,
     rootContainerInstance: Container,
     hostContext: HostContext,
-) => Instance;
+) => T;

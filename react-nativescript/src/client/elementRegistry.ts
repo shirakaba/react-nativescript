@@ -48,6 +48,7 @@ import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { WebView } from "tns-core-modules/ui/web-view/web-view";
 import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 import * as console from "../shared/Logger";
+import { Instance, Type, Props, Container, HostContext, InstanceCreator } from "../shared/HostConfigTypes";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -62,67 +63,67 @@ export type TNSElements = keyof typeof elementMap;
 // TODO: see Angular implementation: https://github.com/NativeScript/nativescript-angular/blob/master/nativescript-angular/element-registry.ts#L179
 
 // FIXME: provide list of keys (TNSElements) without losing type-safety of Record<string, ConcreteViewConstructor>.
-// export const elementMap: Record<string, ConcreteViewConstructor> = {
-export const elementMap = {
-    actionBar: ActionBar, // √
-    actionItem: ActionItem, // √
-    activityIndicator: ActivityIndicator, // √
-    // "animation": Animation,
-    // "border": Border
-    // "builder": Builder,
-    button: Button, // √ Pending event listeners.
-    contentView: ContentView, // √ Pending event listeners.
-    datePicker: DatePicker, // √
-    // "dialogs": Dialogs, // No components in here.
-    // "editableTextBase": EditableTextBase,
-    htmlView: HtmlView, // √
-    image: Image, // √
-    // "cache": Cache, // Observable.observable, but doesn't extend View.
-    label: Label, // √
-    // "layoutBase": LayoutBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
-    absoluteLayout: AbsoluteLayout, // √
-    dockLayout: DockLayout, // √
-    flexboxLayout: FlexboxLayout, // √
-    gridLayout: GridLayout, // √
-    stackLayout: StackLayout, // √
-    wrapLayout: WrapLayout, // √
-    listPicker: ListPicker, // √
-    listView: ListView, // √
-    navigationButton: NavigationButton, // √
-    placeholder: Placeholder, // √
-    progress: Progress, // √
-    proxyViewContainer: ProxyViewContainer,
-    // "repeater": Repeater, // Doesn't translate to React properly. Just use a regular LayoutBase instead :)
-    scrollView: ScrollView, // √
-    searchBar: SearchBar, // √
-    segmentedBar: SegmentedBar, // √
-    segmentedBarItem: SegmentedBarItem,
-    slider: Slider, // √
-    switch: Switch, // √
-    tabView: TabView, // √
-    tabViewItem: TabViewItem, // √
-    textView: TextView, // √
-    // "textBase": TextBase, // ? A concrete class, but not sure whether you can use it as a view in practice...
-    textField: TextField, // √
-    timePicker: TimePicker, // √
-    // "transition": Transition,
-    // "fadeTransition": FadeTransition,
-    // "flipTransition": FlipTransition,
-    // "slideTransition": SlideTransition,
-    webView: WebView, // √ Pending event listeners.
+export const elementMap: Record<string, InstanceCreator> = {
+// export const elementMap = {
+    actionBar: () => new ActionBar(), // √
+    actionItem: () => new ActionItem(), // √
+    activityIndicator: () => new ActivityIndicator(), // √
+    // "animation": () => new Animation(),
+    // "border": () => new Border()
+    // "builder": () => new Builder(),
+    button: () => new Button(), // √ Pending event listeners.
+    contentView: () => new ContentView(), // √ Pending event listeners.
+    datePicker: () => new DatePicker(), // √
+    // "dialogs": () => new Dialogs(), // No components in here.
+    // "editableTextBase": () => new EditableTextBase(),
+    htmlView: () => new HtmlView(), // √
+    image: () => new Image(), // √
+    // "cache": () => new Cache(), // Observable.observable, but doesn't extend View.
+    label: () => new Label(), // √
+    // "layoutBase": () => new LayoutBase(), // ? A concrete class, but not sure whether you can use it as a view in practice...
+    absoluteLayout: () => new AbsoluteLayout(), // √
+    dockLayout: () => new DockLayout(), // √
+    flexboxLayout: () => new FlexboxLayout(), // √
+    gridLayout: () => new GridLayout(), // √
+    stackLayout: () => new StackLayout(), // √
+    wrapLayout: () => new WrapLayout(), // √
+    listPicker: () => new ListPicker(), // √
+    listView: () => new ListView(), // √
+    navigationButton: () => new NavigationButton(), // √
+    placeholder: () => new Placeholder(), // √
+    progress: () => new Progress(), // √
+    proxyViewContainer: () => new ProxyViewContainer(),
+    // "repeater": () => new Repeater(), // Doesn't translate to React properly. Just use a regular LayoutBase instead
+    scrollView: () => new ScrollView(), // √
+    searchBar: () => new SearchBar(), // √
+    segmentedBar: () => new SegmentedBar(), // √
+    segmentedBarItem: () => new SegmentedBarItem(),
+    slider: () => new Slider(), // √
+    switch: () => new Switch(), // √
+    tabView: () => new TabView(), // √
+    tabViewItem: () => new TabViewItem(), // √
+    textView: () => new TextView(), // √
+    // "textBase": () => new TextBase(), // ? A concrete class, but not sure whether you can use it as a view in practice...
+    textField: () => new TextField(), // √
+    timePicker: () => new TimePicker(), // √
+    // "transition": () => new Transition(),
+    // "fadeTransition": () => new FadeTransition(),
+    // "flipTransition": () => new FlipTransition(),
+    // "slideTransition": () => new SlideTransition(),
+    webView: () => new WebView(), // √ Pending event listeners.
     // There's a whole "styling" folder, but nothing is a component.
-    frame: Frame, // √
-    // "view": View,
-    page: Page, // √
+    frame: () => new Frame(), // √
+    // "view": () => new View(),
+    page: () => new Page(), // √
 };
 
-export function register(key: string, viewBaseConstructor: ConcreteArglessViewConstructor): void {
+export function register(key: string, instanceCreator: InstanceCreator): void {
     const incumbent = elementMap[key];
     if (incumbent) {
         // No-op; registration may simply happen as a side-effect each time the module is imported.
         return;
     } else {
-        elementMap[key] = viewBaseConstructor;
+        elementMap[key] = instanceCreator;
     }
 }
 
