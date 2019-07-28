@@ -1,4 +1,4 @@
-import { Instance, HostContext } from "./HostConfig";
+import { Instance, HostContext } from "../shared/HostConfigTypes";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";

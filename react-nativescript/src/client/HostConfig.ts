@@ -39,22 +39,8 @@ import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import * as console from "../shared/Logger";
+import { HostContext, Instance, Type, Props, Container, TextInstance, HydratableInstance, PublicInstance, InstanceCreator } from "../shared/HostConfigTypes";
 
-export type Type = TNSElements | React.JSXElementConstructor<any>;
-type Props = any;
-export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
-/* Of which only LayoutBase|ContentView can take child Views (e.g. TextBase can't, but CAN take child texts; and there are special cases like ActionBar). */
-export type Instance = ViewBase;
-type TextInstance = TextBase;
-type HydratableInstance = any;
-type PublicInstance = any;
-export type HostContext = {
-    isInAParentText: boolean;
-    isInADockLayout: boolean;
-    isInAGridLayout: boolean;
-    isInAnAbsoluteLayout: boolean;
-    isInAFlexboxLayout: boolean;
-};
 type UpdatePayload = {
     hostContext: HostContext;
     updates: Array<any>;

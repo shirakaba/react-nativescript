@@ -1,4 +1,4 @@
-import { Type } from "../client/HostConfig";
+import { Type } from "../shared/HostConfigTypes";
 import * as console from "./Logger";
 
 /**

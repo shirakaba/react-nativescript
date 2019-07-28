@@ -11,7 +11,8 @@
  */
 
 import * as ReactReconciler from "react-reconciler";
-import { reactReconcilerInst, Container } from "./HostConfig";
+import { reactReconcilerInst } from "./HostConfig";
+import { Container } from "../shared/HostConfigTypes";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from "./ReactPortal";

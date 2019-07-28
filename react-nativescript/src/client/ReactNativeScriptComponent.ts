@@ -5,7 +5,7 @@
  * This source code is licensed under the MIT license found in React-LICENSE.txt.
  */
 import assertValidProps from "../shared/assertValidProps";
-import { Type, Instance, Container, HostContext } from "./HostConfig";
+import { Type, Instance, Container, HostContext } from "../shared/HostConfigTypes";
 import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";

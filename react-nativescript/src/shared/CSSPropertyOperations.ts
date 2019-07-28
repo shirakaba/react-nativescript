@@ -1,4 +1,4 @@
-import { Instance } from "../client/HostConfig";
+import { Instance } from "../shared/HostConfigTypes";
 import { Style } from "tns-core-modules/ui/styling/style/style";
 import * as console from "./Logger";
 
