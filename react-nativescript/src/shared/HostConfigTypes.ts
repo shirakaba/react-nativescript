@@ -39,3 +39,34 @@ export type InstanceCreator<T extends Instance = Instance> = (
     rootContainerInstance: Container,
     hostContext: HostContext,
 ) => T;
+
+export interface CustomNodeHierarchyManager<T extends Instance> {
+    readonly __ImplementsCustomNodeHierarchyManager__: true;
+
+    /**
+     * @param parentInstance The custom node in question.
+     * @param child The child to add to the custom node.
+     * @return true to indicate that the operation was successfully handled;
+     *         otherwise false to defer to the default Host Config implementation.
+     */
+    __customHostConfigAppendChild?(parentInstance: T, child: Instance | TextInstance): boolean
+    /**
+     * @param parentInstance The custom node in question.
+     * @param child The child to add to the custom node.
+     * @return true to indicate that the operation was successfully handled;
+     *         otherwise false to defer to the default Host Config implementation.
+     */
+    __customHostConfigRemoveChild?(parent: T, child: Instance | TextInstance): boolean;
+    /**
+     * @param parentInstance The custom node in question.
+     * @param child The child to add to the custom node.
+     * @return true to indicate that the operation was successfully handled;
+     *         otherwise false to defer to the default Host Config implementation.
+     */
+    __customHostConfigInsertBefore?(parentInstance: T, child: Instance | TextInstance, beforeChild: Instance | TextInstance): boolean;
+
+    // TODO: support child host context
+}
+export function implementsCustomNodeHierarchyManager<T extends Instance>(view: Instance|CustomNodeHierarchyManager<T>): view is CustomNodeHierarchyManager<T> {
+    return (view as CustomNodeHierarchyManager<T>).__ImplementsCustomNodeHierarchyManager__ === true;
+}

@@ -39,7 +39,7 @@ import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import * as console from "../shared/Logger";
-import { HostContext, Instance, Type, Props, Container, TextInstance, HydratableInstance, PublicInstance, InstanceCreator } from "../shared/HostConfigTypes";
+import { HostContext, Instance, Type, Props, Container, TextInstance, HydratableInstance, PublicInstance, InstanceCreator, implementsCustomNodeHierarchyManager } from "../shared/HostConfigTypes";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -399,7 +399,21 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`
             );
             return;
-        } else if (child instanceof Page) {
+        }
+        if(implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigAppendChild){
+            console.log(
+                `[appendChild()] Deferring to customHostConfigAppendChild(): ${parentInstance} > ${child}`
+            );
+            const handled: boolean = parentInstance.__customHostConfigAppendChild(parentInstance, child);
+            if(handled){
+                return;
+            }
+            console.log(
+                `[appendChild()] Deferral to customHostConfigAppendChild() didn't handle, so handling with default implementation: ${parent} > ${child}`
+            );
+        }
+
+        if (child instanceof Page) {
             console.warn(
                 `[appendChild()] Page cannot be appended as a true child; no-op for: ${parentInstance} > ${child}`
             );
@@ -571,6 +585,19 @@ const hostConfig: ReactReconciler.HostConfig<
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
 
+        if(implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigInsertBefore){
+            console.log(
+                `[insertBefore()] Deferring to customHostConfigInsertBefore(): ${parentInstance} > ${child} beforeChild ${beforeChild}`
+            );
+            const handled: boolean = parentInstance.__customHostConfigInsertBefore(parentInstance, child, beforeChild);
+            if(handled){
+                return;
+            }
+            console.log(
+                `[insertBefore()] Deferral to customHostConfigInsertBefore() didn't handle, so handling with default implementation: ${parentInstance} > ${child} beforeChild ${beforeChild}`
+            );
+        }
+
         if (parentInstance instanceof LayoutBase) {
             /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
             if (parentInstance instanceof GridLayout) {
@@ -655,7 +682,21 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[removeChild()] parent is null (this is a typical occurrence when unmounting a Portal that was rendered into a null parent); shall no-op here, but totally unsure whether this leaks memory: ${parent} x ${child}`
             );
             return;
-        } else if (child instanceof Page) {
+        }
+        if(implementsCustomNodeHierarchyManager(parent) && parent.__customHostConfigRemoveChild){
+            console.log(
+                `[removeChild()] Deferring to customHostConfigRemoveChild(): ${parent} x ${child}`
+            );
+            const handled: boolean = parent.__customHostConfigRemoveChild(parent, child);
+            if(handled){
+                return;
+            }
+            console.log(
+                `[removeChild()] Deferral to customHostConfigRemoveChild() didn't handle, so handling with default implementation: ${parent} x ${child}`
+            );
+        }
+
+        if (child instanceof Page) {
             console.warn(`[remove()] Page was never a real child in the first place, so no-op. ${parent} x ${child}`);
             return;
         } else if (isASingleChildContainer(parent)) {
