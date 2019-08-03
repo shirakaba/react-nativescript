@@ -6,6 +6,8 @@ import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { RCTObservable, ObservableComponentProps, ObservableComponentState } from "./Observable";
 
 interface Props {
+    /* Optional property to guide the Host Config on how best to handle this node. Will be set on instance. */
+    __rns__nodeTreeRole?: string;
     dock?: Dock;
 
     /* Not familiar with these (from ViewBase), so shall omit. */

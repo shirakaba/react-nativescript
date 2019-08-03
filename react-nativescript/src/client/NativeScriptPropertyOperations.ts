@@ -203,6 +203,9 @@ export function setValueForProperty(
             /* Some poor soul has probably set an ios|android prop with boolean value or something */
             instance.set(name, value);
         }
+    } else if(name === "__rns__nodeTreeRole"){
+        console.log(`[PropOp] got node-tree role`);
+        instance.set(name, value);
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
