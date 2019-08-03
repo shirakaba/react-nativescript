@@ -328,8 +328,9 @@ export type ListViewProps = ViewProps &
         // | "android"
         // | "ios"
         | "items"
-        | "itemTemplate"
-        | "itemTemplates"
+        /* Replaced by cellFactory and cellFactories */
+        // | "itemTemplate"
+        // | "itemTemplates"
         | "itemTemplateSelector"
         | "itemIdGenerator"
         | "separatorColor"
