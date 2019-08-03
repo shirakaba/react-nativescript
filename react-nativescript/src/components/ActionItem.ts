@@ -5,8 +5,12 @@ import { ActionItemProps, PropsWithoutForwardedRef } from "../shared/NativeScrip
 import { StackLayout } from "../client/ElementRegistry";
 import { ActionItem as NativeScriptActionItem } from "tns-core-modules/ui/action-bar/action-bar";
 import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
+import { updateListener } from "../client/EventHandling";
+import { GestureEventData } from "tns-core-modules/ui/gestures/gestures";
 
-interface Props {}
+interface Props {
+    onTap?: (args: GestureEventData) => void;
+}
 
 export type ActionItemComponentProps<
     E extends NativeScriptActionItem = NativeScriptActionItem
@@ -24,6 +28,22 @@ export class _ActionItem<
     S extends {},
     E extends NativeScriptActionItem
 > extends RCTViewBase<P, S, E> {
+
+    /**
+     *
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+
+        if (attach === null) {
+            updateListener(node, "tap", this.props.onTap, nextProps.onTap);
+        } else {
+            const method = (attach ? node.on : node.off).bind(node);
+            if (this.props.onTap) method("tap", this.props.onTap);
+        }
+    }
+
     render() {
         const {
             forwardedRef,
