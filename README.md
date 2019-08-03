@@ -1,7 +1,6 @@
-# React NativeScript
-## About
-
-A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *very* under construction; expect swathing refactors!
+<p align="center">
+    <img src="github_img/RNS_logo.svg" width="270">
+</p>
 
 <p align="center">
     <a href="https://badge.fury.io/js/react-nativescript"><img src="https://badge.fury.io/js/react-nativescript.svg" alt="npm version" height="18"></a>
@@ -21,6 +20,8 @@ A React renderer for NativeScript, allowing you to write a NativeScript app usin
         <img src="https://img.shields.io/twitter/follow/LinguaBrowse.svg?style=social&logo=twitter"/>
     </a>
 </p>
+
+**React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *very* under construction; expect swathing refactors!
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
