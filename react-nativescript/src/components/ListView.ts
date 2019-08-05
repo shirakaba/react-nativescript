@@ -182,9 +182,14 @@ export class _ListView<
     }
 
     private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
+        const node: E | null = this.getCurrentRef();
+        if (!node) {
+            throw new Error("Unable to get ref to ListView");
+        }
+
         console.log(`[ListView] no existing view.`);
         const ref: React.RefObject<any> = React.createRef<any>();
-        const rootKey: string = "ListView-" + this.roots.size.toString();
+        const rootKey: string = `ListView-${node._domId}-${this.roots.size.toString()}`;
 
         ReactNativeScript.render(
             cellFactory(item, ref),
