@@ -28,7 +28,6 @@ export class _ActionItem<
     S extends {},
     E extends NativeScriptActionItem
 > extends RCTViewBase<P, S, E> {
-
     /**
      *
      * @param attach true: attach; false: detach; null: update

@@ -7,8 +7,8 @@ import { EventData } from "tns-core-modules/ui/text-base/text-base";
 import { updateListener } from "../client/EventHandling";
 
 interface Props {
-	onBlur?: (args: EventData) => void;
-	onFocus?: (args: EventData) => void;
+    onBlur?: (args: EventData) => void;
+    onFocus?: (args: EventData) => void;
     onTextChange?: (args: EventData) => void;
 }
 

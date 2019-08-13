@@ -1,8 +1,6 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import {
-    SegmentedBarItem as NativeScriptSegmentedBarItem
-} from "tns-core-modules/ui/segmented-bar/segmented-bar";
+import { SegmentedBarItem as NativeScriptSegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ViewBaseComponentProps, RCTViewBase } from "../components/ViewBase";
 import { register } from "../client/ElementRegistry";
@@ -10,8 +8,7 @@ import { Container, HostContext } from "../shared/HostConfigTypes";
 
 type SegmentedBarItemProps = Pick<NativeScriptSegmentedBarItem, "title">;
 
-interface Props {
-}
+interface Props {}
 
 export type SegmentedBarItemComponentProps<
     E extends NativeScriptSegmentedBarItem = NativeScriptSegmentedBarItem
@@ -29,7 +26,6 @@ export class _SegmentedBarItem<
     S extends {},
     E extends NativeScriptSegmentedBarItem
 > extends RCTViewBase<P, S, E> {
-
     render() {
         const {
             forwardedRef,
@@ -51,12 +47,17 @@ export class _SegmentedBarItem<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<SegmentedBarItemComponentProps<NativeScriptSegmentedBarItem>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<
+    SegmentedBarItemComponentProps<NativeScriptSegmentedBarItem>
+>;
 
 export const SegmentedBarItem: React.ComponentType<
     OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSegmentedBarItem>
 > = React.forwardRef<NativeScriptSegmentedBarItem, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptSegmentedBarItem>) => {
+    (
+        props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>,
+        ref: React.RefObject<NativeScriptSegmentedBarItem>
+    ) => {
         const { children, ...rest } = props;
 
         return React.createElement(

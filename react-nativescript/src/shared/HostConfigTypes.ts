@@ -37,7 +37,7 @@ export type HostContext = {
 export type InstanceCreator<T extends Instance = Instance> = (
     props: Props,
     rootContainerInstance: Container,
-    hostContext: HostContext,
+    hostContext: HostContext
 ) => T;
 
 export interface CustomNodeHierarchyManager<T extends Instance> {
@@ -49,7 +49,7 @@ export interface CustomNodeHierarchyManager<T extends Instance> {
      * @return true to indicate that the operation was successfully handled;
      *         otherwise false to defer to the default Host Config implementation.
      */
-    __customHostConfigAppendChild?(parentInstance: T, child: Instance | TextInstance): boolean
+    __customHostConfigAppendChild?(parentInstance: T, child: Instance | TextInstance): boolean;
     /**
      * @param parentInstance The custom node in question.
      * @param child The child to add to the custom node.
@@ -63,10 +63,16 @@ export interface CustomNodeHierarchyManager<T extends Instance> {
      * @return true to indicate that the operation was successfully handled;
      *         otherwise false to defer to the default Host Config implementation.
      */
-    __customHostConfigInsertBefore?(parentInstance: T, child: Instance | TextInstance, beforeChild: Instance | TextInstance): boolean;
+    __customHostConfigInsertBefore?(
+        parentInstance: T,
+        child: Instance | TextInstance,
+        beforeChild: Instance | TextInstance
+    ): boolean;
 
     // TODO: support child host context
 }
-export function implementsCustomNodeHierarchyManager<T extends Instance>(view: Instance|CustomNodeHierarchyManager<T>): view is CustomNodeHierarchyManager<T> {
+export function implementsCustomNodeHierarchyManager<T extends Instance>(
+    view: Instance | CustomNodeHierarchyManager<T>
+): view is CustomNodeHierarchyManager<T> {
     return (view as CustomNodeHierarchyManager<T>).__ImplementsCustomNodeHierarchyManager__ === true;
 }

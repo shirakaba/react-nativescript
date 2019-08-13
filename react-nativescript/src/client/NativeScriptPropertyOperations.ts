@@ -203,7 +203,7 @@ export function setValueForProperty(
             /* Some poor soul has probably set an ios|android prop with boolean value or something */
             instance.set(name, value);
         }
-    } else if(name === "__rns__nodeTreeRole"){
+    } else if (name === "__rns__nodeTreeRole") {
         console.log(`[PropOp] got node-tree role`);
         instance.set(name, value);
     } else {

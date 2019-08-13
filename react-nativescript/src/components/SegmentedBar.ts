@@ -8,7 +8,14 @@ import {
 } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { ViewComponentProps, RCTView } from "./View";
 import { updateListener } from "../client/EventHandling";
-import { CustomNodeHierarchyManager, Type, Container, HostContext, Instance, TextInstance } from "../shared/HostConfigTypes";
+import {
+    CustomNodeHierarchyManager,
+    Type,
+    Container,
+    HostContext,
+    Instance,
+    TextInstance,
+} from "../shared/HostConfigTypes";
 
 type Constructor<T = {}> = new (...args: any[]) => T;
 
@@ -16,13 +23,13 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptSegmentedBar>>
     return class extends Base implements CustomNodeHierarchyManager<NativeScriptSegmentedBar> {
         __ImplementsCustomNodeHierarchyManager__: true = true;
 
-        constructor(...args: any[]){
+        constructor(...args: any[]) {
             super(...args);
             // This constructor call is needed for some reason; they must be doing something odd with the constructor.
         }
 
         __customHostConfigAppendChild(parent: NativeScriptSegmentedBar, child: Instance | TextInstance): boolean {
-            if(child instanceof NativeScriptSegmentedBarItem){
+            if (child instanceof NativeScriptSegmentedBarItem) {
                 parent.items = [...(parent.items || []), child];
             }
             // i.e. don't bother deferring to Host Config.
@@ -30,15 +37,22 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptSegmentedBar>>
         }
 
         __customHostConfigRemoveChild(parent: NativeScriptSegmentedBar, child: Instance | TextInstance): boolean {
-            if(child instanceof NativeScriptSegmentedBarItem){
-                parent.items = (parent.items || []).filter((item) => item !== child);;
+            if (child instanceof NativeScriptSegmentedBarItem) {
+                parent.items = (parent.items || []).filter(item => item !== child);
             }
             // i.e. don't bother deferring to Host Config.
             return true;
         }
 
-        __customHostConfigInsertBefore(parent: NativeScriptSegmentedBar, child: Instance | TextInstance, beforeChild: Instance | TextInstance): boolean {
-            if(!(child instanceof NativeScriptSegmentedBarItem) || !(beforeChild instanceof NativeScriptSegmentedBarItem)){
+        __customHostConfigInsertBefore(
+            parent: NativeScriptSegmentedBar,
+            child: Instance | TextInstance,
+            beforeChild: Instance | TextInstance
+        ): boolean {
+            if (
+                !(child instanceof NativeScriptSegmentedBarItem) ||
+                !(beforeChild instanceof NativeScriptSegmentedBarItem)
+            ) {
                 // Disqualify any children that are not at least a NativeScriptSegmentedBarItem.
                 return true;
             }
@@ -46,7 +60,7 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptSegmentedBar>>
             const originalItems: NativeScriptSegmentedBarItem[] = parent.items || [];
 
             const atIndex: number = originalItems.indexOf(beforeChild);
-            if(atIndex === -1){
+            if (atIndex === -1) {
                 parent.items = originalItems.concat(child);
                 return true;
             }

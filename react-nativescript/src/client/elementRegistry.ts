@@ -65,7 +65,7 @@ export type TNSElements = keyof typeof elementMap;
 
 // FIXME: provide list of keys (TNSElements) without losing type-safety of Record<string, ConcreteViewConstructor>.
 export const elementMap: Record<string, InstanceCreator> = {
-// export const elementMap = {
+    // export const elementMap = {
     actionBar: () => new ActionBar(), // √
     actionItem: () => new ActionItem(), // √
     activityIndicator: () => new ActivityIndicator(), // √

@@ -39,7 +39,18 @@ import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import * as console from "../shared/Logger";
-import { HostContext, Instance, Type, Props, Container, TextInstance, HydratableInstance, PublicInstance, InstanceCreator, implementsCustomNodeHierarchyManager } from "../shared/HostConfigTypes";
+import {
+    HostContext,
+    Instance,
+    Type,
+    Props,
+    Container,
+    TextInstance,
+    HydratableInstance,
+    PublicInstance,
+    InstanceCreator,
+    implementsCustomNodeHierarchyManager,
+} from "../shared/HostConfigTypes";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -400,12 +411,10 @@ const hostConfig: ReactReconciler.HostConfig<
             );
             return;
         }
-        if(implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigAppendChild){
-            console.log(
-                `[appendChild()] Deferring to customHostConfigAppendChild(): ${parentInstance} > ${child}`
-            );
+        if (implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigAppendChild) {
+            console.log(`[appendChild()] Deferring to customHostConfigAppendChild(): ${parentInstance} > ${child}`);
             const handled: boolean = parentInstance.__customHostConfigAppendChild(parentInstance, child);
-            if(handled){
+            if (handled) {
                 return;
             }
             console.log(
@@ -581,12 +590,12 @@ const hostConfig: ReactReconciler.HostConfig<
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
 
-        if(implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigInsertBefore){
+        if (implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigInsertBefore) {
             console.log(
                 `[insertBefore()] Deferring to customHostConfigInsertBefore(): ${parentInstance} > ${child} beforeChild ${beforeChild}`
             );
             const handled: boolean = parentInstance.__customHostConfigInsertBefore(parentInstance, child, beforeChild);
-            if(handled){
+            if (handled) {
                 return;
             }
             console.log(
@@ -679,12 +688,10 @@ const hostConfig: ReactReconciler.HostConfig<
             );
             return;
         }
-        if(implementsCustomNodeHierarchyManager(parent) && parent.__customHostConfigRemoveChild){
-            console.log(
-                `[removeChild()] Deferring to customHostConfigRemoveChild(): ${parent} x ${child}`
-            );
+        if (implementsCustomNodeHierarchyManager(parent) && parent.__customHostConfigRemoveChild) {
+            console.log(`[removeChild()] Deferring to customHostConfigRemoveChild(): ${parent} x ${child}`);
             const handled: boolean = parent.__customHostConfigRemoveChild(parent, child);
-            if(handled){
+            if (handled) {
                 return;
             }
             console.log(
