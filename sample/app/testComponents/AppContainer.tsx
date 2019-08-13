@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { DockLayoutTest, HMRTest } from './layout';
-import { FormattedStringLabel, WebViewTest, } from "./testComponents";
+import { FormattedStringLabel, WebViewTest, SegmentedBarIssue, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
 import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
 import { NestedHub, NestedModalTest, FramedHubTest, FramedPageWithComplexActionBarTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
@@ -47,20 +47,24 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // );
 
 // See the testComponents directory for many examples of components (and ref-forwarding).
+// const AppContainer = () => (
+//     // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
+//     <$TabView ref={rootRef} selectedIndex={0}>
+//         <$TabViewItem title={"One"}>
+//             <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+//                 <$Label>Uno</$Label>
+//             </$StackLayout>
+//         </$TabViewItem>
+//         <$TabViewItem title={"Two"}>
+//             <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+//                 <$Label>Dos</$Label>
+//             </$StackLayout>
+//         </$TabViewItem>
+//     </$TabView>
+// );
+
 const AppContainer = () => (
-    // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
-    <$TabView ref={rootRef} selectedIndex={0}>
-        <$TabViewItem title={"One"}>
-            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-                <$Label>Uno</$Label>
-            </$StackLayout>
-        </$TabViewItem>
-        <$TabViewItem title={"Two"}>
-            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-                <$Label>Dos</$Label>
-            </$StackLayout>
-        </$TabViewItem>
-    </$TabView>
+    <SegmentedBarIssue forwardedRef={rootRef}/>
 );
 
 export default AppContainer;
