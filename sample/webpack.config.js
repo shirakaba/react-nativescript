@@ -254,10 +254,6 @@ module.exports = env => {
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
                 "process": "global.process",
-
-                /* For various libraries in the React ecosystem (as we're not using any of their Babel loaders) */
-                "__DEV__": `${production ? false : true}`,
-                "global.__DEV__": `${production ? false : true}`,
             }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin(itemsToClean, { verbose: !!verbose }),

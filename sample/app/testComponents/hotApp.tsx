@@ -1,6 +1,4 @@
-import { hot } from 'react-nativescript-hot-loader/root';
 import * as React from "react";
-
 import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel, WebViewTest, } from "./testComponents";
@@ -65,4 +63,4 @@ const app = () => (
     </$TabView>
 );
 
-export default hot(app);
+export default app;

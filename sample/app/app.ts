@@ -1,27 +1,11 @@
-// <reference path="../node_modules/react-nativescript/dist/index.d.ts" />
+/* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
+Object.defineProperty(global, '__DEV__', { value: false });
 
 /*
 In NativeScript, the app.ts file is the entry point to your application.
 You can use this file to perform app-level initialization, but the primary
 purpose of the file is to pass control to the app’s first module.
 */
-
-declare var module: any;
-if(module.hot){
-    // self accept.
-    module.hot.accept(
-        function(error: any) {
-            console.error(`Error in accepting self update for app.ts.`, error);
-        }
-    );
-
-    // module.hot.addStatusHandler(status => {
-    //     console.log(`Change in status for app.ts.`, status);
-    // });
-}
-
-/* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
-(global as any).__DEV__ = true;
 
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
