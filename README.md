@@ -106,6 +106,7 @@ extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
         {
             loader: "awesome-typescript-loader",
             options: {
+                transpileOnly: true,
                 configFileName: "tsconfig.tns.json",
                 useBabel: true,
                 useCache: true,
@@ -132,24 +133,24 @@ If I've missed anything, just refer to [`sample/webpack.config.js`](https://gith
 // app.ts
 
 /* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
-(global as any).__DEV__ = false;
+Object.defineProperty(global, '__DEV__', { value: false });
 
 import * as React from "react";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import App, { rootRef } from "./ReactManagedApp";
+import * as ReactNativeScript from "react-nativescript";
+import AppContainer, { rootRef } from "./AppContainer";
 
-ReactNativeScript.start(React.createElement(App, {}, null), rootRef);
+ReactNativeScript.start(React.createElement(AppContainer, {}, null), rootRef);
 ```
 
 ```typescript
-// ReactManagedApp.ts
+// AppContainer.ts
 import * as React from "react";
-import { $TabView, $TabViewItem, $StackLayout, $Label } from "react-nativescript/dist/index";
+import { $TabView, $TabViewItem, $StackLayout, $Label } from "react-nativescript";
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // See the testComponents directory for many examples of components (and ref-forwarding).
-const App = () => (
+const AppContainer = () => (
     // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
     <$TabView ref={rootRef} selectedIndex={0}>
         <$TabViewItem title={"One"}>
@@ -165,7 +166,7 @@ const App = () => (
     </$TabView>
 );
 
-export default App;
+export default AppContainer;
 ```
 
 #### Running
