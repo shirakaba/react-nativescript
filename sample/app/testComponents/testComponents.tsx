@@ -2,7 +2,7 @@ import * as React from "react";
 import { PercentLength, FormattedString, EventData } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView, Frame } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import {
@@ -23,6 +23,8 @@ import {
     $Page,
     $WebView,
     $SearchBar,
+    $Frame,
+    $SegmentedBar,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
@@ -201,4 +203,28 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
             <$Label formattedText={formattedString} />
         )
     }
+}
+
+export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> { 
+    private readonly pageRef: React.RefObject<Page> = React.createRef<Page>();
+
+    componentDidMount() {
+        this.props.forwardedRef.current.navigate({
+            create:() => {
+                return this.pageRef.current;
+            }
+        });
+    }
+
+    render() {
+        return(
+            <$Frame ref={this.props.forwardedRef}>
+                <$Page ref={this.pageRef}>
+                <$Label text={"HelloWorld"}/>
+                {/* <$SegmentedBar /> */}
+                </$Page>
+            </$Frame>
+        );
+    }
+
 }
