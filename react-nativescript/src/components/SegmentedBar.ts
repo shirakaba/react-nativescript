@@ -82,7 +82,7 @@ export class _SegmentedBar<
                 ref: forwardedRef || this.myRef,
             },
             /* For now, any SegmentedBarItem children will be mapped to items by our React renderer. */
-            ...children
+            children
         );
     }
 }
