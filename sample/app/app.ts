@@ -9,9 +9,9 @@ purpose of the file is to pass control to the app’s first module.
 
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import HotApp, { rootRef } from "./testComponents/HotApp";
+import AppContainer, { rootRef } from "./testComponents/AppContainer";
 
-ReactNativeScript.start(React.createElement(HotApp, {}, null), rootRef);
+ReactNativeScript.start(React.createElement(AppContainer, {}, null), rootRef);
 
 /*
 Do not place any code after the application has been started as it will not

@@ -11,7 +11,7 @@ import { $TabView, $TabViewItem, $ContentView, $StackLayout, $Label, $FlexboxLay
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
-// const app = () => (
+// const AppContainer = () => (
 //     <$FlexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
 //         <$FlexboxLayout
 //             backgroundColor={"green"}
@@ -33,12 +33,12 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 //     </$FlexboxLayout>
 // );
 
-// const app = () => <FramedLayoutTest forwardedRef={rootRef}/>
-// const app = () => <FramedHubTest forwardedRef={rootRef}/>
-// const app = () => <WebViewTest forwardedRef={rootRef}/>
-// const app = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
+// const AppContainer = () => <FramedLayoutTest forwardedRef={rootRef}/>
+// const AppContainer = () => <FramedHubTest forwardedRef={rootRef}/>
+// const AppContainer = () => <WebViewTest forwardedRef={rootRef}/>
+// const AppContainer = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
 
-// const app = () => (
+// const AppContainer = () => (
 //     <FramedPageWithComplexActionBarTest forwardedRef={rootRef}>
 //         <$StackLayout backgroundColor={"orange"}>
 //             <$Label>Hello, World!</$Label>
@@ -47,7 +47,7 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // );
 
 // See the testComponents directory for many examples of components (and ref-forwarding).
-const app = () => (
+const AppContainer = () => (
     // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
     <$TabView ref={rootRef} selectedIndex={0}>
         <$TabViewItem title={"One"}>
@@ -63,4 +63,4 @@ const app = () => (
     </$TabView>
 );
 
-export default app;
+export default AppContainer;
