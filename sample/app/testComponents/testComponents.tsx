@@ -25,9 +25,10 @@ import {
     $SearchBar,
     $Frame,
     $SegmentedBar,
+    $SegmentedBarItem,
 } from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 
@@ -205,8 +206,20 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
     }
 }
 
-export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> { 
+export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<Frame> }, { selectedIndex: number }> { 
     private readonly pageRef: React.RefObject<Page> = React.createRef<Page>();
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            selectedIndex: 1,
+        };
+    }
+
+    private readonly onSelectedIndexChanged = (args: SelectedIndexChangedEventData) => {
+        this.setState({ selectedIndex: args.newIndex });
+    };
 
     componentDidMount() {
         this.props.forwardedRef.current.navigate({
@@ -217,14 +230,26 @@ export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.Ref
     }
 
     render() {
+        const { forwardedRef } = this.props;
+        const { selectedIndex } = this.state;
+
         return(
-            <$Frame ref={this.props.forwardedRef}>
+            <$Frame ref={forwardedRef}>
                 <$Page ref={this.pageRef}>
-                <$Label text={"HelloWorld"}/>
-                {/* <$SegmentedBar /> */}
+                    <$StackLayout>
+                        <$Label text={"HelloWorld"}/>
+                        <$SegmentedBar
+                            className={"m-5"}
+                            selectedIndex={selectedIndex}
+                            onSelectedIndexChanged={this.onSelectedIndexChanged}
+                        >
+                            <$SegmentedBarItem title={"Item 1"}/>
+                            <$SegmentedBarItem title={"Item 2"}/>
+                            <$SegmentedBarItem title={"Item 3"}/>
+                        </$SegmentedBar>
+                    </$StackLayout>
                 </$Page>
             </$Frame>
         );
     }
-
 }

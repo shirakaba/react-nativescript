@@ -3,13 +3,77 @@ import * as React from "react";
 import { SegmentedBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import {
     SegmentedBar as NativeScriptSegmentedBar,
+    SegmentedBarItem as NativeScriptSegmentedBarItem,
     SelectedIndexChangedEventData,
 } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import { ViewComponentProps, RCTView } from "./View";
 import { updateListener } from "../client/EventHandling";
+import { CustomNodeHierarchyManager, Type, Container, HostContext, Instance, TextInstance } from "../shared/HostConfigTypes";
+
+type Constructor<T = {}> = new (...args: any[]) => T;
+
+export function RNSFriendly<TBase extends Constructor<NativeScriptSegmentedBar>>(Base: TBase) {
+    return class extends Base implements CustomNodeHierarchyManager<NativeScriptSegmentedBar> {
+        __ImplementsCustomNodeHierarchyManager__: true = true;
+
+        constructor(...args: any[]){
+            super(...args);
+            // This constructor call is needed for some reason; they must be doing something odd with the constructor.
+        }
+
+        __customHostConfigAppendChild(parent: NativeScriptSegmentedBar, child: Instance | TextInstance): boolean {
+            if(child instanceof NativeScriptSegmentedBarItem){
+                parent.items = [...(parent.items || []), child];
+            }
+            // i.e. don't bother deferring to Host Config.
+            return true;
+        }
+
+        __customHostConfigRemoveChild(parent: NativeScriptSegmentedBar, child: Instance | TextInstance): boolean {
+            if(child instanceof NativeScriptSegmentedBarItem){
+                parent.items = (parent.items || []).filter((item) => item !== child);;
+            }
+            // i.e. don't bother deferring to Host Config.
+            return true;
+        }
+
+        __customHostConfigInsertBefore(parent: NativeScriptSegmentedBar, child: Instance | TextInstance, beforeChild: Instance | TextInstance): boolean {
+            if(!(child instanceof NativeScriptSegmentedBarItem) || !(beforeChild instanceof NativeScriptSegmentedBarItem)){
+                // Disqualify any children that are not at least a NativeScriptSegmentedBarItem.
+                return true;
+            }
+
+            const originalItems: NativeScriptSegmentedBarItem[] = parent.items || [];
+
+            const atIndex: number = originalItems.indexOf(beforeChild);
+            if(atIndex === -1){
+                parent.items = originalItems.concat(child);
+                return true;
+            }
+            const itemsClone: NativeScriptSegmentedBarItem[] = [...originalItems];
+            parent.items = itemsClone.splice(atIndex, 0, child);
+
+            return true;
+        }
+    };
+}
+
+export const RNSFriendlySegmentedBar = RNSFriendly(NativeScriptSegmentedBar);
+
+const elementKey: string = "segmentedBar";
+/* Registration is instead performed in elementRegistry to remove this side-effect from the module and hence aid tree-shaking */
+// register(
+//     elementKey,
+//     (
+//         props: Props,
+//         rootContainerInstance: Container,
+//         hostContext: HostContext,
+//     ) => {
+//         return new RNSFriendlySegmentedBar();
+//     }
+// );
 
 interface Props {
-    // TODO: implement 'items' property for SegmentedBar just as done for TabView
     onSelectedIndexChanged?: (args: SelectedIndexChangedEventData) => void;
 }
 
@@ -76,7 +140,7 @@ export class _SegmentedBar<
         } = this.props;
 
         return React.createElement(
-            "segmentedBar",
+            elementKey,
             {
                 ...rest,
                 ref: forwardedRef || this.myRef,

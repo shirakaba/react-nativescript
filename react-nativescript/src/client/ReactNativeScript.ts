@@ -28,6 +28,7 @@ import { DatePicker as $DatePicker } from "../components/DatePicker";
 import { ScrollView as $ScrollView } from "../components/ScrollView";
 import { SearchBar as $SearchBar } from "../components/SearchBar";
 import { SegmentedBar as $SegmentedBar } from "../components/SegmentedBar";
+import { SegmentedBarItem as $SegmentedBarItem } from "../components/SegmentedBarItem";
 import { Slider as $Slider } from "../components/Slider";
 import { DockLayout as $DockLayout } from "../components/DockLayout";
 import { FlexboxLayout as $FlexboxLayout } from "../components/FlexboxLayout";
@@ -191,6 +192,7 @@ export {
     $ScrollView,
     $SearchBar,
     $SegmentedBar,
+    $SegmentedBarItem,
     $Slider,
     $StackLayout,
     $Switch,

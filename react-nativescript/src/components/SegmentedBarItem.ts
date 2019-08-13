@@ -8,20 +8,7 @@ import { ViewBaseComponentProps, RCTViewBase } from "../components/ViewBase";
 import { register } from "../client/ElementRegistry";
 import { Container, HostContext } from "../shared/HostConfigTypes";
 
-const elementKey: string = "segmentedBarItem";
-register(
-    elementKey,
-    (
-        props: Props,
-        rootContainerInstance: Container,
-        hostContext: HostContext,
-    ) => {
-        return new NativeScriptSegmentedBarItem();
-    }
-);
-
-type SegmentedBarItemProps = Pick<NativeScriptSegmentedBarItem,
-"title">;
+type SegmentedBarItemProps = Pick<NativeScriptSegmentedBarItem, "title">;
 
 interface Props {
 }
@@ -54,7 +41,7 @@ export class _SegmentedBarItem<
         } = this.props;
 
         return React.createElement(
-            elementKey,
+            "segmentedBarItem",
             {
                 ...rest,
                 ref: forwardedRef || this.myRef,
@@ -66,7 +53,7 @@ export class _SegmentedBarItem<
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<SegmentedBarItemComponentProps<NativeScriptSegmentedBarItem>>;
 
-export const $SegmentedBarItem: React.ComponentType<
+export const SegmentedBarItem: React.ComponentType<
     OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptSegmentedBarItem>
 > = React.forwardRef<NativeScriptSegmentedBarItem, OwnPropsWithoutForwardedRef>(
     (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptSegmentedBarItem>) => {

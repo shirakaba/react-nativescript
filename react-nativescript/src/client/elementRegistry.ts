@@ -49,6 +49,7 @@ import { WebView } from "tns-core-modules/ui/web-view/web-view";
 import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout";
 import * as console from "../shared/Logger";
 import { Instance, Type, Props, Container, HostContext, InstanceCreator } from "../shared/HostConfigTypes";
+import { RNSFriendlySegmentedBar } from "../components/SegmentedBar";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -96,7 +97,7 @@ export const elementMap: Record<string, InstanceCreator> = {
     // "repeater": () => new Repeater(), // Doesn't translate to React properly. Just use a regular LayoutBase instead
     scrollView: () => new ScrollView(), // √
     searchBar: () => new SearchBar(), // √
-    segmentedBar: () => new SegmentedBar(), // √
+    segmentedBar: () => new RNSFriendlySegmentedBar(), // This one is special! It's the first example of the new CustomNodeHierarchyManager pattern.
     segmentedBarItem: () => new SegmentedBarItem(),
     slider: () => new Slider(), // √
     switch: () => new Switch(), // √

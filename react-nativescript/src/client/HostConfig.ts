@@ -448,10 +448,6 @@ const hostConfig: ReactReconciler.HostConfig<
         } else if (parentInstance instanceof ActionItem) {
             // Same for both ActionItem and NavigationButton.
             parentInstance.actionView = child as View;
-        } else if (parentInstance instanceof SegmentedBar && child instanceof SegmentedBarItem) {
-            // console.log(`[appendChild()] Remapping SegmentedBarItem from child to item: ${parentInstance} > ${child}, where its view was ${child.view} and its items were:`, parentInstance.items);
-            const newItems = [...(parentInstance.items || []), child];
-            parentInstance.items = newItems;
         } else if (parentInstance instanceof TabView && child instanceof TabViewItem) {
             console.log(
                 `[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where the child's view was ${child.view} and the parent's items were:`,
@@ -749,12 +745,6 @@ const hostConfig: ReactReconciler.HostConfig<
         } else if (parent instanceof ActionItem) {
             // Same for both ActionItem and NavigationButton.
             parent.actionView = null;
-        } else if (parent instanceof SegmentedBar && child instanceof SegmentedBarItem) {
-            console.log(`[removeChild()] ${parent} x ${child}`);
-            if (!parent.items) {
-                parent.items = [];
-            }
-            parent.items = parent.items.filter(i => i !== child);
         } else if (parent instanceof TabView && child instanceof TabViewItem) {
             console.log(`[removeChild()] ${parent} x ${child}`);
             if (!parent.items) {
