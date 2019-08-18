@@ -27,8 +27,6 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 
 ## Setup
 
-**CAUTION:** *Developed against NativeScript `v5.4`; please report if you have any problems with NativeScript `v6.0`!* ⚠️
-
 The following instructions assume that you'll be developing in TypeScript.
 
 ```sh
@@ -291,7 +289,7 @@ It's feature-equivalent with NativeScript Core, but lacking the RAD (Rapid Appli
 
 **What about plugins?**
 
-Only one UI plugin has been adapted for use with React NativeScript so far (`nativescript-svg`), but I haven't formally published it yet. So it's totally possible, but there are other priorities to get on with first. But any non-UI plugins will work just fine!
+Very few UI plugins have been adapted for use with React NativeScript so far, and I'm still altering the API for making UI plugins, so expect there to be relatively few UI plugins for a while. But any non-UI plugins will work just fine!
 
 **Can this consume React Native projects?**
 
@@ -301,14 +299,14 @@ No, but it *could* with a lot of hard work. Allowing React NativeScript to run p
 
 Certainly not UI-based native modules. But all flavours of NativeScript can consume native code, so it can probably consume React Native native modules, though may take a small bit of refactoring 🤔
 
+Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [proof-of-concept](https://gist.github.com/sjchmiela/e1fcb7ca255e77e92bb2c64bc63b7fee) for importing Expo Unimodules into NativeScript that could be used as a basis for this effort. Original discussion [here](https://twitter.com/sjchmiela/status/1158402590499057665?s=20).
+
 ## Roadmap 🛣
 
 A quick list of my own plans (not necessarily in execution order):
 
-* Logo
-* Real-world sample app
 * Documentation website
-* Updated React HMR and Dev Tools (once they're released)
+* Document workflow for React Dev Tools v4 (which includes HMR)
 * Conference talk 🤞
 
 Wishes:
