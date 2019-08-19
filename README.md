@@ -56,6 +56,15 @@ JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-web
 
 Every other file in your project **can** be in JSX/TSX, however.
 
+#### `.gitignore`
+
+Add this line to the `.gitignore` established by the NativeScript Core new project init process:
+
+```
+# Ignores the Awesome TypeScript Loader build cache folder
+.awcache
+```
+
 #### `tsconfig.json`
 
 Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "react"` added.
@@ -141,7 +150,7 @@ ReactNativeScript.start(React.createElement(AppContainer, {}, null), rootRef);
 ```
 
 ```typescript
-// AppContainer.ts
+// AppContainer.tsx
 import * as React from "react";
 import { $TabView, $TabViewItem, $StackLayout, $Label } from "react-nativescript";
 
