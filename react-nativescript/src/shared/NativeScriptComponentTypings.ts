@@ -398,29 +398,24 @@ export type SegmentedBarProps = ViewProps & Pick<SegmentedBar, "selectedIndex" |
 
 export type SliderProps = ViewProps & Pick<Slider, "value" | "minValue" | "maxValue">;
 
-export type FormattedStringProps = ViewBaseProps & Pick<
-    FormattedString,
-    "spans"|
-    "fontFamily"|
-    "fontSize"|
-    "fontStyle"|
-    "fontWeight"|
-    "textDecoration"|
-    "color"|
-    "backgroundColor"
->;
+export type FormattedStringProps = ViewBaseProps &
+    Pick<
+        FormattedString,
+        | "spans"
+        | "fontFamily"
+        | "fontSize"
+        | "fontStyle"
+        | "fontWeight"
+        | "textDecoration"
+        | "color"
+        | "backgroundColor"
+    >;
 
-export type SpanProps = ViewBaseProps & Pick<
-    Span,
-    "fontFamily"|
-    "fontSize"|
-    "fontStyle"|
-    "fontWeight"|
-    "textDecoration"|
-    "color"|
-    "backgroundColor"|
-    "text"
->;
+export type SpanProps = ViewBaseProps &
+    Pick<
+        Span,
+        "fontFamily" | "fontSize" | "fontStyle" | "fontWeight" | "textDecoration" | "color" | "backgroundColor" | "text"
+    >;
 
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];

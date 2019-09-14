@@ -27,7 +27,7 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptFormattedStrin
         __customHostConfigRemoveChild(parent: NativeScriptFormattedString, child: Instance | TextInstance): boolean {
             if (child instanceof Span) {
                 const index: number = parent.spans.indexOf(child);
-                if(index === -1){
+                if (index === -1) {
                     return true;
                 }
                 parent.spans.splice(index, 1);
@@ -41,16 +41,13 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptFormattedStrin
             child: Instance | TextInstance,
             beforeChild: Instance | TextInstance
         ): boolean {
-            if (
-                !(child instanceof Span) ||
-                !(beforeChild instanceof Span)
-            ) {
+            if (!(child instanceof Span) || !(beforeChild instanceof Span)) {
                 // Disqualify any children that are not at least a Span.
                 return true;
             }
 
             const index: number = parent.spans.indexOf(beforeChild);
-            if(index === -1){
+            if (index === -1) {
                 parent.spans.push(child);
                 return true;
             }
@@ -117,7 +114,10 @@ type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<FormattedStringCompo
 export const FormattedString: React.ComponentType<
     OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFormattedString>
 > = React.forwardRef<NativeScriptFormattedString, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptFormattedString>) => {
+    (
+        props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>,
+        ref: React.RefObject<NativeScriptFormattedString>
+    ) => {
         const { children, ...rest } = props;
 
         return React.createElement(

@@ -6,15 +6,15 @@ import { ViewBaseComponentProps, RCTViewBase } from "./ViewBase";
 
 interface Props {}
 
-export type SpanComponentProps<
-    E extends NativeScriptSpan = NativeScriptSpan
-> = Props /* & typeof Span.defaultProps */ & Partial<SpanProps> & ViewBaseComponentProps<E>;
+export type SpanComponentProps<E extends NativeScriptSpan = NativeScriptSpan> = Props /* & typeof Span.defaultProps */ &
+    Partial<SpanProps> &
+    ViewBaseComponentProps<E>;
 
-export class _Span<
-    P extends SpanComponentProps<E>,
-    S extends {},
-    E extends NativeScriptSpan
-> extends RCTViewBase<P, S, E> {
+export class _Span<P extends SpanComponentProps<E>, S extends {}, E extends NativeScriptSpan> extends RCTViewBase<
+    P,
+    S,
+    E
+> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptSpan>()
     // };

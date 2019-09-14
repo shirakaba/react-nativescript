@@ -22,7 +22,7 @@ export function RNSFriendly<TBase extends Constructor<NativeScriptTextBase>>(Bas
                 parent.formattedText = child;
                 return true;
             }
-            
+
             // i.e. defer to Host Config.
             return false;
         }

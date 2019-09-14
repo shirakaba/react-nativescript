@@ -27,7 +27,6 @@ export type LabelComponentProps<
     E extends NativeScriptLabel = NativeScriptLabel
 > = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
 
-
 /**
  * Represents a text label.
  */
