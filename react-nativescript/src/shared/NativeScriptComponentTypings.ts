@@ -52,6 +52,7 @@ import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { ObservableComponentProps } from "../components/Observable";
 import { ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import * as console from "./Logger";
+import { FormattedString, Span } from "tns-core-modules/text/formatted-string";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type StylePropContents = Omit<Style, "PropertyBag" | keyof Observable>;
@@ -396,6 +397,30 @@ export type SearchBarProps = ViewProps &
 export type SegmentedBarProps = ViewProps & Pick<SegmentedBar, "selectedIndex" | "selectedBackgroundColor" | "items">;
 
 export type SliderProps = ViewProps & Pick<Slider, "value" | "minValue" | "maxValue">;
+
+export type FormattedStringProps = ViewBaseProps & Pick<
+    FormattedString,
+    "spans"|
+    "fontFamily"|
+    "fontSize"|
+    "fontStyle"|
+    "fontWeight"|
+    "textDecoration"|
+    "color"|
+    "backgroundColor"
+>;
+
+export type SpanProps = ViewBaseProps & Pick<
+    Span,
+    "fontFamily"|
+    "fontSize"|
+    "fontStyle"|
+    "fontWeight"|
+    "textDecoration"|
+    "color"|
+    "backgroundColor"|
+    "text"
+>;
 
 // export type TextBaseProp<T extends TextBase> = {
 //     [P in keyof T]: T[P];
