@@ -50,6 +50,8 @@ import { WrapLayout } from "tns-core-modules/ui/layouts/wrap-layout/wrap-layout"
 import * as console from "../shared/Logger";
 import { Instance, Type, Props, Container, HostContext, InstanceCreator } from "../shared/HostConfigTypes";
 import { RNSFriendlySegmentedBar } from "../components/SegmentedBar";
+import { RNSFriendlyFormattedString } from "../components/FormattedString";
+import { Span } from "tns-core-modules/text/span";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -75,6 +77,8 @@ export const elementMap: Record<string, InstanceCreator> = {
     button: () => new Button(), // √ Pending event listeners.
     contentView: () => new ContentView(), // √ Pending event listeners.
     datePicker: () => new DatePicker(), // √
+    formattedString: () => new RNSFriendlyFormattedString(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
+    span: () => new Span(), // √
     // "dialogs": () => new Dialogs(), // No components in here.
     // "editableTextBase": () => new EditableTextBase(),
     htmlView: () => new HtmlView(), // √
@@ -97,7 +101,7 @@ export const elementMap: Record<string, InstanceCreator> = {
     // "repeater": () => new Repeater(), // Doesn't translate to React properly. Just use a regular LayoutBase instead
     scrollView: () => new ScrollView(), // √
     searchBar: () => new SearchBar(), // √
-    segmentedBar: () => new RNSFriendlySegmentedBar(), // This one is special! It's the first example of the new CustomNodeHierarchyManager pattern.
+    segmentedBar: () => new RNSFriendlySegmentedBar(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
     segmentedBarItem: () => new SegmentedBarItem(),
     slider: () => new Slider(), // √
     switch: () => new Switch(), // √

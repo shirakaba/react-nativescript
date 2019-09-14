@@ -32,6 +32,8 @@ import { SegmentedBarItem as $SegmentedBarItem } from "../components/SegmentedBa
 import { Slider as $Slider } from "../components/Slider";
 import { DockLayout as $DockLayout } from "../components/DockLayout";
 import { FlexboxLayout as $FlexboxLayout } from "../components/FlexboxLayout";
+import { FormattedString as $FormattedString } from "../components/FormattedString";
+import { Span as $Span } from "../components/Span";
 import { GridLayout as $GridLayout } from "../components/GridLayout";
 import { HtmlView as $HtmlView } from "../components/HtmlView";
 import { Label as $Label } from "../components/Label";
@@ -178,6 +180,7 @@ export {
     $DatePicker,
     $DockLayout,
     $FlexboxLayout,
+    $FormattedString,
     $Frame,
     $GridLayout,
     $HtmlView,
@@ -194,6 +197,7 @@ export {
     $SegmentedBar,
     $SegmentedBarItem,
     $Slider,
+    $Span,
     $StackLayout,
     $Switch,
     $TabView,
