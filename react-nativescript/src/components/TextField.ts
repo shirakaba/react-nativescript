@@ -3,6 +3,22 @@ import * as React from "react";
 import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
 import { TextFieldProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { RCTEditableTextBase, EditableTextBaseComponentProps } from "./EditableTextBase";
+import { RNSFriendly } from "./TextBase";
+
+export const RNSFriendlyTextField = RNSFriendly(NativeScriptTextField);
+
+const elementKey: string = "textField";
+/* Registration is instead performed in elementRegistry to remove this side-effect from the module and hence aid tree-shaking */
+// register(
+//     elementKey,
+//     (
+//         props: Props,
+//         rootContainerInstance: Container,
+//         hostContext: HostContext,
+//     ) => {
+//         return new RNSFriendlyTextField();
+//     }
+// );
 
 interface Props {
     // No mandatory props.
@@ -56,7 +72,7 @@ export class _TextField<
         };
 
         return React.createElement(
-            "textField",
+            elementKey,
             {
                 ...rest,
                 ...textContent,

@@ -52,6 +52,10 @@ import { Instance, Type, Props, Container, HostContext, InstanceCreator } from "
 import { RNSFriendlySegmentedBar } from "../components/SegmentedBar";
 import { RNSFriendlyFormattedString } from "../components/FormattedString";
 import { Span } from "tns-core-modules/text/span";
+import { RNSFriendlyLabel } from "../components/Label";
+import { RNSFriendlyButton } from "../components/Button";
+import { RNSFriendlyTextView } from "../components/TextView";
+import { RNSFriendlyTextField } from "../components/TextField";
 
 // type AnyConcreteView = ConcreteView<any>;
 // type ConcreteView<T extends View> = T;
@@ -74,7 +78,7 @@ export const elementMap: Record<string, InstanceCreator> = {
     // "animation": () => new Animation(),
     // "border": () => new Border()
     // "builder": () => new Builder(),
-    button: () => new Button(), // √ Pending event listeners.
+    button: () => new RNSFriendlyButton(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
     contentView: () => new ContentView(), // √ Pending event listeners.
     datePicker: () => new DatePicker(), // √
     formattedString: () => new RNSFriendlyFormattedString(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
@@ -84,7 +88,7 @@ export const elementMap: Record<string, InstanceCreator> = {
     htmlView: () => new HtmlView(), // √
     image: () => new Image(), // √
     // "cache": () => new Cache(), // Observable.observable, but doesn't extend View.
-    label: () => new Label(), // √
+    label: () => new RNSFriendlyLabel(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
     // "layoutBase": () => new LayoutBase(), // ? A concrete class, but not sure whether you can use it as a view in practice...
     absoluteLayout: () => new AbsoluteLayout(), // √
     dockLayout: () => new DockLayout(), // √
@@ -107,9 +111,9 @@ export const elementMap: Record<string, InstanceCreator> = {
     switch: () => new Switch(), // √
     tabView: () => new TabView(), // √
     tabViewItem: () => new TabViewItem(), // √
-    textView: () => new TextView(), // √
+    textView: () => new RNSFriendlyTextView(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
     // "textBase": () => new TextBase(), // ? A concrete class, but not sure whether you can use it as a view in practice...
-    textField: () => new TextField(), // √
+    textField: () => new RNSFriendlyTextField(), // This one is special! It's an example of the new CustomNodeHierarchyManager pattern.
     timePicker: () => new TimePicker(), // √
     // "transition": () => new Transition(),
     // "fadeTransition": () => new FadeTransition(),

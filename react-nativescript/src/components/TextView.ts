@@ -2,8 +2,23 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import { TextView as NativeScriptTextView } from "tns-core-modules/ui/text-view/text-view";
 import { TextViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
-import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
+import { TextBaseComponentProps, RCTTextBase, RNSFriendly } from "./TextBase";
 import { EditableTextBaseComponentProps, RCTEditableTextBase } from "./EditableTextBase";
+
+export const RNSFriendlyTextView = RNSFriendly(NativeScriptTextView);
+
+const elementKey: string = "textView";
+/* Registration is instead performed in elementRegistry to remove this side-effect from the module and hence aid tree-shaking */
+// register(
+//     elementKey,
+//     (
+//         props: Props,
+//         rootContainerInstance: Container,
+//         hostContext: HostContext,
+//     ) => {
+//         return new RNSFriendlyTextView();
+//     }
+// );
 
 interface Props {
     // No mandatory props.
@@ -57,7 +72,7 @@ export class _TextView<
         };
 
         return React.createElement(
-            "textView",
+            elementKey,
             {
                 ...rest,
                 ...textContent,

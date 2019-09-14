@@ -6,7 +6,22 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
 import { Color } from "tns-core-modules/color/color";
 import { updateListener } from "../client/EventHandling";
-import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
+import { TextBaseComponentProps, RCTTextBase, RNSFriendly } from "./TextBase";
+
+export const RNSFriendlyButton = RNSFriendly(NativeScriptButton);
+
+const elementKey: string = "button";
+/* Registration is instead performed in elementRegistry to remove this side-effect from the module and hence aid tree-shaking */
+// register(
+//     elementKey,
+//     (
+//         props: Props,
+//         rootContainerInstance: Container,
+//         hostContext: HostContext,
+//     ) => {
+//         return new RNSFriendlyButton();
+//     }
+// );
 
 interface Props {
     // onPress
@@ -61,7 +76,7 @@ export class _Button<
         };
 
         return React.createElement(
-            "button",
+            elementKey,
             {
                 className: "btn btn-primary btn-active", // NativeScript defaults from documentation
                 ...rest,

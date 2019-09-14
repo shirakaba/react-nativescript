@@ -2,7 +2,22 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import { LabelProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Label as NativeScriptLabel } from "tns-core-modules/ui/label/label";
-import { TextBaseComponentProps, RCTTextBase } from "./TextBase";
+import { TextBaseComponentProps, RCTTextBase, RNSFriendly } from "./TextBase";
+
+export const RNSFriendlyLabel = RNSFriendly(NativeScriptLabel);
+
+const elementKey: string = "label";
+/* Registration is instead performed in elementRegistry to remove this side-effect from the module and hence aid tree-shaking */
+// register(
+//     elementKey,
+//     (
+//         props: Props,
+//         rootContainerInstance: Container,
+//         hostContext: HostContext,
+//     ) => {
+//         return new RNSFriendlyLabel();
+//     }
+// );
 
 interface Props {
     // No mandatory props.
@@ -11,6 +26,7 @@ interface Props {
 export type LabelComponentProps<
     E extends NativeScriptLabel = NativeScriptLabel
 > = Props /* & typeof _Label.defaultProps */ & Partial<LabelProps> & TextBaseComponentProps<E>;
+
 
 /**
  * Represents a text label.
@@ -56,7 +72,7 @@ export class _Label<
         };
 
         return React.createElement(
-            "label",
+            elementKey,
             {
                 ...rest,
                 ...textContent,
