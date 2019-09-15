@@ -7,9 +7,8 @@ import { LayoutBaseComponentProps, RCTLayoutBase } from "./LayoutBase";
 interface Props {
     /* Each constituent view passed in must bear "row" and "col" Props. */
     /* rows and columns will be added in order specified. */
-    // rows: ItemSpec[];
-    // columns: ItemSpec[];
-    // TODO: Should we enforce that children must only be Views?
+    rows?: ItemSpec[];
+    columns?: ItemSpec[];
 }
 
 export type GridLayoutComponentProps<
