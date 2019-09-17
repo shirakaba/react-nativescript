@@ -37,7 +37,7 @@ tns run ios
 
 ## Documentation
 
-Under construction – please be patient! For now, please refer to the example components and use the [NativeScript Core docs](https://docs.nativescript.org/start/introduction) as your guide.
+Under construction – please be patient! For now, please refer to the examples mentioned below and use the [NativeScript Core docs](https://docs.nativescript.org/start/introduction) as your guide.
 
 ### Example app
 
