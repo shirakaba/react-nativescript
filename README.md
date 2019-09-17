@@ -27,8 +27,6 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 
 ## Setup
 
-The following instructions assume that you'll be developing in TypeScript.
-
 ```sh
 # Make sure that you have `tns` (the NativeScript CLI) installed:
 #   https://docs.nativescript.org/start/quick-setup
