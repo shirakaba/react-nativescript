@@ -21,7 +21,7 @@
     </a>
 </p>
 
-**React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *very* under construction; expect swathing refactors!
+**React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *Very* under construction; expect swathing refactors!
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
@@ -30,161 +30,24 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 The following instructions assume that you'll be developing in TypeScript.
 
 ```sh
-# Create a project like this (or continue from an existing one)
-tns create mycoolapp --tsc
-cd mycoolapp
-
-# In the root of your NativeScript project.
-npm install --save react-nativescript react
-npm install --save-dev @types/react awesome-typescript-loader babel-loader @babel/core @babel/plugin-proposal-class-properties @babel/preset-react fork-ts-checker-webpack-plugin
-
-# Build and run your project like so (specify 'android' instead of 'ios' if applicable):
-tns run ios --no-hmr
+tns create myApp --template tns-template-blank-react
+cd myApp
+tns run ios
 ```
 
-Please file an Issue if you meet any problems when following these instructions. They could well be missing something!
+## Documentation
 
-## Examples
+Under construction – please be patient! For now, please refer to the example components and use the [NativeScript Core docs](https://docs.nativescript.org/start/introduction) as your guide.
 
-### Hello World app
+### Example app
 
-NativeScript CLI does not yet provide a starter template (it's on my to-do list). Here is a summary of how the sample project is set up. It assumes having started from the NativeScript Core TypeScript template (i.e. `tns create mycoolapp --tsc`).
+I've ported [Shiva Prasad](https://github.com/shiv19)'s TypeScript NativeScript Core port of [Alex Ziskind](https://github.com/alexziskind1)'s issue-tracking app to React NativeScript. It's called `rpstrackerrns` and you can find it [here](https://github.com/shirakaba/rpstrackerrns).
 
-#### No JSX/TSX in the entry file, `app.ts`
+The app is based on React NativeScript v0.11.0, so may have some minor differences to the latest version, but the general patterns should be the same.
 
-JSX/TSX is not supported in the entry file `app.ts` due to `nativescript-dev-webpack` filtering it out. It's pending me signing NativeScript's CLA (see this [PR](https://github.com/NativeScript/nativescript-dev-webpack/pull/875)), but I need to get clearance from my company first.
+The repo also includes some example UI plugins – I'll likely be changing the APIs for making those, however, so don't assume that approach to remain supported.
 
-Every other file in your project **can** be in JSX/TSX, however.
-
-#### `.gitignore`
-
-Add this line to the `.gitignore` established by the NativeScript Core new project init process:
-
-```
-# Ignores the Awesome TypeScript Loader build cache folder
-.awcache
-```
-
-#### `tsconfig.json`
-
-Same as for the usual NativeScript Core TypeScript template, but with `"jsx": "react"` added.
-
-#### `webpack.config.js`
-
-The webpack config is bit more complex than the NativeScript Core TypeScript template. This is necessary to support JSX, the React library, and faster webpack builds (i.e. one webpack rule to transform from TSX to JS, rather than two rules).
-
-Same as for the usual NativeScript Core TypeScript template, but with the following modifications:
-
-Assign this variable towards the beginning of your `webpack.config.js`:
-
-```js
-const babelOptions = {
-    babelrc: false,
-    presets: [
-        "@babel/preset-react"
-    ],
-    plugins: [
-        ["@babel/plugin-proposal-class-properties", { loose: true }]
-    ]
-};
-```
-
-...ensure that the Webpack `config.resolve.extensions` includes `.tsx` and `.jsx`:
-
-```js
-extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
-```
-
-... and ensure that your `.js` and `.ts` module rules are replaced with these (which support `.js(x)` and `.ts(x)`). See how we're referencing the `babelOptions` variable that we defined earlier:
-
-```js
-{
-    test: /\.js(x?)$/,
-    exclude: /node_modules/,
-    use: {
-        loader: "babel-loader",
-        options: babelOptions
-    },
-},
-
-{
-    test: /\.ts(x?)$/,
-    use: [
-        {
-            loader: "awesome-typescript-loader",
-            options: {
-                transpileOnly: true,
-                configFileName: "tsconfig.tns.json",
-                useBabel: true,
-                useCache: true,
-                cacheDirectory: ".awcache", /* You'll want to git-ignore this folder :) */
-                babelOptions: babelOptions,
-                babelCore: "@babel/core",
-                /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
-                 * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
-                compilerOptions: {
-                    sourceMap
-                },
-                sourceMap
-            },
-        }
-    ]
-},
-```
-
-If I've missed anything, just refer to [`sample/webpack.config.js`](https://github.com/shirakaba/react-nativescript/blob/master/sample/webpack.config.js), because that's what I'm using!
-
-#### Source code
-
-```typescript
-// app.ts
-
-/* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
-Object.defineProperty(global, '__DEV__', { value: false });
-
-import * as React from "react";
-import * as ReactNativeScript from "react-nativescript";
-import AppContainer, { rootRef } from "./AppContainer";
-
-ReactNativeScript.start(React.createElement(AppContainer, {}, null), rootRef);
-```
-
-```typescript
-// AppContainer.tsx
-import * as React from "react";
-import { $TabView, $TabViewItem, $StackLayout, $Label } from "react-nativescript";
-
-export const rootRef: React.RefObject<any> = React.createRef<any>();
-
-// See the testComponents directory for many examples of components (and ref-forwarding).
-const AppContainer = () => (
-    // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
-    <$TabView ref={rootRef} selectedIndex={0}>
-        <$TabViewItem title={"One"}>
-            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-                <$Label>Uno</$Label>
-            </$StackLayout>
-        </$TabViewItem>
-        <$TabViewItem title={"Two"}>
-            <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-                <$Label>Dos</$Label>
-            </$StackLayout>
-        </$TabViewItem>
-    </$TabView>
-);
-
-export default AppContainer;
-```
-
-#### Running
-
-I recommend to disable HMR because it's not supported out-of-the-box in React NativeScript yet – React is changing the HMR process right now, so I'll support it as soon as it becomes available.
-
-```sh
-tns run ios --no-hmr
-```
-
----
+### Example components
 
 There are many complex components to test (or refer to) in [`sample/app/testComponents/testComponents.ts`](https://github.com/shirakaba/react-nativescript/blob/master/sample/app/testComponents/testComponents.ts). `GameLoop` has some potential ;)
 
@@ -294,7 +157,11 @@ React NativeScript shares most of the good parts of React Native, but above all 
 
 **How far along is it?**
 
-It's feature-equivalent with NativeScript Core, but lacking the RAD (Rapid Application Development) components like RadSideDrawer. Otherwise, everything should be possible. But you'll have to bear with me while I write the documentation (there is none yet)!
+It's feature-equivalent with NativeScript Core! It's just missing documentation to explain how to use it.
+
+**Is it production-ready?**
+
+Maybe. I don't know what I don't know. Try it out, see if you have any issues, and this will become clearer.
 
 **What about plugins?**
 
@@ -315,17 +182,17 @@ Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [pro
 A quick list of my own plans (not necessarily in execution order):
 
 * Documentation website
-* Document workflow for React Dev Tools v4 (which includes HMR)
+* Document workflow for React Dev Tools integration
 * Conference talk 🤞
 
 Wishes:
 
 * Demo apps
 * Translated docs
-* Starter template in NativeScript CLI and Playground
+* Starter template in NativeScript Playground
 * Lots and lots of plugins
 * API compatibility with React Native (very long-term goal)
-* Compatibility with major React packages like React Navigation and Redux (may depend upon above)
+* Compatibility with major React packages like React Navigation (may depend upon above)
 
 ## Contributing 🙋‍♀️
 
