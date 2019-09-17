@@ -33,7 +33,7 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 
 tns create myApp --template tns-template-blank-react
 cd myApp
-tns run ios
+tns preview
 ```
 
 ## Documentation
