@@ -46,10 +46,10 @@ export class _Slider<P extends SliderComponentProps<E>, S extends State, E exten
 
         const node: E | null = this.getCurrentRef();
         if (!node) {
-            node.off("valueChange", this.onValueChange);
+            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
         }
-        console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
+        node.off("valueChange", this.onValueChange);
     }
 
     render(): React.ReactNode {
