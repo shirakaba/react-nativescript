@@ -34,7 +34,12 @@ export class _ListPicker<
         super.updateListeners(node, attach, nextProps);
 
         if (attach === null) {
-            updateListener(node, "selectedIndexChange", this.props.onSelectedIndexChange, nextProps.onSelectedIndexChange);
+            updateListener(
+                node,
+                "selectedIndexChange",
+                this.props.onSelectedIndexChange,
+                nextProps.onSelectedIndexChange
+            );
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 

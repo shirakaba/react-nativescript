@@ -18,11 +18,11 @@ export type SliderComponentProps<
 
 interface State {}
 
-export class _Slider<P extends SliderComponentProps<E>, S extends State, E extends NativeScriptUIElement> extends RCTView<
-    P,
-    S,
-    E
-> {
+export class _Slider<
+    P extends SliderComponentProps<E>,
+    S extends State,
+    E extends NativeScriptUIElement
+> extends RCTView<P, S, E> {
     // static defaultProps = {
     //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };

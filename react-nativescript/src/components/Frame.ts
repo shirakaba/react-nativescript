@@ -7,7 +7,6 @@ import { updateListener } from "../client/EventHandling";
 
 type NativeScriptUIElement = NativeScriptFrame;
 
-
 interface Props {
     onOptionSelected?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }

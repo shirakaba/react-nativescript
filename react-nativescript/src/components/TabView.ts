@@ -61,7 +61,7 @@ export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extend
     render() {
         const {
             forwardedRef,
-    
+
             onSelectedIndexChange,
 
             onLoaded,
