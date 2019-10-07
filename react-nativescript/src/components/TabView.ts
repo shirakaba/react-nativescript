@@ -14,7 +14,7 @@ import { updateListener } from "../client/EventHandling";
 
 interface Props {
     // items: NativeScriptTabViewItem[],
-    onSelectedIndexChanged?(args: SelectedIndexChangedEventData): void;
+    onSelectedIndexChange?(args: SelectedIndexChangedEventData): void;
 }
 
 // export type TabViewComponentProps = Props & Partial<TabViewProps>;
@@ -47,20 +47,22 @@ export class _TabView<P extends TabViewComponentProps<E>, S extends {}, E extend
         if (attach === null) {
             updateListener(
                 node,
-                "selectedIndexChanged",
-                this.props.onSelectedIndexChanged,
-                nextProps.onSelectedIndexChanged
+                "selectedIndexChange",
+                this.props.onSelectedIndexChange,
+                nextProps.onSelectedIndexChange
             );
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if (this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
+            if (this.props.onSelectedIndexChange) method("selectedIndexChange", this.props.onSelectedIndexChange);
         }
     }
 
     render() {
         const {
             forwardedRef,
+    
+            onSelectedIndexChange,
 
             onLoaded,
             onUnloaded,
