@@ -275,7 +275,8 @@ export class SwitchTest extends React.Component<{}, { checked: boolean }> {
                     $Switch,
                     {
                         checked: this.state.checked,
-                        onToggle: (checked: boolean) => {
+                        onToggle: (args) => {
+                            const checked: boolean = args.object.checked;
                             console.log(`[Master switch] now:`, checked);
                             this.setState((state) => ({ checked }), () => {
                                 console.log(`[Master switch] Synced the checked state to ${checked}.`);
@@ -290,7 +291,8 @@ export class SwitchTest extends React.Component<{}, { checked: boolean }> {
                     {
                         isEnabled: false,
                         checked: this.state.checked,
-                        onToggle: (checked: boolean) => {
+                        onToggle: (args) => {
+                            const checked: boolean = args.object.checked;
                             console.log(`[Subordinate switch] now:`, checked);
                         }
                     },
@@ -329,7 +331,8 @@ export class SliderTest extends React.Component<{}, { value: number }> {
                         minValue: this.minValue,
                         maxValue: this.maxValue,
                         color: new Color(255, fraction, fraction, fraction),
-                        onValueChange: (value: number) => {
+                        onValueChange: (args) => {
+                            const value: number = args.object.value;
                             this.setState({ value });
                         }
                     },
@@ -344,7 +347,8 @@ export class SliderTest extends React.Component<{}, { value: number }> {
                         minValue: this.minValue,
                         maxValue: this.maxValue,
                         color: new Color(255, fraction, fraction, fraction),
-                        onValueChange: (value: number) => {
+                        onValueChange: (args) => {
+                            const value: number = args.object.value;
                         }
                     },
                     null,
@@ -391,7 +395,8 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
                         minuteInterval: this.minuteInterval,
                         color: new Color(255, colourFraction, colourFraction, colourFraction),
                         backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
-                        onTimeChange: (time: Date) => {
+                        onTimeChange: (args) => {
+                            const time: Date = args.object.time;
                             this.setState({ time });
                         }
                     },
@@ -409,7 +414,7 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
                         maxMinute: this.maxMinute,
                         color: new Color(255, colourFraction, colourFraction, colourFraction),
                         backgroundColor: new Color(255, oppositeColourFraction, oppositeColourFraction, oppositeColourFraction),
-                        onTimeChange: (time: Date) => {
+                        onTimeChange: (args) => {
                         }
                     },
                     null,
@@ -449,7 +454,8 @@ export class DatePickerTest extends React.Component<{}, { date: Date }> {
                         date: this.state.date,
                         minDate: this.minDate,
                         maxDate: this.maxDate,
-                        onDateChange: (date: Date) => {
+                        onDateChange: (args) => {
+                            const date: Date = args.object.date;
                             console.log(`[onDateChange()]`, date);
                             this.setState({ date });
                         }
@@ -464,7 +470,7 @@ export class DatePickerTest extends React.Component<{}, { date: Date }> {
                         date: this.state.date,
                         minDate: this.minDate,
                         maxDate: this.maxDate,
-                        onDateChange: (date: Date) => {
+                        onDateChange: (args) => {
                         }
                     },
                     null,
@@ -511,9 +517,9 @@ export class ListPickerTest extends React.Component<{}, { selectedLocationIndex:
                         backgroundColor: new Color("pink"),
                         items: this.locations,
                         selectedIndex: this.state.selectedLocationIndex,
-                        onSelectedIndexChange: (selectedIndex: number) => {
+                        onSelectedIndexChange: (args) => {
                             this.setState({
-                                selectedLocationIndex: selectedIndex,
+                                selectedLocationIndex: args.object.selectedIndex,
                                 selectedWeatherIndex: 0,
                             });
                         }
@@ -534,8 +540,8 @@ export class ListPickerTest extends React.Component<{}, { selectedLocationIndex:
                         items: this.weathers[this.state.selectedLocationIndex],
                         // isEnabled: false, /* Has no effect on ListPicker! Arguably a bug in core. */
                         selectedIndex: this.state.selectedWeatherIndex,
-                        onSelectedIndexChange: (selectedIndex: number) => {
-                            this.setState({ selectedWeatherIndex: selectedIndex });
+                        onSelectedIndexChange: (args) => {
+                            this.setState({ selectedWeatherIndex: args.object.selectedIndex });
                         }
                     },
                     null,

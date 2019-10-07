@@ -73,12 +73,13 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         (sb.ios as UISearchBar).autocorrectionType = UITextAutocorrectionType.No;
                         (sb.ios as UISearchBar).autocapitalizationType = UITextAutocapitalizationType.None;
                     }}
-                    onTextChange={(text: string) => {
+                    onTextChange={(args) => {
+                        const text: string = args.object.text;
                         console.log(`[onTextChange]`, text);
                         this.setState({ searchText: text });
                     }}
-                    onSubmit={(args: EventData) => {
-                        const text: string = (args.object as SearchBar).text;
+                    onSubmit={(args) => {
+                        const text: string = args.object.text;
                         console.log(`[onSubmit]`, text);
                         this.setState({ searchText: text, src: text });
                     }}
@@ -107,7 +108,8 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         );
                         (wv.ios as WKWebView).reload();
                     }}
-                    onUrlChange={(src: string) => {
+                    onUrlChange={(args) => {
+                        const src: string = args.object.src;
                         console.log(`[onUrlChange]`, src);
                         this.setState({ src });
                     }}
