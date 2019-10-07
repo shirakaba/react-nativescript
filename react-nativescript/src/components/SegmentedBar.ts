@@ -88,7 +88,7 @@ const elementKey: string = "segmentedBar";
 // );
 
 interface Props {
-    onSelectedIndexChanged?: (args: SelectedIndexChangedEventData) => void;
+    onSelectedIndexChange?: (args: SelectedIndexChangedEventData) => void;
 }
 
 export type SegmentedBarComponentProps<
@@ -113,14 +113,14 @@ export class _SegmentedBar<
         if (attach === null) {
             updateListener(
                 node,
-                "selectedIndexChanged",
-                this.props.onSelectedIndexChanged,
-                nextProps.onSelectedIndexChanged
+                "selectedIndexChange",
+                this.props.onSelectedIndexChange,
+                nextProps.onSelectedIndexChange
             );
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
-            if (this.props.onSelectedIndexChanged) method("selectedIndexChanged", this.props.onSelectedIndexChanged);
+            if (this.props.onSelectedIndexChange) method("selectedIndexChange", this.props.onSelectedIndexChange);
         }
     }
 
@@ -128,7 +128,7 @@ export class _SegmentedBar<
         const {
             forwardedRef,
 
-            onSelectedIndexChanged,
+            onSelectedIndexChange,
 
             onLoaded,
             onUnloaded,
