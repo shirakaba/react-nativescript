@@ -1,25 +1,27 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
 import { EditableTextBase as NativeScriptEditableTextBase } from "../client/ElementRegistry";
-import { EditableTextBaseProps } from "../shared/NativeScriptComponentTypings";
+import { EditableTextBaseProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { RCTTextBase, TextBaseComponentProps } from "./TextBase";
 import { EventData } from "tns-core-modules/ui/text-base/text-base";
 import { updateListener } from "../client/EventHandling";
 
+type NativeScriptUIElement = NativeScriptEditableTextBase;
+
 interface Props {
-    onBlur?: (args: EventData) => void;
-    onFocus?: (args: EventData) => void;
-    onTextChange?: (args: EventData) => void;
+    onBlur?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    onFocus?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    onTextChange?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type EditableTextBaseComponentProps<
-    E extends NativeScriptEditableTextBase = NativeScriptEditableTextBase
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof EditableTextBase.defaultProps */ & Partial<EditableTextBaseProps> & TextBaseComponentProps<E>;
 
 export abstract class RCTEditableTextBase<
     P extends EditableTextBaseComponentProps<E>,
     S extends {},
-    E extends NativeScriptEditableTextBase
+    E extends NativeScriptUIElement
 > extends RCTTextBase<P, S, E> {
     /**
      *

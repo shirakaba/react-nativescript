@@ -1,6 +1,6 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { ViewBaseProps, ViewProps } from "../shared/NativeScriptComponentTypings";
+import { ViewBaseProps, ViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
 import { EventData, Observable } from "tns-core-modules/data/observable/observable";
 import {
@@ -16,11 +16,13 @@ import { ViewBaseComponentProps, RCTViewBase, ViewBaseComponentState } from "./V
 import { updateListener } from "../client/EventHandling";
 import { shallowEqual } from "src/client/shallowEqual";
 
+type NativeScriptUIElement = NativeScriptView;
+
 interface Props {
     /* From View. */
-    onLoaded?: (args: EventData) => void;
-    onUnloaded?: (args: EventData) => void;
-    onAndroidBackPressed?: (args: EventData) => void;
+    onLoaded?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    onUnloaded?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    onAndroidBackPressed?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
     onShowingModally?: (args: ShownModallyData) => void;
     onShownModally?: (args: ShownModallyData) => void;
 
@@ -40,7 +42,7 @@ interface Props {
 }
 
 export type ViewComponentProps<
-    E extends NativeScriptView = NativeScriptView
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
 
 export type ViewComponentState = {} & ViewBaseComponentState;
@@ -48,10 +50,10 @@ export type ViewComponentState = {} & ViewBaseComponentState;
 export abstract class RCTView<
     P extends ViewComponentProps<E>,
     S extends ViewComponentState,
-    E extends NativeScriptView
+    E extends NativeScriptUIElement
 > extends RCTViewBase<P, S, E> {
     // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptView>()
+    //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };
 
     /**

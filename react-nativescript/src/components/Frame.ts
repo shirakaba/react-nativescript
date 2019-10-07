@@ -1,25 +1,28 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { FrameProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { FrameProps, PropsWithoutForwardedRef, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { Frame as NativeScriptFrame, EventData } from "tns-core-modules/ui/frame/frame";
 import { ViewComponentProps, RCTView } from "./View";
 import { updateListener } from "../client/EventHandling";
 
+type NativeScriptUIElement = NativeScriptFrame;
+
+
 interface Props {
-    onOptionSelected?: (args: EventData) => void;
+    onOptionSelected?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type FrameComponentProps<
-    E extends NativeScriptFrame = NativeScriptFrame
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof Frame.defaultProps */ & Partial<FrameProps> & ViewComponentProps<E>;
 
-export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends NativeScriptFrame> extends RCTView<
+export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends NativeScriptUIElement> extends RCTView<
     P,
     S,
     E
 > {
     // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptFrame>()
+    //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };
 
     /**
@@ -73,12 +76,12 @@ export class _Frame<P extends FrameComponentProps<E>, S extends {}, E extends Na
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<FrameComponentProps<NativeScriptFrame>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<FrameComponentProps<NativeScriptUIElement>>;
 
 export const Frame: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptFrame>
-> = React.forwardRef<NativeScriptFrame, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptFrame>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

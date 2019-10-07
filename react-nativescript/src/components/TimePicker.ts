@@ -1,53 +1,43 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { TimePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { TimePickerProps, PropsWithoutForwardedRef, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { TimePicker as NativeScriptTimePicker } from "tns-core-modules/ui/time-picker/time-picker";
 import { ViewComponentProps, RCTView } from "./View";
 import { EventData } from "tns-core-modules/data/observable/observable";
+import { updateListener } from "../client/EventHandling";
+
+type NativeScriptUIElement = NativeScriptTimePicker;
 
 interface Props {
-    onTimeChange?: (time: Date) => void;
+    onTimeChange?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type TimePickerComponentProps<
-    E extends NativeScriptTimePicker = NativeScriptTimePicker
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof TimePicker.defaultProps */ & Partial<TimePickerProps> & ViewComponentProps<E>;
 
 export class _TimePicker<
     P extends TimePickerComponentProps<E>,
     S extends {},
-    E extends NativeScriptTimePicker
+    E extends NativeScriptUIElement
 > extends RCTView<P, S, E> {
     // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptTimePicker>()
+    //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };
 
-    private readonly onTimeChange = (args: EventData) => {
-        const time: Date = (<NativeScriptTimePicker>args.object).time;
+    /**
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
 
-        this.props.onTimeChange && this.props.onTimeChange(time);
-    };
+        if (attach === null) {
+            updateListener(node, "timeChange", this.props.onTimeChange, nextProps.onTimeChange);
+        } else {
+            const method = (attach ? node.on : node.off).bind(node);
 
-    componentDidMount() {
-        super.componentDidMount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
+            if (this.props.onTimeChange) method("timeChange", this.props.onTimeChange);
         }
-        node.on("timeChange", this.onTimeChange);
-    }
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
-        }
-        node.off("timeChange", this.onTimeChange);
     }
 
     render(): React.ReactNode {
@@ -89,12 +79,12 @@ export class _TimePicker<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TimePickerComponentProps<NativeScriptTimePicker>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TimePickerComponentProps<NativeScriptUIElement>>;
 
 export const TimePicker: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTimePicker>
-> = React.forwardRef<NativeScriptTimePicker, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTimePicker>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

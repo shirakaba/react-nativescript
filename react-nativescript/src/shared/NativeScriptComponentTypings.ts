@@ -53,11 +53,18 @@ import { ObservableComponentProps } from "../components/Observable";
 import { ActionItem, NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import * as console from "./Logger";
 import { FormattedString, Span } from "tns-core-modules/text/formatted-string";
+import { EventData } from "tns-core-modules/data/observable/observable";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type StylePropContents = Omit<Style, "PropertyBag" | keyof Observable>;
 interface PartialStyleProp {
     style: Partial<StylePropContents>;
+}
+
+/* This is more ergonomic than requiring developers to manually cast args.object.
+ * TODO: introduce this throughout the library as a convenience for all event handlers. */
+export interface NarrowedEventData<T extends Observable> extends EventData {
+    object: T;
 }
 
 export type PropsWithoutForwardedRef<P extends ObservableComponentProps> = Omit<P, "forwardedRef">;

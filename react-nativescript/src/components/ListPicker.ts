@@ -1,55 +1,45 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { ListPickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { ListPickerProps, PropsWithoutForwardedRef, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ListPicker as NativeScriptListPicker } from "tns-core-modules/ui/list-picker/list-picker";
 import { ViewComponentProps, RCTView } from "./View";
 import { EventData } from "tns-core-modules/data/observable/observable";
 import { ItemsSource } from "tns-core-modules/ui/list-picker/list-picker";
+import { updateListener } from "../client/EventHandling";
+
+type NativeScriptUIElement = NativeScriptListPicker;
 
 interface Props {
     items: any[] | ItemsSource;
-    onSelectedIndexChange?: (selectedIndex: number) => void;
+    onSelectedIndexChange?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type ListPickerComponentProps<
-    E extends NativeScriptListPicker = NativeScriptListPicker
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof ListPicker.defaultProps */ & Partial<ListPickerProps> & ViewComponentProps<E>;
 
 export class _ListPicker<
     P extends ListPickerComponentProps<E>,
     S extends {},
-    E extends NativeScriptListPicker
+    E extends NativeScriptUIElement
 > extends RCTView<P, S, E> {
     // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptListPicker>()
+    //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };
 
-    private readonly onSelectedIndexChange = (args: EventData) => {
-        const selectedIndex: number = (<NativeScriptListPicker>args.object).selectedIndex;
+    /**
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
 
-        this.props.onSelectedIndexChange && this.props.onSelectedIndexChange(selectedIndex);
-    };
+        if (attach === null) {
+            updateListener(node, "selectedIndexChange", this.props.onSelectedIndexChange, nextProps.onSelectedIndexChange);
+        } else {
+            const method = (attach ? node.on : node.off).bind(node);
 
-    componentDidMount() {
-        super.componentDidMount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
+            if (this.props.onSelectedIndexChange) method("selectedIndexChange", this.props.onSelectedIndexChange);
         }
-        node.on("selectedIndexChange", this.onSelectedIndexChange);
-    }
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
-        }
-        node.off("selectedIndexChange", this.onSelectedIndexChange);
     }
 
     render(): React.ReactNode {
@@ -88,12 +78,12 @@ export class _ListPicker<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ListPickerComponentProps<NativeScriptListPicker>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ListPickerComponentProps<NativeScriptUIElement>>;
 
 export const ListPicker: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptListPicker>
-> = React.forwardRef<NativeScriptListPicker, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptListPicker>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

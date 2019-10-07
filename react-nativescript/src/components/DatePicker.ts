@@ -1,58 +1,50 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { DatePickerProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { DatePickerProps, PropsWithoutForwardedRef, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { DatePicker as NativeScriptDatePicker } from "tns-core-modules/ui/date-picker/date-picker";
 import { ViewComponentProps, RCTView } from "./View";
 import { EventData } from "tns-core-modules/data/observable/observable";
+import { updateListener } from "../client/EventHandling";
+
+type NativeScriptUIElement = NativeScriptDatePicker;
 
 interface Props {
-    onDateChange?: (date: Date) => void;
+    onDateChange?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type DatePickerComponentProps<
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof DatePicker.defaultProps */ & Partial<DatePickerProps> & ViewComponentProps<E>;
 
 export class _DatePicker<
     P extends DatePickerComponentProps<E>,
     S extends {},
-    E extends NativeScriptDatePicker
+    E extends NativeScriptUIElement
 > extends RCTView<P, S, E> {
     // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptDatePicker>()
+    //     forwardedRef: React.createRef<NativeScriptUIElement>()
     // };
 
-    private readonly onDateChange = (args: EventData) => {
-        const date: Date = (<NativeScriptDatePicker>args.object).date;
+    /**
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
 
-        this.props.onDateChange && this.props.onDateChange(date);
-    };
+        if (attach === null) {
+            updateListener(node, "dateChange", this.props.onDateChange, nextProps.onDateChange);
+        } else {
+            const method = (attach ? node.on : node.off).bind(node);
 
-    componentDidMount() {
-        super.componentDidMount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
+            if (this.props.onDateChange) method("dateChange", this.props.onDateChange);
         }
-        node.on("dateChange", this.onDateChange);
-    }
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-
-        const node: E | null = this.getCurrentRef();
-        if (!node) {
-            console.warn(`React ref to NativeScript View lost, so unable to update event listeners.`);
-            return;
-        }
-        node.off("dateChange", this.onDateChange);
     }
 
     render(): React.ReactNode {
         const {
             forwardedRef,
+
+            onDateChange,
 
             onLoaded,
             onUnloaded,
@@ -86,12 +78,12 @@ export class _DatePicker<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<DatePickerComponentProps<NativeScriptDatePicker>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<DatePickerComponentProps<NativeScriptUIElement>>;
 
 export const DatePicker: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptDatePicker>
-> = React.forwardRef<NativeScriptDatePicker, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptDatePicker>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
