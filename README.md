@@ -26,6 +26,7 @@
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
 
+
 ## Setup
 
 ```sh
