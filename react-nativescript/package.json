@@ -31,7 +31,7 @@
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
     "react": "^16.8.5",
-    "tns-core-modules": "^6.0.1"
+    "tns-core-modules": "^6.2.1"
   },
   "dependencies": {
     "react-reconciler": "^0.20.2"
@@ -41,7 +41,7 @@
     "@types/react-reconciler": "0.18.0",
     "prettier": "1.18.2",
     "react": "16.8.5",
-    "tns-core-modules": "6.0.1",
+    "tns-core-modules": "6.2.1",
     "typescript": "3.3.4000"
   }
 }
