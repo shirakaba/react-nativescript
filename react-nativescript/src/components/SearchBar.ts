@@ -12,6 +12,8 @@ interface Props {
     onTextChange?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
     onSubmit?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
     onClose?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    /* Not represented in typings, but NativeScript Vue refers to it in its docs, so we'll provide it just in case. */
+    onClear?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type SearchBarComponentProps<
@@ -37,12 +39,14 @@ export class _SearchBar<
             updateListener(node, "textChange", this.props.onTextChange, nextProps.onTextChange);
             updateListener(node, "submit", this.props.onSubmit, nextProps.onSubmit);
             updateListener(node, "close", this.props.onClose, nextProps.onClose);
+            updateListener(node, "clear", this.props.onClear, nextProps.onClear);
         } else {
             const method = (attach ? node.on : node.off).bind(node);
 
             if (this.props.onTextChange) method("textChange", this.props.onTextChange);
             if (this.props.onSubmit) method("submit", this.props.onSubmit);
             if (this.props.onClose) method("close", this.props.onClose);
+            if (this.props.onClear) method("clear", this.props.onClear);
         }
     }
 
@@ -53,6 +57,7 @@ export class _SearchBar<
             onTextChange,
             onSubmit,
             onClose,
+            onClear,
 
             onLoaded,
             onUnloaded,
