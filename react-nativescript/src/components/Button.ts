@@ -2,10 +2,6 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import { ButtonProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Button as NativeScriptButton } from "tns-core-modules/ui/button/button";
-import { EventData } from "tns-core-modules/data/observable/observable";
-import { isAndroid, isIOS } from "tns-core-modules/platform/platform";
-import { Color } from "tns-core-modules/color/color";
-import { updateListener } from "../client/EventHandling";
 import { TextBaseComponentProps, RCTTextBase, RNSFriendly } from "./TextBase";
 
 export const RNSFriendlyButton = RNSFriendly(NativeScriptButton);
