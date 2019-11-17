@@ -1,9 +1,12 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
 import { TextField as NativeScriptTextField } from "tns-core-modules/ui/text-field/text-field";
-import { TextFieldProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { TextFieldProps, PropsWithoutForwardedRef, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { RCTEditableTextBase, EditableTextBaseComponentProps } from "./EditableTextBase";
 import { RNSFriendly } from "./TextBase";
+import { updateListener } from "../client/EventHandling";
+
+type NativeScriptUIElement = NativeScriptTextField;
 
 export const RNSFriendlyTextField = RNSFriendly(NativeScriptTextField);
 
@@ -21,11 +24,11 @@ const elementKey: string = "textField";
 // );
 
 interface Props {
-    // No mandatory props.
+    onReturnPress?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
 }
 
 export type TextFieldComponentProps<
-    E extends NativeScriptTextField = NativeScriptTextField
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof _TextField.defaultProps */ & Partial<TextFieldProps> & EditableTextBaseComponentProps<E>;
 
 /**
@@ -34,11 +37,31 @@ export type TextFieldComponentProps<
 export class _TextField<
     P extends TextFieldComponentProps<E>,
     S extends {},
-    E extends NativeScriptTextField = NativeScriptTextField
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > extends RCTEditableTextBase<P, S, E> {
+    /**
+     *
+     * @param attach true: attach; false: detach; null: update
+     */
+    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
+        super.updateListeners(node, attach, nextProps);
+
+        if (attach === null) {
+            updateListener(node, "returnPress", this.props.onReturnPress, nextProps.onReturnPress);
+        } else {
+            const method = (attach ? node.on : node.off).bind(node);
+            if (this.props.onReturnPress) method("returnPress", this.props.onReturnPress);
+        }
+    }
+
     render() {
         const {
             forwardedRef,
+
+            onReturnPress,
+            onBlur,
+            onFocus,
+            onTextChange,
 
             onLoaded,
             onUnloaded,
@@ -83,12 +106,12 @@ export class _TextField<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TextFieldComponentProps<NativeScriptTextField>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TextFieldComponentProps<NativeScriptUIElement>>;
 
 export const TextField: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTextField>
-> = React.forwardRef<NativeScriptTextField, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTextField>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(

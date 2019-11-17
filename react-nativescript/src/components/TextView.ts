@@ -5,6 +5,8 @@ import { TextViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptC
 import { TextBaseComponentProps, RCTTextBase, RNSFriendly } from "./TextBase";
 import { EditableTextBaseComponentProps, RCTEditableTextBase } from "./EditableTextBase";
 
+type NativeScriptUIElement = NativeScriptTextView;
+
 export const RNSFriendlyTextView = RNSFriendly(NativeScriptTextView);
 
 const elementKey: string = "textView";
@@ -25,7 +27,7 @@ interface Props {
 }
 
 export type TextViewComponentProps<
-    E extends NativeScriptTextView = NativeScriptTextView
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > = Props /* & typeof _TextView.defaultProps */ & Partial<TextViewProps> & EditableTextBaseComponentProps<E>;
 
 /**
@@ -34,11 +36,15 @@ export type TextViewComponentProps<
 export class _TextView<
     P extends TextViewComponentProps<E>,
     S extends {},
-    E extends NativeScriptTextView = NativeScriptTextView
+    E extends NativeScriptUIElement = NativeScriptUIElement
 > extends RCTEditableTextBase<P, S, E> {
     render() {
         const {
             forwardedRef,
+
+            onBlur,
+            onFocus,
+            onTextChange,
 
             onLoaded,
             onUnloaded,
@@ -83,12 +89,12 @@ export class _TextView<
     }
 }
 
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TextViewComponentProps<NativeScriptTextView>>;
+type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<TextViewComponentProps<NativeScriptUIElement>>;
 
 export const TextView: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptTextView>
-> = React.forwardRef<NativeScriptTextView, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptTextView>) => {
+    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptUIElement>
+> = React.forwardRef<NativeScriptUIElement, OwnPropsWithoutForwardedRef>(
+    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptUIElement>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
