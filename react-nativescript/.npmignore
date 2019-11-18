@@ -2,3 +2,4 @@
 *.ts
 !*.d.ts
 tsconfig.json
+dist/.DS_Store
