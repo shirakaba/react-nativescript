@@ -4,12 +4,12 @@
 
 <p align="center">
     <a href="https://badge.fury.io/js/react-nativescript"><img src="https://badge.fury.io/js/react-nativescript.svg" alt="npm version" height="18"></a>
-    <a href="https://github.com/shirakaba/nside">
+    <!-- <a href="https://github.com/shirakaba/nside">
         <img src="http://githubbadges.com/star.svg?user=shirakaba&repo=react-nativescript&style=flat"/>
-    </a>
-    <a href="https://github.com/shirakaba/nside/fork">
+    </a> -->
+    <!-- <a href="https://github.com/shirakaba/nside/fork">
         <img src="http://githubbadges.com/fork.svg?user=shirakaba&repo=react-nativescript&style=flat"/>
-    </a>
+    </a> -->
     <a href="https://opensource.org/licenses/mit-license.php">
         <img src="https://badges.frapsoft.com/os/mit/mit.png?v=103"/>
     </a>
