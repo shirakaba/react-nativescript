@@ -31,3 +31,14 @@ export function useObservableEvents<
 {
     useEventListener(node, "propertyChange", props.onPropertyChange);
 }
+
+export function useObservableInheritance<
+    P extends ObservableComponentProps<E>,
+    E extends NativeScriptObservable = NativeScriptObservable
+>(
+    node: E,
+    props: P
+): void
+{
+    useObservableEvents(node, props);
+}
