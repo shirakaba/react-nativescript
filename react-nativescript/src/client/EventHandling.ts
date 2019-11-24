@@ -1,3 +1,5 @@
+import * as React from "react";
+import { useState, useEffect, useRef } from "react";
 import { Observable, EventData } from "tns-core-modules/data/observable";
 import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
 import * as console from "../shared/Logger";
@@ -35,4 +37,19 @@ export function updateListener<T extends Observable>(
             node.on((eventName as any) as string, incomingListener);
         }
     }
+}
+
+export function useEventListener<E extends Observable>(
+    node: E,
+    eventName: string | GestureTypes,
+    eventListener: GenericListener | undefined
+): void 
+{
+    useEffect(() => {
+        node.on(eventName as string, eventListener);
+
+        return function cleanup() {
+            node.off(eventName as string, eventListener);
+        };
+    }, [eventListener]);
 }
