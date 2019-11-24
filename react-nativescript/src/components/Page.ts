@@ -1,9 +1,10 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
+import { useRef } from "react";
 import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
-import { _ContentView, ContentViewComponentProps } from "./ContentView";
-import { updateListener } from "../client/EventHandling";
+import { _ContentView, ContentViewComponentProps, useContentViewInheritance } from "./ContentView";
+import { useEventListener } from "../client/EventHandling";
 
 interface Props {
     onNavigatingTo?: PageNavigationEventHandler;
@@ -22,77 +23,53 @@ export type PageComponentProps<
  * A React wrapper around the NativeScript Page component.
  * See: ui/page/page
  */
-class _Page<
+export function _Page<
     P extends PageComponentProps<E>,
-    S extends {},
     E extends NativeScriptPage = NativeScriptPage
-> extends _ContentView<P, S, E> {
-    // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptPage>()
-    // };
+>(props: React.PropsWithChildren<P>)
+{
+    const {
+        forwardedRef,
 
-    // private readonly myRef: React.RefObject<NativeScriptPage> = React.createRef<NativeScriptPage>();
+        onNavigatedFrom,
+        onNavigatedTo,
+        onNavigatingFrom,
+        onNavigatingTo,
 
-    /**
-     * @param attach true: attach; false: detach; null: update
-     */
-    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
-        super.updateListeners(node, attach, nextProps);
+        onLoaded,
+        onUnloaded,
+        onAndroidBackPressed,
+        onShowingModally,
+        onShownModally,
 
-        if (attach === null) {
-            updateListener(node, "navigatedFrom", this.props.onNavigatedFrom, nextProps.onNavigatedFrom);
-            updateListener(node, "navigatedTo", this.props.onNavigatedTo, nextProps.onNavigatedTo);
-            updateListener(node, "navigatingFrom", this.props.onNavigatingFrom, nextProps.onNavigatingFrom);
-            updateListener(node, "navigatingTo", this.props.onNavigatingTo, nextProps.onNavigatingTo);
-        } else {
-            const method = (attach ? node.on : node.off).bind(node);
+        onTap,
+        onDoubleTap,
+        onPinch,
+        onPan,
+        onSwipe,
+        onRotation,
+        onLongPress,
+        onTouch,
 
-            if (this.props.onNavigatedFrom) method("navigatedFrom", this.props.onNavigatedFrom);
-            if (this.props.onNavigatedTo) method("navigatedTo", this.props.onNavigatedTo);
-            if (this.props.onNavigatingFrom) method("navigatingFrom", this.props.onNavigatingFrom);
-            if (this.props.onNavigatingTo) method("navigatingTo", this.props.onNavigatingTo);
-        }
-    }
+        onPropertyChange,
 
-    render(): React.ReactNode {
-        const {
-            forwardedRef,
+        children,
+        ...rest
+    } = props;
 
-            onNavigatedFrom,
-            onNavigatedTo,
-            onNavigatingFrom,
-            onNavigatingTo,
+    const ref: React.RefObject<E> = useRef();
+    const node: E = ref.current!;
 
-            onLoaded,
-            onUnloaded,
-            onAndroidBackPressed,
-            onShowingModally,
-            onShownModally,
+    usePageInheritance(node, props);
 
-            onTap,
-            onDoubleTap,
-            onPinch,
-            onPan,
-            onSwipe,
-            onRotation,
-            onLongPress,
-            onTouch,
-
-            onPropertyChange,
-
-            children,
-            ...rest
-        } = this.props;
-
-        return React.createElement(
-            "page",
-            {
-                ...rest,
-                ref: forwardedRef || this.myRef,
-            },
-            children
-        );
-    }
+    return React.createElement(
+        "page",
+        {
+            ...rest,
+            ref: forwardedRef || ref,
+        },
+        children
+    );
 }
 
 type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<PageComponentProps<NativeScriptPage>>;
@@ -113,3 +90,29 @@ export const Page: React.ComponentType<
         );
     }
 );
+
+export function usePageEvents<
+    P extends PageComponentProps<E>,
+    E extends NativeScriptPage = NativeScriptPage
+>(
+    node: E,
+    props: P
+): void
+{
+    useEventListener(node, "navigatedFrom", props.onNavigatedFrom);
+    useEventListener(node, "navigatedTo", props.onNavigatedTo);
+    useEventListener(node, "navigatingFrom", props.onNavigatingFrom);
+    useEventListener(node, "navigatingTo", props.onNavigatingTo);
+}
+
+export function usePageInheritance<
+    P extends PageComponentProps<E>,
+    E extends NativeScriptPage = NativeScriptPage
+>(
+    node: E,
+    props: P
+): void
+{
+    useContentViewInheritance(node, props);
+    usePageEvents(node, props);
+}

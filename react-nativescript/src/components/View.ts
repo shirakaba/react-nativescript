@@ -1,8 +1,7 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { ViewBaseProps, ViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
+import { ViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { View as NativeScriptView, ShownModallyData } from "tns-core-modules/ui/core/view/view";
-import { EventData, Observable } from "tns-core-modules/data/observable/observable";
 import {
     GestureEventData,
     GestureTypes,
@@ -12,9 +11,8 @@ import {
     PinchGestureEventData,
     PanGestureEventData,
 } from "tns-core-modules/ui/gestures/gestures";
-import { ViewBaseComponentProps, RCTViewBase, ViewBaseComponentState } from "./ViewBase";
-import { updateListener } from "../client/EventHandling";
-import { shallowEqual } from "src/client/shallowEqual";
+import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState } from "./ViewBase";
+import { useEventListener } from "../client/EventHandling";
 
 type NativeScriptUIElement = NativeScriptView;
 
@@ -47,53 +45,37 @@ export type ViewComponentProps<
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
-export abstract class RCTView<
+export function useViewEvents<
     P extends ViewComponentProps<E>,
-    S extends ViewComponentState,
-    E extends NativeScriptUIElement
-> extends RCTViewBase<P, S, E> {
-    // static defaultProps = {
-    //     forwardedRef: React.createRef<NativeScriptUIElement>()
-    // };
+    E extends NativeScriptUIElement = NativeScriptUIElement
+>(
+    node: E,
+    props: P
+): void
+{
+    useEventListener(node, "loaded", props.onLoaded);
+    useEventListener(node, "unloaded", props.onUnloaded);
+    useEventListener(node, "androidBackPressed", props.onAndroidBackPressed);
+    useEventListener(node, "showingModally", props.onShowingModally);
+    useEventListener(node, "shownModally", props.onShownModally);
+    useEventListener(node, GestureTypes.tap, props.onTap);
+    useEventListener(node, GestureTypes.doubleTap, props.onDoubleTap);
+    useEventListener(node, GestureTypes.pinch, props.onPinch);
+    useEventListener(node, GestureTypes.pan, props.onPan);
+    useEventListener(node, GestureTypes.swipe, props.onSwipe);
+    useEventListener(node, GestureTypes.rotation, props.onRotation);
+    useEventListener(node, GestureTypes.longPress, props.onLongPress);
+    useEventListener(node, GestureTypes.touch, props.onTouch);
+}
 
-    /**
-     *
-     * @param attach true: attach; false: detach; null: update
-     */
-    protected updateListeners(node: E, attach: boolean | null, nextProps?: P): void {
-        super.updateListeners(node, attach, nextProps);
-
-        if (attach === null) {
-            updateListener(node, "loaded", this.props.onLoaded, nextProps.onLoaded);
-            updateListener(node, "unloaded", this.props.onUnloaded, nextProps.onUnloaded);
-            updateListener(node, "androidBackPressed", this.props.onAndroidBackPressed, nextProps.onAndroidBackPressed);
-            updateListener(node, "showingModally", this.props.onShowingModally, nextProps.onShowingModally);
-            updateListener(node, "shownModally", this.props.onShownModally, nextProps.onShownModally);
-            updateListener(node, GestureTypes.tap, this.props.onTap, nextProps.onTap, "tap");
-            updateListener(node, GestureTypes.doubleTap, this.props.onDoubleTap, nextProps.onDoubleTap, "doubleTap");
-            updateListener(node, GestureTypes.pinch, this.props.onPinch, nextProps.onPinch, "pinch");
-            updateListener(node, GestureTypes.pan, this.props.onPan, nextProps.onPan, "pan");
-            updateListener(node, GestureTypes.swipe, this.props.onSwipe, nextProps.onSwipe, "swipe");
-            updateListener(node, GestureTypes.rotation, this.props.onRotation, nextProps.onRotation, "rotation");
-            updateListener(node, GestureTypes.longPress, this.props.onLongPress, nextProps.onLongPress, "longPress");
-            updateListener(node, GestureTypes.touch, this.props.onTouch, nextProps.onTouch, "touch");
-        } else {
-            const method = (attach ? node.on : node.off).bind(node);
-            if (this.props.onLoaded) method("loaded", this.props.onLoaded);
-            if (this.props.onUnloaded) method("unloaded", this.props.onUnloaded);
-            if (this.props.onAndroidBackPressed) method("androidBackPressed", this.props.onAndroidBackPressed);
-            if (this.props.onShowingModally) method("showingModally", this.props.onShowingModally);
-            if (this.props.onShownModally) method("shownModally", this.props.onShownModally);
-            if (this.props.onTap) method(GestureTypes.tap, this.props.onTap);
-            if (this.props.onDoubleTap) method(GestureTypes.doubleTap, this.props.onDoubleTap);
-            if (this.props.onPinch) method(GestureTypes.pinch, this.props.onPinch);
-            if (this.props.onPan) method(GestureTypes.pan, this.props.onPan);
-            if (this.props.onSwipe) method(GestureTypes.swipe, this.props.onSwipe);
-            if (this.props.onRotation) method(GestureTypes.rotation, this.props.onRotation);
-            if (this.props.onLongPress) method(GestureTypes.longPress, this.props.onLongPress);
-            if (this.props.onTouch) method(GestureTypes.touch, this.props.onTouch);
-        }
-    }
-
-    abstract render(): React.ReactNode;
+export function useViewInheritance<
+    P extends ViewComponentProps<E>,
+    E extends NativeScriptUIElement = NativeScriptUIElement
+>(
+    node: E,
+    props: P
+): void
+{
+    useViewBaseInheritance(node, props);
+    useViewEvents(node, props);
 }
