@@ -9,9 +9,7 @@ interface Props {}
 
 export type ContentViewComponentProps<
     E extends NativeScriptContentView = NativeScriptContentView
-> = Props /* & typeof ContentView.defaultProps */ & Partial<ContentViewProps> & ViewComponentProps<E>;
-
-type OwnPropsWithoutForwardedRef = PropsWithoutForwardedRef<ContentViewComponentProps<NativeScriptContentView>>;
+> = Props & Partial<ContentViewProps> & ViewComponentProps<E>;
 
 export function _ContentView<
     P extends ContentViewComponentProps<E>,
@@ -19,23 +17,20 @@ export function _ContentView<
 >(props: React.PropsWithChildren<P>)
 {   
     const ref: React.RefObject<E> = (this.props.forwardedRef || useRef());
-    const node: E = ref.current!;
-    const { children, ...rest } = useContentViewInheritance(node, props);
+    const intrinsicProps = useContentViewInheritance(ref.current!, props);
 
     return React.createElement(
         "contentView",
         {
-            ...rest,
+            ...intrinsicProps,
             ref,
         },
-        children
+        null
     );
 }
 
-export const ContentView: React.ComponentType<
-    OwnPropsWithoutForwardedRef & React.ClassAttributes<NativeScriptContentView>
-> = React.forwardRef<NativeScriptContentView, OwnPropsWithoutForwardedRef>(
-    (props: React.PropsWithChildren<OwnPropsWithoutForwardedRef>, ref: React.RefObject<NativeScriptContentView>) => {
+export const ContentView = React.forwardRef(
+    (props: React.PropsWithChildren<PropsWithoutForwardedRef<ContentViewComponentProps>>, ref: React.RefObject<NativeScriptContentView>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
