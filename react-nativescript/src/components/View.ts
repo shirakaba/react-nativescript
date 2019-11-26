@@ -14,13 +14,11 @@ import {
 import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState } from "./ViewBase";
 import { useEventListener } from "../client/EventHandling";
 
-type NativeScriptUIElement = NativeScriptView;
-
 interface Props {
     /* From View. */
-    onLoaded?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
-    onUnloaded?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
-    onAndroidBackPressed?: (args: NarrowedEventData<NativeScriptUIElement>) => void;
+    onLoaded?: (args: NarrowedEventData<NativeScriptView>) => void;
+    onUnloaded?: (args: NarrowedEventData<NativeScriptView>) => void;
+    onAndroidBackPressed?: (args: NarrowedEventData<NativeScriptView>) => void;
     onShowingModally?: (args: ShownModallyData) => void;
     onShownModally?: (args: ShownModallyData) => void;
 
@@ -40,8 +38,8 @@ interface Props {
 }
 
 export type ViewComponentProps<
-    E extends NativeScriptUIElement = NativeScriptUIElement
-> = Props /* & typeof RCTView.defaultProps */ & Partial<ViewProps> & ViewBaseComponentProps<E>;
+    E extends NativeScriptView = NativeScriptView
+> = Props & Partial<ViewProps> & ViewBaseComponentProps<E>;
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
@@ -54,7 +52,7 @@ export type ViewComponentState = {} & ViewBaseComponentState;
  */
 export function useViewEvents<
     P extends ViewComponentProps<E>,
-    E extends NativeScriptUIElement = NativeScriptUIElement
+    E extends NativeScriptView = NativeScriptView
 >(
     node: E,
     props: P
@@ -86,7 +84,7 @@ export function useViewEvents<
  */
 export function useViewInheritance<
     P extends ViewComponentProps<E>,
-    E extends NativeScriptUIElement = NativeScriptUIElement
+    E extends NativeScriptView = NativeScriptView
 >(
     node: E,
     props: P

@@ -24,42 +24,16 @@ export function _Plugin<
     E extends NativeScriptView
 >(props: React.PropsWithChildren<P>)
 {
-    const {
-        forwardedRef,
-
-        onLoaded,
-        onUnloaded,
-        onAndroidBackPressed,
-        onShowingModally,
-        onShownModally,
-
-        onTap,
-        onDoubleTap,
-        onPinch,
-        onPan,
-        onSwipe,
-        onRotation,
-        onLongPress,
-        onTouch,
-
-        onPropertyChange,
-
-        children,
-        ...rest
-    } = props;
-
-    const ref: React.RefObject<E> = forwardedRef || useRef();
-    const node: E = ref.current!;
-
-    usePluginInheritance(node, props);
+    const ref: React.RefObject<E> = (this.props.forwardedRef || useRef());
+    const intrinsicProps = usePluginInheritance(ref.current!, props);
 
     return React.createElement(
         "plugin",
         {
+            ...intrinsicProps,
             ref,
-            ...rest,
         },
-        children
+        null
     );
 }
 
@@ -78,6 +52,15 @@ export const Plugin = React.forwardRef(
     }
 );
 
+/**
+ * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
+ * wraps an intrinsic element that extends the same intrinsic element as this one.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
+ * 
+ * @returns just the props to be passed on to the underlying intrinsic element.
+ */
 export function usePluginInheritance<
     /* The props of the React component rather than the plugin (e.g. event listeners) */
     ReactComponentProps extends {},
@@ -88,8 +71,10 @@ export function usePluginInheritance<
 >(
     node: E,
     props: P
-): void
+)
 {
-    useViewInheritance(node, props);
+    const intrinsicProps = useViewInheritance(node, props);
     // Plugin has no events of its own to handle
+
+    return intrinsicProps;
 }
