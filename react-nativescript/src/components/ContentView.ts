@@ -16,7 +16,7 @@ export function _ContentView<
     E extends NativeScriptContentView = NativeScriptContentView
 >(props: React.PropsWithChildren<P>)
 {   
-    const ref: React.RefObject<E> = (this.props.forwardedRef || useRef());
+    const ref: React.RefObject<E> = (props.forwardedRef || useRef());
     const intrinsicProps = useContentViewInheritance(ref.current!, props);
 
     return React.createElement(

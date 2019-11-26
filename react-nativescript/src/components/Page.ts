@@ -28,7 +28,7 @@ export function _Page<
     E extends NativeScriptPage = NativeScriptPage
 >(props: React.PropsWithChildren<P>)
 {
-    const ref: React.RefObject<E> = (this.props.forwardedRef || useRef());
+    const ref: React.RefObject<E> = (props.forwardedRef || useRef());
     const intrinsicProps = usePageInheritance(ref.current!, props);
 
     return React.createElement(
