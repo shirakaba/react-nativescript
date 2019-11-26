@@ -15,18 +15,6 @@ export type PluginComponentProps<
     E extends NativeScriptView
 > = ReactComponentProps & Partial<PluginProps> & ViewComponentProps<E>;
 
-type OwnPropsWithoutForwardedRef<
-    /* The props of the React component rather than the plugin (e.g. event listeners) */
-    ReactComponentProps extends {},
-    /* The props of the plugin (i.e. settable attributes) */
-    PluginProps extends {},
-    E extends NativeScriptView
-> = PropsWithoutForwardedRef<PluginComponentProps<
-    ReactComponentProps,
-    PluginProps,
-    E
->>;
-
 export function _Plugin<
     /* The props of the React component rather than the plugin (e.g. event listeners) */
     ReactComponentProps extends {},
@@ -76,7 +64,7 @@ export function _Plugin<
 }
 
 export const Plugin = React.forwardRef(
-    <ReactComponentProps, PluginProps, E extends NativeScriptView>(props: React.PropsWithChildren<OwnPropsWithoutForwardedRef<ReactComponentProps, PluginProps, E>>, ref: React.RefObject<E>) => {
+    <ReactComponentProps extends {}, PluginProps extends {}, E extends NativeScriptView>(props: React.PropsWithChildren<PropsWithoutForwardedRef<PluginComponentProps<ReactComponentProps, PluginProps, E>>>, ref: React.RefObject<E>) => {
         const { children, ...rest } = props;
 
         return React.createElement(
