@@ -17,41 +17,16 @@ export function _ContentView<
     P extends ContentViewComponentProps<E>,
     E extends NativeScriptContentView = NativeScriptContentView
 >(props: React.PropsWithChildren<P>)
-{
-    const {
-        forwardedRef,
-
-        onLoaded,
-        onUnloaded,
-        onAndroidBackPressed,
-        onShowingModally,
-        onShownModally,
-
-        onTap,
-        onDoubleTap,
-        onPinch,
-        onPan,
-        onSwipe,
-        onRotation,
-        onLongPress,
-        onTouch,
-
-        onPropertyChange,
-
-        children,
-        ...rest
-    } = props;
-
-    const ref: React.RefObject<E> = useRef();
+{   
+    const ref: React.RefObject<E> = (this.props.forwardedRef || useRef());
     const node: E = ref.current!;
-
-    useContentViewInheritance(node, props);
+    const { children, ...rest } = useContentViewInheritance(node, props);
 
     return React.createElement(
         "contentView",
         {
             ...rest,
-            ref: forwardedRef || ref,
+            ref,
         },
         children
     );
@@ -74,14 +49,25 @@ export const ContentView: React.ComponentType<
     }
 );
 
+/**
+ * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
+ * wraps an intrinsic element that extends the same intrinsic element as this one.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
+ * 
+ * @returns just the props to be passed on to the underlying intrinsic element.
+ */
 export function useContentViewInheritance<
     P extends ContentViewComponentProps<E>,
     E extends NativeScriptContentView = NativeScriptContentView
 >(
     node: E,
     props: P
-): void
+)
 {
-    useViewInheritance(node, props);
+    const intrinsicProps = useViewInheritance(node, props);
     // ContentView has no events of its own to handle
+
+    return intrinsicProps;
 }

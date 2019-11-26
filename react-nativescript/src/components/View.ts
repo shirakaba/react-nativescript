@@ -45,6 +45,13 @@ export type ViewComponentProps<
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
+/**
+ * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
+ * That is to say, on mount, update, and unmount.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props the props for the React component (from which this function will use any event listener handlers).
+ */
 export function useViewEvents<
     P extends ViewComponentProps<E>,
     E extends NativeScriptUIElement = NativeScriptUIElement
@@ -68,14 +75,45 @@ export function useViewEvents<
     useEventListener(node, GestureTypes.touch, props.onTouch);
 }
 
+/**
+ * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
+ * wraps an intrinsic element that extends the same intrinsic element as this one.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
+ * 
+ * @returns just the props to be passed on to the underlying intrinsic element.
+ */
 export function useViewInheritance<
     P extends ViewComponentProps<E>,
     E extends NativeScriptUIElement = NativeScriptUIElement
 >(
     node: E,
     props: P
-): void
+)
 {
-    useViewBaseInheritance(node, props);
-    useViewEvents(node, props);
+    const intrinsicProps = useViewBaseInheritance(node, props);
+    useViewEvents(node, intrinsicProps);
+
+    const {
+        onLoaded,
+        onUnloaded,
+        onAndroidBackPressed,
+        onShowingModally,
+        onShownModally,
+
+        onTap,
+        onDoubleTap,
+        onPinch,
+        onPan,
+        onSwipe,
+        onRotation,
+        onLongPress,
+        onTouch,
+
+        ...rest
+    } = intrinsicProps;
+
+    // Omit all event handlers because they aren't used by the intrinsic element.
+    return { ...rest };
 }

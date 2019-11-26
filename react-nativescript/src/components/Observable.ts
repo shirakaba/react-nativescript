@@ -13,11 +13,17 @@ interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
 
 export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<
     E
-> /* & typeof RCTObservable.defaultProps */ &
-    Partial<ObservableProps>;
+> & Partial<ObservableProps>;
 
 export type ObservableComponentState = {};
 
+/**
+ * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
+ * That is to say, on mount, update, and unmount.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props the props for the React component (from which this function will use any event listener handlers).
+ */
 export function useObservableEvents<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
@@ -29,13 +35,29 @@ export function useObservableEvents<
     useEventListener(node, "propertyChange", props.onPropertyChange);
 }
 
+/**
+ * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
+ * wraps an intrinsic element that extends the same intrinsic element as this one.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
+ * 
+ * @returns just the props to be passed on to the underlying intrinsic element.
+ */
 export function useObservableInheritance<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
     node: E,
     props: P
-): void
+)
 {
     useObservableEvents(node, props);
+    const {
+        onPropertyChange,
+        ...rest
+    } = props;
+
+    // Omit all event handlers because they aren't used by the intrinsic element.
+    return { ...rest };
 }

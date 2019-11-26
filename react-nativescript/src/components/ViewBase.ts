@@ -21,14 +21,26 @@ export type ViewBaseComponentProps<
 
 export type ViewBaseComponentState = {} & ObservableComponentState;
 
+/**
+ * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
+ * wraps an intrinsic element that extends the same intrinsic element as this one.
+ * 
+ * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
+ * 
+ * @returns just the props to be passed on to the underlying intrinsic element.
+ */
 export function useViewBaseInheritance<
     P extends ViewBaseComponentProps<E>,
     E extends NativeScriptViewBase = NativeScriptViewBase
 >(
     node: E,
     props: P
-): void
+)
 {
-    useObservableInheritance(node, props);
-    // ViewBase has no events of its own to handle.
+    const intrinsicProps = useObservableInheritance(node, props);
+    // ViewBase has no events of its own to handle.   
+    
+    // We won't omit the __rns__nodeTreeRole or dock props because they 
+    return intrinsicProps;
 }
