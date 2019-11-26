@@ -9,15 +9,17 @@ import { useRef } from "react";
 
 export type PluginComponentProps<
     /* The props of the React component rather than the plugin (e.g. event listeners) */
-    ReactComponentProps,
+    ReactComponentProps extends {},
     /* The props of the plugin (i.e. settable attributes) */
-    PluginProps,
+    PluginProps extends {},
     E extends NativeScriptView
 > = ReactComponentProps & Partial<PluginProps> & ViewComponentProps<E>;
 
 type OwnPropsWithoutForwardedRef<
-    ReactComponentProps,
-    PluginProps,
+    /* The props of the React component rather than the plugin (e.g. event listeners) */
+    ReactComponentProps extends {},
+    /* The props of the plugin (i.e. settable attributes) */
+    PluginProps extends {},
     E extends NativeScriptView
 > = PropsWithoutForwardedRef<PluginComponentProps<
     ReactComponentProps,
@@ -27,9 +29,9 @@ type OwnPropsWithoutForwardedRef<
 
 export function _Plugin<
     /* The props of the React component rather than the plugin (e.g. event listeners) */
-    ReactComponentProps,
+    ReactComponentProps extends {},
     /* The props of the plugin (i.e. settable attributes) */
-    PluginProps,
+    PluginProps extends {},
     P extends PluginComponentProps<ReactComponentProps, PluginProps, E>,
     E extends NativeScriptView
 >(props: React.PropsWithChildren<P>)
@@ -58,7 +60,7 @@ export function _Plugin<
         ...rest
     } = props;
 
-    const ref: React.RefObject<E> = useRef();
+    const ref: React.RefObject<E> = forwardedRef || useRef();
     const node: E = ref.current!;
 
     usePluginInheritance(node, props);
@@ -66,8 +68,8 @@ export function _Plugin<
     return React.createElement(
         "plugin",
         {
+            ref,
             ...rest,
-            ref: forwardedRef || ref,
         },
         children
     );
@@ -90,9 +92,9 @@ export const Plugin = React.forwardRef(
 
 export function usePluginInheritance<
     /* The props of the React component rather than the plugin (e.g. event listeners) */
-    ReactComponentProps,
+    ReactComponentProps extends {},
     /* The props of the plugin (i.e. settable attributes) */
-    PluginProps,
+    PluginProps extends {},
     P extends PluginComponentProps<ReactComponentProps, PluginProps, E>,
     E extends NativeScriptView
 >(
