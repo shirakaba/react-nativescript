@@ -43,6 +43,6 @@
     "prettier": "1.18.2",
     "react": "16.9.0",
     "tns-core-modules": "6.2.1",
-    "typescript": "3.3.4000"
+    "typescript": "3.7.2"
   }
 }
