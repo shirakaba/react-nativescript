@@ -17,44 +17,45 @@ import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import { createPortal as _createPortal } from "./ReactPortal";
 import { run, hasLaunched, getRootView } from "tns-core-modules/application";
-import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
-import { AbsoluteLayout as $AbsoluteLayout } from "../components/AbsoluteLayout";
-import { ActionBar as $ActionBar } from "../components/ActionBar";
-import { ActionItem as $ActionItem } from "../components/ActionItem";
-import { Button as $Button } from "../components/Button";
-import { Frame as $Frame } from "../components/Frame";
-import { ActivityIndicator as $ActivityIndicator } from "../components/ActivityIndicator";
-import { DatePicker as $DatePicker } from "../components/DatePicker";
-import { ScrollView as $ScrollView } from "../components/ScrollView";
-import { SearchBar as $SearchBar } from "../components/SearchBar";
-import { SegmentedBar as $SegmentedBar } from "../components/SegmentedBar";
-import { SegmentedBarItem as $SegmentedBarItem } from "../components/SegmentedBarItem";
-import { Slider as $Slider } from "../components/Slider";
-import { DockLayout as $DockLayout } from "../components/DockLayout";
-import { FlexboxLayout as $FlexboxLayout } from "../components/FlexboxLayout";
-import { FormattedString as $FormattedString } from "../components/FormattedString";
-import { Span as $Span } from "../components/Span";
-import { GridLayout as $GridLayout } from "../components/GridLayout";
-import { HtmlView as $HtmlView } from "../components/HtmlView";
-import { Label as $Label } from "../components/Label";
-import { ListView as $ListView } from "../components/ListView";
-import { ListPicker as $ListPicker } from "../components/ListPicker";
-// import { Portal as $Portal } from "../components/Portal";
-import { NavigationButton as $NavigationButton } from "../components/NavigationButton";
-import { Placeholder as $Placeholder } from "../components/Placeholder";
-import { Progress as $Progress } from "../components/Progress";
-import { StackLayout as $StackLayout } from "../components/StackLayout";
-import { Switch as $Switch } from "../components/Switch";
-import { TextField as $TextField } from "../components/TextField";
-import { TextView as $TextView } from "../components/TextView";
-import { TabView as $TabView } from "../components/TabView";
-import { TabViewItem as $TabViewItem } from "../components/TabViewItem";
-import { TimePicker as $TimePicker } from "../components/TimePicker";
+import { View } from "@nativescript/core";
+// import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "../client/ElementRegistry";
+// import { AbsoluteLayout as $AbsoluteLayout } from "../components/AbsoluteLayout";
+// import { ActionBar as $ActionBar } from "../components/ActionBar";
+// import { ActionItem as $ActionItem } from "../components/ActionItem";
+// import { Button as $Button } from "../components/Button";
+// import { Frame as $Frame } from "../components/Frame";
+// import { ActivityIndicator as $ActivityIndicator } from "../components/ActivityIndicator";
+// import { DatePicker as $DatePicker } from "../components/DatePicker";
+// import { ScrollView as $ScrollView } from "../components/ScrollView";
+// import { SearchBar as $SearchBar } from "../components/SearchBar";
+// import { SegmentedBar as $SegmentedBar } from "../components/SegmentedBar";
+// import { SegmentedBarItem as $SegmentedBarItem } from "../components/SegmentedBarItem";
+// import { Slider as $Slider } from "../components/Slider";
+// import { DockLayout as $DockLayout } from "../components/DockLayout";
+// import { FlexboxLayout as $FlexboxLayout } from "../components/FlexboxLayout";
+// import { FormattedString as $FormattedString } from "../components/FormattedString";
+// import { Span as $Span } from "../components/Span";
+// import { GridLayout as $GridLayout } from "../components/GridLayout";
+// import { HtmlView as $HtmlView } from "../components/HtmlView";
+// import { Label as $Label } from "../components/Label";
+// import { ListView as $ListView } from "../components/ListView";
+// import { ListPicker as $ListPicker } from "../components/ListPicker";
+// // import { Portal as $Portal } from "../components/Portal";
+// import { NavigationButton as $NavigationButton } from "../components/NavigationButton";
+// import { Placeholder as $Placeholder } from "../components/Placeholder";
+// import { Progress as $Progress } from "../components/Progress";
+// import { StackLayout as $StackLayout } from "../components/StackLayout";
+// import { Switch as $Switch } from "../components/Switch";
+// import { TextField as $TextField } from "../components/TextField";
+// import { TextView as $TextView } from "../components/TextView";
+// import { TabView as $TabView } from "../components/TabView";
+// import { TabViewItem as $TabViewItem } from "../components/TabViewItem";
+// import { TimePicker as $TimePicker } from "../components/TimePicker";
 import { ContentView as $ContentView } from "../components/ContentView";
-import { WebView as $WebView } from "../components/WebView";
-import { WrapLayout as $WrapLayout } from "../components/WrapLayout";
+// import { WebView as $WebView } from "../components/WebView";
+// import { WrapLayout as $WrapLayout } from "../components/WrapLayout";
 import { Page as $Page } from "../components/Page";
-import { Image as $Image } from "../components/Image";
+// import { Image as $Image } from "../components/Image";
 import * as console from "../shared/Logger";
 
 // declare global {
@@ -171,40 +172,40 @@ export function start(app: ReactReconciler.ReactNodeList, refToApp: React.RefObj
 export {
     // $Dialogs,
     // $Gestures,
-    $AbsoluteLayout,
-    $ActionBar,
-    $ActionItem,
-    $ActivityIndicator,
-    $Button,
+    // $AbsoluteLayout,
+    // $ActionBar,
+    // $ActionItem,
+    // $ActivityIndicator,
+    // $Button,
     $ContentView,
-    $DatePicker,
-    $DockLayout,
-    $FlexboxLayout,
-    $FormattedString,
-    $Frame,
-    $GridLayout,
-    $HtmlView,
-    $Image,
-    $Label,
-    $ListView,
-    $ListPicker,
-    $NavigationButton,
+    // $DatePicker,
+    // $DockLayout,
+    // $FlexboxLayout,
+    // $FormattedString,
+    // $Frame,
+    // $GridLayout,
+    // $HtmlView,
+    // $Image,
+    // $Label,
+    // $ListView,
+    // $ListPicker,
+    // $NavigationButton,
     $Page,
-    $Placeholder,
-    $Progress,
-    $ScrollView,
-    $SearchBar,
-    $SegmentedBar,
-    $SegmentedBarItem,
-    $Slider,
-    $Span,
-    $StackLayout,
-    $Switch,
-    $TabView,
-    $TabViewItem,
-    $TextField,
-    $TextView,
-    $TimePicker,
-    $WebView,
-    $WrapLayout,
+    // $Placeholder,
+    // $Progress,
+    // $ScrollView,
+    // $SearchBar,
+    // $SegmentedBar,
+    // $SegmentedBarItem,
+    // $Slider,
+    // $Span,
+    // $StackLayout,
+    // $Switch,
+    // $TabView,
+    // $TabViewItem,
+    // $TextField,
+    // $TextView,
+    // $TimePicker,
+    // $WebView,
+    // $WrapLayout,
 };
