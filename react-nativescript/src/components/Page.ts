@@ -44,7 +44,7 @@ export function _Page<
     );
 }
 
-export const Page = React.forwardRef<NativeScriptPage, PropsWithoutForwardedRef<PageComponentProps>>(
+export const Page = React.forwardRef(
     (props: React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>, ref: React.RefObject<NativeScriptPage>) => {
         const { children, ...rest } = props;
 
