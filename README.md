@@ -38,15 +38,48 @@ tns preview
 
 ## Documentation
 
-Under construction – please be patient! For now, please refer to the examples mentioned below and use the [NativeScript Core docs](https://docs.nativescript.org/start/introduction) as your guide.
+* [React NativeScript docs](https://react-nativescript.netlify.com)
+* [NativeScript docs](https://docs.nativescript.org/start/introduction)
 
-### Example app
+## Example app
 
 I've ported [Shiva Prasad](https://github.com/shiv19)'s TypeScript NativeScript Core port of [Alex Ziskind](https://github.com/alexziskind1)'s issue-tracking app to React NativeScript. It's called `rpstrackerrns` and you can find it [here](https://github.com/shirakaba/rpstrackerrns).
 
 The app is based on React NativeScript v0.11.0, so may have some minor differences to the latest version, but the general patterns should be the same.
 
-The repo also includes some example UI plugins – I'll likely be changing the APIs for making those, however, so don't assume that approach to remain supported.
+### Example UI screenshots
+
+<table>
+    <tbody>
+        <tr>
+            <td align="center" valign="middle">
+                <img width="200px" src="/github_img/LoginPage.png"/>
+            </td>
+            <td align="center" valign="middle">
+                <img width="200px" src="/github_img/BacklogPage.png"/>
+            </td>
+            <td align="center" valign="middle">
+                <img width="200px" src="/github_img/DetailPage.png"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/tree/master/app/views/pages/login/LoginPage.tsx">Login Page</a></b></p>
+            </td>
+            <td align="center" valign="middle">
+                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/tree/master/app/views/pages/backlog/BacklogPage.tsx">Backlog Page</a></b></p>
+            </td>
+            <td align="center" valign="middle">
+                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/blob/master/app/views/pages/detail/DetailPage.tsx">Detail Page</a></b></p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+### Example UI plugins
+
+The repo also includes some example plugins (React components for native UI components) – I'll likely be changing the APIs for making those, however, so don't assume that approach to remain supported.
 
 ### Example components
 
@@ -158,11 +191,11 @@ React NativeScript shares most of the good parts of React Native, but above all 
 
 **How far along is it?**
 
-It's feature-equivalent with NativeScript Core! It's just missing documentation to explain how to use it.
+It's feature-equivalent with NativeScript Core!
 
 **Is it production-ready?**
 
-Maybe. I don't know what I don't know. Try it out, see if you have any issues, and this will become clearer.
+It's based on React and NativeScript Core, which are both individually production-ready. However, it needs to be used a bit more before we'll understand whether there are any weaknesses in my implementation.
 
 **What about plugins?**
 
@@ -182,15 +215,15 @@ Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [pro
 
 A quick list of my own plans (not necessarily in execution order):
 
-* Documentation website
-* Document workflow for React Dev Tools integration
+* Migrate to hooks
+* Build a navigation library (possibly by supporting React Navigation)
+* Finalise the plugins API
 * Conference talk 🤞
 
 Wishes:
 
 * Demo apps
 * Translated docs
-* Starter template in NativeScript Playground
 * Lots and lots of plugins
 * API compatibility with React Native (very long-term goal)
 * Compatibility with major React packages like React Navigation (may depend upon above)
