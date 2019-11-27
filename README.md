@@ -32,8 +32,15 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 #   https://docs.nativescript.org/start/quick-setup
 
 tns create myApp --template tns-template-blank-react
+
 cd myApp
+npm install
+
 tns preview
+# or
+tns run ios
+# or
+tns run android
 ```
 
 ## Documentation
