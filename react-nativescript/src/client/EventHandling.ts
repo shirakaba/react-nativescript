@@ -40,23 +40,24 @@ export function updateListener<T extends Observable>(
 }
 
 export function useEventListener<E extends Observable>(
-    node: E|null,
+    ref: React.RefObject<E>,
     eventName: string | GestureTypes,
     eventListener: GenericListener | undefined
 ): void 
 {
     console.log(`[useEventListener] Entered.`);
     useEffect(() => {
-        if(node){
-            node.on(eventName as string, eventListener);
+        if(ref.current && eventListener){
+            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
+            ref.current.on(eventName as string, eventListener);
         } else {
-            console.log(`Node ref was null!`);
+            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
         }
 
         return function cleanup() {
-            if(node){
-                node.off(eventName as string, eventListener);
+            if(ref.current && eventListener){
+                ref.current.off(eventName as string, eventListener);
             }
         };
-    }, [node, eventListener]);
+    }, [ref.current, eventListener]);
 }

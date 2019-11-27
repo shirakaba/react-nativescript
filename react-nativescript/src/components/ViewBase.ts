@@ -34,11 +34,11 @@ export function useViewBaseInheritance<
     P extends ViewBaseComponentProps<E>,
     E extends NativeScriptViewBase = NativeScriptViewBase
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): Omit<P, ViewBaseOmittedProps>
 {
-    const intrinsicProps = useObservableInheritance(node, props);
+    const intrinsicProps = useObservableInheritance(ref, props);
     // ViewBase has no events of its own to handle.   
     
     // We won't omit the __rns__nodeTreeRole or dock props because they 

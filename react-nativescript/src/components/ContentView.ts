@@ -17,7 +17,7 @@ export function _ContentView<
 >(props: React.PropsWithChildren<P>)
 {   
     const ref: React.RefObject<E> = (props.forwardedRef || useRef());
-    const intrinsicProps = useContentViewInheritance(ref.current!, props);
+    const intrinsicProps = useContentViewInheritance(ref, props);
 
     return React.createElement(
         "contentView",
@@ -48,7 +48,7 @@ export const ContentView = React.forwardRef(
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
@@ -57,12 +57,12 @@ export function useContentViewInheritance<
     P extends ContentViewComponentProps<E>,
     E extends NativeScriptContentView = NativeScriptContentView
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): Omit<P, ContentViewOmittedProps>
 {
     console.log(`[useContentViewInheritance] Entered.`);
-    const intrinsicProps = useViewInheritance(node, props);
+    const intrinsicProps = useViewInheritance(ref, props);
     console.log(`[useContentViewInheritance] used useViewInheritance. Shall now return intrinsic props.`);
     // ContentView has no events of its own to handle
 

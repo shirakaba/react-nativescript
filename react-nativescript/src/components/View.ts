@@ -47,37 +47,37 @@ export type ViewComponentState = {} & ViewBaseComponentState;
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
  * That is to say, on mount, update, and unmount.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
 export function useViewEvents<
     P extends ViewComponentProps<E>,
     E extends NativeScriptView = NativeScriptView
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): void
 {
-    useEventListener(node, "loaded", props.onLoaded);
-    useEventListener(node, "unloaded", props.onUnloaded);
-    useEventListener(node, "androidBackPressed", props.onAndroidBackPressed);
-    useEventListener(node, "showingModally", props.onShowingModally);
-    useEventListener(node, "shownModally", props.onShownModally);
-    useEventListener(node, GestureTypes.tap, props.onTap);
-    useEventListener(node, GestureTypes.doubleTap, props.onDoubleTap);
-    useEventListener(node, GestureTypes.pinch, props.onPinch);
-    useEventListener(node, GestureTypes.pan, props.onPan);
-    useEventListener(node, GestureTypes.swipe, props.onSwipe);
-    useEventListener(node, GestureTypes.rotation, props.onRotation);
-    useEventListener(node, GestureTypes.longPress, props.onLongPress);
-    useEventListener(node, GestureTypes.touch, props.onTouch);
+    useEventListener(ref, "loaded", props.onLoaded);
+    useEventListener(ref, "unloaded", props.onUnloaded);
+    useEventListener(ref, "androidBackPressed", props.onAndroidBackPressed);
+    useEventListener(ref, "showingModally", props.onShowingModally);
+    useEventListener(ref, "shownModally", props.onShownModally);
+    useEventListener(ref, GestureTypes.tap, props.onTap);
+    useEventListener(ref, GestureTypes.doubleTap, props.onDoubleTap);
+    useEventListener(ref, GestureTypes.pinch, props.onPinch);
+    useEventListener(ref, GestureTypes.pan, props.onPan);
+    useEventListener(ref, GestureTypes.swipe, props.onSwipe);
+    useEventListener(ref, GestureTypes.rotation, props.onRotation);
+    useEventListener(ref, GestureTypes.longPress, props.onLongPress);
+    useEventListener(ref, GestureTypes.touch, props.onTouch);
 }
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
@@ -86,12 +86,12 @@ export function useViewInheritance<
     P extends ViewComponentProps<E>,
     E extends NativeScriptView = NativeScriptView
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): Omit<P, ViewOmittedProps>
 {
-    const intrinsicProps = useViewBaseInheritance(node, props);
-    useViewEvents(node, intrinsicProps);
+    const intrinsicProps = useViewBaseInheritance(ref, props);
+    useViewEvents(ref, intrinsicProps);
 
     const {
         onLoaded,

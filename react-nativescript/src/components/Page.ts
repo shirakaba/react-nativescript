@@ -31,7 +31,7 @@ export function _Page<
     console.log(`[_Page.render()] entered`);
     const ref: React.RefObject<E> = (props.forwardedRef || useRef());
     console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
-    const intrinsicProps = usePageInheritance(ref.current!, props);
+    const intrinsicProps = usePageInheritance(ref, props);
     console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
 
     return React.createElement(
@@ -63,28 +63,28 @@ export const Page = React.forwardRef<NativeScriptPage, PropsWithoutForwardedRef<
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
  * That is to say, on mount, update, and unmount.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
 export function usePageEvents<
     P extends PageComponentProps<E>,
     E extends NativeScriptPage = NativeScriptPage
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): void
 {
-    useEventListener(node, "navigatedFrom", props.onNavigatedFrom);
-    useEventListener(node, "navigatedTo", props.onNavigatedTo);
-    useEventListener(node, "navigatingFrom", props.onNavigatingFrom);
-    useEventListener(node, "navigatingTo", props.onNavigatingTo);
+    useEventListener(ref, "navigatedFrom", props.onNavigatedFrom);
+    useEventListener(ref, "navigatedTo", props.onNavigatedTo);
+    useEventListener(ref, "navigatingFrom", props.onNavigatingFrom);
+    useEventListener(ref, "navigatingTo", props.onNavigatingTo);
 }
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
@@ -93,14 +93,14 @@ export function usePageInheritance<
     P extends PageComponentProps<E>,
     E extends NativeScriptPage = NativeScriptPage
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): Omit<P, PageOmittedProps>
 {
     console.log(`[usePageInheritance] Entered.`);
-    const intrinsicProps = useContentViewInheritance(node, props);
+    const intrinsicProps = useContentViewInheritance(ref, props);
     console.log(`[usePageInheritance] used useContentViewInheritance. Shall now enter usePageEvents.`);
-    usePageEvents(node, intrinsicProps);
+    usePageEvents(ref, intrinsicProps);
     console.log(`[usePageInheritance] used usePageEvents. Shall now return intrinsic props.`);
 
     const {

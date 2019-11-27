@@ -28,18 +28,18 @@ export function useObservableEvents<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): void
 {
-    useEventListener(node, "propertyChange", props.onPropertyChange);
+    useEventListener(ref, "propertyChange", props.onPropertyChange);
 }
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
  * 
- * @param node the host instance of the underlying intrinsic element for this React component.
+ * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props all props for the intrinsic element and also its React wrapper (e.g. event listener handlers).
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
@@ -48,11 +48,11 @@ export function useObservableInheritance<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
-    node: E|null,
+    ref: React.RefObject<E>,
     props: P
 ): Omit<P, ObservableOmittedProps>
 {
-    useObservableEvents(node, props);
+    useObservableEvents(ref, props);
     const {
         onPropertyChange,
         ...rest
