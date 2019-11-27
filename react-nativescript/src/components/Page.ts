@@ -67,7 +67,7 @@ export function usePageEvents<
     P extends PageComponentProps<E>,
     E extends NativeScriptPage = NativeScriptPage
 >(
-    node: E,
+    node: E|null,
     props: P
 ): void
 {
@@ -90,7 +90,7 @@ export function usePageInheritance<
     P extends PageComponentProps<E>,
     E extends NativeScriptPage = NativeScriptPage
 >(
-    node: E,
+    node: E|null,
     props: P
 ): Omit<P, PageOmittedProps>
 {

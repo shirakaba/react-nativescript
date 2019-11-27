@@ -57,7 +57,7 @@ export function useContentViewInheritance<
     P extends ContentViewComponentProps<E>,
     E extends NativeScriptContentView = NativeScriptContentView
 >(
-    node: E,
+    node: E|null,
     props: P
 ): Omit<P, ContentViewOmittedProps>
 {

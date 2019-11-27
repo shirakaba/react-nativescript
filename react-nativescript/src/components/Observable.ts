@@ -28,7 +28,7 @@ export function useObservableEvents<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
-    node: E,
+    node: E|null,
     props: P
 ): void
 {
@@ -48,7 +48,7 @@ export function useObservableInheritance<
     P extends ObservableComponentProps<E>,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
-    node: E,
+    node: E|null,
     props: P
 ): Omit<P, ObservableOmittedProps>
 {

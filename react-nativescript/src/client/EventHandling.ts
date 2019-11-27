@@ -40,16 +40,20 @@ export function updateListener<T extends Observable>(
 }
 
 export function useEventListener<E extends Observable>(
-    node: E,
+    node: E|null,
     eventName: string | GestureTypes,
     eventListener: GenericListener | undefined
 ): void 
 {
     useEffect(() => {
-        node.on(eventName as string, eventListener);
+        if(node){
+            node.on(eventName as string, eventListener);
+        }
 
         return function cleanup() {
-            node.off(eventName as string, eventListener);
+            if(node){
+                node.off(eventName as string, eventListener);
+            }
         };
     }, [eventListener]);
 }

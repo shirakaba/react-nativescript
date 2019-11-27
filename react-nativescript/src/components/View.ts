@@ -54,7 +54,7 @@ export function useViewEvents<
     P extends ViewComponentProps<E>,
     E extends NativeScriptView = NativeScriptView
 >(
-    node: E,
+    node: E|null,
     props: P
 ): void
 {
@@ -86,7 +86,7 @@ export function useViewInheritance<
     P extends ViewComponentProps<E>,
     E extends NativeScriptView = NativeScriptView
 >(
-    node: E,
+    node: E|null,
     props: P
 ): Omit<P, ViewOmittedProps>
 {

@@ -34,7 +34,7 @@ export function useViewBaseInheritance<
     P extends ViewBaseComponentProps<E>,
     E extends NativeScriptViewBase = NativeScriptViewBase
 >(
-    node: E,
+    node: E|null,
     props: P
 ): Omit<P, ViewBaseOmittedProps>
 {
