@@ -1,4 +1,4 @@
-import * as console from "../shared/Logger";
+// import * as console from "../shared/Logger";
 import * as React from "react";
 import { ContentViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
@@ -61,7 +61,9 @@ export function useContentViewInheritance<
     props: P
 ): Omit<P, ContentViewOmittedProps>
 {
+    console.log(`[useContentViewInheritance] Entered.`);
     const intrinsicProps = useViewInheritance(node, props);
+    console.log(`[useContentViewInheritance] used useViewInheritance. Shall now return intrinsic props.`);
     // ContentView has no events of its own to handle
 
     return intrinsicProps as Omit<P, ContentViewOmittedProps>;

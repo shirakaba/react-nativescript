@@ -1,4 +1,4 @@
-import * as console from "../shared/Logger";
+// import * as console from "../shared/Logger";
 import * as React from "react";
 import { useRef } from "react";
 import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
@@ -28,8 +28,11 @@ export function _Page<
     E extends NativeScriptPage = NativeScriptPage
 >(props: React.PropsWithChildren<P>)
 {
+    console.log(`[_Page.render()] entered`);
     const ref: React.RefObject<E> = (props.forwardedRef || useRef());
+    console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
     const intrinsicProps = usePageInheritance(ref.current!, props);
+    console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
 
     return React.createElement(
         "page",
@@ -94,8 +97,11 @@ export function usePageInheritance<
     props: P
 ): Omit<P, PageOmittedProps>
 {
+    console.log(`[usePageInheritance] Entered.`);
     const intrinsicProps = useContentViewInheritance(node, props);
+    console.log(`[usePageInheritance] used useContentViewInheritance. Shall now enter usePageEvents.`);
     usePageEvents(node, intrinsicProps);
+    console.log(`[usePageInheritance] used usePageEvents. Shall now return intrinsic props.`);
 
     const {
         onNavigatedFrom,

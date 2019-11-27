@@ -2,7 +2,7 @@ import * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { Observable, EventData } from "tns-core-modules/data/observable";
 import { GestureTypes } from "tns-core-modules/ui/gestures/gestures";
-import * as console from "../shared/Logger";
+// import * as console from "../shared/Logger";
 
 // type GenericListener = (...args: any[]) => void;
 type GenericListener = (data: EventData) => void;
@@ -45,9 +45,12 @@ export function useEventListener<E extends Observable>(
     eventListener: GenericListener | undefined
 ): void 
 {
+    console.log(`[useEventListener] Entered.`);
     useEffect(() => {
         if(node){
             node.on(eventName as string, eventListener);
+        } else {
+            console.log(`Node ref was null!`);
         }
 
         return function cleanup() {
