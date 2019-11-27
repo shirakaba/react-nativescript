@@ -55,5 +55,5 @@ export function useEventListener<E extends Observable>(
                 node.off(eventName as string, eventListener);
             }
         };
-    }, [eventListener]);
+    }, [node, eventListener]);
 }
