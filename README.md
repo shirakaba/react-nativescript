@@ -48,7 +48,9 @@ tns run android
 * [React NativeScript docs](https://react-nativescript.netlify.com)
 * [NativeScript docs](https://docs.nativescript.org/start/introduction)
 
-## Example app
+## Example real-world app
+
+*Note: the real-world app described below is not the same app as the one in this repository, `sample/app`, which is merely used for manually testing React NativeScript features.*
 
 I've ported [Shiva Prasad](https://github.com/shiv19)'s TypeScript NativeScript Core port of [Alex Ziskind](https://github.com/alexziskind1)'s issue-tracking app to React NativeScript. It's called `rpstrackerrns` and you can find it [here](https://github.com/shirakaba/rpstrackerrns).
 
@@ -87,10 +89,6 @@ The app is based on React NativeScript v0.11.0, so may have some minor differenc
 ### Example UI plugins
 
 The repo also includes some example plugins (React components for native UI components) – I'll likely be changing the APIs for making those, however, so don't assume that approach to remain supported.
-
-### Example components
-
-There are many complex components to test (or refer to) in [`sample/app/testComponents/testComponents.ts`](https://github.com/shirakaba/react-nativescript/blob/master/sample/app/testComponents/testComponents.ts). `GameLoop` has some potential ;)
 
 ## Why not just use React Native? 🤷‍♂️
 
