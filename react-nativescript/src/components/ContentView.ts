@@ -2,7 +2,7 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import { ContentViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
-import { ViewComponentProps, useViewInheritance } from "./View";
+import { ViewComponentProps, useViewInheritance, ViewOmittedProps } from "./View";
 import { useRef } from "react";
 
 interface Props {}
@@ -59,10 +59,12 @@ export function useContentViewInheritance<
 >(
     node: E,
     props: P
-)
+): Omit<P, ContentViewOmittedProps>
 {
     const intrinsicProps = useViewInheritance(node, props);
     // ContentView has no events of its own to handle
 
-    return intrinsicProps;
+    return intrinsicProps as Omit<P, ContentViewOmittedProps>;
 }
+
+export type ContentViewOmittedProps = ViewOmittedProps;

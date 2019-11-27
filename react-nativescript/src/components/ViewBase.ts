@@ -3,7 +3,7 @@ import * as React from "react";
 import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { ViewBase as NativeScriptViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { ObservableComponentProps, ObservableComponentState, useObservableInheritance } from "./Observable";
+import { ObservableComponentProps, ObservableComponentState, useObservableInheritance, ObservableOmittedProps } from "./Observable";
 
 interface Props {
     /* Optional property to guide the Host Config on how best to handle this node. Will be set on instance. */
@@ -36,11 +36,13 @@ export function useViewBaseInheritance<
 >(
     node: E,
     props: P
-)
+): Omit<P, ViewBaseOmittedProps>
 {
     const intrinsicProps = useObservableInheritance(node, props);
     // ViewBase has no events of its own to handle.   
     
     // We won't omit the __rns__nodeTreeRole or dock props because they 
-    return intrinsicProps;
+    return intrinsicProps as Omit<P, ViewBaseOmittedProps>;
 }
+
+export type ViewBaseOmittedProps = ObservableOmittedProps;

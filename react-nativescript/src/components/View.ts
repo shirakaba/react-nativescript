@@ -11,7 +11,7 @@ import {
     PinchGestureEventData,
     PanGestureEventData,
 } from "tns-core-modules/ui/gestures/gestures";
-import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState } from "./ViewBase";
+import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState, ViewBaseOmittedProps } from "./ViewBase";
 import { useEventListener } from "../client/EventHandling";
 
 interface Props {
@@ -88,7 +88,7 @@ export function useViewInheritance<
 >(
     node: E,
     props: P
-)
+): Omit<P, ViewOmittedProps>
 {
     const intrinsicProps = useViewBaseInheritance(node, props);
     useViewEvents(node, intrinsicProps);
@@ -113,5 +113,22 @@ export function useViewInheritance<
     } = intrinsicProps;
 
     // Omit all event handlers because they aren't used by the intrinsic element.
-    return { ...rest };
+    return { ...rest } as Omit<P, ViewOmittedProps>;
 }
+
+export type ViewOmittedProps = keyof Pick<Props,
+"onLoaded"|
+"onUnloaded"|
+"onAndroidBackPressed"|
+"onShowingModally"|
+"onShownModally"|
+
+"onTap"|
+"onDoubleTap"|
+"onPinch"|
+"onPan"|
+"onSwipe"|
+"onRotation"|
+"onLongPress"|
+"onTouch"
+> | ViewBaseOmittedProps;
