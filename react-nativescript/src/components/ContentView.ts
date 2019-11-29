@@ -49,6 +49,7 @@ export function useContentViewInheritance<
     console.log(`[useContentViewInheritance] used useViewInheritance. Shall now return intrinsic props.`);
     // ContentView has no events of its own to handle
 
+    // We have to explicitly type this because of an issue with tsc inference... :(
     return intrinsicProps as Omit<P, ContentViewOmittedProps>;
 }
 

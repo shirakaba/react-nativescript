@@ -98,6 +98,7 @@ export function usePageInheritance<
     } = intrinsicProps;
 
     // Omit all event handlers because they aren't used by the intrinsic element.
+    // We have to explicitly type this because of an issue with tsc inference... :(
     return { ...rest } as Omit<P, PageOmittedProps>;
 }
 

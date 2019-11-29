@@ -43,6 +43,7 @@ export function useViewBaseInheritance<
     // ViewBase has no events of its own to handle.   
     
     // We won't omit the __rns__nodeTreeRole or dock props because they 
+    // We have to explicitly type this because of an issue with tsc inference... :(
     return intrinsicProps as Omit<P, ViewBaseOmittedProps>;
 }
 
