@@ -24,13 +24,13 @@ export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentView
  * A React wrapper around the NativeScript Page component.
  * See: ui/page/page
  */
-export function _Page(props: PageComponentProps, ref: React.RefObject<NativeScriptPage>)
+export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref: React.RefObject<NativeScriptPage>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     // const inputRef = useRef();
 
     console.log(`[_Page.render()] entered. ref.current:`, ref.current);
-    const intrinsicProps = usePageInheritance(ref, props);
+    const { children, ...intrinsicProps } = usePageInheritance(ref, props);
     console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
 
     return React.createElement(
@@ -39,7 +39,7 @@ export function _Page(props: PageComponentProps, ref: React.RefObject<NativeScri
             ...intrinsicProps,
             ref,
         },
-        null
+        children
     );
 }
 

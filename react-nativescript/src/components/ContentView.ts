@@ -11,9 +11,9 @@ export interface ContentViewAuxProps {}
 export type ContentViewOmittedPropNames = ViewOmittedPropNames;
 export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
-export function _ContentView(props: ContentViewComponentProps, ref: React.RefObject<NativeScriptContentView>)
+export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref: React.RefObject<NativeScriptContentView>)
 {
-    const intrinsicProps = useContentViewInheritance(ref, props);
+    const { children, ...intrinsicProps} = useContentViewInheritance(ref, props);
 
     return React.createElement(
         "contentView",
@@ -21,7 +21,7 @@ export function _ContentView(props: ContentViewComponentProps, ref: React.RefObj
             ...intrinsicProps,
             ref,
         },
-        null
+        children
     );
 }
 
