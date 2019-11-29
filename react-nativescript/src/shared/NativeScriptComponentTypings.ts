@@ -67,8 +67,6 @@ export interface NarrowedEventData<T extends Observable> extends EventData {
     object: T;
 }
 
-export type PropsWithoutForwardedRef<P extends ObservableComponentProps> = Omit<P, "forwardedRef">;
-
 export type ObservableProps = {};
 
 /**
