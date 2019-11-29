@@ -2,7 +2,7 @@
 import * as React from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
-import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
+import { _ContentView, ContentViewComponentProps, useContentViewInheritance } from "./ContentView";
 import { useEventListener } from "../client/EventHandling";
 
 /**
@@ -84,7 +84,7 @@ export function usePageInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, PageOmittedProps>
+)
 {
     console.log(`[usePageInheritance] Entered.`);
     const intrinsicProps = useContentViewInheritance(ref, props);
@@ -101,12 +101,5 @@ export function usePageInheritance<
     } = intrinsicProps;
 
     // Omit all event handlers because they aren't used by the intrinsic element.
-    return { ...rest } as Omit<P, PageOmittedProps>;
+    return { ...rest };
 }
-
-export type PageOmittedProps = keyof Pick<PageAuxProps,
-"onNavigatedFrom"|
-"onNavigatedTo"|
-"onNavigatingFrom"|
-"onNavigatingTo"
-> | ContentViewOmittedProps;

@@ -3,7 +3,7 @@ import * as React from "react";
 import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { ViewBase as NativeScriptViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { ObservableComponentProps, ObservableComponentState, useObservableInheritance, ObservableOmittedProps } from "./Observable";
+import { ObservableComponentProps, ObservableComponentState, useObservableInheritance } from "./Observable";
 
 /**
  * Props for the wrapping component rather than the primitive element.
@@ -37,13 +37,11 @@ export function useViewBaseInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, ViewBaseOmittedProps>
+)
 {
     const intrinsicProps = useObservableInheritance(ref, props);
     // ViewBase has no events of its own to handle.   
     
     // We won't omit the __rns__nodeTreeRole or dock props because they 
-    return intrinsicProps as Omit<P, ViewBaseOmittedProps>;
+    return intrinsicProps;
 }
-
-export type ViewBaseOmittedProps = ObservableOmittedProps;
