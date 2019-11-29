@@ -1,6 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { useRef, useImperativeHandle } from "react";
+import { useRef } from "react";
 import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
@@ -31,8 +31,6 @@ export function _Page<
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     const inputRef = useRef();
-    /* This (should) mimic the current behaviour; we return the ref unchanged. */
-    useImperativeHandle(ref, () => ref.current);
 
     console.log(`[_Page.render()] entered`);
     console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
