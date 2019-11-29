@@ -15,24 +15,21 @@ interface Props {
 
 export type PageNavigationEventHandler = (args: NavigatedData) => void;
 
-export type PageComponentProps<
-    E extends NativeScriptPage = NativeScriptPage
-> = Props & Partial<PageProps> & ContentViewComponentProps<E>;
+export type PageComponentProps = Props & Partial<PageProps> & ContentViewComponentProps;
 
 /**
  * A React wrapper around the NativeScript Page component.
  * See: ui/page/page
  */
 export function _Page<
-    P extends PageComponentProps<E>,
+    P extends PageComponentProps,
     E extends NativeScriptPage = NativeScriptPage
 >(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     // const inputRef = useRef();
 
-    console.log(`[_Page.render()] entered`);
-    console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
+    console.log(`[_Page.render()] entered. ref.current:`, ref.current);
     const intrinsicProps = usePageInheritance(ref, props);
     console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
 
@@ -40,7 +37,7 @@ export function _Page<
         "page",
         {
             ...intrinsicProps,
-            ref: ref,
+            ref,
         },
         null
     );
@@ -60,7 +57,7 @@ export const Page = React.forwardRef<
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
 export function usePageEvents<
-    P extends PageComponentProps<E>,
+    P extends PageComponentProps,
     E extends NativeScriptPage = NativeScriptPage
 >(
     ref: React.RefObject<E>,
@@ -83,7 +80,7 @@ export function usePageEvents<
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
 export function usePageInheritance<
-    P extends PageComponentProps<E>,
+    P extends PageComponentProps,
     E extends NativeScriptPage = NativeScriptPage
 >(
     ref: React.RefObject<E>,

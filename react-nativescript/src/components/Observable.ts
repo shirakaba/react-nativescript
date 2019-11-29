@@ -4,16 +4,12 @@ import { ObservableProps } from "../shared/NativeScriptComponentTypings";
 import { Observable as NativeScriptObservable, EventData } from "tns-core-modules/data/observable/observable";
 import { useEventListener } from "../client/EventHandling";
 
-interface Props<E extends NativeScriptObservable = NativeScriptObservable> {
-    forwardedRef?: React.RefObject<E>;
-
+interface Props {
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
 }
 
-export type ObservableComponentProps<E extends NativeScriptObservable = NativeScriptObservable> = Props<
-    E
-> & Partial<ObservableProps>;
+export type ObservableComponentProps = Props & Partial<ObservableProps>;
 
 export type ObservableComponentState = {};
 
@@ -25,7 +21,7 @@ export type ObservableComponentState = {};
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
 export function useObservableEvents<
-    P extends ObservableComponentProps<E>,
+    P extends ObservableComponentProps,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
     ref: React.RefObject<E>,
@@ -45,7 +41,7 @@ export function useObservableEvents<
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
 export function useObservableInheritance<
-    P extends ObservableComponentProps<E>,
+    P extends ObservableComponentProps,
     E extends NativeScriptObservable = NativeScriptObservable
 >(
     ref: React.RefObject<E>,

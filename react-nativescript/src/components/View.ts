@@ -37,9 +37,7 @@ interface Props {
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
 
-export type ViewComponentProps<
-    E extends NativeScriptView = NativeScriptView
-> = Props & Partial<ViewProps> & ViewBaseComponentProps<E>;
+export type ViewComponentProps = Props & Partial<ViewProps> & ViewBaseComponentProps;
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
@@ -51,7 +49,7 @@ export type ViewComponentState = {} & ViewBaseComponentState;
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
 export function useViewEvents<
-    P extends ViewComponentProps<E>,
+    P extends ViewComponentProps,
     E extends NativeScriptView = NativeScriptView
 >(
     ref: React.RefObject<E>,
@@ -83,7 +81,7 @@ export function useViewEvents<
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
 export function useViewInheritance<
-    P extends ViewComponentProps<E>,
+    P extends ViewComponentProps,
     E extends NativeScriptView = NativeScriptView
 >(
     ref: React.RefObject<E>,

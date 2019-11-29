@@ -15,9 +15,7 @@ interface Props {
     // onUnloaded?: () => void;
 }
 
-export type ViewBaseComponentProps<
-    E extends NativeScriptViewBase = NativeScriptViewBase
-> = Props /* & typeof RCTViewBase.defaultProps */ & Partial<ViewBaseProps> & ObservableComponentProps<E>;
+export type ViewBaseComponentProps = Props & Partial<ViewBaseProps> & ObservableComponentProps;
 
 export type ViewBaseComponentState = {} & ObservableComponentState;
 
@@ -31,7 +29,7 @@ export type ViewBaseComponentState = {} & ObservableComponentState;
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
 export function useViewBaseInheritance<
-    P extends ViewBaseComponentProps<E>,
+    P extends ViewBaseComponentProps,
     E extends NativeScriptViewBase = NativeScriptViewBase
 >(
     ref: React.RefObject<E>,

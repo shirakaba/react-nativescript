@@ -7,12 +7,10 @@ import { useRef } from "react";
 
 interface Props {}
 
-export type ContentViewComponentProps<
-    E extends NativeScriptContentView = NativeScriptContentView
-> = Props & Partial<ContentViewProps> & ViewComponentProps<E>;
+export type ContentViewComponentProps = Props & Partial<ContentViewProps> & ViewComponentProps;
 
 export function _ContentView<
-    P extends ContentViewComponentProps<E>,
+    P extends ContentViewComponentProps,
     E extends NativeScriptContentView = NativeScriptContentView
 >(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
 {   
@@ -44,7 +42,7 @@ export const ContentView = React.forwardRef<
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
 export function useContentViewInheritance<
-    P extends ContentViewComponentProps<E>,
+    P extends ContentViewComponentProps,
     E extends NativeScriptContentView = NativeScriptContentView
 >(
     ref: React.RefObject<E>,
