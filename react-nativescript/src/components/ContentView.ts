@@ -27,10 +27,7 @@ export function _ContentView<
     );
 }
 
-export const ContentView = React.forwardRef<
-    NativeScriptContentView,
-    React.PropsWithChildren<PropsWithoutForwardedRef<ContentViewComponentProps>>
->(_ContentView);
+export const ContentView = React.forwardRef(_ContentView);
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that

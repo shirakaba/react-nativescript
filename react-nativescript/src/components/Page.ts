@@ -44,10 +44,7 @@ export function _Page<
 }
 
 // export const Page = React.forwardRef<React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>>(_Page);
-export const Page = React.forwardRef<
-    NativeScriptPage,
-    React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>
->(_Page);
+export const Page = React.forwardRef(_Page);
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
