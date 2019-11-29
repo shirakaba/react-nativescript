@@ -1,6 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { useRef } from "react";
+import { useRef, useImperativeHandle } from "react";
 import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
@@ -25,11 +25,16 @@ export type PageComponentProps<
  */
 export function _Page<
     P extends PageComponentProps<E>,
-    E extends NativeScriptPage = NativeScriptPage
->(props: React.PropsWithChildren<P>)
+    E extends NativeScriptPage = NativeScriptPage,
+    R extends React.RefObject<E> = React.RefObject<E>
+>(props: React.PropsWithChildren<P>, ref: R)
 {
+    // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
+    const inputRef = useRef();
+    /* This (should) mimic the current behaviour; we return the ref unchanged. */
+    useImperativeHandle(ref, () => ref.current);
+
     console.log(`[_Page.render()] entered`);
-    const ref: React.RefObject<E> = (props.forwardedRef || useRef());
     console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
     const intrinsicProps = usePageInheritance(ref, props);
     console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
@@ -38,26 +43,13 @@ export function _Page<
         "page",
         {
             ...intrinsicProps,
-            ref,
+            ref: inputRef,
         },
         null
     );
 }
 
-export const Page = React.forwardRef(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>, ref: React.RefObject<NativeScriptPage>) => {
-        const { children, ...rest } = props;
-
-        return React.createElement(
-            _Page,
-            {
-                ...rest,
-                forwardedRef: ref,
-            },
-            children
-        );
-    }
-);
+export const Page = React.forwardRef<React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>>(_Page);
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
