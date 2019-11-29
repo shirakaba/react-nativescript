@@ -22,31 +22,6 @@ export type PageNavigationEventHandler = (args: NavigatedData) => void;
 export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentViewComponentProps;
 
 /**
- * A React wrapper around the NativeScript Page component.
- * See: ui/page/page
- */
-export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref?: React.RefObject<NativeScriptPage>)
-{
-    // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
-    ref = ref || createRef<NativeScriptPage>();
-
-    console.log(`[_Page.render()] entered. ref.current:`, ref.current);
-    const { children, ...intrinsicProps } = usePageInheritance(ref, props);
-    console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
-
-    return React.createElement(
-        "page",
-        {
-            ...intrinsicProps,
-            ref,
-        },
-        children
-    );
-}
-
-export const Page = React.forwardRef<NativeScriptPage, React.PropsWithChildren<PageComponentProps>>(_Page);
-
-/**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
  * That is to say, on mount, update, and unmount.
  * 
@@ -102,3 +77,28 @@ export function usePageInheritance<
     // We have to explicitly type this because of an issue with tsc inference... :(
     return { ...rest } as Omit<P, PageOmittedPropNames>;
 }
+
+/**
+ * A React wrapper around the NativeScript Page component.
+ * See: ui/page/page
+ */
+export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref?: React.RefObject<NativeScriptPage>)
+{
+    // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
+    ref = ref || createRef<NativeScriptPage>();
+
+    console.log(`[_Page.render()] entered. ref.current:`, ref.current);
+    const { children, ...intrinsicProps } = usePageInheritance(ref, props);
+    console.log(`[_Page.render()] performed usePageInheritance; returning ReactElement now.`);
+
+    return React.createElement(
+        "page",
+        {
+            ...intrinsicProps,
+            ref,
+        },
+        children
+    );
+}
+
+export const Page = React.forwardRef<NativeScriptPage, React.PropsWithChildren<PageComponentProps>>(_Page);

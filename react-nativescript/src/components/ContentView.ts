@@ -12,23 +12,6 @@ export interface ContentViewAuxProps {}
 export type ContentViewOmittedPropNames = ViewOmittedPropNames;
 export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
-export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref?: React.RefObject<NativeScriptContentView>)
-{
-    ref = ref || createRef<NativeScriptContentView>();
-    const { children, ...intrinsicProps} = useContentViewInheritance(ref, props);
-
-    return React.createElement(
-        "contentView",
-        {
-            ...intrinsicProps,
-            ref,
-        },
-        children
-    );
-}
-
-export const ContentView = React.forwardRef<NativeScriptContentView, React.PropsWithChildren<ContentViewComponentProps>>(_ContentView);
-
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
@@ -54,3 +37,20 @@ export function useContentViewInheritance<
     // We have to explicitly type this because of an issue with tsc inference... :(
     return intrinsicProps as Omit<P, ContentViewOmittedPropNames>;
 }
+
+export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref?: React.RefObject<NativeScriptContentView>)
+{
+    ref = ref || createRef<NativeScriptContentView>();
+    const { children, ...intrinsicProps} = useContentViewInheritance(ref, props);
+
+    return React.createElement(
+        "contentView",
+        {
+            ...intrinsicProps,
+            ref,
+        },
+        children
+    );
+}
+
+export const ContentView = React.forwardRef<NativeScriptContentView, React.PropsWithChildren<ContentViewComponentProps>>(_ContentView);
