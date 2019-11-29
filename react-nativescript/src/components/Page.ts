@@ -1,12 +1,14 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { useRef } from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
 import { useEventListener } from "../client/EventHandling";
 
-interface Props {
+/**
+ * Props for the wrapping component rather than the primitive element.
+ */
+export interface PageAuxProps {
     onNavigatingTo?: PageNavigationEventHandler;
     onNavigatedTo?: PageNavigationEventHandler;
     onNavigatingFrom?: PageNavigationEventHandler;
@@ -15,7 +17,7 @@ interface Props {
 
 export type PageNavigationEventHandler = (args: NavigatedData) => void;
 
-export type PageComponentProps = Props & Partial<PageProps> & ContentViewComponentProps;
+export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentViewComponentProps;
 
 /**
  * A React wrapper around the NativeScript Page component.
@@ -102,7 +104,7 @@ export function usePageInheritance<
     return { ...rest } as Omit<P, PageOmittedProps>;
 }
 
-export type PageOmittedProps = keyof Pick<Props,
+export type PageOmittedProps = keyof Pick<PageAuxProps,
 "onNavigatedFrom"|
 "onNavigatedTo"|
 "onNavigatingFrom"|

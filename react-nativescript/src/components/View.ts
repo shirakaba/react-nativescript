@@ -14,7 +14,10 @@ import {
 import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState, ViewBaseOmittedProps } from "./ViewBase";
 import { useEventListener } from "../client/EventHandling";
 
-interface Props {
+/**
+ * Props for the wrapping component rather than the primitive element.
+ */
+export interface ViewAuxProps {
     /* From View. */
     onLoaded?: (args: NarrowedEventData<NativeScriptView>) => void;
     onUnloaded?: (args: NarrowedEventData<NativeScriptView>) => void;
@@ -37,7 +40,7 @@ interface Props {
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
 
-export type ViewComponentProps = Props & Partial<ViewProps> & ViewBaseComponentProps;
+export type ViewComponentProps = ViewAuxProps & Partial<ViewProps> & ViewBaseComponentProps;
 
 export type ViewComponentState = {} & ViewBaseComponentState;
 
@@ -114,7 +117,7 @@ export function useViewInheritance<
     return { ...rest } as Omit<P, ViewOmittedProps>;
 }
 
-export type ViewOmittedProps = keyof Pick<Props,
+export type ViewOmittedProps = keyof Pick<ViewAuxProps,
 "onLoaded"|
 "onUnloaded"|
 "onAndroidBackPressed"|

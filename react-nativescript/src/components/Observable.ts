@@ -4,12 +4,15 @@ import { ObservableProps } from "../shared/NativeScriptComponentTypings";
 import { Observable as NativeScriptObservable, EventData } from "tns-core-modules/data/observable/observable";
 import { useEventListener } from "../client/EventHandling";
 
-interface Props {
+/**
+ * Props for the wrapping component rather than the primitive element.
+ */
+export interface ObservableAuxProps {
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
 }
 
-export type ObservableComponentProps = Props & Partial<ObservableProps>;
+export type ObservableComponentProps = ObservableAuxProps & Partial<ObservableProps>;
 
 export type ObservableComponentState = {};
 
@@ -58,4 +61,4 @@ export function useObservableInheritance<
     return { ...rest } as Omit<P, ObservableOmittedProps>;
 }
 
-export type ObservableOmittedProps = keyof Pick<Props, "onPropertyChange">;
+export type ObservableOmittedProps = keyof Pick<ObservableAuxProps, "onPropertyChange">;

@@ -5,7 +5,10 @@ import { ViewBase as NativeScriptViewBase } from "tns-core-modules/ui/core/view-
 import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { ObservableComponentProps, ObservableComponentState, useObservableInheritance, ObservableOmittedProps } from "./Observable";
 
-interface Props {
+/**
+ * Props for the wrapping component rather than the primitive element.
+ */
+export interface ViewBaseAuxProps {
     /* Optional property to guide the Host Config on how best to handle this node. Will be set on instance. */
     __rns__nodeTreeRole?: string;
     dock?: Dock;
@@ -15,7 +18,7 @@ interface Props {
     // onUnloaded?: () => void;
 }
 
-export type ViewBaseComponentProps = Props & Partial<ViewBaseProps> & ObservableComponentProps;
+export type ViewBaseComponentProps = ViewBaseAuxProps & Partial<ViewBaseProps> & ObservableComponentProps;
 
 export type ViewBaseComponentState = {} & ObservableComponentState;
 

@@ -3,18 +3,19 @@ import * as React from "react";
 import { ContentViewProps } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, useViewInheritance, ViewOmittedProps } from "./View";
-import { useRef } from "react";
 
-interface Props {}
+/**
+ * Props for the wrapping component rather than the primitive element.
+ */
+export interface ContentViewAuxProps {}
 
-export type ContentViewComponentProps = Props & Partial<ContentViewProps> & ViewComponentProps;
+export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
 export function _ContentView<
     P extends ContentViewComponentProps,
     E extends NativeScriptContentView = NativeScriptContentView
 >(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
-{   
-    // const inputRef = useRef();
+{
     const intrinsicProps = useContentViewInheritance(ref, props);
 
     return React.createElement(
