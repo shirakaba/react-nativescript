@@ -1,5 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
+import { createRef } from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedPropNames } from "./ContentView";
@@ -27,7 +28,7 @@ export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentView
 export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref: React.RefObject<NativeScriptPage>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
-    // const inputRef = useRef();
+    ref = ref || createRef<NativeScriptPage>();
 
     console.log(`[_Page.render()] entered. ref.current:`, ref.current);
     const { children, ...intrinsicProps } = usePageInheritance(ref, props);

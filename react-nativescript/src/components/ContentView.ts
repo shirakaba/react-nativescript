@@ -1,5 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
+import { createRef } from "react";
 import { ContentViewProps } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
@@ -13,6 +14,7 @@ export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentVie
 
 export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref: React.RefObject<NativeScriptContentView>)
 {
+    ref = ref || createRef<NativeScriptContentView>();
     const { children, ...intrinsicProps} = useContentViewInheritance(ref, props);
 
     return React.createElement(
