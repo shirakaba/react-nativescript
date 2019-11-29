@@ -41,7 +41,7 @@ export function useContentViewInheritance<
 export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref?: React.RefObject<NativeScriptContentView>)
 {
     ref = ref || createRef<NativeScriptContentView>();
-    const { children, ...intrinsicProps} = useContentViewInheritance(ref, props);
+    const { children, ...intrinsicProps } = useContentViewInheritance(ref, props);
 
     return React.createElement(
         "contentView",
