@@ -11,7 +11,7 @@ import {
     PinchGestureEventData,
     PanGestureEventData,
 } from "tns-core-modules/ui/gestures/gestures";
-import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState } from "./ViewBase";
+import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState, ViewBaseOmittedProps } from "./ViewBase";
 import { useEventListener } from "../client/EventHandling";
 
 /**
@@ -89,7 +89,7 @@ export function useViewInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-)
+): Omit<P, ViewOmittedProps>
 {
     const intrinsicProps = useViewBaseInheritance(ref, props);
     useViewEvents(ref, intrinsicProps);
@@ -114,5 +114,22 @@ export function useViewInheritance<
     } = intrinsicProps;
 
     // Omit all event handlers because they aren't used by the intrinsic element.
-    return { ...rest };
+    return { ...rest } as Omit<P, ViewOmittedProps>;
 }
+
+export type ViewOmittedProps = keyof Pick<ViewAuxProps,
+"onLoaded"|
+"onUnloaded"|
+"onAndroidBackPressed"|
+"onShowingModally"|
+"onShownModally"|
+
+"onTap"|
+"onDoubleTap"|
+"onPinch"|
+"onPan"|
+"onSwipe"|
+"onRotation"|
+"onLongPress"|
+"onTouch"
+> | ViewBaseOmittedProps;

@@ -49,7 +49,7 @@ export function useObservableInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-)
+): Omit<P, ObservableOmittedProps>
 {
     useObservableEvents(ref, props);
     const {
@@ -58,5 +58,7 @@ export function useObservableInheritance<
     } = props;
 
     // Omit all event handlers because they aren't used by the intrinsic element.
-    return { ...rest };
+    return { ...rest } as Omit<P, ObservableOmittedProps>;
 }
+
+export type ObservableOmittedProps = keyof Pick<ObservableAuxProps, "onPropertyChange">;
