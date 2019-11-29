@@ -43,7 +43,7 @@ export function _AbsoluteLayout(props: React.PropsWithChildren<AbsoluteLayoutCom
     const { children, ...intrinsicProps } = useAbsoluteLayoutInheritance(ref, props);
 
     return React.createElement(
-        "AbsoluteLayout",
+        "absoluteLayout",
         {
             ...intrinsicProps,
             ref,
