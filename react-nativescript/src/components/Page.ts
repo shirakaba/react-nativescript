@@ -25,12 +25,11 @@ export type PageComponentProps<
  */
 export function _Page<
     P extends PageComponentProps<E>,
-    E extends NativeScriptPage = NativeScriptPage,
-    R extends React.RefObject<E> = React.RefObject<E>
->(props: React.PropsWithChildren<P>, ref: R)
+    E extends NativeScriptPage = NativeScriptPage
+>(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
-    const inputRef = useRef();
+    // const inputRef = useRef();
 
     console.log(`[_Page.render()] entered`);
     console.log(`[_Page.render()] using ref: ${ref === props.forwardedRef ? "forwardedRef" : "useRef"}. ref.current:`, ref.current);
@@ -41,13 +40,17 @@ export function _Page<
         "page",
         {
             ...intrinsicProps,
-            ref: inputRef,
+            ref: ref,
         },
         null
     );
 }
 
-export const Page = React.forwardRef<React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>>(_Page);
+// export const Page = React.forwardRef<React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>>(_Page);
+export const Page = React.forwardRef<
+    NativeScriptPage,
+    React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>
+>(_Page);
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.

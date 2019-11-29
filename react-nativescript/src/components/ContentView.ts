@@ -14,9 +14,9 @@ export type ContentViewComponentProps<
 export function _ContentView<
     P extends ContentViewComponentProps<E>,
     E extends NativeScriptContentView = NativeScriptContentView
->(props: React.PropsWithChildren<P>)
+>(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
 {   
-    const ref: React.RefObject<E> = (props.forwardedRef || useRef());
+    // const inputRef = useRef();
     const intrinsicProps = useContentViewInheritance(ref, props);
 
     return React.createElement(
@@ -29,20 +29,10 @@ export function _ContentView<
     );
 }
 
-export const ContentView = React.forwardRef(
-    (props: React.PropsWithChildren<PropsWithoutForwardedRef<ContentViewComponentProps>>, ref: React.RefObject<NativeScriptContentView>) => {
-        const { children, ...rest } = props;
-
-        return React.createElement(
-            _ContentView,
-            {
-                ...rest,
-                forwardedRef: ref,
-            },
-            children
-        );
-    }
-);
+export const ContentView = React.forwardRef<
+    NativeScriptContentView,
+    React.PropsWithChildren<PropsWithoutForwardedRef<ContentViewComponentProps>>
+>(_ContentView);
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
