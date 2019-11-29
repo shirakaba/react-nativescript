@@ -11,10 +11,7 @@ export interface ContentViewAuxProps {}
 
 export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
-export function _ContentView<
-    P extends ContentViewComponentProps,
-    E extends NativeScriptContentView = NativeScriptContentView
->(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
+export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref: React.RefObject<NativeScriptContentView>)
 {
     const intrinsicProps = useContentViewInheritance(ref, props);
 

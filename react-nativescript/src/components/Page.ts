@@ -23,10 +23,7 @@ export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentView
  * A React wrapper around the NativeScript Page component.
  * See: ui/page/page
  */
-export function _Page<
-    P extends PageComponentProps,
-    E extends NativeScriptPage = NativeScriptPage
->(props: React.PropsWithChildren<P>, ref: React.RefObject<E>)
+export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref: React.RefObject<NativeScriptPage>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     // const inputRef = useRef();
