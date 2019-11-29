@@ -1,7 +1,7 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
 import { useRef } from "react";
-import { PageProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
 import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
 import { useEventListener } from "../client/EventHandling";

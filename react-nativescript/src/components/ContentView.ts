@@ -1,6 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { ContentViewProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
+import { ContentViewProps } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
 import { ViewComponentProps, useViewInheritance, ViewOmittedProps } from "./View";
 import { useRef } from "react";
