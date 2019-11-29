@@ -5,12 +5,13 @@ import { Observable as NativeScriptObservable, EventData } from "tns-core-module
 import { useEventListener } from "../client/EventHandling";
 
 /**
- * Props for the wrapping component rather than the primitive element.
+ * Auxiliary props for the wrapping component rather than the primitive element.
  */
 export interface ObservableAuxProps {
     /* From Observable. */
     onPropertyChange?: (data: EventData) => void;
 }
+export type ObservableOmittedPropNames = keyof ObservableAuxProps;
 
 export type ObservableComponentProps = ObservableAuxProps & Partial<ObservableProps>;
 
@@ -49,7 +50,7 @@ export function useObservableInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, ObservableOmittedProps>
+): Omit<P, ObservableOmittedPropNames>
 {
     useObservableEvents(ref, props);
     const {
@@ -59,7 +60,5 @@ export function useObservableInheritance<
 
     // Omit all event handlers because they aren't used by the intrinsic element.
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, ObservableOmittedProps>;
+    return { ...rest } as Omit<P, ObservableOmittedPropNames>;
 }
-
-export type ObservableOmittedProps = keyof Pick<ObservableAuxProps, "onPropertyChange">;

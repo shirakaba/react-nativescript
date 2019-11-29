@@ -3,10 +3,10 @@ import * as React from "react";
 import { ViewBaseProps } from "../shared/NativeScriptComponentTypings";
 import { ViewBase as NativeScriptViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { Dock } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { ObservableComponentProps, ObservableComponentState, useObservableInheritance, ObservableOmittedProps } from "./Observable";
+import { ObservableComponentProps, ObservableComponentState, useObservableInheritance, ObservableOmittedPropNames } from "./Observable";
 
 /**
- * Props for the wrapping component rather than the primitive element.
+ * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
 export interface ViewBaseAuxProps {
     /* Optional property to guide the Host Config on how best to handle this node. Will be set on instance. */
@@ -17,6 +17,7 @@ export interface ViewBaseAuxProps {
     // onLoaded?: () => void;
     // onUnloaded?: () => void;
 }
+export type ViewBaseOmittedPropNames = ObservableOmittedPropNames;
 
 export type ViewBaseComponentProps = ViewBaseAuxProps & Partial<ViewBaseProps> & ObservableComponentProps;
 
@@ -37,14 +38,12 @@ export function useViewBaseInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, ViewBaseOmittedProps>
+): Omit<P, ViewBaseOmittedPropNames>
 {
     const intrinsicProps = useObservableInheritance(ref, props);
     // ViewBase has no events of its own to handle.   
     
     // We won't omit the __rns__nodeTreeRole or dock props because they 
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return intrinsicProps as Omit<P, ViewBaseOmittedProps>;
+    return intrinsicProps as Omit<P, ViewBaseOmittedPropNames>;
 }
-
-export type ViewBaseOmittedProps = ObservableOmittedProps;

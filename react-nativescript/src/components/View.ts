@@ -11,11 +11,11 @@ import {
     PinchGestureEventData,
     PanGestureEventData,
 } from "tns-core-modules/ui/gestures/gestures";
-import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState, ViewBaseOmittedProps } from "./ViewBase";
+import { ViewBaseComponentProps, useViewBaseInheritance, ViewBaseComponentState, ViewBaseOmittedPropNames } from "./ViewBase";
 import { useEventListener } from "../client/EventHandling";
 
 /**
- * Props for the wrapping component rather than the primitive element.
+ * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
 export interface ViewAuxProps {
     /* From View. */
@@ -39,6 +39,7 @@ export interface ViewAuxProps {
     // onLayout?: (left: number, top: number, right: number, bottom: number) => void;
     // onMeasure?: (widthMeasureSpec: number, heightMeasureSpec: number) => void;
 }
+export type ViewOmittedPropNames = keyof ViewAuxProps | ViewBaseOmittedPropNames;
 
 export type ViewComponentProps = ViewAuxProps & Partial<ViewProps> & ViewBaseComponentProps;
 
@@ -89,7 +90,7 @@ export function useViewInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, ViewOmittedProps>
+): Omit<P, ViewOmittedPropNames>
 {
     const intrinsicProps = useViewBaseInheritance(ref, props);
     useViewEvents(ref, intrinsicProps);
@@ -115,22 +116,5 @@ export function useViewInheritance<
 
     // Omit all event handlers because they aren't used by the intrinsic element.
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, ViewOmittedProps>;
+    return { ...rest } as Omit<P, ViewOmittedPropNames>;
 }
-
-export type ViewOmittedProps = keyof Pick<ViewAuxProps,
-"onLoaded"|
-"onUnloaded"|
-"onAndroidBackPressed"|
-"onShowingModally"|
-"onShownModally"|
-
-"onTap"|
-"onDoubleTap"|
-"onPinch"|
-"onPan"|
-"onSwipe"|
-"onRotation"|
-"onLongPress"|
-"onTouch"
-> | ViewBaseOmittedProps;

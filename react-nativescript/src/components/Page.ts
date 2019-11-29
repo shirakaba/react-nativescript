@@ -2,11 +2,11 @@
 import * as React from "react";
 import { PageProps } from "../shared/NativeScriptComponentTypings";
 import { Page as NativeScriptPage, NavigatedData } from "tns-core-modules/ui/page/page";
-import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedProps } from "./ContentView";
+import { _ContentView, ContentViewComponentProps, useContentViewInheritance, ContentViewOmittedPropNames } from "./ContentView";
 import { useEventListener } from "../client/EventHandling";
 
 /**
- * Props for the wrapping component rather than the primitive element.
+ * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
 export interface PageAuxProps {
     onNavigatingTo?: PageNavigationEventHandler;
@@ -14,6 +14,7 @@ export interface PageAuxProps {
     onNavigatingFrom?: PageNavigationEventHandler;
     onNavigatedFrom?: PageNavigationEventHandler;
 }
+export type PageOmittedPropNames = keyof PageAuxProps | ContentViewOmittedPropNames;
 
 export type PageNavigationEventHandler = (args: NavigatedData) => void;
 
@@ -81,7 +82,7 @@ export function usePageInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, PageOmittedProps>
+): Omit<P, PageOmittedPropNames>
 {
     console.log(`[usePageInheritance] Entered.`);
     const intrinsicProps = useContentViewInheritance(ref, props);
@@ -99,12 +100,5 @@ export function usePageInheritance<
 
     // Omit all event handlers because they aren't used by the intrinsic element.
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, PageOmittedProps>;
+    return { ...rest } as Omit<P, PageOmittedPropNames>;
 }
-
-export type PageOmittedProps = keyof Pick<PageAuxProps,
-"onNavigatedFrom"|
-"onNavigatedTo"|
-"onNavigatingFrom"|
-"onNavigatingTo"
-> | ContentViewOmittedProps;

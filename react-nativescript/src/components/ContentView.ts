@@ -2,12 +2,13 @@
 import * as React from "react";
 import { ContentViewProps } from "../shared/NativeScriptComponentTypings";
 import { ContentView as NativeScriptContentView } from "tns-core-modules/ui/content-view/content-view";
-import { ViewComponentProps, useViewInheritance, ViewOmittedProps } from "./View";
+import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 
 /**
- * Props for the wrapping component rather than the primitive element.
+ * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
 export interface ContentViewAuxProps {}
+export type ContentViewOmittedPropNames = ViewOmittedPropNames;
 
 export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
@@ -42,7 +43,7 @@ export function useContentViewInheritance<
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, ContentViewOmittedProps>
+): Omit<P, ContentViewOmittedPropNames>
 {
     console.log(`[useContentViewInheritance] Entered.`);
     const intrinsicProps = useViewInheritance(ref, props);
@@ -50,7 +51,5 @@ export function useContentViewInheritance<
     // ContentView has no events of its own to handle
 
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return intrinsicProps as Omit<P, ContentViewOmittedProps>;
+    return intrinsicProps as Omit<P, ContentViewOmittedPropNames>;
 }
-
-export type ContentViewOmittedProps = ViewOmittedProps;
