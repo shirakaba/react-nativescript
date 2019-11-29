@@ -29,28 +29,9 @@ export function useTextBaseInheritance<
     props: P
 ): Omit<P, TextBaseOmittedPropNames>
 {
-    console.log(`[useTextBaseInheritance] Entered.`);
     const intrinsicProps = useViewInheritance(ref, props);
-    console.log(`[useTextBaseInheritance] used useViewInheritance. Shall now return intrinsic props.`);
     // TextBase has no events of its own to handle
 
     // We have to explicitly type this because of an issue with tsc inference... :(
     return intrinsicProps as Omit<P, TextBaseOmittedPropNames>;
 }
-
-export function _TextBase(props: React.PropsWithChildren<TextBaseComponentProps>, ref?: React.RefObject<NativeScriptTextBase>)
-{
-    ref = ref || createRef<NativeScriptTextBase>();
-    const { children, ...intrinsicProps } = useTextBaseInheritance(ref, props);
-
-    return React.createElement(
-        "textBase",
-        {
-            ...intrinsicProps,
-            ref,
-        },
-        children
-    );
-}
-
-export const TextBase = React.forwardRef<NativeScriptTextBase, React.PropsWithChildren<TextBaseComponentProps>>(_TextBase);
