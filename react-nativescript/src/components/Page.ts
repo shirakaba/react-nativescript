@@ -24,7 +24,7 @@ export type PageComponentProps = PageAuxProps & Partial<PageProps> & ContentView
  * A React wrapper around the NativeScript Page component.
  * See: ui/page/page
  */
-export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref: React.RefObject<NativeScriptPage>)
+export function _Page(props: PageComponentProps, ref: React.RefObject<NativeScriptPage>)
 {
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     // const inputRef = useRef();
@@ -43,8 +43,7 @@ export function _Page(props: React.PropsWithChildren<PageComponentProps>, ref: R
     );
 }
 
-// export const Page = React.forwardRef<React.PropsWithChildren<PropsWithoutForwardedRef<PageComponentProps>>>(_Page);
-export const Page = React.forwardRef(_Page);
+export const Page = React.forwardRef<NativeScriptPage, React.PropsWithChildren<PageComponentProps>>(_Page);
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.

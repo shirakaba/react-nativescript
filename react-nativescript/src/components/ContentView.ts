@@ -9,10 +9,9 @@ import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./
  */
 export interface ContentViewAuxProps {}
 export type ContentViewOmittedPropNames = ViewOmittedPropNames;
-
 export type ContentViewComponentProps = ContentViewAuxProps & Partial<ContentViewProps> & ViewComponentProps;
 
-export function _ContentView(props: React.PropsWithChildren<ContentViewComponentProps>, ref: React.RefObject<NativeScriptContentView>)
+export function _ContentView(props: ContentViewComponentProps, ref: React.RefObject<NativeScriptContentView>)
 {
     const intrinsicProps = useContentViewInheritance(ref, props);
 
@@ -26,7 +25,7 @@ export function _ContentView(props: React.PropsWithChildren<ContentViewComponent
     );
 }
 
-export const ContentView = React.forwardRef(_ContentView);
+export const ContentView = React.forwardRef<NativeScriptContentView, React.PropsWithChildren<ContentViewComponentProps>>(_ContentView);
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
