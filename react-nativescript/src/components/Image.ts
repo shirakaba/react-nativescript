@@ -1,19 +1,18 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef } from "react";
-import { DatePickerProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
-import { DatePicker as NativeScriptDatePicker } from "@nativescript/core";
+import { ImageProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
+import { Image as NativeScriptImage } from "@nativescript/core";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
 
 /**
  * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
-export interface DatePickerAuxProps {
-    onDateChange?: (args: NarrowedEventData<NativeScriptDatePicker>) => void;
+export interface ImageAuxProps {
 }
-export type DatePickerOmittedPropNames = keyof DatePickerAuxProps | ViewOmittedPropNames;
-export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerProps> & ViewComponentProps;
+export type ImageOmittedPropNames = ViewOmittedPropNames;
+export type ImageComponentProps = ImageAuxProps & Partial<ImageProps> & ViewComponentProps;
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
@@ -22,16 +21,16 @@ export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerPr
  * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
-export function useDatePickerEvents<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
->(
-    ref: React.RefObject<E>,
-    props: P
-): void
-{
-    useEventListener(ref, "onDateChange", props.onDateChange);
-}
+// export function useImageEvents<
+//     P extends ImageComponentProps,
+//     E extends NativeScriptImage = NativeScriptImage
+// >(
+//     ref: React.RefObject<E>,
+//     props: P
+// ): void
+// {
+//     useEventListener(ref, "onDateChange", props.onDateChange);
+// }
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
@@ -42,33 +41,28 @@ export function useDatePickerEvents<
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
-export function useDatePickerInheritance<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+export function useImageInheritance<
+    P extends ImageComponentProps,
+    E extends NativeScriptImage = NativeScriptImage
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, DatePickerOmittedPropNames>
+): Omit<P, ImageOmittedPropNames>
 {
     const intrinsicProps = useViewInheritance(ref, props);
-    useDatePickerEvents(ref, props);
-
-    const {
-        onDateChange,
-        ...rest
-    } = intrinsicProps;
+    // Image has no events of its own to handle
 
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, DatePickerOmittedPropNames>;
+    return intrinsicProps as Omit<P, ImageOmittedPropNames>;
 }
 
-export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentProps>, ref?: React.RefObject<NativeScriptDatePicker>)
+export function _Image(props: React.PropsWithChildren<ImageComponentProps>, ref?: React.RefObject<NativeScriptImage>)
 {
-    ref = ref || createRef<NativeScriptDatePicker>();
-    const { children, ...intrinsicProps } = useDatePickerInheritance(ref, props);
+    ref = ref || createRef<NativeScriptImage>();
+    const { children, ...intrinsicProps } = useImageInheritance(ref, props);
 
     return React.createElement(
-        "datePicker",
+        "image",
         {
             ...intrinsicProps,
             ref,
@@ -77,4 +71,4 @@ export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentPr
     );
 }
 
-export const DatePicker = React.forwardRef<NativeScriptDatePicker, React.PropsWithChildren<DatePickerComponentProps>>(_DatePicker);
+export const Image = React.forwardRef<NativeScriptImage, React.PropsWithChildren<ImageComponentProps>>(_Image);

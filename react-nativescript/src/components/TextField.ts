@@ -53,8 +53,13 @@ export function useTextFieldInheritance<
     const intrinsicProps = useEditableTextBaseInheritance(ref, props);
     useTextFieldEvents(ref, intrinsicProps);
 
+    const {
+        onReturnPress,
+        ...rest
+    } = intrinsicProps;
+
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return intrinsicProps as Omit<P, TextFieldOmittedPropNames>;
+    return { ...rest } as Omit<P, TextFieldOmittedPropNames>;
 }
 
 export function _TextField(props: React.PropsWithChildren<TextFieldComponentProps>, ref?: React.RefObject<NativeScriptTextField>)

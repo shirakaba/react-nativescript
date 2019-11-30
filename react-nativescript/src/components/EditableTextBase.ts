@@ -57,6 +57,13 @@ export function useEditableTextBaseInheritance<
     const intrinsicProps = useTextBaseInheritance(ref, props);
     useEditableTextBaseEvents(ref, intrinsicProps);
 
+    const {
+        onBlur,
+        onFocus,
+        onTextChange,
+        ...rest
+    } = intrinsicProps;
+
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return intrinsicProps as Omit<P, EditableTextBaseOmittedPropNames>;
+    return { ...rest } as Omit<P, EditableTextBaseOmittedPropNames>;
 }

@@ -55,9 +55,14 @@ export function useActionItemInheritance<
 {
     const intrinsicProps = useViewBaseInheritance(ref, props);
 
+    const {
+        onTap,
+        ...rest
+    } = intrinsicProps;
+
     // Omit all event handlers because they aren't used by the intrinsic element.
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return intrinsicProps as Omit<P, ActionItemOmittedPropNames>;
+    return { ...rest } as Omit<P, ActionItemOmittedPropNames>;
 }
 
 export function _ActionItem(props: React.PropsWithChildren<ActionItemComponentProps>, ref?: React.RefObject<NativeScriptActionItem>)

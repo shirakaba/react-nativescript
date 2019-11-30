@@ -1,19 +1,19 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef } from "react";
-import { DatePickerProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
-import { DatePicker as NativeScriptDatePicker } from "@nativescript/core";
+import { PlaceholderProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
+import { Placeholder as NativeScriptPlaceholder, CreateViewEventData } from "@nativescript/core";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
 
 /**
  * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
-export interface DatePickerAuxProps {
-    onDateChange?: (args: NarrowedEventData<NativeScriptDatePicker>) => void;
+export interface PlaceholderAuxProps {
+    onCreatingView?(args: CreateViewEventData): void;
 }
-export type DatePickerOmittedPropNames = keyof DatePickerAuxProps | ViewOmittedPropNames;
-export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerProps> & ViewComponentProps;
+export type PlaceholderOmittedPropNames = ViewOmittedPropNames;
+export type PlaceholderComponentProps = PlaceholderAuxProps & Partial<PlaceholderProps> & ViewComponentProps;
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
@@ -22,15 +22,15 @@ export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerPr
  * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
-export function useDatePickerEvents<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+export function usePlaceholderEvents<
+    P extends PlaceholderComponentProps,
+    E extends NativeScriptPlaceholder = NativeScriptPlaceholder
 >(
     ref: React.RefObject<E>,
     props: P
 ): void
 {
-    useEventListener(ref, "onDateChange", props.onDateChange);
+    useEventListener(ref, "creatingView", props.onCreatingView);
 }
 
 /**
@@ -42,33 +42,34 @@ export function useDatePickerEvents<
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
-export function useDatePickerInheritance<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+export function usePlaceholderInheritance<
+    P extends PlaceholderComponentProps,
+    E extends NativeScriptPlaceholder = NativeScriptPlaceholder
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, DatePickerOmittedPropNames>
+): Omit<P, PlaceholderOmittedPropNames>
 {
     const intrinsicProps = useViewInheritance(ref, props);
-    useDatePickerEvents(ref, props);
 
     const {
-        onDateChange,
+        onCreatingView,
         ...rest
     } = intrinsicProps;
 
+    // Placeholder has no events of its own to handle
+
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, DatePickerOmittedPropNames>;
+    return { ...rest }  as Omit<P, PlaceholderOmittedPropNames>;
 }
 
-export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentProps>, ref?: React.RefObject<NativeScriptDatePicker>)
+export function _Placeholder(props: React.PropsWithChildren<PlaceholderComponentProps>, ref?: React.RefObject<NativeScriptPlaceholder>)
 {
-    ref = ref || createRef<NativeScriptDatePicker>();
-    const { children, ...intrinsicProps } = useDatePickerInheritance(ref, props);
+    ref = ref || createRef<NativeScriptPlaceholder>();
+    const { children, ...intrinsicProps } = usePlaceholderInheritance(ref, props);
 
     return React.createElement(
-        "datePicker",
+        "placeholder",
         {
             ...intrinsicProps,
             ref,
@@ -77,4 +78,4 @@ export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentPr
     );
 }
 
-export const DatePicker = React.forwardRef<NativeScriptDatePicker, React.PropsWithChildren<DatePickerComponentProps>>(_DatePicker);
+export const Placeholder = React.forwardRef<NativeScriptPlaceholder, React.PropsWithChildren<PlaceholderComponentProps>>(_Placeholder);

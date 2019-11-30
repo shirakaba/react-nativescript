@@ -1,19 +1,20 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef } from "react";
-import { DatePickerProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
-import { DatePicker as NativeScriptDatePicker } from "@nativescript/core";
+import { ListPickerProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
+import { ListPicker as NativeScriptListPicker, ItemsSource } from "@nativescript/core";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
 
 /**
  * Auxiliary props for the wrapping component rather than the intrinsic element.
  */
-export interface DatePickerAuxProps {
-    onDateChange?: (args: NarrowedEventData<NativeScriptDatePicker>) => void;
+export interface ListPickerAuxProps {
+    items: any[] | ItemsSource;
+    onSelectedIndexChange?: (args: NarrowedEventData<NativeScriptListPicker>) => void;
 }
-export type DatePickerOmittedPropNames = keyof DatePickerAuxProps | ViewOmittedPropNames;
-export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerProps> & ViewComponentProps;
+export type ListPickerOmittedPropNames = ViewOmittedPropNames;
+export type ListPickerComponentProps = ListPickerAuxProps & Partial<ListPickerProps> & ViewComponentProps;
 
 /**
  * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
@@ -22,15 +23,15 @@ export type DatePickerComponentProps = DatePickerAuxProps & Partial<DatePickerPr
  * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
-export function useDatePickerEvents<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+export function useListPickerEvents<
+    P extends ListPickerComponentProps,
+    E extends NativeScriptListPicker = NativeScriptListPicker
 >(
     ref: React.RefObject<E>,
     props: P
 ): void
 {
-    useEventListener(ref, "onDateChange", props.onDateChange);
+    useEventListener(ref, "selectedIndexChange", props.onSelectedIndexChange);
 }
 
 /**
@@ -42,33 +43,33 @@ export function useDatePickerEvents<
  * 
  * @returns just the props to be passed on to the underlying intrinsic element.
  */
-export function useDatePickerInheritance<
-    P extends DatePickerComponentProps,
-    E extends NativeScriptDatePicker = NativeScriptDatePicker
+export function useListPickerInheritance<
+    P extends ListPickerComponentProps,
+    E extends NativeScriptListPicker = NativeScriptListPicker
 >(
     ref: React.RefObject<E>,
     props: P
-): Omit<P, DatePickerOmittedPropNames>
+): Omit<P, ListPickerOmittedPropNames>
 {
     const intrinsicProps = useViewInheritance(ref, props);
-    useDatePickerEvents(ref, props);
+    useListPickerEvents(ref, intrinsicProps);
 
     const {
-        onDateChange,
+        onSelectedIndexChange,
         ...rest
     } = intrinsicProps;
 
     // We have to explicitly type this because of an issue with tsc inference... :(
-    return { ...rest } as Omit<P, DatePickerOmittedPropNames>;
+    return { ...rest } as Omit<P, ListPickerOmittedPropNames>;
 }
 
-export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentProps>, ref?: React.RefObject<NativeScriptDatePicker>)
+export function _ListPicker(props: React.PropsWithChildren<ListPickerComponentProps>, ref?: React.RefObject<NativeScriptListPicker>)
 {
-    ref = ref || createRef<NativeScriptDatePicker>();
-    const { children, ...intrinsicProps } = useDatePickerInheritance(ref, props);
+    ref = ref || createRef<NativeScriptListPicker>();
+    const { children, ...intrinsicProps } = useListPickerInheritance(ref, props);
 
     return React.createElement(
-        "datePicker",
+        "listPicker",
         {
             ...intrinsicProps,
             ref,
@@ -77,4 +78,4 @@ export function _DatePicker(props: React.PropsWithChildren<DatePickerComponentPr
     );
 }
 
-export const DatePicker = React.forwardRef<NativeScriptDatePicker, React.PropsWithChildren<DatePickerComponentProps>>(_DatePicker);
+export const ListPicker = React.forwardRef<NativeScriptListPicker, React.PropsWithChildren<ListPickerComponentProps>>(_ListPicker);

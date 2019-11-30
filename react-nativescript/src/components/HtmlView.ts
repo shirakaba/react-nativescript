@@ -21,16 +21,16 @@ export type HtmlViewComponentProps = HtmlViewAuxProps & Partial<HtmlViewProps> &
  * @param ref the host instance of the underlying intrinsic element for this React component.
  * @param props the props for the React component (from which this function will use any event listener handlers).
  */
-export function useHtmlViewEvents<
-    P extends HtmlViewComponentProps,
-    E extends NativeScriptHtmlView = NativeScriptHtmlView
->(
-    ref: React.RefObject<E>,
-    props: P
-): void
-{
-    useEventListener(ref, "onDateChange", props.onDateChange);
-}
+// export function useHtmlViewEvents<
+//     P extends HtmlViewComponentProps,
+//     E extends NativeScriptHtmlView = NativeScriptHtmlView
+// >(
+//     ref: React.RefObject<E>,
+//     props: P
+// ): void
+// {
+//     useEventListener(ref, "onDateChange", props.onDateChange);
+// }
 
 /**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
@@ -62,7 +62,7 @@ export function _HtmlView(props: React.PropsWithChildren<HtmlViewComponentProps>
     const { children, ...intrinsicProps } = useHtmlViewInheritance(ref, props);
 
     return React.createElement(
-        "HtmlView",
+        "htmlView",
         {
             ...intrinsicProps,
             ref,
