@@ -10,7 +10,7 @@ import { EditableTextBaseComponentProps, useEditableTextBaseInheritance, Editabl
  */
 export interface TextViewAuxProps {
 }
-export type TextViewOmittedPropNames = keyof TextViewAuxProps & EditableTextBaseOmittedPropNames;
+export type TextViewOmittedPropNames = keyof TextViewAuxProps | EditableTextBaseOmittedPropNames;
 export type TextViewComponentProps = TextViewAuxProps & Partial<TextViewProps> & EditableTextBaseComponentProps;
 
 /**

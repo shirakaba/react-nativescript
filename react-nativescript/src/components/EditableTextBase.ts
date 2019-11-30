@@ -14,7 +14,7 @@ export interface EditableTextBaseAuxProps {
     onFocus?: (args: NarrowedEventData<NativeScriptEditableTextBase>) => void;
     onTextChange?: (args: NarrowedEventData<NativeScriptEditableTextBase>) => void;
 }
-export type EditableTextBaseOmittedPropNames = keyof EditableTextBaseAuxProps & TextBaseOmittedPropNames;
+export type EditableTextBaseOmittedPropNames = keyof EditableTextBaseAuxProps | TextBaseOmittedPropNames;
 export type EditableTextBaseComponentProps = EditableTextBaseAuxProps & Partial<EditableTextBaseProps> & TextBaseComponentProps;
 
 /**

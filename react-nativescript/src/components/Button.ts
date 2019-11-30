@@ -11,7 +11,7 @@ import { useEventListener } from "../client/EventHandling";
  */
 export interface ButtonAuxProps {
 }
-export type ButtonOmittedPropNames = keyof ButtonAuxProps & TextBaseOmittedPropNames;
+export type ButtonOmittedPropNames = keyof ButtonAuxProps | TextBaseOmittedPropNames;
 export type ButtonComponentProps = ButtonAuxProps & Partial<ButtonProps> & TextBaseComponentProps;
 
 /**

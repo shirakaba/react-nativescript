@@ -12,7 +12,7 @@ import { useEventListener } from "../client/EventHandling";
 export interface TextFieldAuxProps {
     onReturnPress?: (args: NarrowedEventData<NativeScriptTextField>) => void;
 }
-export type TextFieldOmittedPropNames = keyof TextFieldAuxProps & EditableTextBaseOmittedPropNames;
+export type TextFieldOmittedPropNames = keyof TextFieldAuxProps | EditableTextBaseOmittedPropNames;
 export type TextFieldComponentProps = TextFieldAuxProps & Partial<TextFieldProps> & EditableTextBaseComponentProps;
 
 /**
