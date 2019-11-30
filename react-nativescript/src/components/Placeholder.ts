@@ -12,7 +12,7 @@ import { useEventListener } from "../client/EventHandling";
 export interface PlaceholderAuxProps {
     onCreatingView?(args: CreateViewEventData): void;
 }
-export type PlaceholderOmittedPropNames = ViewOmittedPropNames;
+export type PlaceholderOmittedPropNames = keyof PlaceholderAuxProps | ViewOmittedPropNames;
 export type PlaceholderComponentProps = PlaceholderAuxProps & Partial<PlaceholderProps> & ViewComponentProps;
 
 /**

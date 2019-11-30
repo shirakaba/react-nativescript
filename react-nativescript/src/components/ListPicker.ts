@@ -13,7 +13,7 @@ export interface ListPickerAuxProps {
     items: any[] | ItemsSource;
     onSelectedIndexChange?: (args: NarrowedEventData<NativeScriptListPicker>) => void;
 }
-export type ListPickerOmittedPropNames = ViewOmittedPropNames;
+export type ListPickerOmittedPropNames = keyof Pick<ListPickerAuxProps, "onSelectedIndexChange"> | ViewOmittedPropNames;
 export type ListPickerComponentProps = ListPickerAuxProps & Partial<ListPickerProps> & ViewComponentProps;
 
 /**
