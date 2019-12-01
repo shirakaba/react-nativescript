@@ -1,10 +1,10 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { createRef } from "react";
+import { createRef, useState, useRef, useEffect } from "react";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
-import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout } from "@nativescript/core";
+import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View } from "@nativescript/core";
 
 export type CellViewContainer = StackLayout;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
@@ -88,12 +88,37 @@ export function useListViewInheritance<
     return { ...rest } as Omit<P, ListViewOmittedPropNames>;
 }
 
+type NumberKey = number | string;
+type RootKeyAndRef = { rootKey: string; ref: React.RefObject<any> };
+
+interface State {
+    nativeCells: Record<NumberKey, CellViewContainer>;
+    /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
+    nativeCellToItemIndex: Map<CellViewContainer, NumberKey>;
+    itemIndexToNativeCell?: Map<NumberKey, CellViewContainer>;
+}
+
+
 /**
  * A React wrapper around the NativeScript ListView component.
  * See: ui/ListView/ListView
  */
 export function _ListView(props: React.PropsWithChildren<ListViewComponentProps>, ref?: React.RefObject<NativeScriptListView>)
 {
+    // https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
+    const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
+    useEffect(() => {
+        argsViewToRootKeyAndRefRef.current = new Map();
+    })
+    const rootsRef = useRef<Set<string>>();
+    useEffect(() => {
+        rootsRef.current = new Set();
+    })
+
+    const [nativeCells, setNativeCells] = useState({});
+    const [nativeCellToItemIndex, setNativeCellToItemIndex] = useState(new Map());
+    const [itemIndexToNativeCell, setItemIndexToNativeCell] = useState(props._debug && props._debug.logLevel === "debug" ? new Map() : void 0);
+
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
