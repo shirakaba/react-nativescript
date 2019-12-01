@@ -13,24 +13,6 @@ export type ActivityIndicatorOmittedPropNames = ViewOmittedPropNames;
 export type ActivityIndicatorComponentProps = ActivityIndicatorAuxProps & Partial<ActivityIndicatorProps> & ViewComponentProps;
 
 /**
- * A hook to handle adding/removing events any time a dependent event listener handler in the props changes value.
- * That is to say, on mount, update, and unmount.
- * 
- * @param ref the host instance of the underlying intrinsic element for this React component.
- * @param props the props for the React component (from which this function will use any event listener handlers).
- */
-// export function useActivityIndicatorEvents<
-//     P extends ActivityIndicatorComponentProps,
-//     E extends NativeScriptActivityIndicator = NativeScriptActivityIndicator
-// >(
-//     ref: React.RefObject<E>,
-//     props: P
-// ): void
-// {
-//     useEventListener(ref, "onTap", props.onTap);
-// }
-
-/**
  * A hook to inherit all the behaviour of this React component. Useful when creating a React component that
  * wraps an intrinsic element that extends the same intrinsic element as this one.
  * 

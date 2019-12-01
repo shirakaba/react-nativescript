@@ -33,7 +33,7 @@ export function useActionItemEvents<
     props: P
 ): void
 {
-    useEventListener(ref, "onTap", props.onTap);
+    useEventListener(ref, "tap", props.onTap);
 }
 
 /**
