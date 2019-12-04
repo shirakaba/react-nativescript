@@ -146,7 +146,7 @@ export function _ListView(
             },
             rootKey
         );
-        this.roots.add(rootKey);
+        rootsRef.current!.add(rootKey);
 
         return {
             rootKey,
@@ -158,6 +158,7 @@ export function _ListView(
         () => {
             if (props.cellFactories && ref.current) {
                 const itemTemplates: KeyedTemplate[] = [];
+                const argsViewToRootKeyAndRef = argsViewToRootKeyAndRefRef.current;
                 props.cellFactories.forEach((info, key: string) => {
                     const { placeholderItem, cellFactory } = info;
                     itemTemplates.push({
@@ -165,7 +166,7 @@ export function _ListView(
                         createView: () => {
                             console.log(`[ListView] item template "${key}"`);
                             const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory);
-                            this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+                            argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
 
                             return rootKeyAndRef.ref.current;
                         },
@@ -179,7 +180,7 @@ export function _ListView(
                 }
             };
         },
-        [ref.current]
+        [ref.current, argsViewToRootKeyAndRefRef.current]
     );
 
     const defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
