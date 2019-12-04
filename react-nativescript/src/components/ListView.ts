@@ -109,11 +109,11 @@ export function _ListView(props: React.PropsWithChildren<ListViewComponentProps>
     const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
     useEffect(() => {
         argsViewToRootKeyAndRefRef.current = new Map();
-    })
+    }, []);
     const rootsRef = useRef<Set<string>>();
     useEffect(() => {
         rootsRef.current = new Set();
-    })
+    }, []);
 
     const [nativeCells, setNativeCells] = useState({});
     const [nativeCellToItemIndex, setNativeCellToItemIndex] = useState(new Map());
