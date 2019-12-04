@@ -104,6 +104,40 @@ export function isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
     return typeof (arr as ItemsSource).getItem === "function";
 }
 
+function renderNewRoot(
+    item: any,
+    cellFactory: CellFactory,
+    node: NativeScriptListView | null,
+    roots: Set<string> | null,
+): RootKeyAndRef {
+    if (!node) {
+        throw new Error("Unable to get ref to ListView");
+    }
+
+    if (!roots) {
+        throw new Error("Unable to get ref to roots");
+    }
+
+    console.log(`[ListView] no existing view.`);
+    const cellRef: React.RefObject<any> = React.createRef<any>();
+    const rootKey: string = `ListView-${node._domId}-${roots.size.toString()}`;
+
+    ReactNativeScript.render(
+        cellFactory(item, cellRef),
+        null,
+        () => {
+            // console.log(`Rendered into cell! ref:`);
+        },
+        rootKey
+    );
+    roots.add(rootKey);
+
+    return {
+        rootKey,
+        ref: cellRef,
+    };
+};
+
 /**
  * A React wrapper around the NativeScript ListView component.
  * See: ui/ListView/ListView
@@ -140,32 +174,6 @@ export function _ListView(
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
-    const renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
-        const node: NativeScriptListView | null = ref.current;
-        if (!node) {
-            throw new Error("Unable to get ref to ListView");
-        }
-
-        console.log(`[ListView] no existing view.`);
-        const cellRef: React.RefObject<any> = React.createRef<any>();
-        const rootKey: string = `ListView-${node._domId}-${rootsRef.current!.size.toString()}`;
-
-        ReactNativeScript.render(
-            cellFactory(item, cellRef),
-            null,
-            () => {
-                // console.log(`Rendered into cell! ref:`);
-            },
-            rootKey
-        );
-        rootsRef.current!.add(rootKey);
-
-        return {
-            rootKey,
-            ref: cellRef,
-        };
-    };
-
     useEffect(
         () => {
             if (props.cellFactories && ref.current) {
@@ -177,7 +185,12 @@ export function _ListView(
                         key,
                         createView: () => {
                             console.log(`[ListView] item template "${key}"`);
-                            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory);
+                            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
+                                placeholderItem,
+                                cellFactory,
+                                ref.current,
+                                rootsRef.current
+                            );
                             argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
 
                             return rootKeyAndRef.ref.current;
@@ -192,7 +205,7 @@ export function _ListView(
                 }
             };
         },
-        [ref.current, argsViewToRootKeyAndRefRef.current]
+        [ref.current, argsViewToRootKeyAndRefRef.current, rootsRef.current]
     );
 
     const defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
@@ -218,7 +231,12 @@ export function _ListView(
 
         let view: View | undefined = args.view;
         if (!view) {
-            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(item, cellFactory);
+            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
+                item,
+                cellFactory,
+                ref.current,
+                rootsRef.current
+            );
 
             args.view = rootKeyAndRef.ref.current;
 
