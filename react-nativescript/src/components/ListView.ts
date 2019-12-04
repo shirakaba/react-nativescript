@@ -118,7 +118,6 @@ function renderNewRoot(
         throw new Error("Unable to get ref to roots");
     }
 
-    console.log(`[ListView] no existing view.`);
     const cellRef: React.RefObject<any> = React.createRef<any>();
     const rootKey: string = `ListView-${node._domId}-${roots.size.toString()}`;
 
@@ -184,7 +183,7 @@ export function _ListView(
                     itemTemplates.push({
                         key,
                         createView: () => {
-                            console.log(`[ListView] item template "${key}"`);
+                            console.log(`[ListView] item template "${key}" - creating initial view.`);
                             const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
                                 placeholderItem,
                                 cellFactory,
@@ -237,6 +236,7 @@ export function _ListView(
 
             let view: View | undefined = args.view;
             if (!view) {
+                console.log(`[ListView] no existing view, so creating initial view.`);
                 const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
                     item,
                     cellFactory,
