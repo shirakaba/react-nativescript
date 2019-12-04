@@ -5,7 +5,7 @@ import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
-import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate, ViewBase } from "@nativescript/core";
+import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate, ViewBase, TextView, GridLayout } from "@nativescript/core";
 
 export type CellViewContainer = View;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
@@ -173,6 +173,7 @@ export function _ListView(
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
+    console.log(`[ListView] approaching effect 3.`);
     useEffect(
         () => {
             if (props.cellFactories && ref.current) {
@@ -183,7 +184,7 @@ export function _ListView(
                     itemTemplates.push({
                         key,
                         createView: () => {
-                            console.log(`[ListView] item template "${key}" - creating initial view.`);
+                            // console.log(`[ListView] item template "${key}" - creating initial view.`);
                             const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
                                 placeholderItem,
                                 cellFactory,
@@ -193,11 +194,22 @@ export function _ListView(
                             console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
                             argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
 
+                            // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
+                            //     if(child instanceof TextView){
+                            //         console.log(`[ListView] child ${child} with text ${child.text}`);
+                            //     } else {
+                            //         console.log(`[ListView] child: ${child}`);
+                            //     }
+                            //     return true;
+                            // });
+
                             return rootKeyAndRef.ref.current;
                         },
                     });
                 });
                 ref.current.itemTemplates = itemTemplates;
+            } else {
+                console.log(`[ListView] unable to run effect 3 this time round!`);
             }
             return () => {
                 if(ref.current){
@@ -212,9 +224,11 @@ export function _ListView(
             rootsRef.current,
         ]
     );
+    console.log(`[ListView] passed effect 3.`);
 
     const onItemLoading: (args: ItemEventData) => void = useCallback(
         (args: ItemEventData) => {
+            console.log(`[ListView] onItemLoading: ${args.index}`);
             const { logLevel, onCellRecycle, onCellFirstLoad } = props._debug;
             const { items, itemTemplateSelector } = props;
             const item: any = isItemsSource(items) ? items.getItem(args.index) : items[args.index];
@@ -298,6 +312,60 @@ export function _ListView(
         "listView",
         {
             ...intrinsicProps,
+            itemTemplates: [
+                {
+                    key: "odd",
+                    createView: () => {
+                        console.log(`[ListView] item template "odd" TEST`);
+                        // const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
+                        //     { index: 0, content: "FAKE" },
+                        //     cellFactory,
+                        //     ref.current,
+                        //     rootsRef.current
+                        // );
+                        // console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
+                        // argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+
+                        // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
+                        //     if(child instanceof TextView){
+                        //         console.log(`[ListView] child ${child} with text ${child.text}`);
+                        //     } else {
+                        //         console.log(`[ListView] child: ${child}`);
+                        //     }
+                        //     return true;
+                        // });
+
+                        // return rootKeyAndRef.ref.current;
+                        return null;
+                    },
+                },
+                {
+                    key: "even",
+                    createView: () => {
+                        console.log(`[ListView] item template "even" TEST`);
+                        // const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
+                        //     { index: 0, content: "FAKE" },
+                        //     cellFactory,
+                        //     ref.current,
+                        //     rootsRef.current
+                        // );
+                        // console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
+                        // argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+
+                        // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
+                        //     if(child instanceof TextView){
+                        //         console.log(`[ListView] child ${child} with text ${child.text}`);
+                        //     } else {
+                        //         console.log(`[ListView] child: ${child}`);
+                        //     }
+                        //     return true;
+                        // });
+
+                        // return rootKeyAndRef.ref.current;
+                        return null;
+                    },
+                }
+            ],
             ref,
         },
         children
