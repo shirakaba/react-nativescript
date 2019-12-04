@@ -116,10 +116,20 @@ export function _ListView(
     const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
     useEffect(() => {
         argsViewToRootKeyAndRefRef.current = new Map();
+        return () => {
+            if(argsViewToRootKeyAndRefRef.current){
+                argsViewToRootKeyAndRefRef.current!.clear();
+            }
+        };
     }, []);
     const rootsRef = useRef<Set<string>>();
     useEffect(() => {
         rootsRef.current = new Set();
+        return () => {
+            if(rootsRef.current){
+                rootsRef.current.forEach(root => ReactNativeScript.unmountComponentAtNode(root));
+            }
+        };
     }, []);
 
     /* Not using these in practice now, but may re-introduce them if ever needing to do library debugging. */
