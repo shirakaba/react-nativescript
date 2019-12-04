@@ -1,13 +1,13 @@
-import * as console from "../shared/Logger";
+// import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef, useState, useRef, useEffect, useCallback } from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
-import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate } from "@nativescript/core";
+import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate, ViewBase } from "@nativescript/core";
 
-export type CellViewContainer = StackLayout;
+export type CellViewContainer = View;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
 
 /**
@@ -90,7 +90,7 @@ export function useListViewInheritance<
 }
 
 type NumberKey = number | string;
-type RootKeyAndRef = { rootKey: string; ref: React.RefObject<any> };
+type RootKeyAndRef = { rootKey: string; ref: React.RefObject<View> };
 
 interface State {
     // nativeCells: Record<NumberKey, CellViewContainer>;
@@ -190,6 +190,7 @@ export function _ListView(
                                 ref.current,
                                 rootsRef.current
                             );
+                            console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
                             argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
 
                             return rootKeyAndRef.ref.current;
