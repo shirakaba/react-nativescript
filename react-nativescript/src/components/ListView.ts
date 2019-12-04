@@ -205,7 +205,12 @@ export function _ListView(
                 }
             };
         },
-        [ref.current, argsViewToRootKeyAndRefRef.current, rootsRef.current]
+        [
+            props.cellFactories,
+            ref.current,
+            argsViewToRootKeyAndRefRef.current,
+            rootsRef.current,
+        ]
     );
 
     const onItemLoading: (args: ItemEventData) => void = useCallback(
