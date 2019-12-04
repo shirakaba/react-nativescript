@@ -103,7 +103,9 @@ interface State {
  * A React wrapper around the NativeScript ListView component.
  * See: ui/ListView/ListView
  */
-export function _ListView(props: React.PropsWithChildren<ListViewComponentProps>, ref?: React.RefObject<NativeScriptListView>)
+export function _ListView(
+    props: React.PropsWithChildren<ListViewComponentProps> = { _debug: { logLevel: "info" }, items: [] },
+    ref?: React.RefObject<NativeScriptListView>)
 {
     // https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
     const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
