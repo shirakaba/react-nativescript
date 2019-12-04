@@ -93,10 +93,10 @@ type NumberKey = number | string;
 type RootKeyAndRef = { rootKey: string; ref: React.RefObject<any> };
 
 interface State {
-    nativeCells: Record<NumberKey, CellViewContainer>;
+    // nativeCells: Record<NumberKey, CellViewContainer>;
     /* Native cells may be rotated e.g. what once displayed items[0] may now need to display items[38] */
-    nativeCellToItemIndex: Map<CellViewContainer, NumberKey>;
-    itemIndexToNativeCell?: Map<NumberKey, CellViewContainer>;
+    // nativeCellToItemIndex: Map<CellViewContainer, NumberKey>;
+    // itemIndexToNativeCell?: Map<NumberKey, CellViewContainer>;
 }
 
 export function isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
@@ -122,9 +122,11 @@ export function _ListView(
         rootsRef.current = new Set();
     }, []);
 
-    const [nativeCells, setNativeCells] = useState({});
-    const [nativeCellToItemIndex, setNativeCellToItemIndex] = useState(new Map());
-    const [itemIndexToNativeCell, setItemIndexToNativeCell] = useState(props._debug && props._debug.logLevel === "debug" ? new Map() : void 0);
+    /* Not using these in practice now, but may re-introduce them if ever needing to do library debugging. */
+    // const [nativeCells, setNativeCells] = useState({});
+    // const [nativeCellToItemIndex, setNativeCellToItemIndex] = useState(new Map());
+    // const [itemIndexToNativeCell, setItemIndexToNativeCell] = useState(props._debug && props._debug.logLevel === "debug" ? new Map() : void 0);
+
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
