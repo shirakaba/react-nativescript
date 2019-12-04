@@ -1,10 +1,11 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef, useState, useRef, useEffect } from "react";
+import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
-import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View } from "@nativescript/core";
+import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource } from "@nativescript/core";
 
 export type CellViewContainer = StackLayout;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
@@ -98,6 +99,10 @@ interface State {
     itemIndexToNativeCell?: Map<NumberKey, CellViewContainer>;
 }
 
+export function isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
+    // Same implementation as: https://github.com/NativeScript/NativeScript/blob/b436ecde3605b695a0ffa1757e38cc094e2fe311/tns-core-modules/ui/list-picker/list-picker-common.ts#L74
+    return typeof (arr as ItemsSource).getItem === "function";
+}
 
 /**
  * A React wrapper around the NativeScript ListView component.
@@ -120,9 +125,91 @@ export function _ListView(
     const [nativeCells, setNativeCells] = useState({});
     const [nativeCellToItemIndex, setNativeCellToItemIndex] = useState(new Map());
     const [itemIndexToNativeCell, setItemIndexToNativeCell] = useState(props._debug && props._debug.logLevel === "debug" ? new Map() : void 0);
-
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
+
+    const renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
+        const node: NativeScriptListView | null = ref.current;
+        if (!node) {
+            throw new Error("Unable to get ref to ListView");
+        }
+
+        console.log(`[ListView] no existing view.`);
+        const cellRef: React.RefObject<any> = React.createRef<any>();
+        const rootKey: string = `ListView-${node._domId}-${rootsRef.current!.size.toString()}`;
+
+        ReactNativeScript.render(
+            cellFactory(item, cellRef),
+            null,
+            () => {
+                // console.log(`Rendered into cell! ref:`);
+            },
+            rootKey
+        );
+        this.roots.add(rootKey);
+
+        return {
+            rootKey,
+            ref: cellRef,
+        };
+    };
+
+    const defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
+        const { logLevel, onCellRecycle, onCellFirstLoad } = props._debug;
+        const { items, itemTemplateSelector } = props;
+        const item: any = isItemsSource(items) ? items.getItem(args.index) : items[args.index];
+        const template: string | null = itemTemplateSelector
+            ? typeof itemTemplateSelector === "string"
+                ? itemTemplateSelector
+                : (itemTemplateSelector as ((item: any, index: number, items: any) => string))(item, args.index, items)
+            : null;
+        const cellFactory: CellFactory | undefined =
+            template === null
+                ? props.cellFactory
+                : props.cellFactories
+                ? props.cellFactories.get(template).cellFactory
+                : props.cellFactory;
+
+        if (typeof cellFactory === "undefined") {
+            console.warn(`ListView: No cell factory found, given template ${template}!`);
+            return;
+        }
+
+        let view: View | undefined = args.view;
+        if (!view) {
+            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(item, cellFactory);
+
+            args.view = rootKeyAndRef.ref.current;
+
+            /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
+            argsViewToRootKeyAndRefRef.current!.set(args.view, rootKeyAndRef);
+
+            if (onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.ref.current);
+        } else {
+            console.log(`[ListView] existing view: `, view);
+            if (onCellRecycle) onCellRecycle(view as CellViewContainer);
+
+            const { rootKey, ref } = argsViewToRootKeyAndRefRef.current!.get(view);
+            if (typeof rootKey === "undefined") {
+                console.error(`Unable to find root key that args.view corresponds to!`, view);
+                return;
+            }
+            if (typeof ref === "undefined") {
+                console.error(`Unable to find ref that args.view corresponds to!`, view);
+                return;
+            }
+
+            // args.view = null;
+            ReactNativeScript.render(
+                cellFactory(item, ref),
+                null,
+                () => {
+                    // console.log(`Rendered into cell! detachedRootRef:`);
+                },
+                rootKey
+            );
+        }
+    };
 
     const { children, ...intrinsicProps } = useListViewInheritance(ref, props);
 
