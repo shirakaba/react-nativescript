@@ -240,6 +240,8 @@ export function _ListView(
         }
     };
 
+    useEventListener(ref, NativeScriptListView.itemLoadingEvent, defaultOnItemLoading);
+
     const { children, ...intrinsicProps } = useListViewInheritance(ref, props);
 
     return React.createElement(
