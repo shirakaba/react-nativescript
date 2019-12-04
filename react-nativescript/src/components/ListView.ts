@@ -5,7 +5,7 @@ import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
-import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource } from "@nativescript/core";
+import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate } from "@nativescript/core";
 
 export type CellViewContainer = StackLayout;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
@@ -153,6 +153,34 @@ export function _ListView(
             ref: cellRef,
         };
     };
+
+    useEffect(
+        () => {
+            if (props.cellFactories && ref.current) {
+                const itemTemplates: KeyedTemplate[] = [];
+                props.cellFactories.forEach((info, key: string) => {
+                    const { placeholderItem, cellFactory } = info;
+                    itemTemplates.push({
+                        key,
+                        createView: () => {
+                            console.log(`[ListView] item template "${key}"`);
+                            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory);
+                            this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+
+                            return rootKeyAndRef.ref.current;
+                        },
+                    });
+                });
+                ref.current.itemTemplates = itemTemplates;
+            }
+            return () => {
+                if(ref.current){
+                    ref.current.itemTemplates = [];
+                }
+            };
+        },
+        [ref.current]
+    );
 
     const defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = props._debug;
