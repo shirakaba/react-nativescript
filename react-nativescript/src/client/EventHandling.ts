@@ -45,13 +45,13 @@ export function useEventListener<E extends Observable>(
     eventListener: GenericListener | undefined
 ): void 
 {
-    console.log(`[useEventListener] Entered.`);
+    // console.log(`[useEventListener] Entered.`);
     useEffect(() => {
         if(ref.current && eventListener){
-            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
+            // console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
             ref.current.on(eventName as string, eventListener);
         } else {
-            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
+            // console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
         }
 
         return function cleanup() {
