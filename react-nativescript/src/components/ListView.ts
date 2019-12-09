@@ -1,6 +1,6 @@
 // import * as console from "../shared/Logger";
 import * as React from "react";
-import { createRef, useState, useRef, useEffect, useCallback } from "react";
+import { createRef, useRef, useEffect, useCallback, useMemo } from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
@@ -107,18 +107,9 @@ export function isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
 function renderNewRoot(
     item: any,
     cellFactory: CellFactory,
-    // node: NativeScriptListView | null,
     listViewId: number,
-    roots: Set<string> | null,
+    roots: Set<string>,
 ): RootKeyAndRef {
-    // if (!node) {
-    //     throw new Error("Unable to get ref to ListView");
-    // }
-
-    if (!roots) {
-        throw new Error("Unable to get ref to roots");
-    }
-
     const cellRef: React.RefObject<any> = React.createRef<any>();
     const rootKey: string = `ListView-${listViewId}-${roots.size.toString()}`;
 
@@ -155,19 +146,20 @@ export function _ListView(
     ref?: React.RefObject<NativeScriptListView>)
 {
     const instanceVars = useRef<InstanceVars>();
-    // https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
-    // const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
-    /* Here we have to initialise our refs before the first render to replicate a class instance variable (thanks, React) */
+    /* 
+     * Here we have to initialise our refs before the first render in order to properly replicate a
+     * class component instance variable (thanks, React)
+     * https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
+     * */
     if(!instanceVars.current){
-        console.log(`[ListView] initialising instance vars`);
+        console.log(`[ListView] initialising instance vars; listViewInstances: ${listViewInstances}`);
         instanceVars.current = {
             number: listViewInstances++,
             argsViewToRootKeyAndRef: new Map(),
             roots: new Set(),
         };
     }
-    
-    // const rootsRef = useRef<Set<string>>();
+
     useEffect(() => {
         // console.log(`[effect 1] argsViewToRootKeyAndRefRef.current`, argsViewToRootKeyAndRefRef.current);
         return () => {
@@ -185,28 +177,6 @@ export function _ListView(
 
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
-
-    // console.log(`[ListView] approaching effect 3. argsViewToRootKeyAndRefRef.current: ${argsViewToRootKeyAndRefRef.current}; rootsRef.current: ${rootsRef.current}; ref.current: ${ref.current}`);
-    // useEffect(
-    //     () => {
-    //         if(ref.current){
-    //             const itemTemplates = makeItemTemplates(props.cellFactories, ref, argsViewToRootKeyAndRefRef, rootsRef);
-    //             ref.current.itemTemplates = itemTemplates;
-    //         }
-    //         return () => {
-    //             if(ref.current){
-    //                 ref.current.itemTemplates = [];
-    //             }
-    //         };
-    //     },
-    //     [
-    //         props.cellFactories,
-    //         ref.current,
-    //         argsViewToRootKeyAndRefRef.current,
-    //         rootsRef.current,
-    //     ]
-    // );
-    // console.log(`[ListView] passed effect 3.`);
 
     const onItemLoading: (args: ItemEventData) => void = useCallback(
         (args: ItemEventData) => {
@@ -281,8 +251,6 @@ export function _ListView(
             props.cellFactory,
             props.cellFactories,
             instanceVars.current,
-            // rootsRef.current,
-            // argsViewToRootKeyAndRefRef.current,
         ]
     );
 
@@ -296,7 +264,7 @@ export function _ListView(
         "listView",
         {
             ...intrinsicProps,
-            // TODO: use memo
+            // TODO: memoize this?
             itemTemplates: makeItemTemplates(props.cellFactories, instanceVars),
             ref,
         },
