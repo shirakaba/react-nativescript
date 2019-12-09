@@ -47,17 +47,24 @@ export function useEventListener<E extends Observable>(
 {
     // console.log(`[useEventListener] Entered.`);
     useEffect(() => {
-        if(ref.current && eventListener){
-            // console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
-            ref.current.on(eventName as string, eventListener);
-        } else {
-            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
-        }
-
-        return function cleanup() {
+        function cleanup() {
             if(ref.current && eventListener){
                 ref.current.off(eventName as string, eventListener);
             }
         };
+
+        if(!eventListener){
+            console.log(`[useEventListener.useEffect] "${eventName}" - no event listener!`);
+            return cleanup;
+        }
+        if(!ref.current){
+            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
+            return cleanup;
+        }
+
+        console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
+        ref.current.on(eventName as string, eventListener);
+
+        return cleanup;
     }, [ref.current, eventListener]);
 }
