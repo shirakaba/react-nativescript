@@ -176,58 +176,27 @@ export function _ListView(
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
-    console.log(`[ListView] approaching effect 3. argsViewToRootKeyAndRefRef.current: ${argsViewToRootKeyAndRefRef.current}; rootsRef.current: ${rootsRef.current}; ref.current: ${ref.current}`);
-    useEffect(
-        () => {
-            if (props.cellFactories && ref.current) {
-                const itemTemplates: KeyedTemplate[] = [];
-                const argsViewToRootKeyAndRef = argsViewToRootKeyAndRefRef.current;
-                props.cellFactories.forEach((info, key: string) => {
-                    const { placeholderItem, cellFactory } = info;
-                    itemTemplates.push({
-                        key,
-                        createView: () => {
-                            // console.log(`[ListView] item template "${key}" - creating initial view.`);
-                            const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
-                                placeholderItem,
-                                cellFactory,
-                                ref.current,
-                                rootsRef.current
-                            );
-                            console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
-                            argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
-
-                            // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
-                            //     if(child instanceof TextView){
-                            //         console.log(`[ListView] child ${child} with text ${child.text}`);
-                            //     } else {
-                            //         console.log(`[ListView] child: ${child}`);
-                            //     }
-                            //     return true;
-                            // });
-
-                            return rootKeyAndRef.ref.current;
-                        },
-                    });
-                });
-                ref.current.itemTemplates = itemTemplates;
-            } else {
-                console.log(`[ListView] unable to run effect 3 this time round!`);
-            }
-            return () => {
-                if(ref.current){
-                    ref.current.itemTemplates = [];
-                }
-            };
-        },
-        [
-            props.cellFactories,
-            ref.current,
-            argsViewToRootKeyAndRefRef.current,
-            rootsRef.current,
-        ]
-    );
-    console.log(`[ListView] passed effect 3.`);
+    // console.log(`[ListView] approaching effect 3. argsViewToRootKeyAndRefRef.current: ${argsViewToRootKeyAndRefRef.current}; rootsRef.current: ${rootsRef.current}; ref.current: ${ref.current}`);
+    // useEffect(
+    //     () => {
+    //         if(ref.current){
+    //             const itemTemplates = makeItemTemplates(props.cellFactories, ref, argsViewToRootKeyAndRefRef, rootsRef);
+    //             ref.current.itemTemplates = itemTemplates;
+    //         }
+    //         return () => {
+    //             if(ref.current){
+    //                 ref.current.itemTemplates = [];
+    //             }
+    //         };
+    //     },
+    //     [
+    //         props.cellFactories,
+    //         ref.current,
+    //         argsViewToRootKeyAndRefRef.current,
+    //         rootsRef.current,
+    //     ]
+    // );
+    // console.log(`[ListView] passed effect 3.`);
 
     const onItemLoading: (args: ItemEventData) => void = useCallback(
         (args: ItemEventData) => {
@@ -311,64 +280,14 @@ export function _ListView(
 
     const { children, ...intrinsicProps } = useListViewInheritance(ref, props);
 
+    // FIXME: itemTemplates must be set by the time of render, and yet it seems useEffect() only runs after render?
+    // Our current itemTemplates code also depends upon those effects having run first to populate map & set refs.
     return React.createElement(
         "listView",
         {
             ...intrinsicProps,
-            itemTemplates: [
-                {
-                    key: "odd",
-                    createView: () => {
-                        console.log(`[ListView] item template "odd" TEST`);
-                        // const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
-                        //     { index: 0, content: "FAKE" },
-                        //     cellFactory,
-                        //     ref.current,
-                        //     rootsRef.current
-                        // );
-                        // console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
-                        // argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
-
-                        // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
-                        //     if(child instanceof TextView){
-                        //         console.log(`[ListView] child ${child} with text ${child.text}`);
-                        //     } else {
-                        //         console.log(`[ListView] child: ${child}`);
-                        //     }
-                        //     return true;
-                        // });
-
-                        // return rootKeyAndRef.ref.current;
-                        return null;
-                    },
-                },
-                {
-                    key: "even",
-                    createView: () => {
-                        console.log(`[ListView] item template "even" TEST`);
-                        // const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
-                        //     { index: 0, content: "FAKE" },
-                        //     cellFactory,
-                        //     ref.current,
-                        //     rootsRef.current
-                        // );
-                        // console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
-                        // argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
-
-                        // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
-                        //     if(child instanceof TextView){
-                        //         console.log(`[ListView] child ${child} with text ${child.text}`);
-                        //     } else {
-                        //         console.log(`[ListView] child: ${child}`);
-                        //     }
-                        //     return true;
-                        // });
-
-                        // return rootKeyAndRef.ref.current;
-                        return null;
-                    },
-                }
-            ],
+            // TODO: use memo
+            itemTemplates: makeItemTemplates(props.cellFactories, ref, argsViewToRootKeyAndRefRef, rootsRef),
             ref,
         },
         children
@@ -376,3 +295,40 @@ export function _ListView(
 }
 
 export const ListView = React.forwardRef<NativeScriptListView, React.PropsWithChildren<ListViewComponentProps>>(_ListView);
+
+function makeItemTemplates(cellFactories: ListViewAuxProps["cellFactories"], ref: React.RefObject<NativeScriptListView>, argsViewToRootKeyAndRefRef: React.MutableRefObject<Map<View, RootKeyAndRef>>, rootsRef: React.MutableRefObject<Set<string>>): KeyedTemplate[] {
+    if(!ref.current){
+        console.warn(`[makeItemTemplates] Unable to get ref to ListView.`);
+        return [];
+    }
+    if (cellFactories) {
+        const itemTemplates: KeyedTemplate[] = [];
+        const argsViewToRootKeyAndRef = argsViewToRootKeyAndRefRef.current;
+        cellFactories.forEach((info, key: string) => {
+            const { placeholderItem, cellFactory } = info;
+            itemTemplates.push({
+                key,
+                createView: () => {
+                    // console.log(`[ListView] item template "${key}" - creating initial view.`);
+                    const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory, ref.current, rootsRef.current);
+                    console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
+                    argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+                    // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
+                    //     if(child instanceof TextView){
+                    //         console.log(`[ListView] child ${child} with text ${child.text}`);
+                    //     } else {
+                    //         console.log(`[ListView] child: ${child}`);
+                    //     }
+                    //     return true;
+                    // });
+                    return rootKeyAndRef.ref.current;
+                },
+            });
+        });
+        return itemTemplates;
+    } else {
+        console.warn(`[ListView] unable to run effect 3 this time round!`);
+        return [];
+    }
+}
+
