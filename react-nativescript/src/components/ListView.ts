@@ -129,6 +129,43 @@ function renderNewRoot(
     };
 };
 
+
+function makeItemTemplates(cellFactories: ListViewAuxProps["cellFactories"], currentInstanceVars: InstanceVars|null): KeyedTemplate[] {
+    if(!currentInstanceVars){
+        console.warn(`[makeItemTemplates] Unable to get ref to ListView currentInstanceVars.`);
+        return [];
+    }
+    if (cellFactories) {
+        const itemTemplates: KeyedTemplate[] = [];
+        const { argsViewToRootKeyAndRef, roots, id } = currentInstanceVars;
+        cellFactories.forEach((info, key: string) => {
+            const { placeholderItem, cellFactory } = info;
+            itemTemplates.push({
+                key,
+                createView: () => {
+                    // console.log(`[ListView] item template "${key}" - creating initial view.`);
+                    const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory, id, roots);
+                    console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
+                    argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+                    // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
+                    //     if(child instanceof TextView){
+                    //         console.log(`[ListView] child ${child} with text ${child.text}`);
+                    //     } else {
+                    //         console.log(`[ListView] child: ${child}`);
+                    //     }
+                    //     return true;
+                    // });
+                    return rootKeyAndRef.ref.current;
+                },
+            });
+        });
+        return itemTemplates;
+    } else {
+        console.warn(`[ListView] unable to run effect 3 this time round!`);
+        return [];
+    }
+}
+
 interface InstanceVars {
     id: number;
     argsViewToRootKeyAndRef: Map<View, RootKeyAndRef>;
@@ -278,40 +315,3 @@ export function _ListView(
 }
 
 export const ListView = React.forwardRef<NativeScriptListView, React.PropsWithChildren<ListViewComponentProps>>(_ListView);
-
-function makeItemTemplates(cellFactories: ListViewAuxProps["cellFactories"], currentInstanceVars: InstanceVars|null): KeyedTemplate[] {
-    if(!currentInstanceVars){
-        console.warn(`[makeItemTemplates] Unable to get ref to ListView currentInstanceVars.`);
-        return [];
-    }
-    if (cellFactories) {
-        const itemTemplates: KeyedTemplate[] = [];
-        const { argsViewToRootKeyAndRef, roots, id } = currentInstanceVars;
-        cellFactories.forEach((info, key: string) => {
-            const { placeholderItem, cellFactory } = info;
-            itemTemplates.push({
-                key,
-                createView: () => {
-                    // console.log(`[ListView] item template "${key}" - creating initial view.`);
-                    const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory, id, roots);
-                    console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
-                    argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
-                    // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
-                    //     if(child instanceof TextView){
-                    //         console.log(`[ListView] child ${child} with text ${child.text}`);
-                    //     } else {
-                    //         console.log(`[ListView] child: ${child}`);
-                    //     }
-                    //     return true;
-                    // });
-                    return rootKeyAndRef.ref.current;
-                },
-            });
-        });
-        return itemTemplates;
-    } else {
-        console.warn(`[ListView] unable to run effect 3 this time round!`);
-        return [];
-    }
-}
-
