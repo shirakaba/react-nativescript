@@ -1,4 +1,4 @@
-// import * as console from "../shared/Logger";
+import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef, useRef, useEffect, useCallback, useMemo } from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
