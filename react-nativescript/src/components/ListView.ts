@@ -130,7 +130,7 @@ function renderNewRoot(
 };
 
 interface InstanceVars {
-    number: number;
+    id: number;
     argsViewToRootKeyAndRef: Map<View, RootKeyAndRef>;
     roots: Set<string>;
 }
@@ -154,7 +154,7 @@ export function _ListView(
     if(!instanceVars.current){
         console.log(`[ListView] initialising instance vars; listViewInstances: ${listViewInstances}`);
         instanceVars.current = {
-            number: listViewInstances++,
+            id: listViewInstances++,
             argsViewToRootKeyAndRef: new Map(),
             roots: new Set(),
         };
@@ -183,6 +183,10 @@ export function _ListView(
             console.log(`[ListView] onItemLoading: ${args.index}`);
             const { logLevel, onCellRecycle, onCellFirstLoad } = props._debug;
             const { items, itemTemplateSelector } = props;
+            if(!instanceVars.current){
+                throw new Error(`[ListView.onItemLoaded] Unexpected state: instanceVars.current was undefined.`);
+            }
+            const { argsViewToRootKeyAndRef, roots, id } = instanceVars.current;
             const item: any = isItemsSource(items) ? items.getItem(args.index) : items[args.index];
             const template: string | null = itemTemplateSelector
                 ? typeof itemTemplateSelector === "string"
@@ -207,21 +211,22 @@ export function _ListView(
                 const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
                     item,
                     cellFactory,
-                    instanceVars.current.number,
-                    instanceVars.current.roots
+                    id,
+                    roots
                 );
 
                 args.view = rootKeyAndRef.ref.current;
 
-                /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
-                instanceVars.current.argsViewToRootKeyAndRef.set(args.view, rootKeyAndRef);
+                /* Here we're re-using the ref - I assume this is best practice.
+                 * If not, we can make a new one on each update instead. */
+                argsViewToRootKeyAndRef.set(args.view, rootKeyAndRef);
 
                 if (onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.ref.current);
             } else {
                 console.log(`[ListView] existing view: `, view);
                 if (onCellRecycle) onCellRecycle(view as CellViewContainer);
 
-                const { rootKey, ref } = instanceVars.current.argsViewToRootKeyAndRef.get(view);
+                const { rootKey, ref } = argsViewToRootKeyAndRef.get(view);
                 if (typeof rootKey === "undefined") {
                     console.error(`Unable to find root key that args.view corresponds to!`, view);
                     return;
@@ -258,14 +263,14 @@ export function _ListView(
 
     const { children, ...intrinsicProps } = useListViewInheritance(ref, props);
 
-    // FIXME: itemTemplates must be set by the time of render, and yet it seems useEffect() only runs after render?
-    // Our current itemTemplates code also depends upon those effects having run first to populate map & set refs.
     return React.createElement(
         "listView",
         {
             ...intrinsicProps,
-            // TODO: memoize this?
-            itemTemplates: makeItemTemplates(props.cellFactories, instanceVars),
+            itemTemplates: useMemo(
+                () => makeItemTemplates(props.cellFactories, instanceVars.current),
+                [props.cellFactories, instanceVars.current]
+            ),
             ref,
         },
         children
@@ -274,21 +279,21 @@ export function _ListView(
 
 export const ListView = React.forwardRef<NativeScriptListView, React.PropsWithChildren<ListViewComponentProps>>(_ListView);
 
-function makeItemTemplates(cellFactories: ListViewAuxProps["cellFactories"], instanceVars: React.RefObject<InstanceVars>): KeyedTemplate[] {
-    if(!instanceVars.current){
-        console.warn(`[makeItemTemplates] Unable to get ref to ListView instanceVars.`);
+function makeItemTemplates(cellFactories: ListViewAuxProps["cellFactories"], currentInstanceVars: InstanceVars|null): KeyedTemplate[] {
+    if(!currentInstanceVars){
+        console.warn(`[makeItemTemplates] Unable to get ref to ListView currentInstanceVars.`);
         return [];
     }
     if (cellFactories) {
         const itemTemplates: KeyedTemplate[] = [];
-        const argsViewToRootKeyAndRef = instanceVars.current.argsViewToRootKeyAndRef;
+        const { argsViewToRootKeyAndRef, roots, id } = currentInstanceVars;
         cellFactories.forEach((info, key: string) => {
             const { placeholderItem, cellFactory } = info;
             itemTemplates.push({
                 key,
                 createView: () => {
                     // console.log(`[ListView] item template "${key}" - creating initial view.`);
-                    const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory, instanceVars.current.number, instanceVars.current.roots);
+                    const rootKeyAndRef: RootKeyAndRef = renderNewRoot(placeholderItem, cellFactory, id, roots);
                     console.log(`[ListView] item template "${key}" - created initial view. ${rootKeyAndRef.rootKey} : ${rootKeyAndRef.ref.current}`);
                     argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
                     // rootKeyAndRef.ref.current!.eachChildView((child: View) => {
