@@ -308,11 +308,11 @@ export function _ListView(
                 () => {
                     if(props.cellFactories){
                         return makeItemTemplates(props.cellFactories, instanceVars.current);
-                    } else {
-                        return "default";
                     }
+                    // This is the intended case for non-templated ListViews.
+                    return "default";
                 },
-                [props.cellFactory, props.cellFactories, instanceVars.current]
+                [props.cellFactories, instanceVars.current]
             ),
             ref,
         },
