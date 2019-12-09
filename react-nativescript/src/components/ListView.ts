@@ -1,4 +1,4 @@
-import * as console from "../shared/Logger";
+// import * as console from "../shared/Logger";
 import * as React from "react";
 import { createRef, useRef, useEffect, useCallback, useMemo } from "react";
 import * as ReactNativeScript from "../client/ReactNativeScript";
@@ -6,6 +6,7 @@ import { ListViewProps, NarrowedEventData } from "../shared/NativeScriptComponen
 import { ViewComponentProps, useViewInheritance, ViewOmittedPropNames } from "./View";
 import { useEventListener } from "../client/EventHandling";
 import { NavigatedData, ListView as NativeScriptListView, ItemEventData, StackLayout, View, ItemsSource, KeyedTemplate, ViewBase, TextView, GridLayout } from "@nativescript/core";
+import { _Page } from "./Page";
 
 export type CellViewContainer = View;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
@@ -33,7 +34,7 @@ export interface ListViewAuxProps {
     };
 
 }
-export type ListViewOmittedPropNames = keyof ListViewAuxProps | ViewOmittedPropNames;
+export type ListViewOmittedPropNames = keyof Pick<ListViewAuxProps, "cellFactory"|"cellFactories"|"onItemTap"|"onLoadMoreItems"|"_debug"> | ViewOmittedPropNames;
 
 export type ListViewNavigationEventHandler = (args: NavigatedData) => void;
 
@@ -81,6 +82,9 @@ export function useListViewInheritance<
     const {
         onItemTap,
         onLoadMoreItems,
+        _debug,
+        cellFactory,
+        cellFactories,
         ...rest
     } = intrinsicProps;
 
@@ -244,13 +248,13 @@ export function _ListView(
 
             let view: View | undefined = args.view;
             if (!view) {
-                console.log(`[ListView] no existing view, so creating initial view.`);
                 const rootKeyAndRef: RootKeyAndRef = renderNewRoot(
                     item,
                     cellFactory,
                     id,
                     roots
-                );
+                    );
+                console.log(`[ListView] no existing view, so created initial view:`, rootKeyAndRef.ref.current);
 
                 args.view = rootKeyAndRef.ref.current;
 
@@ -260,7 +264,7 @@ export function _ListView(
 
                 if (onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.ref.current);
             } else {
-                console.log(`[ListView] existing view: `, view);
+                console.log(`[ListView] existing view: ${view}; reading from argsViewToRootKeyAndRef`, argsViewToRootKeyAndRef);
                 if (onCellRecycle) onCellRecycle(view as CellViewContainer);
 
                 const { rootKey, ref } = argsViewToRootKeyAndRef.get(view);
@@ -298,12 +302,36 @@ export function _ListView(
 
     useEventListener(ref, NativeScriptListView.itemLoadingEvent, onItemLoading);
 
-    const { children, ...intrinsicProps } = useListViewInheritance(ref, props);
+    /*
+     * THANKS, REACT
+     *
+     * ListView starts firing events as soon as the renderer assigns its "items" property.
+     * 
+     * However, we can only start listening for those events once the instance has been
+     * given a ref (which is upon mounting - i.e. being appended as a child to a parent).
+     * 
+     * If we pass the "items" prop as a prop, the onItemLoading listener will have been
+     * attached too late for the above-the-fold cells to be handled.
+     * 
+     * I think React DOM sidesteps this by having DOM level 1 events (e.g. an "onload"
+     * property), and therefore not needing to wait for a ref.
+     */ 
+    useEffect(() => {
+        if(ref.current){
+            ref.current.items = props.items;
+        } else {
+            ref.current.items = [];
+        }
+    }, [props.items]);
+
+    const { children, items, ...intrinsicProps } = useListViewInheritance(ref, props);
 
     return React.createElement(
         "listView",
         {
             ...intrinsicProps,
+            // items,
+
             itemTemplates: useMemo(
                 () => {
                     if(props.cellFactories){

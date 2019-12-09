@@ -1,6 +1,6 @@
 import * as React from "react";
 import { $Page, $ContentView } from 'react-nativescript';
-import { DynamicListViewWithImages } from './list';
+import { DynamicListViewWithImages, ListViewTest } from './list';
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 export const cvRef: React.RefObject<any> = React.createRef<any>();
@@ -34,7 +34,7 @@ const AppContainer = () => (
         // onTap={()=> { console.log("on tap!"); }}
         // onTouch={()=> { console.log("on touch!"); }}
     >
-        <DynamicListViewWithImages/>
+        <ListViewTest/>
     </$Page>
 );
 

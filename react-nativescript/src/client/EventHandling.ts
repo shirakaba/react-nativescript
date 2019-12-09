@@ -51,7 +51,7 @@ export function useEventListener<E extends Observable>(
             // console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was populated, with eventListener`, eventListener);
             ref.current.on(eventName as string, eventListener);
         } else {
-            // console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
+            console.log(`[useEventListener.useEffect] "${eventName}" - ref.current ref was null!`);
         }
 
         return function cleanup() {

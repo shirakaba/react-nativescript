@@ -52,56 +52,56 @@ export class ListViewTest extends React.Component<{}, {}> {
                 }}
                 height={{ unit: "%", value: 100 }}
                 items={[...items.map((val: Item) => val)]}
-                // cellFactory={(item: Item, ref: React.RefObject<any>) => {
-                //     return (
-                //         <$Label
-                //             ref={ref}
-                //             // key={container._domId}
-                //             fontSize={24}
-                //         >
-                //             {`#${item}`}
-                //         </$Label>
-                //     );
-                // }}
+                cellFactory={(item: Item, ref: React.RefObject<any>) => {
+                    return (
+                        <$Label
+                            ref={ref}
+                            // key={container._domId}
+                            fontSize={24}
+                        >
+                            {`#${item}`}
+                        </$Label>
+                    );
+                }}
                 itemTemplateSelector={(item: Item, index: number, items: any): string => {
                     return index % 2 === 0 ? "even" : "odd";
                 }}
-                cellFactories={new Map([
-                    [
-                        "odd",
-                        {
-                            placeholderItem: 1,
-                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
-                                return (
-                                    <$Label
-                                        ref={ref}
-                                        // key={container._domId}
-                                        fontSize={24}
-                                    >
-                                        {`ODD #${item}`}
-                                    </$Label>
-                                );
-                            }
-                        }
-                    ],
-                    [
-                        "even",
-                        {
-                            placeholderItem: 0,
-                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
-                                return (
-                                    <$TextView
-                                        ref={ref}
-                                        // key={container._domId}
-                                        fontSize={24}
-                                    >
-                                        {`EVEN #${item}`}
-                                    </$TextView>
-                                );
-                            }
-                        }
-                    ],
-                ])}
+                // cellFactories={new Map([
+                //     [
+                //         "odd",
+                //         {
+                //             placeholderItem: 1,
+                //             cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                //                 return (
+                //                     <$Label
+                //                         ref={ref}
+                //                         // key={container._domId}
+                //                         fontSize={24}
+                //                     >
+                //                         {`ODD #${item}`}
+                //                     </$Label>
+                //                 );
+                //             }
+                //         }
+                //     ],
+                //     [
+                //         "even",
+                //         {
+                //             placeholderItem: 0,
+                //             cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                //                 return (
+                //                     <$TextView
+                //                         ref={ref}
+                //                         // key={container._domId}
+                //                         fontSize={24}
+                //                     >
+                //                         {`EVEN #${item}`}
+                //                     </$TextView>
+                //                 );
+                //             }
+                //         }
+                //     ],
+                // ])}
             >
             </$ListView>
         );
