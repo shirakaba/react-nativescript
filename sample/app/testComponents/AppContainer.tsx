@@ -1,8 +1,28 @@
 import * as React from "react";
 import { $Page, $ContentView } from 'react-nativescript';
+import { DynamicListViewWithImages } from './list';
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 export const cvRef: React.RefObject<any> = React.createRef<any>();
+
+// const AppContainer = () => (
+//     <$Page
+//         ref={rootRef}
+//         width={{ value: 100, unit: "%" }}
+//         height={{ value: 100, unit: "%" }}
+//         backgroundColor="blue"
+//         onLoaded={()=> { console.log("page loaded!"); }}
+//         onTap={()=> { console.log("on tap!"); }}
+//         onTouch={()=> { console.log("on touch!"); }}
+//     >
+//         <$ContentView
+//             // ref={cvRef}
+//             width={{ value: 100, unit: "%" }}
+//             height={{ value: 100, unit: "%" }}
+//             backgroundColor="red"
+//         />
+//     </$Page>
+// );
 
 const AppContainer = () => (
     <$Page
@@ -10,17 +30,12 @@ const AppContainer = () => (
         width={{ value: 100, unit: "%" }}
         height={{ value: 100, unit: "%" }}
         backgroundColor="blue"
-        onLoaded={()=> { console.log("page loaded!"); }}
-        onTap={()=> { console.log("on tap!"); }}
-        onTouch={()=> { console.log("on touch!"); }}
+        // onLoaded={()=> { console.log("page loaded!"); }}
+        // onTap={()=> { console.log("on tap!"); }}
+        // onTouch={()=> { console.log("on touch!"); }}
     >
-        <$ContentView
-            // ref={cvRef}
-            width={{ value: 100, unit: "%" }}
-            height={{ value: 100, unit: "%" }}
-            backgroundColor="red"
-        />
+        <DynamicListViewWithImages/>
     </$Page>
-); 
+);
 
 export default AppContainer;
