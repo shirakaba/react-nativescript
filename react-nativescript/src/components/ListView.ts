@@ -305,8 +305,14 @@ export function _ListView(
         {
             ...intrinsicProps,
             itemTemplates: useMemo(
-                () => makeItemTemplates(props.cellFactories, instanceVars.current),
-                [props.cellFactories, instanceVars.current]
+                () => {
+                    if(props.cellFactories){
+                        return makeItemTemplates(props.cellFactories, instanceVars.current);
+                    } else {
+                        return "default";
+                    }
+                },
+                [props.cellFactory, props.cellFactories, instanceVars.current]
             ),
             ref,
         },
