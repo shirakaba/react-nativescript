@@ -147,18 +147,21 @@ export function _ListView(
 {
     // https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
     const argsViewToRootKeyAndRefRef = useRef<Map<View, RootKeyAndRef>>();
-    useEffect(() => {
+    /* Here we have to initialise our refs before the first render to replicate a class property (thanks, React) */
+    if(!argsViewToRootKeyAndRefRef.current){
         argsViewToRootKeyAndRefRef.current = new Map();
+    }
+    const rootsRef = useRef<Set<string>>();
+    if(!rootsRef.current){
+        rootsRef.current = new Set();
+    }
+    useEffect(() => {
+        // argsViewToRootKeyAndRefRef.current = new Map();
+        console.log(`[effect 1] argsViewToRootKeyAndRefRef.current`, argsViewToRootKeyAndRefRef.current);
         return () => {
             if(argsViewToRootKeyAndRefRef.current){
                 argsViewToRootKeyAndRefRef.current!.clear();
             }
-        };
-    }, []);
-    const rootsRef = useRef<Set<string>>();
-    useEffect(() => {
-        rootsRef.current = new Set();
-        return () => {
             if(rootsRef.current){
                 rootsRef.current.forEach(root => ReactNativeScript.unmountComponentAtNode(root));
             }
@@ -173,7 +176,7 @@ export function _ListView(
     // https://reactjs.org/docs/hooks-reference.html#useimperativehandle
     ref = ref || createRef<NativeScriptListView>();
 
-    console.log(`[ListView] approaching effect 3.`);
+    console.log(`[ListView] approaching effect 3. argsViewToRootKeyAndRefRef.current: ${argsViewToRootKeyAndRefRef.current}; rootsRef.current: ${rootsRef.current}; ref.current: ${ref.current}`);
     useEffect(
         () => {
             if (props.cellFactories && ref.current) {
