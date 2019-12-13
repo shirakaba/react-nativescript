@@ -316,21 +316,22 @@ export function _ListView(
      * I think React DOM sidesteps this by having DOM level 1 events (e.g. an "onload"
      * property), and therefore not needing to wait for a ref.
      */ 
-    useEffect(() => {
-        if(ref.current){
-            ref.current.items = props.items;
-        } else {
-            ref.current.items = [];
-        }
-    }, [props.items]);
+    // useEffect(() => {
+    //     if(ref.current){
+    //         ref.current.items = props.items;
+    //     } else {
+    //         ref.current.items = [];
+    //     }
+    // }, [props.items]);
 
     const { children, items, ...intrinsicProps } = useListViewInheritance(ref, props);
 
     return React.createElement(
         "listView",
         {
+            ref,
             ...intrinsicProps,
-            // items,
+            items,
 
             itemTemplates: useMemo(
                 () => {
@@ -342,7 +343,6 @@ export function _ListView(
                 },
                 [props.cellFactories, instanceVars.current]
             ),
-            ref,
         },
         children
     );
