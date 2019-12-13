@@ -34,7 +34,8 @@
     "tns-core-modules": "^6.2.1"
   },
   "dependencies": {
-    "react-reconciler": "^0.20.2"
+    "react-reconciler": "0.24.0",
+    "scheduler": "0.18.0"
   },
   "devDependencies": {
     "@types/react": "16.9.11",
@@ -42,6 +43,6 @@
     "prettier": "1.18.2",
     "react": "16.9.0",
     "tns-core-modules": "6.2.1",
-    "typescript": "3.3.4000"
+    "typescript": "3.7.2"
   }
 }

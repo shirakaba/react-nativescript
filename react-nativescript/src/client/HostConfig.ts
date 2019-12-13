@@ -12,6 +12,7 @@
 
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from "react-reconciler";
+import * as scheduler from "scheduler";
 import {
     ActionBar,
     TNSElements,
@@ -144,6 +145,18 @@ const hostConfig: ReactReconciler.HostConfig<
     TimeoutHandle,
     NoTimeout
 > = {
+    //https://github.com/sencha/ext-react/issues/306#issuecomment-521906095
+    
+    scheduleDeferredCallback: scheduler.unstable_scheduleCallback,
+    cancelDeferredCallback: scheduler.unstable_cancelCallback,
+
+    // @ts-ignore not in typings
+    schedulePassiveEffects: scheduler.unstable_scheduleCallback,
+    cancelPassiveEffects: scheduler.unstable_cancelCallback,
+
+    // @ts-ignore not in typings
+    shouldYield: scheduler.unstable_shouldYield,
+    now: scheduler.unstable_now,
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
         // TODO (this was a complete guess).
         return instance;
@@ -381,15 +394,15 @@ const hostConfig: ReactReconciler.HostConfig<
 
         return textView;
     },
-    scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
-        // TODO: check whether default timeout should be 0.
-        if (!options) options = { timeout: 0 };
+    // scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
+    //     // TODO: check whether default timeout should be 0.
+    //     if (!options) options = { timeout: 0 };
 
-        return setTimeout(callback, options.timeout);
-    },
-    cancelDeferredCallback(callbackID: any): void {
-        clearTimeout(callbackID);
-    },
+    //     return setTimeout(callback, options.timeout);
+    // },
+    // cancelDeferredCallback(callbackID: any): void {
+    //     clearTimeout(callbackID);
+    // },
     setTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
         return setTimeout(handler, timeout);
     },
@@ -397,7 +410,7 @@ const hostConfig: ReactReconciler.HostConfig<
         clearTimeout(handle);
     },
     noTimeout: noTimeoutValue,
-    now: Date.now,
+    // now: Date.now,
     isPrimaryRenderer: true,
     supportsMutation: true, // TODO
     supportsPersistence: false,
