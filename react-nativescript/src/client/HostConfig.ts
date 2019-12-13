@@ -146,7 +146,7 @@ const hostConfig: ReactReconciler.HostConfig<
     NoTimeout
 > = {
     //https://github.com/sencha/ext-react/issues/306#issuecomment-521906095
-    
+
     scheduleDeferredCallback: scheduler.unstable_scheduleCallback,
     cancelDeferredCallback: scheduler.unstable_cancelCallback,
 
