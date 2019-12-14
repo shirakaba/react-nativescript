@@ -129,6 +129,12 @@ export function unmountComponentAtNode(containerTag: RootKey): void {
     });
 }
 
+/*
+ * https://github.com/reduxjs/react-redux/issues/1392
+ * https://github.com/facebook/react/blob/b15bf36750ca4c4a5a09f2de76c5315ded1258d0/packages/react-native-renderer/src/ReactNativeRenderer.js#L230
+ */
+export const unstable_batchedUpdates = reactReconcilerInst.batchedUpdates;
+
 /**
  * Convenience function to start your React NativeScript app.
  * This should be placed as the final line of your app.ts file, as no
