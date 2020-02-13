@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "uk.co.birchlabs.rnssample",
     "tns-android": {
-      "version": "6.3.0"
+      "version": "6.4.1"
     },
     "tns-ios": {
-      "version": "6.3.0"
+      "version": "6.4.0"
     }
   },
   "main": "app.js",
@@ -19,7 +19,7 @@
     "@nativescript/theme": "2.2.1",
     "react": "16.9.0",
     "react-nativescript": "file:../react-nativescript",
-    "tns-core-modules": "~6.3.0"
+    "tns-core-modules": "~6.4.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
@@ -29,7 +29,7 @@
     "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.0.6",
     "fork-ts-checker-webpack-plugin": "1.3.7",
-    "nativescript-dev-webpack": "~1.4.0",
+    "nativescript-dev-webpack": "~1.5.0",
     "tns-platform-declarations": "6.0.1",
     "typescript": "3.7.2"
   },
