@@ -1,14 +1,15 @@
 import { Instance, HostContext } from "../shared/HostConfigTypes";
 import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
-import { DockLayout } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
-import { View } from "tns-core-modules/ui/core/view/view";
-import { GridLayout, ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
-import { AbsoluteLayout } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
-import { FlexboxLayout } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import { DockLayout, dockProperty } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
+import { View, classNameProperty } from "tns-core-modules/ui/core/view/view";
+import { GridLayout, ItemSpec, rowProperty, rowSpanProperty, columnProperty, columnSpanProperty } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { AbsoluteLayout, topProperty, leftProperty } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import { FlexboxLayout, alignSelfProperty, flexGrowProperty, flexShrinkProperty, flexWrapBeforeProperty, orderProperty } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
 import * as console from "../shared/Logger";
+import { rnsDeletedPropValue } from "./magicValues";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -90,14 +91,14 @@ export function setValueForProperty(
 
     if (name === "class") {
         // console.warn(`Note that 'class' is remapped to 'className'.`);
-        instance.set("className", value);
+        instance.set("className", value === rnsDeletedPropValue ? classNameProperty.defaultValue : value);
     } else if ((name === "rows" || name === "columns") && instance instanceof GridLayout) {
         if (name === "rows") {
             /* Clear any existing rows; would be more efficient to do a diff, but hard to get right. */
             if (instance.getRows().length > 0) {
                 instance.removeRows();
             }
-            (value as ItemSpec[]).forEach((item: ItemSpec) => {
+            (value as ItemSpec[] || []).forEach((item: ItemSpec) => {
                 instance.addRow(item);
             });
         } else if (name === "columns") {
@@ -106,7 +107,7 @@ export function setValueForProperty(
                 instance.removeColumns();
             }
             instance.removeColumns();
-            (value as ItemSpec[]).forEach((item: ItemSpec) => {
+            (value as ItemSpec[] || []).forEach((item: ItemSpec) => {
                 instance.addColumn(item);
             });
         }
@@ -119,28 +120,28 @@ export function setValueForProperty(
         hostContext.isInAFlexboxLayout
     ) {
         if (name === "alignSelf") {
-            FlexboxLayout.setAlignSelf(instance as View, value);
+            FlexboxLayout.setAlignSelf(instance as View, value === rnsDeletedPropValue ? alignSelfProperty.defaultValue : value);
         } else if (name === "flexGrow") {
-            FlexboxLayout.setFlexGrow(instance as View, value);
+            FlexboxLayout.setFlexGrow(instance as View, value === rnsDeletedPropValue ? flexGrowProperty.defaultValue : value);
         } else if (name === "flexShrink") {
-            FlexboxLayout.setFlexShrink(instance as View, value);
+            FlexboxLayout.setFlexShrink(instance as View, value === rnsDeletedPropValue ? flexShrinkProperty.defaultValue : value);
         } else if (name === "flexWrapBefore") {
-            FlexboxLayout.setFlexWrapBefore(instance as View, value);
+            FlexboxLayout.setFlexWrapBefore(instance as View, value === rnsDeletedPropValue ? flexWrapBeforeProperty.defaultValue : value);
         } else if (name === "order") {
-            FlexboxLayout.setOrder(instance as View, value);
+            FlexboxLayout.setOrder(instance as View, value === rnsDeletedPropValue ? orderProperty.defaultValue : value);
         }
     } else if ((name === "top" || name === "left") && hostContext.isInAnAbsoluteLayout) {
         /* FIXME: Determine whether it makes sense for top/left to be applied upon the instance    * itself if component is ever removed from its AbsoluteLayout parent (and how to do so). */
         if (name === "top") {
-            AbsoluteLayout.setTop(instance as View, value);
+            AbsoluteLayout.setTop(instance as View, value === rnsDeletedPropValue ? topProperty.defaultValue : value);
         } else if (name === "left") {
-            AbsoluteLayout.setLeft(instance as View, value);
+            AbsoluteLayout.setLeft(instance as View, value === rnsDeletedPropValue ? leftProperty.defaultValue : value);
         }
     } else if (name === "dock" && hostContext.isInADockLayout) {
         // https://github.com/NativeScript/NativeScript/blob/05c2460fc4989dae4d7fa1ee52f6d54e0c3113f5/tns-core-modules/ui/layouts/dock-layout/dock-layout-common.ts
         /* If the component is subsequently removed from its Dock parent, I'm guessing that
          * this property probably has no effect, so no need to figure out how to unset it. */
-        DockLayout.setDock(instance as View, value);
+        DockLayout.setDock(instance as View, value === rnsDeletedPropValue ? dockProperty.defaultValue : value);
     } else if (
         (name === "row" || name === "column" || name === "rowSpan" || name === "columnSpan") &&
         hostContext.isInAGridLayout
@@ -149,13 +150,13 @@ export function setValueForProperty(
         /* If the component is subsequently removed from its Grid parent, I'm guessing that
          * this property probably has no effect, so no need to figure out how to unset it. */
         if (name === "row") {
-            GridLayout.setRow(instance as View, value);
+            GridLayout.setRow(instance as View, value === rnsDeletedPropValue ? rowProperty.defaultValue : value);
         } else if (name === "rowSpan") {
-            GridLayout.setRowSpan(instance as View, value);
+            GridLayout.setRowSpan(instance as View, value === rnsDeletedPropValue ? rowSpanProperty.defaultValue : value);
         } else if (name === "column") {
-            GridLayout.setColumn(instance as View, value);
+            GridLayout.setColumn(instance as View, value === rnsDeletedPropValue ? columnProperty.defaultValue : value);
         } else if (name === "columnSpan") {
-            GridLayout.setColumnSpan(instance as View, value);
+            GridLayout.setColumnSpan(instance as View, value === rnsDeletedPropValue ? columnSpanProperty.defaultValue : value);
         }
         // } else if(
         //     name === "color" && instance instanceof ActionBar ||
@@ -170,10 +171,12 @@ export function setValueForProperty(
     } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)) {
         /* These props, at least in ActionItem, are read-only, so must be set recursively instead. */
         if (typeof value === "object") {
+            /* FIXME: support setting back to defaultValue if value is rnsDeletedPropValue! */
             const keys: string[] = Object.keys(value);
             if (keys.length === 0) return;
             console.log(`[PropOp] got platform-specific prop of type object`);
             keys.forEach((key: string) => {
+                /* FIXME: support setting back to defaultValue if any subValue is rnsDeletedPropValue! */
                 const subValue: any = value[key];
                 if (name === "ios") {
                     console.log(`[PropOp] Setting ${instance}.ios.${key} = ${subValue}`);
@@ -185,12 +188,13 @@ export function setValueForProperty(
             });
         } else {
             console.warn(`[PropOp] got platform-specific non-object prop`);
-            /* Some poor soul has probably set an ios|android prop with boolean value or something */
+            /* Some poor soul has probably set an ios|android prop with boolean value or something
+             * FIXME: support setting back to defaultValue if value is rnsDeletedPropValue! */
             instance.set(name, value);
         }
     } else if (name === "__rns__nodeTreeRole") {
         console.log(`[PropOp] got node-tree role`);
-        instance.set(name, value);
+        instance.set(name, value === rnsDeletedPropValue ? false : value);
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */

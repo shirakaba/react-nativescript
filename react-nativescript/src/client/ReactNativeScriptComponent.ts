@@ -10,6 +10,7 @@ import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import * as console from "../shared/Logger";
+import { rnsDeletedPropValue } from "./magicValues";
 
 const DANGEROUSLY_SET_INNER_HTML: string = "dangerouslySetInnerHTML";
 const SUPPRESS_CONTENT_EDITABLE_WARNING: string = "suppressContentEditableWarning";
@@ -240,6 +241,7 @@ export function setInitialDOMProperties(
             // 		}
             // 		ensureListeningTo(rootContainerElement, propKey);
             // 	}
+        // TODO: check whether this condition, which makes sense for DOM, makes sense for NativeScript.
         } else if (nextProp != null) {
             setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag, hostContext);
         }
@@ -370,7 +372,8 @@ export function diffProperties(
             console.log(`[diffProperties] INSPECTING OLDPROPS key:`, propKey);
             // For all other deleted properties we add it to the queue. We use
             // the whitelist in the commit phase instead.
-            (updatePayload = updatePayload || []).push(propKey, null);
+            //
+            (updatePayload = updatePayload || []).push(propKey, rnsDeletedPropValue);
         }
     }
 

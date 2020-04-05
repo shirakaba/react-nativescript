@@ -1,0 +1,1 @@
+export const rnsDeletedPropValue: string = "__rns_deleted_prop__";
