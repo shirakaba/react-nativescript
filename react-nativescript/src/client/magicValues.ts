@@ -1,1 +1,1 @@
-export const rnsDeletedPropValue: string = "__rns_deleted_prop__";
+export const rnsDeletedPropValue: symbol = Symbol("__rns_deleted_prop__");
