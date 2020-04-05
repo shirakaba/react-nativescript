@@ -2,10 +2,10 @@
   "nativescript": {
     "id": "uk.co.birchlabs.rnssample",
     "tns-android": {
-      "version": "6.4.1"
+      "version": "6.5.0"
     },
     "tns-ios": {
-      "version": "6.4.0"
+      "version": "6.5.0"
     }
   },
   "main": "app.js",
@@ -19,7 +19,7 @@
     "@nativescript/theme": "2.2.1",
     "react": "16.9.0",
     "react-nativescript": "file:../react-nativescript",
-    "tns-core-modules": "~6.4.0"
+    "tns-core-modules": "~6.5.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
