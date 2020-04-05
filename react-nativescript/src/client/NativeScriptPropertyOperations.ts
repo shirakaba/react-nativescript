@@ -3,8 +3,10 @@ import { TextBase } from "tns-core-modules/ui/text-base/text-base";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout, dockProperty } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { View, classNameProperty } from "tns-core-modules/ui/core/view/view";
+import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
 import { GridLayout, ItemSpec, rowProperty, rowSpanProperty, columnProperty, columnSpanProperty } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout, topProperty, leftProperty } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
+import { Property } from "tns-core-modules/ui/core/properties/properties";
 import { FlexboxLayout, alignSelfProperty, flexGrowProperty, flexShrinkProperty, flexWrapBeforeProperty, orderProperty } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
@@ -198,7 +200,23 @@ export function setValueForProperty(
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
-        instance.set(name, value);
+        if(value === rnsDeletedPropValue){
+            /**
+             * We can't import the Property directly from each module (without a huge rewrite), but the singleton
+             * instance of the Property is registered upon the prototype of the class, and so is therefore accessible
+             * on the class instance.
+             * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L298
+             * 
+             * If no defaultValue is specified, we fall back to void 0 (what it would resolve as anyway):
+             * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L173-L174
+             */
+            type ViewBaseSubclass = ViewBase;
+            type DefaultValueType = unknown;
+            const registeredProperty: Property<ViewBaseSubclass, DefaultValueType>|undefined = instance[name];
+            instance.set(name, registeredProperty ? registeredProperty.defaultValue : void 0);
+        } else {
+            instance.set(name, value);
+        }
         // TODO: should probably notify of property change, too..?
     }
 }
