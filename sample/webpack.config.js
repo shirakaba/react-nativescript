@@ -3,6 +3,7 @@ const { join, relative, resolve, sep } = require("path");
 const webpack = require("webpack");
 const nsWebpack = require("nativescript-dev-webpack");
 const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
+const { getNoEmitOnErrorFromTSConfig } = require("nativescript-dev-webpack/utils/tsconfig-utils");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
@@ -11,24 +12,15 @@ const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeS
 const TerserPlugin = require("terser-webpack-plugin");
 const hashSalt = Date.now().toString();
 
-const babelOptions = {
-    babelrc: false,
-    presets: [
-        "@babel/preset-react"
-    ],
-    plugins: [
-        ["@babel/plugin-proposal-class-properties", { loose: true }]
-    ]
-};
-
 module.exports = env => {
     // Add your custom Activities, Services and other Android app components here.
-    const appComponents = [
+    const appComponents = env.appComponents || [];
+    appComponents.push(...[
         "tns-core-modules/ui/frame",
         "tns-core-modules/ui/frame/activity",
-    ];
+    ]);
 
-    const platform = env && (env.android && "android" || env.ios && "ios");
+    const platform = env && (env.android && "android" || env.ios && "ios" || env.platform);
     if (!platform) {
         throw new Error("You need to provide a target platform!");
     }
@@ -36,13 +28,16 @@ module.exports = env => {
     const platforms = ["ios", "android"];
     const projectRoot = __dirname;
 
+    if (env.platform) {
+        platforms.push(env.platform);
+    }
+
     // Default destination inside platforms/<platform>/...
     const dist = resolve(projectRoot, nsWebpack.getAppPath(platform, projectRoot));
 
     const {
         // The 'appPath' and 'appResourcesPath' values are fetched from
-        // the nsconfig.json configuration file
-        // when bundling with `tns run android|ios --bundle`.
+        // the nsconfig.json configuration file.
         appPath = "app",
         appResourcesPath = "app/App_Resources",
 
@@ -56,16 +51,31 @@ module.exports = env => {
         hmr, // --env.hmr,
         unitTesting, // --env.unitTesting,
         verbose, // --env.verbose
+        snapshotInDocker, // --env.snapshotInDocker
+        skipSnapshotTools, // --env.skipSnapshotTools
+        compileSnapshot // --env.compileSnapshot
     } = env;
+
+    const useLibs = compileSnapshot;
     const isAnySourceMapEnabled = !!sourceMap || !!hiddenSourceMap;
     const externals = nsWebpack.getConvertedExternals(env.externals);
 
     const appFullPath = resolve(projectRoot, appPath);
+    const hasRootLevelScopedModules = nsWebpack.hasRootLevelScopedModules({ projectDir: projectRoot });
+    let coreModulesPackageName = "tns-core-modules";
+    const alias = env.alias || {};
+    alias['~'] = appFullPath;
+
+    if (hasRootLevelScopedModules) {
+        coreModulesPackageName = "@nativescript/core";
+        alias["tns-core-modules"] = coreModulesPackageName;
+    }
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
 
     const entryModule = nsWebpack.getEntryModule(appFullPath, platform);
     const entryPath = `.${sep}${entryModule}.ts`;
-    const entries = { bundle: entryPath };
+    const entries = env.entries || {};
+    entries.bundle = entryPath;
 
     const tsConfigPath = resolve(projectRoot, "tsconfig.tns.json");
 
@@ -81,6 +91,8 @@ module.exports = env => {
         itemsToClean.push(`${join(projectRoot, "platforms", "android", "app", "src", "main", "assets", "snapshots")}`);
         itemsToClean.push(`${join(projectRoot, "platforms", "android", "app", "build", "configurations", "nativescript-android-snapshot")}`);
     }
+
+    const noEmitOnErrorFromTSConfig = getNoEmitOnErrorFromTSConfig(tsConfigPath);
 
     nsWebpack.processAppComponents(appComponents, platform);
     const config = {
@@ -106,17 +118,15 @@ module.exports = env => {
             hashSalt
         },
         resolve: {
-            extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
+            extensions: [".ts", ".js", ".scss", ".css"],
             // Resolve {N} system modules from tns-core-modules
             modules: [
-                resolve(__dirname, "node_modules/tns-core-modules"),
+                resolve(__dirname, `node_modules/${coreModulesPackageName}`),
                 resolve(__dirname, "node_modules"),
-                "node_modules/tns-core-modules",
+                `node_modules/${coreModulesPackageName}`,
                 "node_modules",
             ],
-            alias: {
-                '~': appFullPath,
-            },
+            alias,
             // resolve symlinks to symlinked modules
             symlinks: true
         },
@@ -135,6 +145,7 @@ module.exports = env => {
         devtool: hiddenSourceMap ? "hidden-source-map" : (sourceMap ? "inline-source-map" : "none"),
         optimization: {
             runtimeChunk: "single",
+            noEmitOnErrors: noEmitOnErrorFromTSConfig,
             splitChunks: {
                 cacheGroups: {
                     vendor: {
@@ -174,7 +185,7 @@ module.exports = env => {
         module: {
             rules: [
                 {
-                    test: nsWebpack.getEntryPathRegExp(appFullPath, entryPath),
+                    include: join(appFullPath, entryPath),
                     use: [
                         // Require all Android app components
                         platform === "android" && {
@@ -194,7 +205,7 @@ module.exports = env => {
                         },
                     ].filter(loader => !!loader)
                 },
-                
+
                 {
                     test: /\.(ts|css|scss|html|xml)$/,
                     use: "nativescript-dev-webpack/hmr/hot-loader"
@@ -204,48 +215,33 @@ module.exports = env => {
 
                 {
                     test: /\.css$/,
-                    use: { loader: "css-loader", options: { url: false } }
+                    use: "nativescript-dev-webpack/css2json-loader"
                 },
 
                 {
                     test: /\.scss$/,
                     use: [
-                        { loader: "css-loader", options: { url: false } },
+                        "nativescript-dev-webpack/css2json-loader",
                         "sass-loader"
                     ]
                 },
 
                 {
-                    test: /\.js(x?)$/,
-                    exclude: /node_modules/,
+                    test: /\.ts$/,
                     use: {
-                        loader: "babel-loader",
-                        options: babelOptions
-                    },
-                },
-
-                {
-                    test: /\.ts(x?)$/,
-                    use: [
-                        {
-                            loader: "awesome-typescript-loader",
-                            options: {
-                                configFileName: "tsconfig.tns.json",
-                                transpileOnly: true,
-                                useBabel: true,
-                                useCache: true,
-                                cacheDirectory: ".awcache",
-                                babelOptions: babelOptions,
-                                babelCore: "@babel/core",
-                                /* I'm not sure of the correct way to input sourceMap, so trying both ways indicated
-                                 * in https://github.com/s-panferov/awesome-typescript-loader/issues/526 */
-                                compilerOptions: {
-                                    sourceMap: isAnySourceMapEnabled
-                                },
-                                sourceMap: isAnySourceMapEnabled
-                            },
-                        }
-                    ]
+                        loader: "ts-loader",
+                        options: {
+                            configFile: tsConfigPath,
+                            // https://github.com/TypeStrong/ts-loader/blob/ea2fcf925ec158d0a536d1e766adfec6567f5fb4/README.md#faster-builds
+                            // https://github.com/TypeStrong/ts-loader/blob/ea2fcf925ec158d0a536d1e766adfec6567f5fb4/README.md#hot-module-replacement
+                            transpileOnly: true,
+                            allowTsInNodeModules: true,
+                            compilerOptions: {
+                                sourceMap: isAnySourceMapEnabled,
+                                declaration: false
+                            }
+                        },
+                    }
                 },
             ]
         },
@@ -279,6 +275,7 @@ module.exports = env => {
                 tsconfig: tsConfigPath,
                 async: false,
                 useTypescriptIncrementalApi: true,
+                checkSyntacticErrors: true,
                 memoryLimit: 4096
             })
         ],
@@ -303,12 +300,13 @@ module.exports = env => {
             ],
             projectRoot,
             webpackConfig: config,
+            snapshotInDocker,
+            skipSnapshotTools,
+            useLibs
         }));
     }
 
     if (hmr) {
-        /* WARNING: HMR is not yet supported in React NativeScript, so don't bother using it.
-         *          HMR will be supported once the React team release their new standalone React DevTools.  */
         config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 

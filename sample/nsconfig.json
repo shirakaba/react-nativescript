@@ -1,1 +1,4 @@
-{}
+{
+    "useLegacyWorkflow": false,
+    "webpackConfigPath": "./react-nativescript.webpack.config.js"
+}
