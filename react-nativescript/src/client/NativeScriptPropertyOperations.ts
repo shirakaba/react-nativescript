@@ -105,6 +105,8 @@ export function setValueForProperty(
     //     }
     // }
 
+    // const currentValue: unknown = instance.get("name");
+
     if (name === "class") {
         // console.warn(`Note that 'class' is remapped to 'className'.`);
         instance.set("className", value === rnsDeletedPropValue ? classNameProperty.defaultValue : value);
@@ -238,20 +240,18 @@ export function setValueForProperty(
         if (value === rnsDeletedPropValue) {
             /**
              * We can't import the Property directly from each module (without a huge rewrite), but the singleton
-             * instance of the Property is registered upon the prototype of the class, and so is therefore accessible
-             * on the class instance.
+             * instance of the Property registers its default value upon the prototype of the class.
              * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L298
              *
-             * If no defaultValue is specified, we fall back to void 0 (what it would resolve as anyway):
+             * If no defaultValue is specified, it would resolve to void 0 anyway.
              * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L173-L174
              */
-            type ViewBaseSubclass = ViewBase;
-            type DefaultValueType = unknown;
-            const registeredProperty: Property<ViewBaseSubclass, DefaultValueType> | undefined = instance[name];
-            instance.set(name, registeredProperty ? registeredProperty.defaultValue : void 0);
+            const defaultValueForProperty: unknown = (instance as any).__proto__[name];
+            console.log(`[PropOp] Got rnsDeletedPropValue for "${name}". Default value found to be:`, defaultValueForProperty);
+            instance.set(name, defaultValueForProperty);
         } else {
             instance.set(name, value);
         }
-        // TODO: should probably notify of property change, too..?
+        /* By using instance.set(), the instance is notified of the property change. */
     }
 }
