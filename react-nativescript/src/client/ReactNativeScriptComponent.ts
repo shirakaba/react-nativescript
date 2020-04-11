@@ -241,7 +241,7 @@ export function setInitialDOMProperties(
             // 		}
             // 		ensureListeningTo(rootContainerElement, propKey);
             // 	}
-        // TODO: check whether this condition, which makes sense for DOM, makes sense for NativeScript.
+            // TODO: check whether this condition, which makes sense for DOM, makes sense for NativeScript.
         } else if (nextProp != null) {
             setValueForProperty(domElement, propKey, nextProp, isCustomComponentTag, hostContext);
         }

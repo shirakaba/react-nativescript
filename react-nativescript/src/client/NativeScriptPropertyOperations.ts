@@ -4,10 +4,24 @@ import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { DockLayout, dockProperty } from "tns-core-modules/ui/layouts/dock-layout/dock-layout";
 import { View, classNameProperty } from "tns-core-modules/ui/core/view/view";
 import { ViewBase } from "tns-core-modules/ui/core/view-base/view-base";
-import { GridLayout, ItemSpec, rowProperty, rowSpanProperty, columnProperty, columnSpanProperty } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import {
+    GridLayout,
+    ItemSpec,
+    rowProperty,
+    rowSpanProperty,
+    columnProperty,
+    columnSpanProperty,
+} from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { AbsoluteLayout, topProperty, leftProperty } from "tns-core-modules/ui/layouts/absolute-layout/absolute-layout";
 import { Property } from "tns-core-modules/ui/core/properties/properties";
-import { FlexboxLayout, alignSelfProperty, flexGrowProperty, flexShrinkProperty, flexWrapBeforeProperty, orderProperty } from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
+import {
+    FlexboxLayout,
+    alignSelfProperty,
+    flexGrowProperty,
+    flexShrinkProperty,
+    flexWrapBeforeProperty,
+    orderProperty,
+} from "tns-core-modules/ui/layouts/flexbox-layout/flexbox-layout";
 import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
 import * as console from "../shared/Logger";
@@ -100,7 +114,7 @@ export function setValueForProperty(
             if (instance.getRows().length > 0) {
                 instance.removeRows();
             }
-            (value as ItemSpec[] || []).forEach((item: ItemSpec) => {
+            ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
                 instance.addRow(item);
             });
         } else if (name === "columns") {
@@ -109,7 +123,7 @@ export function setValueForProperty(
                 instance.removeColumns();
             }
             instance.removeColumns();
-            (value as ItemSpec[] || []).forEach((item: ItemSpec) => {
+            ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
                 instance.addColumn(item);
             });
         }
@@ -122,15 +136,30 @@ export function setValueForProperty(
         hostContext.isInAFlexboxLayout
     ) {
         if (name === "alignSelf") {
-            FlexboxLayout.setAlignSelf(instance as View, value === rnsDeletedPropValue ? alignSelfProperty.defaultValue : value);
+            FlexboxLayout.setAlignSelf(
+                instance as View,
+                value === rnsDeletedPropValue ? alignSelfProperty.defaultValue : value
+            );
         } else if (name === "flexGrow") {
-            FlexboxLayout.setFlexGrow(instance as View, value === rnsDeletedPropValue ? flexGrowProperty.defaultValue : value);
+            FlexboxLayout.setFlexGrow(
+                instance as View,
+                value === rnsDeletedPropValue ? flexGrowProperty.defaultValue : value
+            );
         } else if (name === "flexShrink") {
-            FlexboxLayout.setFlexShrink(instance as View, value === rnsDeletedPropValue ? flexShrinkProperty.defaultValue : value);
+            FlexboxLayout.setFlexShrink(
+                instance as View,
+                value === rnsDeletedPropValue ? flexShrinkProperty.defaultValue : value
+            );
         } else if (name === "flexWrapBefore") {
-            FlexboxLayout.setFlexWrapBefore(instance as View, value === rnsDeletedPropValue ? flexWrapBeforeProperty.defaultValue : value);
+            FlexboxLayout.setFlexWrapBefore(
+                instance as View,
+                value === rnsDeletedPropValue ? flexWrapBeforeProperty.defaultValue : value
+            );
         } else if (name === "order") {
-            FlexboxLayout.setOrder(instance as View, value === rnsDeletedPropValue ? orderProperty.defaultValue : value);
+            FlexboxLayout.setOrder(
+                instance as View,
+                value === rnsDeletedPropValue ? orderProperty.defaultValue : value
+            );
         }
     } else if ((name === "top" || name === "left") && hostContext.isInAnAbsoluteLayout) {
         /* FIXME: Determine whether it makes sense for top/left to be applied upon the instance    * itself if component is ever removed from its AbsoluteLayout parent (and how to do so). */
@@ -154,11 +183,17 @@ export function setValueForProperty(
         if (name === "row") {
             GridLayout.setRow(instance as View, value === rnsDeletedPropValue ? rowProperty.defaultValue : value);
         } else if (name === "rowSpan") {
-            GridLayout.setRowSpan(instance as View, value === rnsDeletedPropValue ? rowSpanProperty.defaultValue : value);
+            GridLayout.setRowSpan(
+                instance as View,
+                value === rnsDeletedPropValue ? rowSpanProperty.defaultValue : value
+            );
         } else if (name === "column") {
             GridLayout.setColumn(instance as View, value === rnsDeletedPropValue ? columnProperty.defaultValue : value);
         } else if (name === "columnSpan") {
-            GridLayout.setColumnSpan(instance as View, value === rnsDeletedPropValue ? columnSpanProperty.defaultValue : value);
+            GridLayout.setColumnSpan(
+                instance as View,
+                value === rnsDeletedPropValue ? columnSpanProperty.defaultValue : value
+            );
         }
         // } else if(
         //     name === "color" && instance instanceof ActionBar ||
@@ -200,19 +235,19 @@ export function setValueForProperty(
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
-        if(value === rnsDeletedPropValue){
+        if (value === rnsDeletedPropValue) {
             /**
              * We can't import the Property directly from each module (without a huge rewrite), but the singleton
              * instance of the Property is registered upon the prototype of the class, and so is therefore accessible
              * on the class instance.
              * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L298
-             * 
+             *
              * If no defaultValue is specified, we fall back to void 0 (what it would resolve as anyway):
              * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L173-L174
              */
             type ViewBaseSubclass = ViewBase;
             type DefaultValueType = unknown;
-            const registeredProperty: Property<ViewBaseSubclass, DefaultValueType>|undefined = instance[name];
+            const registeredProperty: Property<ViewBaseSubclass, DefaultValueType> | undefined = instance[name];
             instance.set(name, registeredProperty ? registeredProperty.defaultValue : void 0);
         } else {
             instance.set(name, value);
