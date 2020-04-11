@@ -116,18 +116,21 @@ export function setValueForProperty(
             if (instance.getRows().length > 0) {
                 instance.removeRows();
             }
-            ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
-                instance.addRow(item);
-            });
+            if(value !== rnsDeletedPropValue){
+                ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
+                    instance.addRow(item);
+                });
+            }
         } else if (name === "columns") {
             /* Clear any existing columns; would be more efficient to do a diff, but hard to get right. */
             if (instance.getColumns().length > 0) {
                 instance.removeColumns();
             }
-            instance.removeColumns();
-            ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
-                instance.addColumn(item);
-            });
+            if(value !== rnsDeletedPropValue){
+                ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
+                    instance.addColumn(item);
+                });
+            }
         }
     } else if (
         (name === "alignSelf" ||
@@ -229,7 +232,11 @@ export function setValueForProperty(
             console.warn(`[PropOp] got platform-specific non-object prop`);
             /* Some poor soul has probably set an ios|android prop with boolean value or something
              * FIXME: support setting back to defaultValue if value is rnsDeletedPropValue! */
-            instance.set(name, value);
+            if(value === rnsDeletedPropValue){
+                setDefaultValueForArbitraryProperty(instance, name);
+            } else {
+                instance.set(name, value);
+            }
         }
     } else if (name === "__rns__nodeTreeRole") {
         console.log(`[PropOp] got node-tree role`);
@@ -246,12 +253,16 @@ export function setValueForProperty(
              * If no defaultValue is specified, it would resolve to void 0 anyway.
              * @see https://github.com/NativeScript/NativeScript/blob/bd9828a0367b30bd332070c92a5f2f921461c5a8/nativescript-core/ui/core/properties/properties.ts#L173-L174
              */
-            const defaultValueForProperty: unknown = (instance as any).__proto__[name];
-            console.log(`[PropOp] Got rnsDeletedPropValue for "${name}". Default value found to be:`, defaultValueForProperty);
-            instance.set(name, defaultValueForProperty);
+            setDefaultValueForArbitraryProperty(instance, name);
         } else {
             instance.set(name, value);
         }
         /* By using instance.set(), the instance is notified of the property change. */
     }
+}
+
+function setDefaultValueForArbitraryProperty(instance: Instance, name: string): void {
+    const defaultValueForProperty: unknown = (instance as any).__proto__[name];
+    console.log(`[PropOp] Got rnsDeletedPropValue for "${name}". Default value found to be:`, defaultValueForProperty);
+    instance.set(name, defaultValueForProperty);
 }
