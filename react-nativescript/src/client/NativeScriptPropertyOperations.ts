@@ -116,7 +116,7 @@ export function setValueForProperty(
             if (instance.getRows().length > 0) {
                 instance.removeRows();
             }
-            if(value !== rnsDeletedPropValue){
+            if (value !== rnsDeletedPropValue) {
                 ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
                     instance.addRow(item);
                 });
@@ -126,7 +126,7 @@ export function setValueForProperty(
             if (instance.getColumns().length > 0) {
                 instance.removeColumns();
             }
-            if(value !== rnsDeletedPropValue){
+            if (value !== rnsDeletedPropValue) {
                 ((value as ItemSpec[]) || []).forEach((item: ItemSpec) => {
                     instance.addColumn(item);
                 });
@@ -232,7 +232,7 @@ export function setValueForProperty(
             console.warn(`[PropOp] got platform-specific non-object prop`);
             /* Some poor soul has probably set an ios|android prop with boolean value or something
              * FIXME: support setting back to defaultValue if value is rnsDeletedPropValue! */
-            if(value === rnsDeletedPropValue){
+            if (value === rnsDeletedPropValue) {
                 setDefaultValueForArbitraryProperty(instance, name);
             } else {
                 instance.set(name, value);
