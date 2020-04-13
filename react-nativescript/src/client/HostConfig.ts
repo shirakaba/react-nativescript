@@ -825,13 +825,11 @@ const hostConfig: ReactReconciler.HostConfig<
         return hostConfig.removeChild(container, child);
     },
     resetTextContent(instance: Instance): void {
-        if (instance instanceof TextBase) {
-            const oldText: string = instance.text;
+        if (instance instanceof TextBase || instance instanceof Span) {
             instance.text = "";
-            instance.notifyPropertyChange("text", "", oldText);
         } else {
             console.warn(
-                `resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase.`
+                `resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase, and Span.`
             );
         }
     },
