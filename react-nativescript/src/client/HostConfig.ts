@@ -189,9 +189,7 @@ const hostConfig: ReactReconciler.HostConfig<
          * When type 'label' or 'button' passes into here, they will then find that
          * parentHostContext.isInAFlexboxLayout === true.
          */
-        console.log(
-            `[getChildHostContext] type: ${type}`
-        );
+        console.log(`[getChildHostContext] type: ${type}`);
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
         const prevIsInAParentFormattedString: boolean = parentHostContext.isInAParentFormattedString;
@@ -202,7 +200,7 @@ const hostConfig: ReactReconciler.HostConfig<
         /**
          * TODO: as the Host Config only exposes the parent type, rather than the actual instance of the parent, we can't support adding text nodes as children
          * based on instanceof. This means that any elements extending text primitives won't inherit the text primitives' behaviour.
-         * 
+         *
          * We could address this by enforcing a magic string at the front of the type, but it's not ideal.
          */
         const isInAParentText: boolean =
@@ -291,7 +289,9 @@ const hostConfig: ReactReconciler.HostConfig<
                 throw new Error(`The only child element that should be nested inside a FormattedString is a Span.`);
             }
             if (hostContext.isInAParentText && view instanceof FormattedString === false) {
-                throw new Error(`The only child element that should be nested inside a TextBase is a FormattedString or a text node.`);
+                throw new Error(
+                    `The only child element that should be nested inside a TextBase is a FormattedString or a text node.`
+                );
             }
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
@@ -406,7 +406,9 @@ const hostConfig: ReactReconciler.HostConfig<
     ): TextInstance {
         console.log(`[createTextInstance] with text: "${text}"`);
         if (!hostContext.isInAParentText && !hostContext.isInAParentSpan) {
-            throw new Error(`React NativeScript's Host Config only supports rendering text nodes as direct children of one of the primitives ["label", "textView", "textField", "button", "span"]. Please use the 'text' property for setting text on this element instead.`);
+            throw new Error(
+                `React NativeScript's Host Config only supports rendering text nodes as direct children of one of the primitives ["label", "textView", "textField", "button", "span"]. Please use the 'text' property for setting text on this element instead.`
+            );
         }
         // See createInstance().
 
@@ -526,7 +528,7 @@ const hostConfig: ReactReconciler.HostConfig<
         /**
          * At some point, we will need to provide a way for people to inherit this behaviour when extending text primitives.
          */
-        if(textInstance instanceof TextBase || textInstance instanceof Span){
+        if (textInstance instanceof TextBase || textInstance instanceof Span) {
             textInstance.text = newText;
         }
         // Note: we used to do a notifyPropertyChange() here, but I think it's redundant due to the way Property establishes setters upon each class prototype.
@@ -808,13 +810,13 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
             );
             return;
-        /* FormattedString > Span case seems to be handled just fine by default clauses (somehow) */
-        // } else if (parent instanceof FormattedString) {
-        //     if(child instanceof Span){
-        //         console.log(`[removeChild()] FormattedString x Span`);
-        //         const childIndex: number = parent.spans.indexOf(child);
-        //         parent.spans.splice(childIndex, 1);
-        //     }
+            /* FormattedString > Span case seems to be handled just fine by default clauses (somehow) */
+            // } else if (parent instanceof FormattedString) {
+            //     if(child instanceof Span){
+            //         console.log(`[removeChild()] FormattedString x Span`);
+            //         const childIndex: number = parent.spans.indexOf(child);
+            //         parent.spans.splice(childIndex, 1);
+            //     }
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
