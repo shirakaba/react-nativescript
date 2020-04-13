@@ -10,6 +10,7 @@ import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { $TabView, $TabViewItem, $ContentView, $StackLayout, $Label, $FlexboxLayout, $Button } from 'react-nativescript';
 import { DeletePropFromScrollViewTest } from "./propDeletion";
+import { FormattedStringTest } from './text';
 
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
@@ -70,7 +71,7 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // );
 
 const AppContainer = () => (
-    <DeletePropFromScrollViewTest forwardedRef={rootRef}/>
+    <FormattedStringTest forwardedRef={rootRef}/>
 );
 
 export default hot(AppContainer);
