@@ -518,13 +518,13 @@ const hostConfig: ReactReconciler.HostConfig<
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
         console.log(`[commitTextUpdate()]`, textInstance);
-        textInstance.notifyPropertyChange("text", newText, oldText);
         /**
          * At some point, we will need to provide a way for people to inherit this behaviour when extending text primitives.
          */
         if(textInstance instanceof TextBase || textInstance instanceof Span){
             textInstance.text = newText;
         }
+        // Note: we used to do a notifyPropertyChange() here, but I think it's redundant due to the way Property establishes setters upon each class prototype.
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-2/
