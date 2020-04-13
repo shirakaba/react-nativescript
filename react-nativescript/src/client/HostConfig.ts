@@ -190,7 +190,7 @@ const hostConfig: ReactReconciler.HostConfig<
          * parentHostContext.isInAFlexboxLayout === true.
          */
         console.log(
-            `[getChildHostContext] type: ${type}; parentHostContext.isInAFlexboxLayout: ${parentHostContext.isInAFlexboxLayout}`
+            `[getChildHostContext] type: ${type}`
         );
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
