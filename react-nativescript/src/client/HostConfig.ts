@@ -808,6 +808,13 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
             );
             return;
+        /* FormattedString > Span case seems to be handled just fine by default clauses (somehow) */
+        // } else if (parent instanceof FormattedString) {
+        //     if(child instanceof Span){
+        //         console.log(`[removeChild()] FormattedString x Span`);
+        //         const childIndex: number = parent.spans.indexOf(child);
+        //         parent.spans.splice(childIndex, 1);
+        //     }
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
