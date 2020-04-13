@@ -52,7 +52,7 @@ import {
     InstanceCreator,
     implementsCustomNodeHierarchyManager,
 } from "../shared/HostConfigTypes";
-import { Span } from "@nativescript/core";
+import { FormattedString, Span } from "@nativescript/core";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -166,6 +166,7 @@ const hostConfig: ReactReconciler.HostConfig<
         return {
             isInAParentText: false,
             isInAParentSpan: false,
+            isInAParentFormattedString: false,
             isInADockLayout: false,
             isInAGridLayout: false,
             isInAnAbsoluteLayout: false,
@@ -193,6 +194,7 @@ const hostConfig: ReactReconciler.HostConfig<
         );
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
+        const prevIsInAParentFormattedString: boolean = parentHostContext.isInAParentFormattedString;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
         const prevIsInAFlexboxLayout: boolean = parentHostContext.isInAFlexboxLayout;
@@ -210,6 +212,7 @@ const hostConfig: ReactReconciler.HostConfig<
          * @see https://github.com/shirakaba/react-nativescript/issues/53#issuecomment-612834141
          */
         const isInAParentSpan: boolean = type === "span";
+        const isInAParentFormattedString: boolean = type === "formattedString";
         const isInADockLayout: boolean = type === "dockLayout";
         const isInAGridLayout: boolean = type === "gridLayout";
         const isInAnAbsoluteLayout: boolean = type === "absoluteLayout";
@@ -224,6 +227,7 @@ const hostConfig: ReactReconciler.HostConfig<
         if (
             prevIsInAParentText === isInAParentText &&
             prevIsInAParentSpan === isInAParentSpan &&
+            prevIsInAParentFormattedString === isInAParentFormattedString &&
             prevIsInADockLayout === isInADockLayout &&
             prevIsInADockLayout === isInAGridLayout &&
             prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout &&
@@ -234,6 +238,7 @@ const hostConfig: ReactReconciler.HostConfig<
             return {
                 isInAParentText,
                 isInAParentSpan,
+                isInAParentFormattedString,
                 isInADockLayout,
                 isInAGridLayout,
                 isInAnAbsoluteLayout,
@@ -277,9 +282,6 @@ const hostConfig: ReactReconciler.HostConfig<
         let view: Instance;
         const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
         if (viewConstructor) {
-            if (type === "contentView" && hostContext.isInAParentText) {
-                throw new Error("Nesting of <ContentView> within a TextBase is not currently supported.");
-            }
             view = viewConstructor(props, rootContainerInstance, hostContext);
             /**
              * NativeScript Core does actually allow you to nest elements in these cases (they just don't get rendered),
@@ -287,6 +289,9 @@ const hostConfig: ReactReconciler.HostConfig<
              */
             if (hostContext.isInAParentFormattedString && view instanceof Span === false) {
                 throw new Error(`The only child element that should be nested inside a FormattedString is a Span.`);
+            }
+            if (hostContext.isInAParentText && view instanceof FormattedString === false) {
+                throw new Error(`The only child element that should be nested inside a TextBase is a FormattedString or a text node.`);
             }
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);

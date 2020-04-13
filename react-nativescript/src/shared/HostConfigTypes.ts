@@ -31,6 +31,7 @@ export type PublicInstance = any;
 export type HostContext = {
     isInAParentText: boolean;
     isInAParentSpan: boolean;
+    isInAParentFormattedString: boolean;
     isInADockLayout: boolean;
     isInAGridLayout: boolean;
     isInAnAbsoluteLayout: boolean;
