@@ -6,7 +6,7 @@
  */
 import assertValidProps from "../shared/assertValidProps";
 import { Type, Instance, Container, HostContext } from "../shared/HostConfigTypes";
-import { TextBase, ViewBase } from "tns-core-modules/ui/text-base/text-base";
+import { TextBase, ViewBase, Span } from "@nativescript/core";
 import { setValueForStyles } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import * as console from "../shared/Logger";
@@ -50,12 +50,10 @@ function setTextContent(node: Instance, text: string): void {
     //     }
     // }
 
-    if (node instanceof TextBase) {
-        const oldText: string = node.text;
+    if (node instanceof TextBase || node instanceof Span) {
         node.text = text;
-        node.notifyPropertyChange("text", text, oldText);
     } else {
-        console.warn(`setTextContent() content incorrectly called on non-TextBase!`);
+        console.warn(`setTextContent() content incorrectly called on component that was neither a TextBase nor a Span!`);
     }
 }
 
