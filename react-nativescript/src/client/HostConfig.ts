@@ -52,6 +52,7 @@ import {
     InstanceCreator,
     implementsCustomNodeHierarchyManager,
 } from "../shared/HostConfigTypes";
+import { Span } from "@nativescript/core";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -164,6 +165,7 @@ const hostConfig: ReactReconciler.HostConfig<
     getRootHostContext(rootContainerInstance: Container): HostContext {
         return {
             isInAParentText: false,
+            isInAParentSpan: false,
             isInADockLayout: false,
             isInAGridLayout: false,
             isInAnAbsoluteLayout: false,
@@ -190,12 +192,24 @@ const hostConfig: ReactReconciler.HostConfig<
             `[getChildHostContext] type: ${type}; parentHostContext.isInAFlexboxLayout: ${parentHostContext.isInAFlexboxLayout}`
         );
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
+        const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
         const prevIsInADockLayout: boolean = parentHostContext.isInADockLayout;
         const prevIsInAnAbsoluteLayout: boolean = parentHostContext.isInAnAbsoluteLayout;
         const prevIsInAFlexboxLayout: boolean = parentHostContext.isInAFlexboxLayout;
 
+        /**
+         * TODO: as the Host Config only exposes the parent type, rather than the actual instance of the parent, we can't support adding text nodes as children
+         * based on instanceof. This means that any elements extending text primitives won't inherit the text primitives' behaviour.
+         * 
+         * We could address this by enforcing a magic string at the front of the type, but it's not ideal.
+         */
         const isInAParentText: boolean =
             type === "label" || type === "textView" || type === "textField" || type === "button";
+        /**
+         * We'll allow Span to support text nodes despite not extending TextBase.
+         * @see https://github.com/shirakaba/react-nativescript/issues/53#issuecomment-612834141
+         */
+        const isInAParentSpan: boolean = type === "span";
         const isInADockLayout: boolean = type === "dockLayout";
         const isInAGridLayout: boolean = type === "gridLayout";
         const isInAnAbsoluteLayout: boolean = type === "absoluteLayout";
@@ -209,6 +223,7 @@ const hostConfig: ReactReconciler.HostConfig<
          */
         if (
             prevIsInAParentText === isInAParentText &&
+            prevIsInAParentSpan === isInAParentSpan &&
             prevIsInADockLayout === isInADockLayout &&
             prevIsInADockLayout === isInAGridLayout &&
             prevIsInAnAbsoluteLayout === isInAnAbsoluteLayout &&
@@ -218,6 +233,7 @@ const hostConfig: ReactReconciler.HostConfig<
         } else {
             return {
                 isInAParentText,
+                isInAParentSpan,
                 isInADockLayout,
                 isInAGridLayout,
                 isInAnAbsoluteLayout,
@@ -265,6 +281,13 @@ const hostConfig: ReactReconciler.HostConfig<
                 throw new Error("Nesting of <ContentView> within a TextBase is not currently supported.");
             }
             view = viewConstructor(props, rootContainerInstance, hostContext);
+            /**
+             * NativeScript Core does actually allow you to nest elements in these cases (they just don't get rendered),
+             * but I'd prefer RNS to throw an explicit error here.
+             */
+            if (hostContext.isInAParentFormattedString && view instanceof Span === false) {
+                throw new Error(`The only child element that should be nested inside a FormattedString is a Span.`);
+            }
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
@@ -377,8 +400,8 @@ const hostConfig: ReactReconciler.HostConfig<
         internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): TextInstance {
         console.log(`[createTextInstance] with text: "${text}"`);
-        if (!hostContext.isInAParentText) {
-            throw new Error("Text strings must be rendered within a component extending <TextBase>.");
+        if (!hostContext.isInAParentText && !hostContext.isInAParentSpan) {
+            throw new Error(`React NativeScript's Host Config only supports rendering text nodes as direct children of one of the primitives ["label", "textView", "textField", "button", "span"]. Please use the 'text' property for setting text on this element instead.`);
         }
         // See createInstance().
 
@@ -495,9 +518,13 @@ const hostConfig: ReactReconciler.HostConfig<
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
         console.log(`[commitTextUpdate()]`, textInstance);
-        textInstance.text = newText;
-        // e.g.: https://github.com/NativeScript/NativeScript/blob/master/tns-core-modules/data/observable/observable.ts#L53
         textInstance.notifyPropertyChange("text", newText, oldText);
+        /**
+         * At some point, we will need to provide a way for people to inherit this behaviour when extending text primitives.
+         */
+        if(textInstance instanceof TextBase || textInstance instanceof Span){
+            textInstance.text = newText;
+        }
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-2/
