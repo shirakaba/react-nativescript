@@ -32,15 +32,16 @@
   },
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
+    "@types/react": "16.9.34",
     "react": "^16.9.0",
     "tns-core-modules": "^6.5.0"
   },
   "dependencies": {
-    "@types/react": "16.9.34",
     "react-reconciler": "0.24.0",
     "scheduler": "0.18.0"
   },
   "devDependencies": {
+    "@types/react": "16.9.34",
     "@types/react-reconciler": "0.18.0",
     "patch-package": "^6.2.2",
     "prettier": "1.18.2",
