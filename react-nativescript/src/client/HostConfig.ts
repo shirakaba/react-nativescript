@@ -53,6 +53,7 @@ import {
     implementsCustomNodeHierarchyManager,
 } from "../shared/HostConfigTypes";
 import { FormattedString, Span } from "@nativescript/core";
+import { formattedTextProperty } from "tns-core-modules/ui/text-base/text-base";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -474,6 +475,14 @@ const hostConfig: ReactReconciler.HostConfig<
             console.log(`[appendChild()] (Page receiving ActionBar) ${parentInstance} > ${child}`);
             parentInstance.actionBar = child;
             return;
+        } else if (child instanceof FormattedString) {
+            if(parentInstance instanceof TextBase){
+                console.log(`[appendChild()] (TextBase receiving FormattedString) ${parentInstance} > ${child}`);
+                parentInstance.formattedText = child;
+            } else {
+                console.log(`[appendChild()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parentInstance} > ${child}`);
+            }
+            return;
         } else if (isASingleChildContainer(parentInstance)) {
             console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
             /* These elements were originally designed to hold one element only:
@@ -512,6 +521,11 @@ const hostConfig: ReactReconciler.HostConfig<
         } else if (parentInstance instanceof TabViewItem) {
             console.log(`[appendChild()] (instance of TabViewItem) ${parentInstance} > ${child}`);
             parentInstance.view = child as View;
+        } else if (parentInstance instanceof FormattedString) {
+            if(child instanceof Span){
+                console.log(`[appendChild()] FormattedString > Span`);
+                parentInstance.spans.push(child);
+            }
         } else {
             console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
             parentInstance._addView(child);
@@ -650,7 +664,15 @@ const hostConfig: ReactReconciler.HostConfig<
             );
         }
 
-        if (parentInstance instanceof LayoutBase) {
+        if (child instanceof FormattedString) {
+            if(parentInstance instanceof TextBase){
+                console.log(`[HostConfig.insertBefore()] (TextBase receiving FormattedString); I only support a single child, so we'll delete any incumbent. ${parentInstance} > ${child}`);
+                parentInstance.formattedText = child;
+            } else {
+                console.log(`[HostConfig.insertBefore()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parentInstance} > ${child}`);
+            }
+            return;
+        } else if (parentInstance instanceof LayoutBase) {
             /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
             if (parentInstance instanceof GridLayout) {
                 console.warn(
@@ -684,6 +706,12 @@ const hostConfig: ReactReconciler.HostConfig<
                     `[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`
                 );
                 parentInstance.insertChild(child as View, atIndex);
+            }
+        } else if (parentInstance instanceof FormattedString) {
+            if(child instanceof Span && beforeChild instanceof Span){
+                console.log(`[HostConfig.insertBefore] FormattedString > Span`);
+                const beforeChildIndex: number = parentInstance.spans.indexOf(beforeChild);
+                parentInstance.spans.splice(beforeChildIndex, 0); // TODO: check for off-by-one error
             }
         } else {
             console.warn(
@@ -749,6 +777,14 @@ const hostConfig: ReactReconciler.HostConfig<
         if (child instanceof Page) {
             console.warn(`[remove()] Page was never a real child in the first place, so no-op. ${parent} x ${child}`);
             return;
+        } else if (child instanceof FormattedString) {
+            if(parent instanceof TextBase){
+                console.log(`[removeChild()] (TextBase removing FormattedString); I only support a single child, so we'll delete any incumbent. ${parent} x ${child}`);
+                parent.formattedText = formattedTextProperty.defaultValue;
+            } else {
+                console.log(`[removeChild()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parent} x ${child}`);
+            }
+            return;
         } else if (isASingleChildContainer(parent)) {
             console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
             /* These elements were originally designed to hold one element only:
@@ -810,13 +846,13 @@ const hostConfig: ReactReconciler.HostConfig<
                 `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
             );
             return;
-            /* FormattedString > Span case seems to be handled just fine by default clauses (somehow) */
-            // } else if (parent instanceof FormattedString) {
-            //     if(child instanceof Span){
-            //         console.log(`[removeChild()] FormattedString x Span`);
-            //         const childIndex: number = parent.spans.indexOf(child);
-            //         parent.spans.splice(childIndex, 1);
-            //     }
+        /* FormattedString > Span case seemed to be handled just fine by default clauses (somehow) */
+        } else if (parent instanceof FormattedString) {
+            if(child instanceof Span){
+                console.log(`[removeChild()] FormattedString x Span`);
+                const childIndex: number = parent.spans.indexOf(child);
+                parent.spans.splice(childIndex, 1);
+            }
         } else {
             console.log(`[removeChild()] default clause: ${parent} x ${child}`);
             parent._removeView(child);
