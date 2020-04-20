@@ -63,6 +63,12 @@ type TabStripItemEventData = import("@nativescript/core/ui/tab-navigation-base/t
 type Label = import("@nativescript/core/ui/label/label").Label;
 type Image = import("@nativescript/core/ui/image/image").Image;
 
+type FontStyle = import("@nativescript/core/ui/styling/font").FontStyle;
+type FontWeight = import("@nativescript/core/ui/styling/font").FontWeight;
+type ObservableArray<T> = import("@nativescript/core/data/observable-array").ObservableArray<T>;
+type Span = import("@nativescript/core/text/span").Span;
+type TextDecoration = import("@nativescript/core/ui/text-base").TextDecoration;
+
 // ui/action-bar/action-bar.d.ts
 export type ActionBarAttributes =  ViewAttributes & {
     actionItems: ActionItems;
@@ -83,8 +89,32 @@ export type ActionBarAttributes =  ViewAttributes & {
     titleView: View;
 };
 
+// ui/text-base/formatted-string.d.ts
+export type FormattedStringAttributes = ViewBaseAttributes & {
+    backgroundColor: Color;
+    color: Color;
+    fontFamily: string;
+    fontSize: number;
+    fontStyle: FontStyle;
+    fontWeight: FontWeight;
+    spans: ObservableArray<Span>;
+    textDecoration: TextDecoration;
+};
+
+// ui/text-base/span.d.ts
+export type SpanAttributes = ViewBaseAttributes & {
+    backgroundColor: Color;
+    color: Color;
+    fontFamily: string;
+    fontSize: number;
+    fontStyle: FontStyle;
+    fontWeight: FontWeight;
+    text: string;
+    textDecoration: TextDecoration;
+};
+
 // ui/core/view/view.d.ts
-export type ViewAttributes =  ViewBaseAttributes & {
+export type ViewAttributes = ViewBaseAttributes & {
     android: any;
     androidDynamicElevationOffset: number;
     androidElevation: number;
