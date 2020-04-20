@@ -26,6 +26,7 @@ import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
 import { ActionBar, TabViewItem } from "./ElementRegistry";
 import * as console from "../shared/Logger";
 import { rnsDeletedPropValue } from "./magicValues";
+import { MutableRefObject } from "react";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/DOMPropertyOperations.js which carries the following copyright:
@@ -107,6 +108,11 @@ export function setValueForProperty(
 
     // const currentValue: unknown = instance.get("name");
 
+    /* I expect that React Reconciler does this for us under the hood. */
+    // if (name === "ref"){
+    //     (value as MutableRefObject<Instance>).current = instance;
+    // }
+    
     if (name === "class") {
         // console.warn(`Note that 'class' is remapped to 'className'.`);
         instance.set("className", value === rnsDeletedPropValue ? classNameProperty.defaultValue : value);
@@ -241,6 +247,14 @@ export function setValueForProperty(
     } else if (name === "__rns__nodeTreeRole") {
         console.log(`[PropOp] got node-tree role`);
         instance.set(name, value === rnsDeletedPropValue ? false : value);
+    } else if(name.length > 2 && name.startsWith("on") && value === rnsDeletedPropValue || typeof value === "function") {
+        const eventName: string = name[2].toLowerCase() + name.slice(3);
+        console.log(`[PropOp] got suspected event listener "${eventName}" (from name "${name}")`);
+        if(value === rnsDeletedPropValue){
+            instance.off(eventName);
+        } else {
+            instance.on(eventName, value);
+        }
     } else {
         /* FIXME: ensure that we're only calling instance.set() for a valid View/Observable property;
          * many props, e.g. "frameRateMs", may purely be for the use of custom components. */
