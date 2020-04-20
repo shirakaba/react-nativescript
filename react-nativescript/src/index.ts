@@ -11,13 +11,14 @@
  */
 
 import * as ReactReconciler from "react-reconciler";
-import { reactReconcilerInst } from "./client/HostConfig";
-import { Container } from "./shared/HostConfigTypes";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
+import * as console from "./shared/Logger";
+import { Application, View } from "@nativescript/core";
+const { run, hasLaunched, getRootView } = Application;
+import { reactReconcilerInst } from "./client/HostConfig";
+import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
-import { run, hasLaunched, getRootView } from "tns-core-modules/application";
-import { Frame, Page, TabView, View, ContentView, ProxyViewContainer } from "./client/ElementRegistry";
 import { AbsoluteLayout as $AbsoluteLayout } from "./components/AbsoluteLayout";
 import { ActionBar as $ActionBar } from "./components/ActionBar";
 import { ActionItem as $ActionItem } from "./components/ActionItem";
@@ -55,7 +56,6 @@ import { WebView as $WebView } from "./components/WebView";
 import { WrapLayout as $WrapLayout } from "./components/WrapLayout";
 import { Page as $Page } from "./components/Page";
 import { Image as $Image } from "./components/Image";
-import * as console from "./shared/Logger";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
