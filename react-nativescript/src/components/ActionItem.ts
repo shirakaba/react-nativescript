@@ -1,6 +1,5 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ActionItemProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { StackLayout } from "../client/ElementRegistry";
 import { ActionItem as NativeScriptActionItem } from "tns-core-modules/ui/action-bar/action-bar";

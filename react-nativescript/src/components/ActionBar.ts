@@ -1,6 +1,5 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import * as ReactNativeScript from "../client/ReactNativeScript";
 import { ActionBar as NativeScriptActionBar } from "tns-core-modules/ui/action-bar/action-bar";
 import { ActionBarProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { ViewComponentProps, RCTView } from "./View";

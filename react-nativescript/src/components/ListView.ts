@@ -11,7 +11,7 @@ import { View, EventData } from "tns-core-modules/ui/core/view/view";
 import { updateListener } from "../client/EventHandling";
 import { ContentView, Observable, Color, KeyedTemplate } from "tns-core-modules/ui/page/page";
 import { ViewComponentProps, RCTView, ViewComponentState } from "./View";
-import * as ReactNativeScript from "../client/ReactNativeScript";
+import * as ReactNativeScript from "../index";
 
 export type CellViewContainer = ContentView;
 type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;

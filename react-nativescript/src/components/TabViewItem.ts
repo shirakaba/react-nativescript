@@ -1,6 +1,5 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import * as ReactNativeScript from "../client/ReactNativeScript";
 import { TabViewItemProps, ViewBaseProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 import { View, ViewBase, StackLayout, Color, ContentView, Label } from "../client/ElementRegistry";
 import {

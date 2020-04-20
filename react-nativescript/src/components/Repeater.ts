@@ -9,7 +9,6 @@
 // import { CustomLayoutViewProps, RepeaterProps, PropsWithoutForwardedRef } from "../shared/NativeScriptComponentTypings";
 // import { Repeater as NativeScriptRepeater } from "tns-core-modules/ui/repeater/repeater";
 // import { RCTCustomLayoutView, CustomLayoutViewComponentProps } from "./CustomLayoutView";
-// import * as ReactNativeScript from "../client/ReactNativeScript"
 
 // type ViewFactory = ((item: any, ref: React.RefObject<any>) => React.ReactElement);
 
