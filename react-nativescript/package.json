@@ -10,6 +10,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
+    "postinstall": "patch-package",
     "prettier": "prettier --print-width 120 --tab-width 4 --trailing-comma es5 --end-of-line lf --write \"src/**/*.ts\"",
     "build": "tsc --project ./tsconfig.json",
     "dev": "tsc --watch --project ./tsconfig.json",
@@ -35,12 +36,13 @@
     "tns-core-modules": "^6.5.0"
   },
   "dependencies": {
+    "@types/react": "16.9.34",
     "react-reconciler": "0.24.0",
     "scheduler": "0.18.0"
   },
   "devDependencies": {
-    "@types/react": "16.9.34",
     "@types/react-reconciler": "0.18.0",
+    "patch-package": "^6.2.2",
     "prettier": "1.18.2",
     "react": "16.9.0",
     "tns-core-modules": "6.5.0",
