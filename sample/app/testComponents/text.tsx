@@ -6,10 +6,9 @@ export class FormattedStringTest extends React.Component<{ forwardedRef: React.R
         return (
             <stackLayout
                 ref={this.props.forwardedRef}
-                height={"100%"}
-                width={"100%"}
                 style={{
                     backgroundColor: "gray",
+                    height: "100%",
                     width: "100%",
                 }}
             >
