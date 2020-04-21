@@ -4,7 +4,15 @@ import { Color } from "@nativescript/core";
 export class FormattedStringTest extends React.Component<{ forwardedRef: React.Ref<any> }, {}> {
     render(){
         return (
-            <stackLayout ref={this.props.forwardedRef} backgroundColor={"gray"} height={"100%" as any} width={"100%" as any}>
+            <stackLayout
+                ref={this.props.forwardedRef}
+                height={"100%"}
+                width={"100%"}
+                style={{
+                    backgroundColor: "gray",
+                    width: "100%",
+                }}
+            >
                 <label textWrap={true}>
                     <formattedString>
                         <span text="This text has a " />

@@ -242,7 +242,6 @@ export type ViewBaseAttributes =  ObservableAttributes & {
     recycleNativeView?: "always" | "never" | "auto";
     row?: number;
     rowSpan?: number;
-    style?: string | Style;
     top?: number | "auto" | LengthDipUnit | LengthPxUnit;
     typeName?: string;
     viewController?: any;
