@@ -6,7 +6,7 @@ import * as console from "../shared/Logger";
  * Code in here referenced from: https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/shared/ReactPortal.js which carries the following copyright:
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in React-LICENSE.txt.
+ * This source code is licensed under the MIT license found in /LICENSE.
  */
 
 const hasSymbol = typeof Symbol === "function" && Symbol.for;

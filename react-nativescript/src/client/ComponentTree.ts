@@ -2,7 +2,7 @@
  * Code in here referenced from: https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/react-dom/src/client/ReactDOMComponentTree.js which carries the following copyright:
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in React-LICENSE.txt.
+ * This source code is licensed under the MIT license found in /LICENSE.
  */
 import * as ReactReconciler from "react-reconciler";
 import { Instance } from "../shared/HostConfigTypes";

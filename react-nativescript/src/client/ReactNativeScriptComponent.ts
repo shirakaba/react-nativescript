@@ -2,7 +2,7 @@
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/client/ReactDOMComponent.js which carries the following copyright:
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the MIT license found in React-LICENSE.txt.
+ * This source code is licensed under the MIT license found in LICENSE.
  */
 import assertValidProps from "../shared/assertValidProps";
 import { Type, Instance, Container, HostContext } from "../shared/HostConfigTypes";
