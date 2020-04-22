@@ -1,4 +1,3 @@
-import 'react-hot-loader'; // Must be imported before React and ReactNativeScript.
 import * as React from "react";
 
 /* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
