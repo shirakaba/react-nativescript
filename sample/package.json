@@ -30,7 +30,6 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.9.0",
     "@types/react": "16.9.34",
-    "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.0.6",
     "fork-ts-checker-webpack-plugin": "1.3.7",
     "nativescript-dev-webpack": "~1.5.0",
