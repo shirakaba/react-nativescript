@@ -79,31 +79,37 @@ module.exports = (env) => {
     baseConfig.resolve.extensions = [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"];
     baseConfig.resolve.alias["react-dom"] = "react-nativescript";
 
+    // Augment NativeScript's existing DefinePlugin definitions with a few more of our own.
+    let existingDefinePlugin;
+    baseConfig.plugins = baseConfig.plugins.filter(plugin => {
+        const isDefinePlugin = plugin && plugin.constructor && plugin.constructor.name === "DefinePlugin";
+        existingDefinePlugin = plugin;
+        return !isDefinePlugin;
+    });
     baseConfig.plugins.unshift(
         new webpack.DefinePlugin({
             /* For various libraries in the React ecosystem. */
             "__DEV__": production ? "false" : "true",
-            // ...(
-            //     hmr ?
-            //         {
-            //             /* react-hot-loader expects to run in an environment where globals are stored on the `window` object.
-            //              * NativeScript uses `global` instead, so we'll alias that to satisfy it.
-            //              *
-            //              * Somehow `var globalValue = window` throws a ReferenceError if `window` is aliased to `global`,
-            //              * but is fine if aliased to `global.global`. */
-            //             "window": "global.global",
-            //             /* Stops react-hot-loader from being bundled in production mode:
-            //             * https://github.com/gaearon/react-hot-loader/issues/602#issuecomment-340246945 */
-            //             "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
-            //         } :
-            //         {}
-            // ),
+            ...existingDefinePlugin.definitions,
+            ...(
+                hmr ?
+                    {
+                        /* react-refrehs expects to run in an environment where globals are stored on the `window` object.
+                         * NativeScript uses `global` instead, so we'll alias that to satisfy it.
+                         *
+                         * Somehow `var globalValue = window` throws a ReferenceError if `window` is aliased to `global`,
+                         * but is fine if aliased to `global.global`. */
+                        "window": "global.global",
+                    } :
+                    {}
+            ),
         }),
     );
-
     
+    // Unsure whether or not to run this line, but provisionally shall try.
+    baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
+
     if (env.production) {
-        baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
         // nothing
     } else {
         if(hmr){
