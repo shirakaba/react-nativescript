@@ -63,9 +63,9 @@ module.exports = (env) => {
     });
     baseConfig.plugins.unshift(
         new webpack.DefinePlugin({
+            ...existingDefinePlugin.definitions,
             /* For various libraries in the React ecosystem. */
             "__DEV__": production ? "false" : "true",
-            ...existingDefinePlugin.definitions,
             ...(
                 hmr ?
                     {
@@ -84,8 +84,12 @@ module.exports = (env) => {
         }),
     );
     
-    // Unsure whether or not to run this line, but provisionally shall try.
-    baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
+    if(production){
+        /* Running this line seems to lead to React Hot Loader bundling production.min.js (which is empty)
+         * rather than its development lib (which is big and intrusive).
+         * So it should be understood that HMR is not supported in production mode. */
+        baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
+    }
 
     return baseConfig;
 };
