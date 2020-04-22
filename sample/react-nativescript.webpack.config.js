@@ -99,7 +99,7 @@ module.exports = (env) => {
                          *
                          * Somehow `var globalValue = window` throws a ReferenceError if `window` is aliased to `global`,
                          * but is fine if aliased to `global.global`. */
-                        "window": "global.global",
+                        "window": "global",
                     } :
                     {}
             ),
@@ -107,13 +107,15 @@ module.exports = (env) => {
     );
     
     // Unsure whether or not to run this line, but provisionally shall try.
-    baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
+    // baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
 
     if (env.production) {
         // nothing
     } else {
         if(hmr){
-            baseConfig.plugins.push(new ReactRefreshWebpackPlugin());
+            baseConfig.plugins.push(new ReactRefreshWebpackPlugin({
+                overlay: false,
+            }));
         }
     }
 
