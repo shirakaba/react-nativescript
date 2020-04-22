@@ -1,6 +1,7 @@
 const webpackConfig = require("./webpack.config");
 const webpack = require("webpack");
 const path = require("path");
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
 module.exports = (env) => {
     env = env || {};
@@ -15,9 +16,9 @@ module.exports = (env) => {
         ],
         plugins: [
             ...(
-                hmr ?
+                hmr && !production ?
                     [
-                        ["react-hot-loader/babel"]
+                        ['react-refresh/babel']
                     ] :
                     []
             ),
@@ -70,26 +71,32 @@ module.exports = (env) => {
         new webpack.DefinePlugin({
             /* For various libraries in the React ecosystem. */
             "__DEV__": production ? "false" : "true",
-            ...(
-                hmr ?
-                    {
-                        /* react-hot-loader expects to run in an environment where globals are stored on the `window` object.
-                         * NativeScript uses `global` instead, so we'll alias that to satisfy it.
-                         *
-                         * Somehow `var globalValue = window` throws a ReferenceError if `window` is aliased to `global`,
-                         * but is fine if aliased to `global.global`. */
-                        "window": "global.global",
-                        /* Stops react-hot-loader from being bundled in production mode:
-                        * https://github.com/gaearon/react-hot-loader/issues/602#issuecomment-340246945 */
-                        "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
-                    } :
-                    {}
-            ),
+            // ...(
+            //     hmr ?
+            //         {
+            //             /* react-hot-loader expects to run in an environment where globals are stored on the `window` object.
+            //              * NativeScript uses `global` instead, so we'll alias that to satisfy it.
+            //              *
+            //              * Somehow `var globalValue = window` throws a ReferenceError if `window` is aliased to `global`,
+            //              * but is fine if aliased to `global.global`. */
+            //             "window": "global.global",
+            //             /* Stops react-hot-loader from being bundled in production mode:
+            //             * https://github.com/gaearon/react-hot-loader/issues/602#issuecomment-340246945 */
+            //             "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
+            //         } :
+            //         {}
+            // ),
         }),
     );
 
+    
     if (env.production) {
         baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
+        // nothing
+    } else {
+        if(hmr){
+            baseConfig.plugins.push(new ReactRefreshWebpackPlugin());
+        }
     }
 
     return baseConfig;
