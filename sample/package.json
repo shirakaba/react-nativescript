@@ -29,7 +29,6 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.9.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.2.0",
     "@types/react": "16.9.34",
     "awesome-typescript-loader": "5.2.1",
     "babel-loader": "8.0.6",
@@ -37,10 +36,8 @@
     "nativescript-dev-webpack": "~1.5.0",
     "patch-package": "^6.2.2",
     "react-hot-loader": "^4.12.20",
-    "react-refresh": "^0.8.1",
     "tns-platform-declarations": "6.0.1",
-    "typescript": "^3.7.2",
-    "webpack-hot-middleware": "^2.25.0"
+    "typescript": "^3.7.2"
   },
   "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
   "readme": "NativeScript Application"
