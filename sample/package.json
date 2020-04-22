@@ -18,6 +18,7 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/theme": "2.2.1",
+    "eventsource": "^1.0.7",
     "react": "16.9.0",
     "react-nativescript": "file:../react-nativescript",
     "tns-core-modules": "~6.5.0"
