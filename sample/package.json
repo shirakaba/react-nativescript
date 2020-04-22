@@ -39,7 +39,8 @@
     "react-hot-loader": "^4.12.20",
     "react-refresh": "^0.8.1",
     "tns-platform-declarations": "6.0.1",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0"
   },
   "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
   "readme": "NativeScript Application"
