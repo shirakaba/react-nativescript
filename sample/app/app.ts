@@ -4,9 +4,6 @@ import * as React from "react";
 /* Controls react-nativescript log verbosity. true: all logs; false: only error logs. */
 Object.defineProperty(global, '__DEV__', { value: false });
 
-Object.defineProperty(global, 'addEventListener', { value: () => { console.log("global.addEventListener called!"); } });
-Object.defineProperty(global, 'removeEventListener', { value: () => { console.log("global.addEventListener called!"); } });
-
 /*
 In NativeScript, the app.ts file is the entry point to your application.
 You can use this file to perform app-level initialization, but the primary
