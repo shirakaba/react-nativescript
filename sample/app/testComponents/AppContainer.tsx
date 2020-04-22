@@ -74,4 +74,5 @@ const AppContainer = () => (
     <FormattedStringTest forwardedRef={rootRef}/>
 );
 
-export default AppContainer;
+export default hot(AppContainer);
+// export default AppContainer;
