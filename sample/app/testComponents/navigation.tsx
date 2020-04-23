@@ -133,7 +133,7 @@ export class ActionBarTest extends React.Component<{}, {}> {
         const navigationButton = new NavigationButton();
         navigationButton.text = "Go Back";
         return React.createElement(
-            "actionbar",
+            $ActionBar,
             {
                 navigationButton,
                 // color: new Color("red"),
@@ -147,13 +147,13 @@ export class ActionBarTest extends React.Component<{}, {}> {
 export class TabViewTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            "tabview",
+            $TabView,
             {
                 selectedIndex: 1
             },
 
             React.createElement(
-                "tabviewitem",
+                $TabViewItem,
                 {
                     title: "Dock",
                 },
@@ -165,7 +165,7 @@ export class TabViewTest extends React.Component<{}, {}> {
             ),
 
             React.createElement(
-                "tabviewitem",
+                $TabViewItem,
                 {
                     title: "Flexbox",
                 },
