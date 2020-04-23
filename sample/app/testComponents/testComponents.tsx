@@ -38,8 +38,8 @@ type ViewBaseProp<T extends ViewBase> = {
 
 export class TextFieldTest extends React.Component<{ toWhat: string }, {}> {
     render(){
-        return React.createElement('TextField', null, `Hello ${this.props.toWhat}`);
-        // { type: "TextField", props: { toWhat: string, children: string } }
+        return React.createElement('textField', null, `Hello ${this.props.toWhat}`);
+        // { type: "textField", props: { toWhat: string, children: string } }
     }
 }
 
@@ -134,7 +134,7 @@ class MyRootView extends React.Component<{}, {}> {
 export class NestedContentView extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            $ContentView,
+            "contentView",
             {
                 style: {
                     /* Note that "75%" and "yellow" also work at run-time; it's just that the typings disallow it. */
@@ -146,7 +146,7 @@ export class NestedContentView extends React.Component<{}, {}> {
                 // width: 75,
             },
             React.createElement(
-                $ContentView,
+                "contentView",
                 {
                     /* Seems that these props are totally untyped (deep 'any'). */
                     style: {
