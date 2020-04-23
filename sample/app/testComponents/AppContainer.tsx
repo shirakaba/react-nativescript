@@ -1,6 +1,6 @@
 import { hot } from 'react-hot-loader/root';
 import * as React from "react";
-import { Frame, Page, StackLayout, ProxyViewContainer, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
+import { Frame, Page, StackLayout, ContentView, View, TabView } from "react-nativescript/dist/client/ElementRegistry";
 import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel, WebViewTest, SegmentedBarIssue, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
@@ -8,7 +8,6 @@ import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, L
 import { NestedHub, NestedModalTest, FramedHubTest, FramedPageWithComplexActionBarTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
-import { $TabView, $TabViewItem, $ContentView, $StackLayout, $Label, $FlexboxLayout, $Button } from 'react-nativescript';
 import { DeletePropFromScrollViewTest } from "./propDeletion";
 import { FormattedStringTest } from './text';
 

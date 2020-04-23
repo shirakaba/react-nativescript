@@ -1,33 +1,8 @@
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import {
-    $Button,
-    $ContentView,
-    $TextView,
-    $TextField,
-    $Label,
-    // StylePropContents,
-    $DockLayout,
-    $AbsoluteLayout,
-    $StackLayout,
-    $FlexboxLayout,
-    $ListView,
-    $ActionBar,
-    $TabView,
-    $TabViewItem,
-    $Page,
-} from "react-nativescript/dist/index";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
+import { Color, Page, EventData } from "@nativescript/core";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar, StatefulPortalToPageWithActionBar } from "./navigation";
 import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "tns-core-modules/ui/gestures/gestures";
-import { EventData } from "tns-core-modules/data/observable/observable";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){

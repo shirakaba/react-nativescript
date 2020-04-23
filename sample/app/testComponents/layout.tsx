@@ -2,27 +2,10 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
+import { TabViewItem } from "@nativescript/core";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import {
-    $Button,
-    $ContentView,
-    $TextView,
-    $Label,
-    // StylePropContents,
-    $DockLayout,
-    $AbsoluteLayout,
-    $StackLayout,
-    $FlexboxLayout,
-    $ListView,
-    $ActionBar,
-    $TabView,
-    $TabViewItem,
-    $Page,
-} from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
 
 export class DockLayoutTest extends React.Component<{}, {}> {
