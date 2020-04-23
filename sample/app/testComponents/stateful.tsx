@@ -156,7 +156,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
         const { index } = this.state;
 
         return React.createElement(
-            $Label,
+            "label",
             {
                 text: text.slice(index, text.length)
             },
@@ -227,7 +227,7 @@ export class Clock extends React.Component<{}, { date: Date }> {
         console.log(`[Clock] render()!`);
         
         return React.createElement(
-            $TextView,
+            "textview",
             {
             },
             this.state.date.toLocaleTimeString()
@@ -268,11 +268,11 @@ export class SwitchTest extends React.Component<{}, { checked: boolean }> {
 
         return (
             React.createElement(
-                $StackLayout,
+                "stacklayout",
                 {},
 
                 React.createElement(
-                    $Switch,
+                    "switch",
                     {
                         checked: this.state.checked,
                         onToggle: (args) => {
@@ -287,7 +287,7 @@ export class SwitchTest extends React.Component<{}, { checked: boolean }> {
                 ),
 
                 React.createElement(
-                    $Switch,
+                    "switch",
                     {
                         isEnabled: false,
                         checked: this.state.checked,
@@ -321,11 +321,11 @@ export class SliderTest extends React.Component<{}, { value: number }> {
 
         return (
             React.createElement(
-                $StackLayout,
+                "stacklayout",
                 {},
 
                 React.createElement(
-                    $Slider,
+                    "slider",
                     {
                         value: this.state.value,
                         minValue: this.minValue,
@@ -340,7 +340,7 @@ export class SliderTest extends React.Component<{}, { value: number }> {
                 ),
 
                 React.createElement(
-                    $Slider,
+                    "slider",
                     {
                         isEnabled: false,
                         value: this.state.value,
@@ -381,11 +381,11 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
 
         return (
             React.createElement(
-                $StackLayout,
+                "stacklayout",
                 {},
 
                 React.createElement(
-                    $TimePicker,
+                    "timepicker",
                     {
                         time: this.state.time,
                         minHour: this.minHour,
@@ -404,7 +404,7 @@ export class TimePickerTest extends React.Component<{}, { time: Date }> {
                 ),
 
                 React.createElement(
-                    $TimePicker,
+                    "timepicker",
                     {
                         isEnabled: false,
                         time: this.state.time,
@@ -439,17 +439,17 @@ export class DatePickerTest extends React.Component<{}, { date: Date }> {
     render() {
         return (
             React.createElement(
-                $StackLayout,
+                "stacklayout",
                 {},
 
                 React.createElement(
-                    $TextView,
+                    "textview",
                     {},
                     `Uncontroversial calendar of good Sonic games (1991 - 1994).\n\nSelecting values beyond 27th May 1994 is prevented, because of course there were no good Sonic games after Sonic 3.\n\nBottom calendar is disabled, but inherits state.`
                 ),
 
                 React.createElement(
-                    $DatePicker,
+                    "datepicker",
                     {
                         date: this.state.date,
                         minDate: this.minDate,
@@ -464,7 +464,7 @@ export class DatePickerTest extends React.Component<{}, { date: Date }> {
                 ),
 
                 React.createElement(
-                    $DatePicker,
+                    "datepicker",
                     {
                         isEnabled: false,
                         date: this.state.date,
@@ -502,17 +502,17 @@ export class ListPickerTest extends React.Component<{}, { selectedLocationIndex:
     render() {
         return (
             React.createElement(
-                $StackLayout,
+                "stacklayout",
                 {},
 
                 React.createElement(
-                    $Label,
+                    "label",
                     {},
                     `Locations`
                 ),
 
                 React.createElement(
-                    $ListPicker,
+                    "listpicker",
                     {
                         backgroundColor: new Color("pink"),
                         items: this.locations,
@@ -528,13 +528,13 @@ export class ListPickerTest extends React.Component<{}, { selectedLocationIndex:
                 ),
 
                 React.createElement(
-                    $Label,
+                    "label",
                     {},
                     `Weathers`
                 ),
 
                 React.createElement(
-                    $ListPicker,
+                    "listpicker",
                     {
                         backgroundColor: new Color("pink"),
                         items: this.weathers[this.state.selectedLocationIndex],

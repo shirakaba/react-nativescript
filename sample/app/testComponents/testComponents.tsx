@@ -134,7 +134,7 @@ class MyRootView extends React.Component<{}, {}> {
 export class NestedContentView extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            $ContentView,
+            "contentview",
             {
                 style: {
                     /* Note that "75%" and "yellow" also work at run-time; it's just that the typings disallow it. */
@@ -146,7 +146,7 @@ export class NestedContentView extends React.Component<{}, {}> {
                 // width: 75,
             },
             React.createElement(
-                $ContentView,
+                "contentview",
                 {
                     /* Seems that these props are totally untyped (deep 'any'). */
                     style: {

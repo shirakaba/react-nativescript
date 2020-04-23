@@ -29,11 +29,11 @@ export class DockLayoutTest extends React.Component<{}, {}> {
 export class AbsoluteLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            $AbsoluteLayout,
+            "absolutelayout",
             {
             },
             React.createElement(
-                $Button,
+                "button",
                 {
                     dock: "left",
                     text: "Left: 10, Top: 5",
@@ -45,7 +45,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Button,
+                "button",
                 {
                     dock: "top",
                     text: "Left: 30, Top: 80",
@@ -57,7 +57,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Button,
+                "button",
                 {
                     dock: "right",
                     text: "Left: 150, Top: 25",
@@ -69,7 +69,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Button,
+                "button",
                 {
                     dock: "bottom",
                     text: "Left: 70, Top: 150",
@@ -95,7 +95,7 @@ export class HMRTest extends React.Component<{}, {}> {
 export class FlexboxLayoutTest extends React.Component<{}, {}> {
     render(){
         return React.createElement(
-            $FlexboxLayout,
+            "flexboxlayout",
             {
                 flexDirection: "column-reverse",
                 justifyContent: "space-around",
@@ -107,7 +107,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 backgroundColor: "lightGray"
             },
             React.createElement(
-                $Label,
+                "label",
                 {
                     text: "Label 1",
                     width: 60,
@@ -117,7 +117,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Label,
+                "label",
                 {
                     text: "Label 2",
                     alignSelf: "center",
@@ -128,7 +128,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Label,
+                "label",
                 {
                     text: "Label 3",
                     alignSelf: "flex-end",
@@ -139,7 +139,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 null
             ),
             React.createElement(
-                $Label,
+                "label",
                 {
                     text: "Label 4",
                     width: 60,
