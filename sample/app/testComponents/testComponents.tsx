@@ -86,7 +86,7 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         );
                         (wv.ios as WKWebView).reload();
                     }}
-                    onUrlChange={(args) => {
+                    onSrcChange={(args) => {
                         const src: string = args.object.src;
                         console.log(`[onUrlChange]`, src);
                         this.setState({ src });

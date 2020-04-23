@@ -1,13 +1,9 @@
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Frame } from "react-nativescript/dist/client/ElementRegistry";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
+import { Page, Frame } from "@nativescript/core";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
 import { DockLayoutTest, FlexboxLayoutTest, AbsoluteLayoutTest } from "./layout";
+import { FrameAttributes, PageAttributes } from "react-nativescript/dist/lib/react-nativescript-jsx";
 
 export class NestedHub extends React.Component<{
     forwardedRef: React.RefObject<Page>;
@@ -54,7 +50,7 @@ export class NestedHub extends React.Component<{
 }
 export class NestedModalTest extends React.Component<{
     forwardedRef: React.RefObject<Page>;
-} & PageComponentProps<Page>, {}> {
+} & PageAttributes, {}> {
     render() {
         const { forwardedRef, ...rest } = this.props;
         const yellowPageRef = React.createRef<Page>();
@@ -193,7 +189,7 @@ export class PageWithActionBar extends React.Component<
     {
         actionBarTitle?: string,
         forwardedRef: React.RefObject<Page>,
-    } & PageComponentProps<Page>,
+    } & PageAttributes,
     {}
 > {
     render(){
@@ -340,7 +336,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
  * because null is not regarded as a ReactNode to begin with.
  */
 export const PortalToPageWithActionBar: React.SFC<
-    { actionBarTitle: string } & PageComponentProps<Page>
+    { forwardedRef: React.RefObject<Page>, actionBarTitle: string } & PageAttributes
 > =
 (props) => {
     const { forwardedRef, actionBarTitle, children, ...rest } = props;
@@ -366,7 +362,7 @@ export const PortalToPageWithActionBar: React.SFC<
  * An explicit shouldComponentUpdate() is purely there to help me follow the logs. It's not needed otherwise.
  */
 export class StatefulPortalToPageWithActionBar extends React.Component<
-    { actionBarTitle: string } & PageAttributes,
+    { forwardedRef: React.RefObject<Page>, actionBarTitle: string } & PageAttributes,
     {}
 > {
     shouldComponentUpdate(
@@ -394,7 +390,7 @@ export class StatefulPortalToPageWithActionBar extends React.Component<
     }
 }
 
-export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {
+export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageAttributes, {}> {
     private readonly bluePageRef = React.createRef<Page>();
     render(){
         const { forwardedRef, ...rest } = this.props;
