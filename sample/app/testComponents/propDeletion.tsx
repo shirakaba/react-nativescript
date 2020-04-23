@@ -1,5 +1,4 @@
 import * as React from "react";
-import { $ScrollView, $TextView, $StackLayout, $GridLayout, $Label } from "react-nativescript";
 import { ScrollView } from "@nativescript/core";
 import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 
@@ -19,18 +18,7 @@ class DeletePropFromScrollViewTestContent extends React.Component<{}, {}> {
             <scrollView orientation="vertical">
                 {/* <gridLayout rows="200 200 200 200 200 200 200 200 200 200"> */}
                 <gridLayout
-                    rows={[
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                        new ItemSpec(200, "pixel"),
-                    ]}
+                    rows={"200 200 200 200 200 200 200 200 200 200"}
                 >
                     <label className="m-10" row={0} text="Some text content follows here..." textWrap={true} />
                     <label className="m-10" row={1} text="Some text content follows here..." textWrap={true} />

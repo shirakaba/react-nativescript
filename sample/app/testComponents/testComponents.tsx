@@ -2,31 +2,9 @@ import * as React from "react";
 import { PercentLength, FormattedString, EventData } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView, Frame } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView, Frame } from "@nativescript/core";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import {
-    $Button,
-    $ContentView,
-    $TextView,
-    $TextField,
-    $Label,
-    // StylePropContents,
-    $DockLayout,
-    $AbsoluteLayout,
-    $StackLayout,
-    $FlexboxLayout,
-    $ListView,
-    $ActionBar,
-    $TabView,
-    $TabViewItem,
-    $Page,
-    $WebView,
-    $SearchBar,
-    $Frame,
-    $SegmentedBar,
-    $SegmentedBarItem,
-} from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
 import { PageComponentProps } from "react-nativescript/dist/components/Page";
@@ -74,12 +52,12 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         (sb.ios as UISearchBar).autocapitalizationType = UITextAutocapitalizationType.None;
                     }}
                     onTextChange={(args) => {
-                        const text: string = args.object.text;
+                        const text: string = (args.object as SearchBar).text;
                         console.log(`[onTextChange]`, text);
                         this.setState({ searchText: text });
                     }}
                     onSubmit={(args) => {
-                        const text: string = args.object.text;
+                        const text: string = (args.object as SearchBar).text;
                         console.log(`[onSubmit]`, text);
                         this.setState({ searchText: text, src: text });
                     }}

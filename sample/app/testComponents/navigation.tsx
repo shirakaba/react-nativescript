@@ -2,38 +2,16 @@ import * as React from "react";
 import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, Frame } from "react-nativescript/dist/client/ElementRegistry";
+import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Frame } from "react-nativescript/dist/client/ElementRegistry";
 import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import {
-    $Button,
-    $Frame,
-    $ContentView,
-    $TextView,
-    $Switch,
-    $Label,
-    // StylePropContents,
-    $DockLayout,
-    $AbsoluteLayout,
-    $StackLayout,
-    $FlexboxLayout,
-    $ListView,
-    $ActionBar,
-    $TabView,
-    $TabViewItem,
-    $Page,
-    $NavigationButton,
-    $ActionItem,
-} from "react-nativescript/dist/index";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
-import { FrameComponentProps } from "react-nativescript/dist/components/Frame";
 import { DockLayoutTest, FlexboxLayoutTest, AbsoluteLayoutTest } from "./layout";
 
 export class NestedHub extends React.Component<{
     forwardedRef: React.RefObject<Page>;
-} & PageComponentProps<Page>, {}> {
+} & PageAttributes, {}> {
     render() {
         const { forwardedRef, ...rest } = this.props;
         const greenPageRef = React.createRef<Page>();
@@ -388,7 +366,7 @@ export const PortalToPageWithActionBar: React.SFC<
  * An explicit shouldComponentUpdate() is purely there to help me follow the logs. It's not needed otherwise.
  */
 export class StatefulPortalToPageWithActionBar extends React.Component<
-    { actionBarTitle: string } & PageComponentProps<Page>,
+    { actionBarTitle: string } & PageAttributes,
     {}
 > {
     shouldComponentUpdate(
@@ -446,7 +424,7 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
     }
 }
 
-export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<Frame> } & FrameComponentProps<Frame>, {}> {
+export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<Frame> } & FrameAttributes, {}> {
     private readonly bluePageRef = React.createRef<Page>();
 
     componentDidMount(){

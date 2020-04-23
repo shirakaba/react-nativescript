@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 // if((module as any).hot) {
 //     // self accept.
 //     (module as any).hot.accept(
@@ -8,35 +10,7 @@
 // }
 
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
 import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer } from "react-nativescript/dist/client/ElementRegistry";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import {
-    $Button,
-    $ContentView,
-    $TextView,
-    $TextField,
-    $Label,
-    $Image,
-    // StylePropContents,
-    $DockLayout,
-    $AbsoluteLayout,
-    $StackLayout,
-    $FlexboxLayout,
-    $GridLayout,
-    $ListView,
-    $ActionBar,
-    $TabView,
-    $TabViewItem,
-    $Page,
-} from "react-nativescript/dist/index";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
-import { PortalToPageWithActionBar } from "./navigation";
 import { CellViewContainer } from "react-nativescript/dist/components/ListView";
 import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
 import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
@@ -270,8 +244,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 return (
                                     <gridLayout
                                         ref={ref}
-                                        rows={[new ItemSpec(1, "star")]}
-                                        columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
+                                        rows={"*"}
+                                        columns={"64 *"}
                                     >
                                         <image
                                             row={0}
@@ -307,8 +281,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                     <gridLayout
                                         ref={ref}
                                         backgroundColor={new Color("yellow")}
-                                        rows={[new ItemSpec(1, "star")]}
-                                        columns={[new ItemSpec(1, "star"), new ItemSpec(64, "pixel")]}
+                                        rows={"*"}
+                                        columns={"* 64"}
                                     >
                                         <textView
                                             paddingLeft={8}
