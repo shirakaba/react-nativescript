@@ -9,6 +9,6 @@ export function UpdateEventHandlerTest() {
     }
   
     return (
-        <$Button onTap={handleTap} text="click me"/>
+        <button onTap={handleTap} text="click me"/>
     );
 }

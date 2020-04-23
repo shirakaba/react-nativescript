@@ -46,7 +46,7 @@ export class TextFieldTest extends React.Component<{ toWhat: string }, {}> {
 export class TextViewTest extends React.Component<{ toWhat: string }, {}> {
     render(){
         // return (<ReactTextView text={`Hello ${this.props.toWhat}`}/>);
-        return (<$TextView>{`Hello ${this.props.toWhat}`}</$TextView>);
+        return (<textView>{`Hello ${this.props.toWhat}`}</textView>);
     }
 }
 
@@ -62,8 +62,8 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
 
     render(){
         return (
-            <$StackLayout ref={this.props.forwardedRef}>
-                <$SearchBar
+            <stackLayout ref={this.props.forwardedRef}>
+                <searchBar
                     text={this.state.searchText}
                     /* componentDidMount: NativeScript wrapper views mounted. Native views not yet initialised.
                      * onLoaded: wrappers' native views initialised. Happens AFTER componentDidMount. */
@@ -85,7 +85,7 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                     }}
                 />
 
-                <$WebView
+                <webView
                     height={{ value: 100, unit: "%" }}
                     width={{ value: 100, unit: "%" }}
                     src={this.state.src}
@@ -114,14 +114,14 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         this.setState({ src });
                     }}
                 />
-            </$StackLayout>
+            </stackLayout>
         );
     }
 }
 
 export class LabelTest extends React.Component<{ toWhat: string }, {}> {
     render(){
-        return (<$Label>{`Hello ${this.props.toWhat}`}</$Label>);
+        return (<label>{`Hello ${this.props.toWhat}`}</label>);
     }
 }
 
@@ -203,7 +203,7 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
         // );
 
         return (
-            <$Label formattedText={formattedString} />
+            <label formattedText={formattedString} />
         )
     }
 }
@@ -236,22 +236,22 @@ export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.Ref
         const { selectedIndex } = this.state;
 
         return(
-            <$Frame ref={forwardedRef}>
-                <$Page ref={this.pageRef}>
-                    <$StackLayout>
-                        <$Label text={"HelloWorld"}/>
-                        <$SegmentedBar
+            <frame ref={forwardedRef}>
+                <page ref={this.pageRef}>
+                    <stackLayout>
+                        <label text={"HelloWorld"}/>
+                        <segmentedBar
                             className={"m-5"}
                             selectedIndex={selectedIndex}
                             onSelectedIndexChanged={this.onSelectedIndexChanged}
                         >
-                            <$SegmentedBarItem title={"Item 1"}/>
-                            <$SegmentedBarItem title={"Item 2"}/>
-                            <$SegmentedBarItem title={"Item 3"}/>
-                        </$SegmentedBar>
-                    </$StackLayout>
-                </$Page>
-            </$Frame>
+                            <segmentedBarItem title={"Item 1"}/>
+                            <segmentedBarItem title={"Item 2"}/>
+                            <segmentedBarItem title={"Item 3"}/>
+                        </segmentedBar>
+                    </stackLayout>
+                </page>
+            </frame>
         );
     }
 }

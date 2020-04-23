@@ -28,17 +28,17 @@ import { PageComponentProps } from "react-nativescript/dist/components/Page";
 export class DockLayoutTest extends React.Component<{}, {}> {
     render(){
         return (
-            <$DockLayout
+            <dockLayout
                 width={{ value: 100, unit: "%" }}
                 height={{ value: 100, unit: "%" }}
                 stretchLastChild={true}
             >
-                <$Button dock={"left"} backgroundColor={"#0099CC"}>Left</$Button>
-                <$Button dock={"top"} backgroundColor={"#AA0078"}>Top</$Button>
-                <$Button dock={"right"} backgroundColor={"#8C489F"}>Right</$Button>
-                <$Button dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</$Button>
-                <$Button backgroundColor={"#CCFFFF"} color={new Color("gray")}>Fill</$Button>
-            </$DockLayout>
+                <button dock={"left"} backgroundColor={"#0099CC"}>Left</button>
+                <button dock={"top"} backgroundColor={"#AA0078"}>Top</button>
+                <button dock={"right"} backgroundColor={"#8C489F"}>Right</button>
+                <button dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</button>
+                <button backgroundColor={"#CCFFFF"} color={new Color("gray")}>Fill</button>
+            </dockLayout>
         );
     }
 }

@@ -380,11 +380,11 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <$Page ref={forwardedRef} actionBarHidden={false} {...rest}>
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Label text={`Audio loaded: ${this.state.audioLoaded}`}/>
-                    <$Button
+            <page ref={forwardedRef} actionBarHidden={false} {...rest}>
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <label text={`Audio loaded: ${this.state.audioLoaded}`}/>
+                    <button
                         text={"Launch SpriteKit game (with audio)!"}
                         onTap={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
@@ -396,8 +396,8 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
                             nc.pushViewControllerAnimated(this.gameVC, true);
                         }}
                     />
-                </$StackLayout>
-            </$Page>
+                </stackLayout>
+            </page>
         );
     }
 }

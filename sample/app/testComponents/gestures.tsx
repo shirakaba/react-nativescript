@@ -32,7 +32,7 @@ import { EventData } from "tns-core-modules/data/observable/observable";
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
         return (
-                <$ContentView
+                <contentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
@@ -48,8 +48,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                     onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
                     onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
                 >
-                    <$FlexboxLayout justifyContent="center" alignItems="center">
-                        <$ContentView
+                    <flexboxLayout justifyContent="center" alignItems="center">
+                        <contentView
                             style={{
                                 backgroundColor: new Color("orange"),
                                 width: { unit: "px", value: 300 },
@@ -65,8 +65,8 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                             onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
                             onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
                         />
-                    </$FlexboxLayout>
-                </$ContentView>
+                    </flexboxLayout>
+                </contentView>
         );
     }
 }
@@ -117,15 +117,15 @@ export class PanGestureTest extends React.Component<
         const { x, y } = this.state;
 
         return (
-                <$ContentView
+                <contentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
                 >
-                    <$AbsoluteLayout>
-                        <$ContentView
+                    <absoluteLayout>
+                        <contentView
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
@@ -136,8 +136,8 @@ export class PanGestureTest extends React.Component<
 
                             onPan={this.onPan}
                         />
-                    </$AbsoluteLayout>
-                </$ContentView>
+                    </absoluteLayout>
+                </contentView>
         );
     }
 }
@@ -148,15 +148,15 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <$Page
+            <page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
                 onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] base Page`)}
             >
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Button
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <button
                         text={"Navigate to yellow page"}
                         onTap={() => {
                             const currentPage: Page = forwardedRef.current!;
@@ -167,7 +167,7 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                             });
                         }}
                     />
-                </$StackLayout>
+                </stackLayout>
                 
                 <PortalToPageWithActionBar
                     forwardedRef={this.yellowPageRef}
@@ -182,9 +182,9 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                         }
                     }}
                 >
-                    <$Label>You're viewing the yellow page!</$Label>
+                    <label>You're viewing the yellow page!</label>
                 </PortalToPageWithActionBar>
-            </$Page>
+            </page>
         );
     }
 }
@@ -231,22 +231,22 @@ export class StatefulPageGestureTest extends React.Component<
         // const yellowPageRef = React.createRef<Page>();
 
         return (
-            <$Page
+            <page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
                 onSwipe={this.onSwipeBasePage}
             >
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Button
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <button
                         text={"Navigate to yellow page"}
                         onTap={this.onTapBasePage}
                     />
-                </$StackLayout>
+                </stackLayout>
                 
                 <PortalToStatefulPage yellowPageRef={this.yellowPageRef} />
-            </$Page>
+            </page>
         );
     }
 }
@@ -336,15 +336,15 @@ export class PortalToStatefulPage extends React.Component<
                 backgroundColor={"yellow"}
                 onSwipe={this.onSwipeYellowPage}
             >
-                <$ContentView
+                <contentView
                     style={{
                         backgroundColor: new Color("yellow"),
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
                 >
-                    <$AbsoluteLayout>
-                        <$ContentView
+                    <absoluteLayout>
+                        <contentView
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
@@ -355,8 +355,8 @@ export class PortalToStatefulPage extends React.Component<
                             // onPan={this.onPan}
                             onTap={this.onTap}
                         />
-                    </$AbsoluteLayout>
-                </$ContentView>
+                    </absoluteLayout>
+                </contentView>
             </StatefulPortalToPageWithActionBar>
         );
     }
@@ -402,21 +402,21 @@ export class StatefulPageGestureTest2 extends React.Component<
         console.log(`[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current.frame.currentPage}`);
 
         return (
-            <$Page
+            <page
                 ref={forwardedRef}
                 actionBarHidden={false}
                 {...rest}
             >
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Button
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <button
                         text={"Navigate to yellow page"}
                         onTap={this.onTapBasePage}
                     />
-                </$StackLayout>
+                </stackLayout>
                 
                 <PortalToPageWithStatefulContentView yellowPageRef={this.yellowPageRef} />
-            </$Page>
+            </page>
         );
     }
 }
@@ -498,15 +498,15 @@ export class StatefulContentView extends React.Component<
         const { x, y } = this.state;
 
         return (
-            <$ContentView
+            <contentView
                 style={{
                     backgroundColor: new Color("yellow"),
                     width: { unit: "%", value: 100 },
                     height: { unit: "%", value: 100 },
                 }}
             >
-                <$AbsoluteLayout>
-                    <$ContentView
+                <absoluteLayout>
+                    <contentView
                         left={{ unit: "px", value: x }}
                         top={{ unit: "px", value: y }}
                         style={{
@@ -516,8 +516,8 @@ export class StatefulContentView extends React.Component<
                         }}
                         onTap={this.onTap}
                     />
-                </$AbsoluteLayout>
-            </$ContentView>
+                </absoluteLayout>
+            </contentView>
         );
     }
 }

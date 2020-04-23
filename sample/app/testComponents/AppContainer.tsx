@@ -15,8 +15,8 @@ import { FormattedStringTest } from './text';
 export const rootRef: React.RefObject<any> = React.createRef<any>();
 
 // const AppContainer = () => (
-//     <$FlexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
-//         <$FlexboxLayout
+//     <flexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
+//         <flexboxLayout
 //             backgroundColor={"green"}
 //             flexDirection={"column"}
 //             flexGrow={1}
@@ -24,28 +24,28 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 //             // position={"absolute"}
 //             alignItems={"center"}
 //         >
-//             <$Label text={"LABEL"}/>
-//         </$FlexboxLayout>
-//         <$FlexboxLayout
+//             <label text={"LABEL"}/>
+//         </flexboxLayout>
+//         <flexboxLayout
 //             backgroundColor={"blue"}
 //             flexDirection={"column"}
 //         >
-//             <$Button text={"BUTTON"} className={""}/>
-//         </$FlexboxLayout>
-//         {/* <$Button text={"BUTTON"} className={""}/> */}
-//     </$FlexboxLayout>
+//             <button text={"BUTTON"} className={""}/>
+//         </flexboxLayout>
+//         {/* <button text={"BUTTON"} className={""}/> */}
+//     </flexboxLayout>
 // );
 
 // const AppContainer = () => <FramedLayoutTest forwardedRef={rootRef}/>
 // const AppContainer = () => <FramedHubTest forwardedRef={rootRef}/>
 // const AppContainer = () => <WebViewTest forwardedRef={rootRef}/>
-// const AppContainer = () => <$StackLayout ref={rootRef}><DatePickerTest/></$StackLayout>
+// const AppContainer = () => <stackLayout ref={rootRef}><DatePickerTest/></stackLayout>
 
 // const AppContainer = () => (
 //     <FramedPageWithComplexActionBarTest forwardedRef={rootRef}>
-//         <$StackLayout backgroundColor={"orange"}>
-//             <$Label>Hello, World!</$Label>
-//         </$StackLayout>
+//         <stackLayout backgroundColor={"orange"}>
+//             <label>Hello, World!</label>
+//         </stackLayout>
 //     </FramedPageWithComplexActionBarTest>
 // );
 
@@ -56,18 +56,18 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 /* See the testComponents directory for many examples of components (and ref-forwarding). */
 // const AppContainer = () => (
 //     // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
-//     <$TabView ref={rootRef} selectedIndex={0}>
-//         <$TabViewItem title={"One"}>
-//             <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-//                 <$Label>Uno</$Label>
-//             </$StackLayout>
-//         </$TabViewItem>
-//         <$TabViewItem title={"Two"}>
-//             <$StackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
-//                 <$Label>Dos</$Label>
-//             </$StackLayout>
-//         </$TabViewItem>
-//     </$TabView>
+//     <tabView ref={rootRef} selectedIndex={0}>
+//         <tabViewItem title={"One"}>
+//             <stackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+//                 <label>Uno</label>
+//             </stackLayout>
+//         </tabViewItem>
+//         <tabViewItem title={"Two"}>
+//             <stackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
+//                 <label>Dos</label>
+//             </stackLayout>
+//         </tabViewItem>
+//     </tabView>
 // );
 
 const AppContainer = () => (

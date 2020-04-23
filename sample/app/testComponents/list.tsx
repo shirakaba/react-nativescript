@@ -50,7 +50,7 @@ export class ListViewTest extends React.Component<{}, {}> {
         /* There may be an argument for nesting the ListView within a LayoutBase once
          * dealing with the Safe Area (shall have to find out and see!). */
         return (
-            <$ListView
+            <listView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -64,13 +64,13 @@ export class ListViewTest extends React.Component<{}, {}> {
                 items={[...items.map((val: Item) => val)]}
                 // cellFactory={(item: Item, ref: React.RefObject<any>) => {
                 //     return (
-                //         <$Label
+                //         <label
                 //             ref={ref}
                 //             // key={container._domId}
                 //             fontSize={24}
                 //         >
                 //             {`#${item}`}
-                //         </$Label>
+                //         </label>
                 //     );
                 // }}
                 itemTemplateSelector={(item: Item, index: number, items: any): string => {
@@ -83,13 +83,13 @@ export class ListViewTest extends React.Component<{}, {}> {
                             placeholderItem: 1,
                             cellFactory: (item: Item, ref: React.RefObject<any>) => {
                                 return (
-                                    <$Label
+                                    <label
                                         ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
                                         {`ODD #${item}`}
-                                    </$Label>
+                                    </label>
                                 );
                             }
                         }
@@ -100,20 +100,20 @@ export class ListViewTest extends React.Component<{}, {}> {
                             placeholderItem: 0,
                             cellFactory: (item: Item, ref: React.RefObject<any>) => {
                                 return (
-                                    <$TextView
+                                    <textView
                                         ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
                                         {`EVEN #${item}`}
-                                    </$TextView>
+                                    </textView>
                                 );
                             }
                         }
                     ],
                 ])}
             >
-            </$ListView>
+            </listView>
         );
     }
 }
@@ -239,7 +239,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
 
     render(){
         return (
-            <$ListView
+            <listView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -268,19 +268,19 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
-                                    <$GridLayout
+                                    <gridLayout
                                         ref={ref}
                                         rows={[new ItemSpec(1, "star")]}
                                         columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                                     >
-                                        <$Image
+                                        <image
                                             row={0}
                                             col={0}
                                             src={imgSource}
                                             style={this.styles.thumb}
                                             stretch={"aspectFill"}
                                         />
-                                        <$TextView
+                                        <textView
                                             row={0}
                                             col={1}
                                             // key={container._domId}
@@ -289,8 +289,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             paddingRight={8}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </$TextView>
-                                    </$GridLayout>
+                                        </textView>
+                                    </gridLayout>
                                 );
                             }
                         }
@@ -304,13 +304,13 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
-                                    <$GridLayout
+                                    <gridLayout
                                         ref={ref}
                                         backgroundColor={new Color("yellow")}
                                         rows={[new ItemSpec(1, "star")]}
                                         columns={[new ItemSpec(1, "star"), new ItemSpec(64, "pixel")]}
                                     >
-                                        <$TextView
+                                        <textView
                                             paddingLeft={8}
                                             row={0}
                                             col={0}
@@ -319,15 +319,15 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                                             fontSize={12}
                                         >
                                             {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                                        </$TextView>
-                                        <$Image
+                                        </textView>
+                                        <image
                                             row={0}
                                             col={1}
                                             src={imgSource}
                                             style={this.styles.bigThumb}
                                             stretch={"aspectFill"}
                                         />
-                                    </$GridLayout>
+                                    </gridLayout>
                                 );
                             }
                         }
@@ -338,19 +338,19 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 //     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                 //     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
                 //     return (
-                //         <$GridLayout
+                //         <gridLayout
                 //             ref={ref}
                 //             rows={[new ItemSpec(1, "star")]}
                 //             columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                 //         >
-                //             <$Image
+                //             <image
                 //                 row={0}
                 //                 col={0}
                 //                 src={imgSource}
                 //                 style={this.styles.thumb}
                 //                 stretch={"aspectFill"}
                 //             />
-                //             <$Label
+                //             <label
                 //                 row={0}
                 //                 col={1}
                 //                 // key={container._domId}
@@ -358,8 +358,8 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 //                 fontSize={12}
                 //             >
                 //                 {`${item.index} - ${LOREM_IPSUM.substr(0, rowHash % 301 + 10)}`}
-                //             </$Label>
-                //         </$GridLayout>
+                //             </label>
+                //         </gridLayout>
                 //     );
                 // }}
             />

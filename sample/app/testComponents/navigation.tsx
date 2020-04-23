@@ -38,10 +38,10 @@ export class NestedHub extends React.Component<{
         const { forwardedRef, ...rest } = this.props;
         const greenPageRef = React.createRef<Page>();
         const redPageRef = React.createRef<Page>();
-        return (<$Page ref={forwardedRef} actionBarHidden={false} {...rest}>
-            <$ActionBar title="Hub" className="action-bar" />
-            <$StackLayout>
-                <$Button text={"Navigate to green page"} onTap={() => {
+        return (<page ref={forwardedRef} actionBarHidden={false} {...rest}>
+            <actionBar title="Hub" className="action-bar" />
+            <stackLayout>
+                <button text={"Navigate to green page"} onTap={() => {
                     const currentPage: Page = forwardedRef.current!;
                     currentPage.frame.navigate({
                         create: () => {
@@ -49,12 +49,12 @@ export class NestedHub extends React.Component<{
                         }
                     });
                 }} />
-            </$StackLayout>
+            </stackLayout>
 
             <PortalToPageWithActionBar forwardedRef={greenPageRef} actionBarTitle={"Green"} backgroundColor={"green"}>
-                <$StackLayout>
-                    <$Label>You're viewing the green page!</$Label>
-                    <$Button text={"Navigate to red page"} onTap={() => {
+                <stackLayout>
+                    <label>You're viewing the green page!</label>
+                    <button text={"Navigate to red page"} onTap={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.frame.navigate({
                             create: () => {
@@ -62,16 +62,16 @@ export class NestedHub extends React.Component<{
                             }
                         });
                     }} />
-                </$StackLayout>
+                </stackLayout>
 
             </PortalToPageWithActionBar>
 
             <PortalToPageWithActionBar forwardedRef={redPageRef} actionBarTitle={"Red"} backgroundColor={"red"}>
-                <$StackLayout>
-                    <$Label>You're viewing the red page!</$Label>
-                </$StackLayout>
+                <stackLayout>
+                    <label>You're viewing the red page!</label>
+                </stackLayout>
             </PortalToPageWithActionBar>
-        </$Page>);
+        </page>);
     }
 }
 export class NestedModalTest extends React.Component<{
@@ -81,10 +81,10 @@ export class NestedModalTest extends React.Component<{
         const { forwardedRef, ...rest } = this.props;
         const yellowPageRef = React.createRef<Page>();
         const greenPageRef = React.createRef<Page>();
-        return (<$Page ref={forwardedRef} actionBarHidden={false} {...rest}>
-            <$ActionBar title="Navigation Hub" className="action-bar" />
-            <$StackLayout>
-                <$Button text={"Open yellow modal"} onTap={() => {
+        return (<page ref={forwardedRef} actionBarHidden={false} {...rest}>
+            <actionBar title="Navigation Hub" className="action-bar" />
+            <stackLayout>
+                <button text={"Open yellow modal"} onTap={() => {
                     const currentPage: Page = forwardedRef.current!;
                     currentPage.showModal(yellowPageRef.current!, {
                         context: {},
@@ -93,12 +93,12 @@ export class NestedModalTest extends React.Component<{
                         stretched: false,
                     });
                 }} />
-            </$StackLayout>
+            </stackLayout>
 
             <PortalToPageWithActionBar forwardedRef={yellowPageRef} actionBarTitle={"Yellow page"} backgroundColor={"yellow"}>
-                <$StackLayout>
-                    <$Label>You're viewing the yellow page!</$Label>
-                    <$Button text={"Open green modal"} onTap={() => {
+                <stackLayout>
+                    <label>You're viewing the yellow page!</label>
+                    <button text={"Open green modal"} onTap={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.showModal(greenPageRef.current!, {
                             context: {},
@@ -107,23 +107,23 @@ export class NestedModalTest extends React.Component<{
                             stretched: false,
                         });
                     }} />
-                    <$Button text={"Close yellow modal"} onTap={() => {
+                    <button text={"Close yellow modal"} onTap={() => {
                         const currentPage: Page = yellowPageRef.current!;
                         currentPage.closeModal({});
                     }} />
-                </$StackLayout>
+                </stackLayout>
             </PortalToPageWithActionBar>
 
             <PortalToPageWithActionBar forwardedRef={greenPageRef} actionBarTitle={"Green page"} backgroundColor={"green"}>
-                <$StackLayout>
-                    <$Label>You're viewing the green page!</$Label>
-                    <$Button text={"Close green modal"} onTap={() => {
+                <stackLayout>
+                    <label>You're viewing the green page!</label>
+                    <button text={"Close green modal"} onTap={() => {
                         const currentPage: Page = greenPageRef.current!;
                         currentPage.closeModal({});
                     }} />
-                </$StackLayout>
+                </stackLayout>
             </PortalToPageWithActionBar>
-        </$Page>);
+        </page>);
     }
 }
 
@@ -222,10 +222,10 @@ export class PageWithActionBar extends React.Component<
         const { children, forwardedRef, actionBarTitle, ...rest } = this.props;
 
         return (
-            <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
-                <$ActionBar {...{ title: actionBarTitle }} />
+            <page ref={forwardedRef} actionBarHidden={false} {...rest} >
+                <actionBar {...{ title: actionBarTitle }} />
                 {children}
-            </$Page>
+            </page>
         );
     }
 }
@@ -241,17 +241,17 @@ export class PageWithComplexActionBarTest extends React.Component<
         const { children, forwardedRef, ...rest } = this.props;
 
         return (
-            <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
-                <$ActionBar>
+            <page ref={forwardedRef} actionBarHidden={false} {...rest} >
+                <actionBar>
                     {/* The Switch will become the titleView */}
-                    <$Switch/>
+                    <switch/>
                     {/* The ActionItem will be added to the actionItems array */}
-                    <$ActionItem text={"AI"} ios={{ position: "right", systemIcon: 4 }}></$ActionItem>
+                    <actionItem text={"AI"} ios={{ position: "right", systemIcon: 4 }}></actionItem>
                     {/* The NavigationButton will set as the NavigationButton (but won't be visible because there's no backwards navigation to do from here). */}
-                    <$NavigationButton text={"NB"}></$NavigationButton>
-                </$ActionBar>
+                    <navigationButton text={"NB"}></navigationButton>
+                </actionBar>
                 {children}
-            </$Page>
+            </page>
         );
     }
 }
@@ -309,28 +309,28 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
         const { forwardedRef } = this.props;
 
         return (
-            <$Page ref={forwardedRef} actionBarHidden={false}>
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Button
+            <page ref={forwardedRef} actionBarHidden={false}>
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <button
                         text={"Navigate to AbsoluteLayout"}
                         onTap={() => {
                             this.navigateToPage(this.absoluteLayoutPageRef.current, "AbsoluteLayout");
                         }}
                     />
-                    <$Button
+                    <button
                         text={"Navigate to DockLayout"}
                         onTap={() => {
                             this.navigateToPage(this.dockLayoutPageRef.current, "DockLayout");
                         }}
                     />
-                    <$Button
+                    <button
                         text={"Navigate to FlexboxLayout"}
                         onTap={() => {
                             this.navigateToPage(this.flexboxLayoutPageRef.current, "FlexboxLayout");
                         }}
                     />
-                </$StackLayout>
+                </stackLayout>
                 
                 <PortalToPage forwardedRef={this.absoluteLayoutPageRef} actionBarTitle={"AbsoluteLayout"}>
                     <AbsoluteLayoutTest/>
@@ -343,7 +343,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                 <PortalToPage forwardedRef={this.flexboxLayoutPageRef} actionBarTitle={"FlexboxLayout"}>
                     <FlexboxLayoutTest/>
                 </PortalToPage>
-            </$Page>
+            </page>
         );
     }
 }
@@ -369,10 +369,10 @@ export const PortalToPageWithActionBar: React.SFC<
     console.log(`[PortalToPageWithActionBar - "${actionBarTitle}"] createPortal() forwardedRef.current: ${forwardedRef.current}`);
     return ReactNativeScript.createPortal(
         (
-            <$Page ref={forwardedRef} actionBarHidden={false} {...rest} >
-                <$ActionBar title={actionBarTitle} className={"action-bar"}/>
+            <page ref={forwardedRef} actionBarHidden={false} {...rest} >
+                <actionBar title={actionBarTitle} className={"action-bar"}/>
                 {children}
-            </$Page>
+            </page>
         ),
         null,
         `Portal('${actionBarTitle}')`
@@ -405,10 +405,10 @@ export class StatefulPortalToPageWithActionBar extends React.Component<
 
         return ReactNativeScript.createPortal(
             (
-                <$Page actionBarHidden={false} {...rest} ref={forwardedRef} >
-                    <$ActionBar title={actionBarTitle} className={"action-bar"}/>
+                <page actionBarHidden={false} {...rest} ref={forwardedRef} >
+                    <actionBar title={actionBarTitle} className={"action-bar"}/>
                     {children}
-                </$Page>
+                </page>
             ),
             null,
             `Portal('${actionBarTitle}')`
@@ -422,10 +422,10 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <$Page ref={forwardedRef} actionBarHidden={false} {...rest}>
-                <$ActionBar title="Navigation Hub" className="action-bar" />
-                <$StackLayout>
-                    <$Button
+            <page ref={forwardedRef} actionBarHidden={false} {...rest}>
+                <actionBar title="Navigation Hub" className="action-bar" />
+                <stackLayout>
+                    <button
                         text={"Navigate to blue page"}
                         onTap={() => {
                             const currentPage: Page = forwardedRef.current!;
@@ -436,12 +436,12 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
                             });
                         }}
                     />
-                </$StackLayout>
+                </stackLayout>
                 
                 <PortalToPageWithActionBar forwardedRef={this.bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
-                    <$Label>You're viewing the blue page!</$Label>
+                    <label>You're viewing the blue page!</label>
                 </PortalToPageWithActionBar>
-            </$Page>
+            </page>
         );
     }
 }
@@ -466,11 +466,11 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<F
         const { forwardedRef, ...rest } = this.props;
 
         return (
-            <$Frame ref={forwardedRef} {...rest}>
+            <frame ref={forwardedRef} {...rest}>
                 <PortalToPageWithActionBar forwardedRef={this.bluePageRef} actionBarTitle={"Blue page"} backgroundColor={"blue"}>
-                    <$Label>You're viewing the blue page!</$Label>
+                    <label>You're viewing the blue page!</label>
                 </PortalToPageWithActionBar>
-            </$Frame>
+            </frame>
         );
     }
 }
@@ -506,7 +506,7 @@ export class FramedChildTest extends React.Component<
 
     render(){
         return (
-            <$Frame ref={this.props.forwardedRef}>
+            <frame ref={this.props.forwardedRef}>
                 {(
                     ReactNativeScript.createPortal(
                         (
@@ -516,7 +516,7 @@ export class FramedChildTest extends React.Component<
                         `Portal('FramedChild')`
                     )
                 )}
-            </$Frame>
+            </frame>
         );
     }
 }
@@ -553,19 +553,19 @@ export class FramedLayoutTest extends React.Component<{ forwardedRef: React.RefO
 
     render(){
         return (
-            <$Frame ref={this.props.forwardedRef}>
+            <frame ref={this.props.forwardedRef}>
                 {(
                     ReactNativeScript.createPortal(
                         (
-                            <$ContentView ref={this.layoutTestPageRef}>
+                            <contentView ref={this.layoutTestPageRef}>
                                 <DockLayoutTest/>
-                            </$ContentView>
+                            </contentView>
                         ),
                         null,
                         `Portal('Dock Layout Test')`
                     )
                 )}
-            </$Frame>
+            </frame>
         );
     }
 }
