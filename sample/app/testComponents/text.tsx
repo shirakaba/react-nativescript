@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Color } from "@nativescript/core";
 
-export class FormattedStringTest extends React.Component<{ forwardedRef: React.Ref<any> }, {}> {
+export class FormattedStringTest extends React.Component<{}, {}> {
     render(){
         return (
             <stackLayout
-                ref={this.props.forwardedRef}
                 style={{
                     backgroundColor: "gray",
                     height: "100%",

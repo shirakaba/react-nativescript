@@ -11,8 +11,6 @@ import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { DeletePropFromScrollViewTest } from "./propDeletion";
 import { FormattedStringTest } from './text';
 
-export const rootRef: React.RefObject<any> = React.createRef<any>();
-
 // const AppContainer = () => (
 //     <flexboxLayout flexDirection={"row"} height={40} backgroundColor={"purple"}>
 //         <flexboxLayout
@@ -35,13 +33,13 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 //     </flexboxLayout>
 // );
 
-// const AppContainer = () => <FramedLayoutTest forwardedRef={rootRef}/>
-// const AppContainer = () => <FramedHubTest forwardedRef={rootRef}/>
-// const AppContainer = () => <WebViewTest forwardedRef={rootRef}/>
-// const AppContainer = () => <stackLayout ref={rootRef}><DatePickerTest/></stackLayout>
+// const AppContainer = () => <FramedLayoutTest/>
+// const AppContainer = () => <FramedHubTest/>
+// const AppContainer = () => <WebViewTest/>
+// const AppContainer = () => <stackLayout><DatePickerTest/></stackLayout>
 
 // const AppContainer = () => (
-//     <FramedPageWithComplexActionBarTest forwardedRef={rootRef}>
+//     <FramedPageWithComplexActionBarTest>
 //         <stackLayout backgroundColor={"orange"}>
 //             <label>Hello, World!</label>
 //         </stackLayout>
@@ -49,13 +47,13 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // );
 
 // const AppContainer = () => (
-//     <SegmentedBarIssue forwardedRef={rootRef}/>
+//     <SegmentedBarIssue/>
 // );
 
 /* See the testComponents directory for many examples of components (and ref-forwarding). */
 // const AppContainer = () => (
 //     // Do NOT forget to pass in this rootRef, otherwise your app will crash on startup! :)
-//     <tabView ref={rootRef} selectedIndex={0}>
+//     <tabView selectedIndex={0}>
 //         <tabViewItem title={"One"}>
 //             <stackLayout height={{ value: 100, unit: "%"}} width={{ value: 100, unit: "%"}}>
 //                 <label>Uno</label>
@@ -70,7 +68,7 @@ export const rootRef: React.RefObject<any> = React.createRef<any>();
 // );
 
 const AppContainer = () => (
-    <FormattedStringTest forwardedRef={rootRef}/>
+    <FormattedStringTest/>
 );
 
 export default hot(AppContainer);

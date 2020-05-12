@@ -20,6 +20,7 @@ const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
+import { RNSRoot } from "./components/RNSRoot";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -105,12 +106,8 @@ export const unstable_batchedUpdates = reactReconcilerInst.batchedUpdates;
  * code will run after it (at least on iOS).
  *
  * @param app - Your <App/> component.
- * @param refToApp - ref to the root element of <App/>.
- *
- * You can create a ref like so:
- *   const refToApp: React.RefObject<any> = React.createRef<any>();
  */
-export function start(app: ReactReconciler.ReactNodeList, refToApp: React.RefObject<View>): void {
+export function start(app: ReactReconciler.ReactNodeList): void {
     const existingRootView: View | undefined = getRootView();
     const _hasLaunched: boolean = hasLaunched();
     console.log(
@@ -131,9 +128,10 @@ export function start(app: ReactReconciler.ReactNodeList, refToApp: React.RefObj
 
     run({
         create: () => {
-            render(app, null, () => console.log(`Container updated!`), "__APP_ROOT__");
+            const root = new RNSRoot();
+            render(app, root, () => console.log(`Container updated!`), "__APP_ROOT__");
 
-            return refToApp.current;
+            return root.baseRef as View;
         },
     });
 }
