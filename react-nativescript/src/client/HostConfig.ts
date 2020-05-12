@@ -54,6 +54,7 @@ import {
 } from "../shared/HostConfigTypes";
 import { FormattedString, Span } from "@nativescript/core";
 import { formattedTextProperty } from "tns-core-modules/ui/text-base/text-base";
+import { RNSRoot } from "../components/RNSRoot";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -533,8 +534,13 @@ const hostConfig: ReactReconciler.HostConfig<
         // TODO: check whether a property/event change should be fired.
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
+        if(container instanceof RNSRoot){
+            console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
+            container.setBaseRef(child);
+            return;
+        }
         console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
-        hostConfig.appendChild(container, child);
+        hostConfig.appendChild(container as View, child);
         // TODO: check whether a property/event change should be fired.
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
@@ -859,6 +865,10 @@ const hostConfig: ReactReconciler.HostConfig<
         }
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
+        if(container instanceof RNSRoot){
+            container.setBaseRef(null);
+            return;
+        }
         console.log(`[removeChildFromContainer()] deferring to removeChild(): ${container} > ${child}`);
         return hostConfig.removeChild(container, child);
     },

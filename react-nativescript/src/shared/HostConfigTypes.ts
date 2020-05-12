@@ -1,28 +1,17 @@
 import {
-    ActionBar,
     TNSElements,
-    elementMap,
-    ConcreteViewConstructor,
-    ContentView,
-    GridLayout,
-    LayoutBase,
-    Page,
+} from "../client/ElementRegistry";
+import {
     TextBase,
-    TextView,
     View,
     ViewBase,
-    TabView,
-    TabViewItem,
-    SegmentedBar,
-    ScrollView,
-    ActionItem,
-    NavigationButton,
-} from "../client/ElementRegistry";
-import { Span } from "tns-core-modules/text/span";
+    Span,
+} from "@nativescript/core";
+import { RNSRoot } from "../components/RNSRoot";
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;
 export type Props = any;
-export type Container = View; // The root node of the app. Typically Frame, but View is more flexible.
+export type Container = View | RNSRoot; // The root node of the app. Typically Frame, but View is more flexible.
 /* Of which only LayoutBase|ContentView can take child Views (e.g. TextBase can't, but CAN take child texts; and there are special cases like ActionBar). */
 export type Instance = ViewBase;
 export type TextInstance = TextBase | Span;
