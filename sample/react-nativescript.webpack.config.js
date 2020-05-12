@@ -31,10 +31,6 @@ module.exports = (env) => {
 
     const baseConfig = webpackConfig(env);
 
-    // Omit `ts` from the hot-loader test as we'll be providing Fast Refresh instead.
-    const hotLoader = baseConfig.module.rules.filter(rule => rule.use === "nativescript-dev-webpack/hmr/hot-loader")[0];
-    hotLoader.test = /\.(css|scss|html|xml)$/;
-
     // Remove ts-loader as we'll be using Babel to transpile the TypeScript instead.
     baseConfig.module.rules = baseConfig.module.rules.filter((rule) => {
         return rule.loader !== "ts-loader";
