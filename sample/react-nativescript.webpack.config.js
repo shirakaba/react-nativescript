@@ -62,6 +62,7 @@ module.exports = (env) => {
             ...existingDefinePlugin.definitions,
             /* For various libraries in the React ecosystem. */
             "__DEV__": production ? "false" : "true",
+            "__TEST__": "false",
             ...(
                 hmr ?
                     {
