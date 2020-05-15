@@ -4,8 +4,9 @@ import {
     ViewBase as TNSViewBase,
 } from '@nativescript/core'
 import { NSVElement, NSVViewFlags } from './nodes'
-import { actionBarNodeOps } from './components/ActionBar'
-import { warn } from '@vue/runtime-core'
+// import { actionBarNodeOps } from './components/ActionBar'
+// import { warn } from '@vue/runtime-core'
+const warn = console.warn.bind(console);
 
 export type NSVElementResolver = () => TNSViewBase
 
@@ -142,15 +143,16 @@ if (!__TEST__) {
         { viewFlags: NSVViewFlags.CONTENT_VIEW }
     )
 
-    // ActionBar
-    registerElement(
-        'InternalActionBar',
-        () => require('@nativescript/core').ActionBar,
-        {
-            viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
-            nodeOps: actionBarNodeOps
-        }
-    )
+    /** TODO */
+    // // ActionBar
+    // registerElement(
+    //     'InternalActionBar',
+    //     () => require('@nativescript/core').ActionBar,
+    //     {
+    //         viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
+    //         nodeOps: actionBarNodeOps
+    //     }
+    // )
     registerElement(
         'ActionItem',
         () => require('@nativescript/core').ActionItem
@@ -247,6 +249,7 @@ if (!__TEST__) {
             }
         }
     )
+    /** TODO */
     registerElement(
         'InternalListView',
         () => require('@nativescript/core').ListView,

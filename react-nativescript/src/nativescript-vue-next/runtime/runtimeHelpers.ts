@@ -1,4 +1,3 @@
-declare var __DEV__: boolean;
 export const ELEMENT_REF = Symbol(__DEV__ ? `elementRef` : ``)
 
 export const isAndroidKey = (key: string) =>
