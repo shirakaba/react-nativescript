@@ -101,44 +101,44 @@ export function isKnownView(elementName: string): boolean {
 if (!__TEST__) {
     // layouts
     registerElement(
-        'AbsoluteLayout',
+        'absoluteLayout',
         () => require('@nativescript/core').AbsoluteLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
     registerElement(
-        'DockLayout',
+        'dockLayout',
         () => require('@nativescript/core').DockLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
     registerElement(
-        'FlexboxLayout',
+        'flexboxLayout',
         () => require('@nativescript/core').FlexboxLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
     registerElement(
-        'GridLayout',
+        'gridLayout',
         () => require('@nativescript/core').GridLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
     registerElement(
-        'StackLayout',
+        'stackLayout',
         () => require('@nativescript/core').StackLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
     registerElement(
-        'WrapLayout',
+        'wrapLayout',
         () => require('@nativescript/core').WrapLayout,
         { viewFlags: NSVViewFlags.LAYOUT_VIEW }
     )
 
     // ContentViews
     registerElement(
-        'ContentView',
+        'contentView',
         () => require('@nativescript/core').ContentView,
         { viewFlags: NSVViewFlags.CONTENT_VIEW }
     )
     registerElement(
-        'ScrollView',
+        'scrollView',
         () => require('@nativescript/core').ScrollView,
         { viewFlags: NSVViewFlags.CONTENT_VIEW }
     )
@@ -146,7 +146,7 @@ if (!__TEST__) {
     /** TODO */
     // // ActionBar
     // registerElement(
-    //     'InternalActionBar',
+    //     'internalActionBar',
     //     () => require('@nativescript/core').ActionBar,
     //     {
     //         viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
@@ -154,17 +154,17 @@ if (!__TEST__) {
     //     }
     // )
     registerElement(
-        'ActionItem',
+        'actionItem',
         () => require('@nativescript/core').ActionItem
     )
     registerElement(
-        'NavigationButton',
+        'navigationButton',
         () => require('@nativescript/core').NavigationButton
     )
 
     // navigation
     registerElement(
-        'Frame',
+        'frame',
         () => require('@nativescript/core').Frame,
         {
             // todo: move into Frame.ts when we end up creating a component for Frame
@@ -193,32 +193,32 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'Page',
+        'page',
         () => require('@nativescript/core').Page,
         { viewFlags: NSVViewFlags.CONTENT_VIEW }
     )
 
     // html
     registerElement(
-        'HtmlView',
+        'htmlView',
         () => require('@nativescript/core').HtmlView
     )
     registerElement(
-        'WebView',
+        'webView',
         () => require('@nativescript/core').WebView
     )
 
     // components
     registerElement(
-        'ActivityIndicator',
+        'activityIndicator',
         () => require('@nativescript/core').ActivityIndicator
     )
     registerElement(
-        'Button',
+        'button',
         () => require('@nativescript/core').Button
     )
     registerElement(
-        'DatePicker',
+        'datePicker',
         () => require('@nativescript/core').DatePicker,
         {
             model: {
@@ -228,19 +228,19 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'FormattedString',
+        'formattedString',
         () => require('@nativescript/core').FormattedString
     )
     registerElement(
-        'Image',
+        'image',
         () => require('@nativescript/core').Image
     )
     registerElement(
-        'Label',
+        'label',
         () => require('@nativescript/core').Label
     )
     registerElement(
-        'ListPicker',
+        'listPicker',
         () => require('@nativescript/core').ListPicker,
         {
             model: {
@@ -251,22 +251,22 @@ if (!__TEST__) {
     )
     /** TODO */
     registerElement(
-        'InternalListView',
+        'internalListView',
         () => require('@nativescript/core').ListView,
         {
             viewFlags: NSVViewFlags.NO_CHILDREN
         }
     )
     registerElement(
-        'Placeholder',
+        'placeholder',
         () => require('@nativescript/core').Placeholder,
     )
     registerElement(
-        'Progress',
+        'progress',
         () => require('@nativescript/core').Progress
     )
     registerElement(
-        'SearchBar',
+        'searchBar',
         () => require('@nativescript/core').SearchBar,
         {
             model: {
@@ -276,7 +276,7 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'SegmentedBar',
+        'segmentedBar',
         () => require('@nativescript/core').SegmentedBar,
         {
             model: {
@@ -286,11 +286,11 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'SegmentedBarItem',
+        'segmentedBarItem',
         () => require('@nativescript/core').SegmentedBarItem,
     )
     registerElement(
-        'Slider',
+        'slider',
         () => require('@nativescript/core').Slider,
         {
             model: {
@@ -300,11 +300,11 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'Span',
+        'span',
         () => require('@nativescript/core').Span,
     )
     registerElement(
-        'Switch',
+        'switch',
         () => require('@nativescript/core').Switch,
         {
             model: {
@@ -314,7 +314,7 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'TextField',
+        'textField',
         () => require('@nativescript/core').TextField,
         {
             model: {
@@ -324,7 +324,7 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'TextView',
+        'textView',
         () => require('@nativescript/core').TextView,
         {
             model: {
@@ -334,7 +334,7 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'TimePicker',
+        'timePicker',
         () => require('@nativescript/core').TimePicker,
         {
             model: {
