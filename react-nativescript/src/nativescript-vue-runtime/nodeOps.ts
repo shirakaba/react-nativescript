@@ -1,4 +1,3 @@
-import { RendererOptions } from '@vue/runtime-core'
 import {
     INSVElement,
     INSVNode,
@@ -8,49 +7,52 @@ import {
     NSVText
 } from './nodes'
 
-export interface NSVNodeOps
-    extends Omit<RendererOptions<INSVNode, INSVElement>, 'patchProp'> {
-    createRoot(): NSVRoot
-}
-
-export const nodeOps: NSVNodeOps = {
-    createRoot() {
-        return new NSVRoot()
+/**
+ * An implementation of RendererOptions from '@vue/runtime-core'.
+ * @see https://github.com/vuejs/vue-next/blob/e56d33edb1d42b4957a28538cd8d6302685072ac/packages/runtime-core/src/renderer.ts#L83
+ */
+export const nodeOps = {
+    createRoot(): NSVRoot {
+        return new NSVRoot();
     },
-    createComment(text) {
-        return new NSVComment(text)
+    createComment(text: string): INSVNode {
+        return new NSVComment(text);
     },
-    createElement(type, isSVG) {
-        return new NSVElement(type)
+    createElement(type: string, isSVG: boolean = false): INSVElement {
+        return new NSVElement(type);
     },
-    createText(text) {
-        return new NSVText(text)
+    createText(text: string): INSVNode {
+        return new NSVText(text);
     },
-    nextSibling(node) {
-        return node.nextSibling
+    nextSibling(node: INSVNode): INSVNode|null {
+        return node.nextSibling;
     },
-    parentNode(node) {
-        return node.parentNode
+    parentNode(node: INSVNode): INSVElement|null {
+        return node.parentNode;
     },
-    insert(child, parent, anchor) {
+    insert(child: INSVNode, parent: INSVElement, anchor: INSVNode|null = null): void {
         if (anchor !== null) {
-            parent.insertBefore(child, anchor)
+            parent.insertBefore(child, anchor);
         } else {
-            parent.appendChild(child)
+            parent.appendChild(child);
         }
     },
-    remove(el) {
+    remove(el: INSVElement): void {
         if (el.parentNode != null) {
-            el.parentNode.removeChild(el)
+            el.parentNode.removeChild(el);
         }
     },
-    setElementText(node, text) {
-        node.text = text
+    setElementText(node: INSVElement, text: string): void {
+        node.text = text;
     },
-    setText(node, text) {
-        node.text = text
+    setText(node: INSVNode, text: string): void {
+        node.text = text;
     },
-    setScopeId(el, id) {
-        el.setAttribute(id, '')
+    setScopeId(el: INSVElement, id: string): void {
+        el.setAttribute(id, '');
     }
-}
+} as const;
+
+export type NSVNodeOps = typeof nodeOps;
+
+// TODO: patchProp() as separate function
