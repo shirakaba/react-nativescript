@@ -8,7 +8,13 @@ import { ELEMENT_REF } from './runtimeHelpers';
 import { debug } from '../shared';
 import { ViewBase, LayoutBase, Style } from '@nativescript/core'
 import { unsetValue } from '@nativescript/core/ui/core/properties'
-import set from 'set-value'
+/* 
+ * I had some difficulty importing this as:
+ *   import set from 'set-value';
+ * I believe that turning on `"esModuleInterop": true` in tsconfig.json would allow us to use the default import.
+ * But maybe this is just a problem in the Webpack domain.
+ */
+import set = require('set-value');
 
 // import unset from 'unset-value'
 
