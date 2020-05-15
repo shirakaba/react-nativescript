@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "react-reconciler": "0.24.0",
-    "scheduler": "0.18.0"
+    "scheduler": "0.18.0",
+    "set-value": "^3.0.2"
   },
   "devDependencies": {
     "@types/react": "16.9.34",
