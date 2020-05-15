@@ -20,7 +20,7 @@ const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
-import { RNSRoot } from "./components/RNSRoot";
+import { NSVRoot } from "./nativescript-vue-next/runtime/nodes";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
@@ -128,10 +128,10 @@ export function start(app: ReactReconciler.ReactNodeList): void {
 
     run({
         create: () => {
-            const root = new RNSRoot();
+            const root = new NSVRoot();
             render(app, root, () => console.log(`Container updated!`), "__APP_ROOT__");
 
-            return root.baseRef as View;
+            return root.baseRef.nativeView as View;
         },
     });
 }

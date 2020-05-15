@@ -50,13 +50,7 @@ function setTextContent(node: Instance, text: string): void {
     //     }
     // }
 
-    if (node instanceof TextBase || node instanceof Span) {
-        node.text = text;
-    } else {
-        console.warn(
-            `setTextContent() content incorrectly called on component that was neither a TextBase nor a Span!`
-        );
-    }
+    node.text = text;
 }
 
 export function setInitialProperties(

@@ -55,7 +55,7 @@ export interface INSVElement extends INSVNode {
     addEventListener(
         event: string,
         handler: any,
-        options: AddEventListenerOptions
+        options?: AddEventListenerOptions
     ): void
 
     removeEventListener(event: string, handler?: any): void

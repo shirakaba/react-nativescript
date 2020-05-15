@@ -1,13 +1,6 @@
 import {
     TNSElements,
 } from "../client/ElementRegistry";
-import {
-    TextBase,
-    View,
-    ViewBase,
-    Span,
-} from "@nativescript/core";
-import { RNSRoot } from "../components/RNSRoot";
 import { NSVText, NSVRoot, INSVElement } from "../nativescript-vue-next/runtime/nodes";
 
 export type Type = TNSElements | React.JSXElementConstructor<any>;

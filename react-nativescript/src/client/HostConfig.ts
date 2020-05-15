@@ -13,12 +13,6 @@
 // import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from "react-reconciler";
 import * as scheduler from "scheduler";
-import {
-    TNSElements,
-    ContentView,
-    Page,
-    ScrollView,
-} from "./ElementRegistry";
 import { isKnownView } from "../nativescript-vue-next/runtime/registry";
 import { precacheFiberNode, updateFiberProps } from "./ComponentTree";
 import { diffProperties, updateProperties, setInitialProperties } from "./ReactNativeScriptComponent";
@@ -207,7 +201,7 @@ const hostConfig: ReactReconciler.HostConfig<
             const componentFunction: React.Component<Props, {}> = new (type as any)(props);
             const createdElement = componentFunction.render() as React.ReactElement<
                 Props,
-                React.JSXElementConstructor<any> | TNSElements
+                React.JSXElementConstructor<any> | string
             >;
 
             return hostConfig.createInstance(
