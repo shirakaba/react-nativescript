@@ -5,7 +5,7 @@ import {
     NSVElement,
     NSVRoot,
     NSVText
-} from './nodes'
+} from './nodes';
 
 /**
  * An implementation of RendererOptions from '@vue/runtime-core'.

@@ -4,11 +4,14 @@ import {
     normalizeElementName,
     NSVViewMeta,
 } from './registry'
-import { ELEMENT_REF } from '@nativescript-vue/runtime'
-import { debug } from '@nativescript-vue/shared'
+import { ELEMENT_REF } from './runtimeHelpers';
+import { debug } from '../nativescript-vue-shared';
 import { ViewBase, LayoutBase, Style } from '@nativescript/core'
 import { unsetValue } from '@nativescript/core/ui/core/properties'
 import set from 'set-value'
+
+declare var __TEST__: boolean;
+
 // import unset from 'unset-value'
 
 // import {isContentView, isLayout} from "./index";
@@ -61,7 +64,12 @@ export interface INSVElement extends INSVNode {
 
     dispatchEvent(event: string): void
 
-    nativeView: (ViewBase | LayoutBase) & { [ELEMENT_REF]: INSVElement }
+    /**
+     * Not sure of the purpose of ELEMENT_REF just yet.
+     * Comes from: import { ELEMENT_REF } from '@nativescript-vue/runtime';
+     */
+    // nativeView: (ViewBase | LayoutBase) & { [ELEMENT_REF]: INSVElement }
+    nativeView: (ViewBase | LayoutBase);
 
     getAttribute(name: string): unknown
 
