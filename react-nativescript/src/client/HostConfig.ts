@@ -14,31 +14,14 @@
 import * as ReactReconciler from "react-reconciler";
 import * as scheduler from "scheduler";
 import {
-    ActionBar,
     TNSElements,
-    elementMap,
-    ConcreteViewConstructor,
     ContentView,
-    GridLayout,
-    LayoutBase,
     Page,
-    TextBase,
-    TextView,
-    View,
-    ViewBase,
-    TabView,
-    TabViewItem,
-    SegmentedBar,
     ScrollView,
-    ActionItem,
-    NavigationButton,
 } from "./ElementRegistry";
+import { isKnownView } from "../nativescript-vue-next/runtime/registry";
 import { precacheFiberNode, updateFiberProps } from "./ComponentTree";
 import { diffProperties, updateProperties, setInitialProperties } from "./ReactNativeScriptComponent";
-import { validateDOMNesting, updatedAncestorInfo } from "./validateDOMNesting";
-import { setValueForStyles } from "../shared/CSSPropertyOperations";
-import { setValueForProperty } from "./NativeScriptPropertyOperations";
-import { SegmentedBarItem } from "tns-core-modules/ui/segmented-bar/segmented-bar";
 import * as console from "../shared/Logger";
 import {
     HostContext,
@@ -49,12 +32,8 @@ import {
     TextInstance,
     HydratableInstance,
     PublicInstance,
-    InstanceCreator,
-    implementsCustomNodeHierarchyManager,
 } from "../shared/HostConfigTypes";
-import { FormattedString, Span } from "@nativescript/core";
-import { formattedTextProperty } from "tns-core-modules/ui/text-base/text-base";
-import { RNSRoot } from "../components/RNSRoot";
+import { NSVElement, NSVText, NSVRoot } from "../nativescript-vue-next/runtime/nodes";
 
 type UpdatePayload = {
     hostContext: HostContext;
@@ -64,74 +43,6 @@ type ChildSet = any;
 type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
-
-function isASingleChildContainer(view: Instance): view is Page | ContentView | ScrollView {
-    return view instanceof ContentView || view instanceof Page || view instanceof ScrollView;
-}
-
-// function handleChildrenProp(
-//     type: Type,
-//     props: Props,
-//     rootContainerInstance: Container,
-//     hostContext: HostContext,
-//     internalInstanceHandle: ReactReconciler.OpaqueHandle,
-//     view: View,
-//     value: any,
-// ){
-//     if(value === null){
-//         // No children specified.
-//         return;
-//     }
-//     if(Array.isArray(value)){
-//         console.warn(`'children' value was array; support is experimental!`);
-//     }
-
-//     const valueArray: any[] = Array.isArray(value) ? value : [value];
-
-//     valueArray.forEach((value: any) => {
-//         if(hostConfig.shouldSetTextContent(type, props)){
-//             if(view instanceof TextBase){
-//                 // WARNING: unsure that this is how you're supposed to use HostConfig.
-//                 hostConfig.commitTextUpdate(view, "", value);
-//                 console.log(`[createInstance() 1e] type: ${type}. after commitTextUpdate():`, view.text);
-//             } else {
-//                 const tv: TextView = hostConfig.createTextInstance(value, rootContainerInstance, hostContext, internalInstanceHandle) as TextView;
-
-//                 console.warn(`Support for setting textContent of a non-TextBase view is experimental.`);
-//                 hostConfig.appendChild(view, tv);
-//             }
-//         } else {
-//             if(!value){
-//                 console.warn(`'children' prop's value was ${value}, so skipping.`);
-//                 return;
-//             }
-
-//             // console.log(`value:`, value);
-//             const prospectiveChild = value as React.ReactElement<any, string>;
-
-//             (()=>{
-//                 const { children, ...rest } = prospectiveChild.props;
-//                 console.warn(`Support for nesting children is experimental. child type: ${prospectiveChild.type}. props:`, { ...rest });
-//             })();
-
-//             if(!prospectiveChild.type){
-//                 console.warn(`The value of 'prospectiveChild.type' was ${value}, so skipping.`);
-//                 return;
-//             }
-
-//             const instanceFromChild: ViewBase|TextBase = hostConfig.createInstance(
-//                 prospectiveChild.type as Type,
-//                 prospectiveChild.props,
-//                 rootContainerInstance,
-//                 hostContext,
-//                 internalInstanceHandle
-//             );
-//             hostConfig.appendChild(view, instanceFromChild);
-
-//             // hostConfig.appendChild(view, value);
-//         }
-//     });
-// }
 
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<
@@ -280,21 +191,10 @@ const hostConfig: ReactReconciler.HostConfig<
         console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
 
         let view: Instance;
-        const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
-        if (viewConstructor) {
-            view = viewConstructor(props, rootContainerInstance, hostContext);
-            /**
-             * NativeScript Core does actually allow you to nest elements in these cases (they just don't get rendered),
-             * but I'd prefer RNS to throw an explicit error here.
-             */
-            if (hostContext.isInAParentFormattedString && view instanceof Span === false) {
-                throw new Error(`The only child element that should be nested inside a FormattedString is a Span.`);
-            }
-            if (hostContext.isInAParentText && view instanceof FormattedString === false) {
-                throw new Error(
-                    `The only child element that should be nested inside a TextBase is a FormattedString or a text node.`
-                );
-            }
+        
+        // const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
+        if (typeof type === "string" && isKnownView(type)) {
+            view = new NSVElement(type);
             precacheFiberNode(internalInstanceHandle, view);
             updateFiberProps(view, props);
         } else {
@@ -318,47 +218,6 @@ const hostConfig: ReactReconciler.HostConfig<
                 internalInstanceHandle
             );
         }
-
-        if (hostContext.isInADockLayout && !props.dock) {
-            console.warn(
-                `Components in a DockLayout should bear the 'dock' property. Undefined behaviour if they don't!`
-            );
-        }
-        if (hostContext.isInAGridLayout && (typeof props.row === "undefined" || typeof props.col === "undefined")) {
-            console.warn(
-                `Components in a GridLayout should bear both the 'row' and 'col' properties. Undefined behaviour if they don't!`
-            );
-        }
-        if (hostContext.isInAnAbsoluteLayout && (!props.left || !props.top)) {
-            console.warn(
-                `Components in a GridLayout should bear both the 'top' and 'left' properties, passed as a property rather than a style. Undefined behaviour if they don't!`
-            );
-        }
-
-        // console.log(`[createInstance() 1c] type: ${type}. constructed:`, view);
-        // Object.keys(props).forEach((prop: string) => {
-        //     const value: any = props[prop];
-
-        //     /*
-        //         Note that in this situation, only <span>One</span> will be shown. Probably handled before it reaches the Host Config though:
-        //           <div children={[<span>Two</span>, <span>Three</span>]}>
-        //             <span>One</span>
-        //         </div>
-        //     */
-        //     if(prop === "children"){
-        //         return handleChildrenProp(
-        //             type,
-        //             props,
-        //             rootContainerInstance,
-        //             hostContext,
-        //             internalInstanceHandle,
-        //             view,
-        //             value
-        //         );
-        //     } else {
-        //         setValueForProperty(view, prop, value, false);
-        //     }
-        // });
 
         /* finalizeInitialChildren() > setInitialProperties() shall handle props, just as in React DOM. */
 
@@ -412,19 +271,11 @@ const hostConfig: ReactReconciler.HostConfig<
                 `React NativeScript's Host Config only supports rendering text nodes as direct children of one of the primitives ["label", "textView", "textField", "button", "span"]. Please use the 'text' property for setting text on this element instead.`
             );
         }
-        // See createInstance().
 
-        /* Is TextView the most appropriate here? RN uses RCTRawText.
-         * Alternative is TextField or Label. TextBase just a base class.
-         * Medium tutorial uses: document.createTextNode(text); */
-        const textView: TextView = new TextView();
-        textView.text = text;
-        precacheFiberNode(internalInstanceHandle, textView);
+        const textNode = new NSVText(text);
+        precacheFiberNode(internalInstanceHandle, textNode as Instance);
 
-        // TODO: maybe inherit the style information from container..?
-        // TODO: also merge in the hostContext (whatever that is).
-
-        return textView;
+        return textNode;
     },
     // scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
     //     // TODO: check whether default timeout should be 0.
@@ -456,102 +307,22 @@ const hostConfig: ReactReconciler.HostConfig<
             );
             return;
         }
-        if (implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigAppendChild) {
-            console.log(`[appendChild()] Deferring to customHostConfigAppendChild(): ${parentInstance} > ${child}`);
-            const handled: boolean = parentInstance.__customHostConfigAppendChild(parentInstance, child);
-            if (handled) {
-                return;
-            }
-            console.log(
-                `[appendChild()] Deferral to customHostConfigAppendChild() didn't handle, so handling with default implementation: ${parent} > ${child}`
-            );
-        }
 
-        if (child instanceof Page) {
-            console.warn(
-                `[appendChild()] Page cannot be appended as a true child; no-op for: ${parentInstance} > ${child}`
-            );
-            return;
-        } else if (child instanceof ActionBar && parentInstance instanceof Page) {
-            console.log(`[appendChild()] (Page receiving ActionBar) ${parentInstance} > ${child}`);
-            parentInstance.actionBar = child;
-            return;
-        } else if (child instanceof FormattedString) {
-            if(parentInstance instanceof TextBase){
-                console.log(`[appendChild()] (TextBase receiving FormattedString) ${parentInstance} > ${child}`);
-                parentInstance.formattedText = child;
-            } else {
-                console.log(`[appendChild()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parentInstance} > ${child}`);
-            }
-            return;
-        } else if (isASingleChildContainer(parentInstance)) {
-            console.log(`[appendChild()] (single-child container) ${parentInstance} > ${child}`);
-            /* These elements were originally designed to hold one element only:
-             * https://stackoverflow.com/a/55351086/5951226 */
-
-            parentInstance.content = child as View;
-        } else if (parentInstance instanceof LayoutBase) {
-            console.log(`[appendChild()] (instance of LayoutBase) ${parentInstance} > ${child}`);
-            parentInstance.addChild(child as View);
-        } else if (parentInstance instanceof ActionBar) {
-            if (child instanceof ActionItem) {
-                if (child instanceof NavigationButton) {
-                    console.log(`[appendChild()] (instance of NavigationButton) ${parentInstance} > ${child}`);
-                    parentInstance.navigationButton = child;
-                } else if (child instanceof ActionItem) {
-                    console.log(`[appendChild()] (instance of ActionItem) ${parentInstance} > ${child}`);
-                    parentInstance.actionItems.addItem(child);
-                }
-            } else {
-                // Take to be titleView
-                console.log(`[appendChild()] (not ActionItem; assumed to be titleView) ${parentInstance} > ${child}`);
-                parentInstance.titleView = child as View;
-            }
-        } else if (parentInstance instanceof ActionItem) {
-            // Same for both ActionItem and NavigationButton.
-            parentInstance.actionView = child as View;
-        } else if (parentInstance instanceof TabView && child instanceof TabViewItem) {
-            console.log(
-                `[appendChild()] Remapping TabViewItem from child to item: ${parentInstance} > ${child}, where the child's view was ${child.view} and the parent's items were:`,
-                parentInstance.items
-            );
-            /* We must go through the setter rather than simply mutate the existing array. */
-            const newItems = [...(parentInstance.items || []), child];
-            parentInstance.items = newItems;
-            // console.log(`[appendChild()] parentInstance.items now updated to:`, parentInstance.items);
-        } else if (parentInstance instanceof TabViewItem) {
-            console.log(`[appendChild()] (instance of TabViewItem) ${parentInstance} > ${child}`);
-            parentInstance.view = child as View;
-        } else if (parentInstance instanceof FormattedString) {
-            if(child instanceof Span){
-                console.log(`[appendChild()] FormattedString > Span`);
-                parentInstance.spans.push(child);
-            }
-        } else {
-            console.log(`[appendChild()] (default clause) ${parentInstance} > ${child}`);
-            parentInstance._addView(child);
-        }
-        // TODO: check whether a property/event change should be fired.
+        parentInstance.appendChild(child);
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-        if(container instanceof RNSRoot){
+        if(container instanceof NSVRoot){
             console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
             container.setBaseRef(child);
             return;
         }
-        console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
-        hostConfig.appendChild(container as View, child);
-        // TODO: check whether a property/event change should be fired.
+
+        console.log(`[appendChildToContainer()] proceeding: ${container} > ${child}`);
+        container.appendChild(child);
     },
     commitTextUpdate(textInstance: TextInstance, oldText: string, newText: string): void {
         console.log(`[commitTextUpdate()]`, textInstance);
-        /**
-         * At some point, we will need to provide a way for people to inherit this behaviour when extending text primitives.
-         */
-        if (textInstance instanceof TextBase || textInstance instanceof Span) {
-            textInstance.text = newText;
-        }
-        // Note: we used to do a notifyPropertyChange() here, but I think it's redundant due to the way Property establishes setters upon each class prototype.
+        textInstance.text = newText;
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-2/
@@ -569,7 +340,7 @@ const hostConfig: ReactReconciler.HostConfig<
         internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): void {
         console.log(`commitMount() with type: ${type}`, instance);
-        (instance as View).focus();
+        // (instance as View).focus();
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-3/
@@ -657,94 +428,7 @@ const hostConfig: ReactReconciler.HostConfig<
     insertBefore(parentInstance: Instance, child: Instance | TextInstance, beforeChild: Instance | TextInstance): void {
         console.log(`[HostConfig.insertBefore] ${parentInstance} > ${child} beforeChild ${beforeChild}`);
 
-        if (implementsCustomNodeHierarchyManager(parentInstance) && parentInstance.__customHostConfigInsertBefore) {
-            console.log(
-                `[insertBefore()] Deferring to customHostConfigInsertBefore(): ${parentInstance} > ${child} beforeChild ${beforeChild}`
-            );
-            const handled: boolean = parentInstance.__customHostConfigInsertBefore(parentInstance, child, beforeChild);
-            if (handled) {
-                return;
-            }
-            console.log(
-                `[insertBefore()] Deferral to customHostConfigInsertBefore() didn't handle, so handling with default implementation: ${parentInstance} > ${child} beforeChild ${beforeChild}`
-            );
-        }
-
-        if (child instanceof FormattedString) {
-            if(parentInstance instanceof TextBase){
-                console.log(`[HostConfig.insertBefore()] (TextBase receiving FormattedString); I only support a single child, so we'll delete any incumbent. ${parentInstance} > ${child}`);
-                parentInstance.formattedText = child;
-            } else {
-                console.log(`[HostConfig.insertBefore()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parentInstance} > ${child}`);
-            }
-            return;
-        } else if (parentInstance instanceof LayoutBase) {
-            /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
-            if (parentInstance instanceof GridLayout) {
-                console.warn(
-                    `HostConfig.insertBefore() LayoutBase implementation has not been tested specifically for GridLayout!`
-                );
-                // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
-            }
-
-            /* Implementation from:
-             * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L164
-             * https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/utils.js#L32
-             */
-            if (child.parent === parentInstance) {
-                const index: number = parentInstance.getChildIndex(child as View);
-                if (index !== -1) {
-                    console.log(
-                        `[HostConfig.insertBefore] Provisionally calling ${parentInstance}.removeChild(${child}).`
-                    );
-                    parentInstance.removeChild(child as View);
-                }
-            }
-
-            const atIndex: number = parentInstance.getChildIndex(beforeChild as View);
-            if (atIndex === -1) {
-                console.log(
-                    `[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.addChild(${child})`
-                );
-                parentInstance.addChild(child as View);
-            } else {
-                console.log(
-                    `[HostConfig.insertBefore] calculated atIndex as ${atIndex}; shall call: ${parentInstance}.insertChild(${child}, ${atIndex})`
-                );
-                parentInstance.insertChild(child as View, atIndex);
-            }
-        } else if (parentInstance instanceof FormattedString) {
-            if(child instanceof Span && beforeChild instanceof Span){
-                console.log(`[HostConfig.insertBefore] FormattedString > Span`);
-                const beforeChildIndex: number = parentInstance.spans.indexOf(beforeChild);
-                parentInstance.spans.splice(beforeChildIndex, 0); // TODO: check for off-by-one error
-            }
-        } else {
-            console.warn(
-                `[HostConfig.insertBefore] parentInstance was not a LayoutBase, so deferring to hostConfig.appendChild() with: ${parentInstance} > ${child} beforeChild ${beforeChild}`
-            );
-            hostConfig.appendChild(parentInstance, child);
-        }
-
-        // /* TODO: implement this for GridLayout, if feeling brave! An example use case (and test case) would help. */
-        // if(parentInstance instanceof GridLayout){
-        //     console.warn(`HostConfig.insertBefore() not implemented for GridLayout!`);
-        //     // addChildAtCell(view: View, row: number, column: number, rowSpan?: number, columnSpan?: number): void;
-        // }
-
-        // // TODO: Refer to {N}Vue's implementation: https://github.com/nativescript-vue/nativescript-vue/blob/master/platform/nativescript/renderer/ViewNode.js#L157
-        // let beforeChildIndex: number = 0;
-        // parentInstance.eachChild((viewBase: ViewBase) => {
-        //     if(viewBase === beforeChild){
-        //         return false;
-        //     } else {
-        //         beforeChildIndex++;
-        //         return true;
-        //     }
-        // });
-
-        // console.log(`[HostConfig.insertBefore] calculated beforeChildIndex as ${beforeChildIndex}; shall call: ${parentInstance}._addView(${child}, ${beforeChildIndex})`);
-        // parentInstance._addView(child, beforeChildIndex);
+        parentInstance.insertBefore(child, beforeChild);
     },
     /**
      * From: https://blog.atulr.com/react-custom-renderer-3/
@@ -758,8 +442,14 @@ const hostConfig: ReactReconciler.HostConfig<
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance
     ): void {
-        console.log(`[insertInContainerBefore()] deferring to insertBefore(): ${container} > ${child}`);
-        return hostConfig.insertInContainerBefore(container, child, beforeChild);
+        if(container instanceof NSVRoot){
+            console.log(`[insertInContainerBefore()] performing no-op for insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`);
+            container.setBaseRef(child); // Unsure what else to do here..!
+            return;
+        }
+
+        console.log(`[insertInContainerBefore()] performing insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`);
+        container.insertBefore(child, beforeChild);
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
         if (parent === null) {
@@ -769,117 +459,20 @@ const hostConfig: ReactReconciler.HostConfig<
             );
             return;
         }
-        if (implementsCustomNodeHierarchyManager(parent) && parent.__customHostConfigRemoveChild) {
-            console.log(`[removeChild()] Deferring to customHostConfigRemoveChild(): ${parent} x ${child}`);
-            const handled: boolean = parent.__customHostConfigRemoveChild(parent, child);
-            if (handled) {
-                return;
-            }
-            console.log(
-                `[removeChild()] Deferral to customHostConfigRemoveChild() didn't handle, so handling with default implementation: ${parent} x ${child}`
-            );
-        }
 
-        if (child instanceof Page) {
-            console.warn(`[remove()] Page was never a real child in the first place, so no-op. ${parent} x ${child}`);
-            return;
-        } else if (child instanceof FormattedString) {
-            if(parent instanceof TextBase){
-                console.log(`[removeChild()] (TextBase removing FormattedString); I only support a single child, so we'll delete any incumbent. ${parent} x ${child}`);
-                parent.formattedText = formattedTextProperty.defaultValue;
-            } else {
-                console.log(`[removeChild()] (Got FormattedString child, but not for a TextBase parent, so shall no-op) ${parent} x ${child}`);
-            }
-            return;
-        } else if (isASingleChildContainer(parent)) {
-            console.log(`[removeChild()] instance of single-child parent: ${parent} x ${child}`);
-            /* These elements were originally designed to hold one element only:
-             * https://stackoverflow.com/a/55351086/5951226 */
-            console.warn(`[removeChild()] TODO: Check whether "parent.content = null" will indeed remove the content.`);
-            parent.content = null;
-        } else if (parent instanceof LayoutBase) {
-            /** For logging purposes only **/
-            const childrenBefore = [];
-            parent.eachChild((viewBase: ViewBase) => {
-                childrenBefore.push(viewBase);
-                return true;
-            });
-            console.log(
-                `[removeChild()] parent instance of LayoutBase. Current children: [${childrenBefore}]: ${parent} x ${child}`
-            );
-            /*******************************/
-
-            parent.removeChild(child as View);
-
-            /** For logging purposes only **/
-            const childrenAfter = [];
-            parent.eachChild((viewBase: ViewBase) => {
-                childrenAfter.push(viewBase);
-                return true;
-            });
-            console.log(`[removeChild()] completed. Children now: [${childrenAfter}]`);
-            /*******************************/
-        } else if (child instanceof ActionBar && parent instanceof Page) {
-            console.log(
-                `[removeChild()] Detaching ActionBar from Page forbidden in NativeScript Core, so no-op: ${parent} x ${child}`
-            );
-            return;
-        } else if (parent instanceof ActionBar) {
-            if (child instanceof ActionItem) {
-                if (child instanceof NavigationButton) {
-                    console.log(`[removeChild()] (instance of NavigationButton) ${parent} x ${child}`);
-                    parent.navigationButton = null; // Anything falsy should work.
-                } else if (child instanceof ActionItem) {
-                    console.log(`[removeChild()] (instance of ActionItem) ${parent} x ${child}`);
-                    parent.actionItems.removeItem(child);
-                }
-            } else {
-                // Take to be titleView
-                console.log(`[removeChild()] (not ActionItem; assumed to be titleView) ${parent} x ${child}`);
-                parent.titleView = null;
-            }
-        } else if (parent instanceof ActionItem) {
-            // Same for both ActionItem and NavigationButton.
-            parent.actionView = null;
-        } else if (parent instanceof TabView && child instanceof TabViewItem) {
-            console.log(`[removeChild()] ${parent} x ${child}`);
-            if (!parent.items) {
-                parent.items = [];
-            }
-            parent.items = parent.items.filter(i => i !== child);
-        } else if (parent instanceof TabViewItem) {
-            console.log(
-                `[removeChild()] Detaching view from TabViewItem not supported in NativeScript Core, so no-op: ${parent} x ${child}`
-            );
-            return;
-        /* FormattedString > Span case seemed to be handled just fine by default clauses (somehow) */
-        } else if (parent instanceof FormattedString) {
-            if(child instanceof Span){
-                console.log(`[removeChild()] FormattedString x Span`);
-                const childIndex: number = parent.spans.indexOf(child);
-                parent.spans.splice(childIndex, 1);
-            }
-        } else {
-            console.log(`[removeChild()] default clause: ${parent} x ${child}`);
-            parent._removeView(child);
-        }
+        parent.removeChild(child);
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        if(container instanceof RNSRoot){
+        if(container instanceof NSVRoot){
             container.setBaseRef(null);
             return;
         }
-        console.log(`[removeChildFromContainer()] deferring to removeChild(): ${container} > ${child}`);
-        return hostConfig.removeChild(container, child);
+
+        console.log(`[removeChildFromContainer()] performing removeChild(): ${container} > ${child}`);
+        container.removeChild(child);
     },
     resetTextContent(instance: Instance): void {
-        if (instance instanceof TextBase || instance instanceof Span) {
-            instance.text = "";
-        } else {
-            console.warn(
-                `resetTextContent() stub called on a non-TextBase View. Text-resetting is only implemented for instances extending TextBase, and Span.`
-            );
-        }
+        instance.text = "";
     },
 };
 

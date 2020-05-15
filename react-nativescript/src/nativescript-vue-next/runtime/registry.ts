@@ -92,7 +92,7 @@ export function registerElement(
     // console.log(`->registerElement(${elementName})`)
 }
 
-export function isKnownView(elementName: string) {
+export function isKnownView(elementName: string): boolean {
     return elementMap.hasOwnProperty(normalizeElementName(elementName))
 }
 

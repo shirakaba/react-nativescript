@@ -292,16 +292,16 @@ export class NSVText extends NSVNode {
 }
 
 export class NSVRoot extends NSVNode {
-    el?: NSVElement
+    baseRef?: NSVElement
 
     constructor() {
         super(NSVNodeTypes.ROOT)
     }
 
-    appendChild(el: INSVNode) {
+    setBaseRef(el: INSVNode|null): void {
         // console.log(`NSVRoot->appendChild(${el.nodeType})`)
         if (el instanceof NSVElement) {
-            this.el = el
+            this.baseRef = el
         }
         // no-op
     }
