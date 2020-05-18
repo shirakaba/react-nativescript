@@ -233,7 +233,7 @@ if (!__TEST__) {
         'formattedString',
         () => require('@nativescript/core').FormattedString,
         {
-            // todo: move into FormattedString.ts when we end up creating a component for Frame
+            // todo: move into FormattedString.ts when we end up creating a component for FormattedString
             /**
              * The default parentView._addChildFromBuilder() seems to handle the case of pushing a new child in.
              * It might even handle the case of splicing a child into place. I wasn't able to check.
