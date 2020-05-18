@@ -259,7 +259,7 @@ export class NSVElement extends NSVNode implements INSVElement {
             this.childNodes.splice(index, 1)
             el.parentNode = null
             if (el.nodeType === NSVNodeTypes.ELEMENT) {
-                removeChild(el as NSVElement, this)
+                removeChild(el as NSVElement, this) // Removing a child span takes us down here
             } else if (el.nodeType === NSVNodeTypes.TEXT) {
                 this.updateText()
             }
@@ -383,6 +383,7 @@ function removeChild(child: NSVElement, parent: NSVElement) {
     } else if (parent.meta.viewFlags & NSVViewFlags.CONTENT_VIEW) {
         parentView.content = null
     } else {
+        // Removing a child span takes us down here
         parentView._removeView(childView)
     }
 }

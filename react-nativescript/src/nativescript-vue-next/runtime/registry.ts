@@ -2,6 +2,8 @@ import {
     Frame as TNSFrame,
     Page as TNSPage,
     ViewBase as TNSViewBase,
+    FormattedString as TNSFormattedString,
+    Span as TNSSpan,
 } from '@nativescript/core'
 import { NSVElement, NSVViewFlags } from './nodes'
 // import { actionBarNodeOps } from './components/ActionBar'
@@ -229,7 +231,54 @@ if (!__TEST__) {
     )
     registerElement(
         'formattedString',
-        () => require('@nativescript/core').FormattedString
+        () => require('@nativescript/core').FormattedString,
+        {
+            // todo: move into FormattedString.ts when we end up creating a component for Frame
+            /**
+             * The default parentView._addChildFromBuilder() seems to handle the case of pushing a new child in.
+             * It might even handle the case of splicing a child into place. I wasn't able to check.
+             */
+            nodeOps: {
+                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    const formattedString = parent.nativeView as TNSFormattedString
+                    if (child.nativeView instanceof TNSSpan) {
+                        const spansLength: number = formattedString.spans.length;
+                        formattedString.spans.splice(
+                            typeof atIndex === "undefined" ? 
+                                spansLength :
+                                atIndex,
+                            0,
+                            child.nativeView
+                        );
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `<formattedString> must only contain <span> elements - ` +
+                                `got <${child.nativeView.constructor.name}> instead.`
+                            )
+                        }
+                    }
+                },
+                /**
+                 * The default parentView._removeView() crashes upon removing a span.
+                 * This implementation addresses that.
+                 */
+                remove(child: NSVElement, parent: NSVElement): void {
+                    const formattedString = parent.nativeView as TNSFormattedString
+                    if (child.nativeView instanceof TNSSpan) {
+                        const childIndex: number = formattedString.spans.indexOf(child.nativeView);
+                        formattedString.spans.splice(childIndex, 1);
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `<formattedString> must only contain <span> elements - ` +
+                                `got <${child.nativeView.constructor.name}> instead.`
+                            )
+                        }
+                    }
+                }
+            }
+        }
     )
     registerElement(
         'image',
