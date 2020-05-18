@@ -6,7 +6,7 @@ import {
 } from './registry'
 import { ELEMENT_REF } from './runtimeHelpers';
 import { debug } from '../shared';
-import { ViewBase, LayoutBase, Style } from '@nativescript/core'
+import { ViewBase, LayoutBase, Style, ObservableArray } from '@nativescript/core'
 import { unsetValue } from '@nativescript/core/ui/core/properties'
 /* 
  * I had some difficulty importing this as:
@@ -15,6 +15,7 @@ import { unsetValue } from '@nativescript/core/ui/core/properties'
  * But maybe this is just a problem in the Webpack domain.
  */
 import set = require('set-value');
+import { warn } from '../../shared/Logger';
 
 // import unset from 'unset-value'
 
@@ -200,10 +201,20 @@ export class NSVElement extends NSVNode implements INSVElement {
     }
 
     setAttribute(name: string, value: unknown) {
+        if(name === "nodeRole" && typeof value === "string"){
+            this.nodeRole = value;
+            return;
+        }
+
         set(this.nativeView, name, value)
     }
 
     removeAttribute(name: string) {
+        if(name === "nodeRole"){
+            this.nodeRole = void 0;
+            return;
+        }
+
         // potential issue: unsetValue is an empty object
         // not all properties/attributes may know/check for this
         set(this.nativeView, name, unsetValue)
@@ -342,6 +353,11 @@ function addChild(child: NSVElement, parent: NSVElement, atIndex?: number) {
         return parent.meta.nodeOps.insert(child, parent, atIndex)
     }
 
+    const nodeRole: string|undefined = child.nodeRole;
+    if(nodeRole){
+        return addChildByNodeRole(nodeRole, childView, parentView, atIndex);
+    }
+
     if (parent.meta.viewFlags & NSVViewFlags.LAYOUT_VIEW) {
         if (atIndex) {
             parentView.insertChild(childView, atIndex)
@@ -378,6 +394,11 @@ function removeChild(child: NSVElement, parent: NSVElement) {
     const parentView = parent.nativeView
     const childView = child.nativeView
 
+    const nodeRole: string|undefined = child.nodeRole;
+    if(nodeRole){
+        return removeChildByNodeRole(nodeRole, childView, parentView);
+    }
+
     if (parent.meta.viewFlags & NSVViewFlags.LAYOUT_VIEW) {
         parentView.removeChild(childView)
     } else if (parent.meta.viewFlags & NSVViewFlags.CONTENT_VIEW) {
@@ -385,5 +406,75 @@ function removeChild(child: NSVElement, parent: NSVElement) {
     } else {
         // Removing a child span takes us down here
         parentView._removeView(childView)
+    }
+}
+
+
+function addChildByNodeRole(nodeRole: string, childView: any, parentView: any, atIndex?: number): void {
+    const childrenSetter = parentView[nodeRole];
+    if(typeof childrenSetter.length !== "undefined"){
+        // Treat as if it's an array.
+        const childrenSetterLength: number = parentView[nodeRole].length;
+        const atSafeIndex: number = typeof atIndex === "undefined" ? childrenSetterLength : atIndex;
+
+        if(childrenSetter instanceof ObservableArray){
+            parentView[nodeRole].splice(atSafeIndex, 0, childView);
+        } else if(Array.isArray(childrenSetter)){
+            parentView[nodeRole] = [...parentView[nodeRole]].splice(atSafeIndex, 0, childView);
+        } else {
+            if (__DEV__) {
+                warn(
+                    `parentView "${parentView.constructor.name}" had a value for nodeRole "${nodeRole}" ` +
+                    `that had a "length" property yet did not conform to Array or ObservableArray. Cannot add child. ` +
+                    `Please explicitly implement nodeOps.insert() for the parentView.`
+                );
+            }
+        }
+    } else {
+        /*
+         * Treat it as if it's simply a setter.
+         * This assumes (quite fairly) that the plugin author is not delegating to us the responsibility
+         * of initialising an array for childrenSetter.
+        */
+        parentView[nodeRole] = childView;
+    }
+}
+
+function removeChildByNodeRole(nodeRole: string, childView: any, parentView: any): void {
+    const childrenSetter = parentView[nodeRole];
+    if(typeof childrenSetter.indexOf === "function"){
+        // Treat as if it's an array.
+        const childIndex: number = parentView[nodeRole].indexOf(childView);
+
+        if(childrenSetter instanceof ObservableArray){
+            parentView[nodeRole].splice(childIndex, 1);
+        } else if(Array.isArray(childrenSetter)){
+            parentView[nodeRole] = [...parentView[nodeRole]].splice(childIndex, 1);
+        } else {
+            if (__DEV__) {
+                warn(
+                    `parentView "${parentView.constructor.name}" had a value for nodeRole "${nodeRole}" ` +
+                    `that had an "indexOf" property yet did not conform to Array or ObservableArray. Cannot add childView "${childView.constructor.name}". ` +
+                    `Please explicitly implement nodeOps.remove() for the parentView.`
+                );
+            }
+        }
+    } else {
+        /*
+        * Treat it as if it's simply a setter.
+        * We can't use unsetValue here, because the childrenSetter is not necessarily a Property (which indeed is the case for FormattedString.spans).
+        * TODO: If there's a way to determine whether the childrenSetter is a Property, I'd be very happy to run that first check and use unsetValue.
+         */
+        const defaultValueForChildrenSetter: unknown = parentView.__proto__[nodeRole];
+        try {
+            parentView[nodeRole] = defaultValueForChildrenSetter;
+        } catch(e){
+            if (__DEV__) {
+                warn(
+                    `parentView "${parentView.constructor.name}" failed to remove childView "${childView.constructor.name}", given nodeRole "${nodeRole}" ` +
+                    `Please explicitly implement nodeOps.remove() for the parentView.`
+                );
+            }
+        }
     }
 }
