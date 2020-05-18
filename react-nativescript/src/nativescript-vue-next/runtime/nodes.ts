@@ -40,6 +40,11 @@ export const enum NSVViewFlags {
 }
 
 export interface INSVNode {
+    /**
+     * Used to give a hint to nodeOps about how this node should be appended into its parent.
+     * Relevant for cases such as RadSideDrawer, which have 'mainContent' and 'drawerContent'.
+     */
+    nodeRole?: string
     nodeId: number
     nodeType: NSVNodeTypes
     text: string | undefined
@@ -91,6 +96,7 @@ export abstract class NSVNode implements INSVNode {
         this.nodeId = nodeId++
     }
 
+    nodeRole?: string
     nodeId: number
     nodeType: NSVNodeTypes
     text: string | undefined
