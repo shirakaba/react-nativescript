@@ -182,14 +182,23 @@ if (!__TEST__) {
                     } else {
                         if (__DEV__) {
                             warn(
-                                `<Frame> must only contain <Page> elements - ` +
+                                `<frame> must only contain <page> elements - ` +
                                 `got <${child.nativeView.constructor.name}> instead.`
                             )
                         }
                     }
                 },
                 remove(child: NSVElement, parent: NSVElement): void {
-                    // ignore? warn? throw? navigate back?
+                    /*
+                     * ignore? warn? throw? navigate back?
+                     * Skimming over the implementation, I'm not confident that removal is supported by NativeScript Core.
+                     */
+                    if (__DEV__) {
+                        warn(
+                            `React NativeScript does not support removal of a <page> from a <frame>, ` +
+                            `as it is unclear how that would be handled in NativeScript Core. Skipping removal.`
+                        )
+                    }
                 }
             }
         }
