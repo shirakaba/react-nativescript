@@ -220,7 +220,7 @@ export class PageWithComplexActionBarTest extends React.Component<
                     {/* The Switch will become the titleView */}
                     <switch/>
                     {/* The ActionItem will be added to the actionItems array */}
-                    <actionItem text={"AI"} ios={{ position: "right", systemIcon: 4 }}></actionItem>
+                    <actionItem text={"AI"} ios={{ position: "right" as const, systemIcon: 4 }}></actionItem>
                     {/* The NavigationButton will set as the NavigationButton (but won't be visible because there's no backwards navigation to do from here). */}
                     <navigationButton text={"NB"}></navigationButton>
                 </actionBar>
