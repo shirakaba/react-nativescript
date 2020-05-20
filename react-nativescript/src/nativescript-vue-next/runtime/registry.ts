@@ -4,6 +4,9 @@ import {
     ViewBase as TNSViewBase,
     FormattedString as TNSFormattedString,
     Span as TNSSpan,
+    ActionBar as TNSActionBar,
+    ActionItem as TNSActionItem,
+    NavigationButton as TNSNavigationButton,
 } from '@nativescript/core'
 import { NSVElement, NSVViewFlags } from './nodes'
 // import { actionBarNodeOps } from './components/ActionBar'
@@ -145,16 +148,105 @@ if (!__TEST__) {
         { viewFlags: NSVViewFlags.CONTENT_VIEW }
     )
 
-    /** TODO */
-    // // ActionBar
-    // registerElement(
-    //     'internalActionBar',
-    //     () => require('@nativescript/core').ActionBar,
-    //     {
-    //         viewFlags: NSVViewFlags.SKIP_ADD_TO_DOM,
-    //         nodeOps: actionBarNodeOps
-    //     }
-    // )
+    registerElement(
+        'actionBar',
+        () => require('@nativescript/core').ActionBar,
+        {
+            nodeOps: {
+                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    const actionBar = parent.nativeView as TNSActionBar;
+
+                    if(child.nodeRole === "navigationButton"){
+                        if(child.nativeView instanceof TNSNavigationButton){
+                            actionBar.navigationButton = child.nativeView;
+                        } else {
+                            if (__DEV__) {
+                                warn(
+                                    `Unable to add child "${child.nativeView.constructor.name}" as the navigationButton of <actionBar> as it is not an instance of NavigationButton.`
+                                );
+                            }
+                        }
+                    } else if(child.nodeRole === "actionItems"){
+                        if(child.nativeView instanceof TNSActionItem === false){
+                            if (__DEV__) {
+                                warn(
+                                    `Unable to add child "${child.nativeView.constructor.name}" to the actionItems of <actionBar> as it is not an instance of ActionItem.`
+                                );
+                            };
+                            return;
+                        }
+
+                        /**
+                         * The implementation shows that getItems() returns a clone of the array, conforming to Array.
+                         * @see action-bar-common.js
+                         */
+                        const existingItems: TNSActionItem[] = actionBar.actionItems.getItems();
+
+                        if(typeof atIndex === "undefined" || atIndex === existingItems.length){
+                            /**
+                             * The implementation shows that addItem() acts as Array.prototype.push().
+                             * @see action-bar-common.js
+                             */
+                            actionBar.actionItems.addItem(child.nativeView);
+                        } else {
+                            /**
+                             * actionBar.actionItems doesn't publicly expose a splice() API, so we'll have to do things the hard way.
+                             */
+    
+                            const updatedItems: TNSActionItem[] = actionBar.actionItems.getItems();
+                            updatedItems.splice(
+                                atIndex,
+                                0,
+                                child.nativeView
+                            );
+    
+                            existingItems.forEach(actionItem => actionBar.actionItems.removeItem(actionItem));
+                            updatedItems.forEach(actionItem => actionBar.actionItems.addItem(actionItem));
+                        }
+                    } else if(child.nodeRole === "actionItem"){
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <actionBar> as it had the nodeRole "actionItem"; please correct it to "actionItems".`
+                            );
+                        }
+                    } else if(child.nodeRole === "titleView"){
+                        actionBar.titleView = child.nativeView;
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <actionBar> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "navigationButton", "actionItems", or "titleView".`
+                            )
+                        }
+                    }
+                },
+                remove(child: NSVElement, parent: NSVElement): void {
+                    const actionBar = parent.nativeView as TNSActionBar;
+
+                    if(child.nodeRole === "navigationButton"){
+                        actionBar.navigationButton = null; // Anything falsy should work.
+                    } else if(child.nodeRole === "actionItems"){
+                        actionBar.actionItems.removeItem(child.nativeView);
+                    } else if(child.nodeRole === "actionItem"){
+                        if (__DEV__) {
+                            warn(
+                                `Unable to remove child "${child.nativeView.constructor.name}" from <actionBar> as it had the nodeRole "actionItem"; please correct it to "actionItems".`
+                            );
+                        }
+                    } else if(child.nodeRole === "titleView"){
+                        actionBar.titleView = null; // Anything falsy should work.
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <actionBar> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "navigationButton", "actionItems", or "titleView".`
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
     registerElement(
         'actionItem',
         () => require('@nativescript/core').ActionItem
@@ -206,7 +298,46 @@ if (!__TEST__) {
     registerElement(
         'page',
         () => require('@nativescript/core').Page,
-        { viewFlags: NSVViewFlags.CONTENT_VIEW }
+        {
+            viewFlags: NSVViewFlags.CONTENT_VIEW,
+            nodeOps: {
+                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    const page = parent.nativeView as TNSPage;
+
+                    if(typeof atIndex === "number" && atIndex > 0){
+                        if (__DEV__) {
+                            warn(
+                                `Cannot add child "${child.nativeView.constructor.name}" to Page, as Page only accepts a single child. ` +
+                                `If you wish to add more than one child to a Page, wrap them in a LayoutBase like <stackLayout>.`
+                            )
+                        }
+                        return;
+                    }
+
+                    if (child.nodeRole === "actionBar" || child.nativeView instanceof TNSActionBar) {
+                        page.actionBar = child.nativeView;
+                    } else {
+                        page.content = child.nativeView;
+                    }
+                },
+                remove(child: NSVElement, parent: NSVElement): void {
+                    const page = parent.nativeView as TNSPage;
+                    if (child.nodeRole === "actionBar" || child.nativeView instanceof TNSActionBar) {
+                        /* Well we could technically do this, but it'd be better to just teach good practices. */
+                        // page.actionBar = new TNSActionBar();
+                        
+                        if (__DEV__) {
+                            warn(
+                                `Unable to remove ActionBar from Page; not supported by NativeScript Core. ` +
+                                `You may prefer to set page.actionBarHidden = true instead.`
+                            )
+                        }
+                    } else {
+                        page.content = null;
+                    }
+                }
+            }
+        }
     )
 
     // html
