@@ -7,6 +7,7 @@ type RNSStyle = {
 
 
 export interface NativeScriptAttributes<T extends Observable = Observable> extends ClassAttributes<T> {
+    nodeRole?: string;
     children?: ReactNode;
 }
 
