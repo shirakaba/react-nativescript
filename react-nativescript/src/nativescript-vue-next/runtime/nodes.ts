@@ -411,8 +411,8 @@ function removeChild(child: NSVElement, parent: NSVElement) {
 
 
 function addChildByNodeRole(nodeRole: string, childView: any, parentView: any, atIndex?: number): void {
-    const childrenSetter = parentView[nodeRole];
-    if(typeof childrenSetter.length !== "undefined"){
+    const childrenSetter: any|undefined = parentView[nodeRole];
+    if(typeof childrenSetter !== "undefined" && typeof childrenSetter.length !== "undefined"){
         // Treat as if it's an array.
         const childrenSetterLength: number = parentView[nodeRole].length;
         const atSafeIndex: number = typeof atIndex === "undefined" ? childrenSetterLength : atIndex;
@@ -442,7 +442,7 @@ function addChildByNodeRole(nodeRole: string, childView: any, parentView: any, a
 
 function removeChildByNodeRole(nodeRole: string, childView: any, parentView: any): void {
     const childrenSetter = parentView[nodeRole];
-    if(typeof childrenSetter.indexOf === "function"){
+    if(typeof childrenSetter !== "undefined" && typeof childrenSetter.indexOf === "function"){
         // Treat as if it's an array.
         const childIndex: number = parentView[nodeRole].indexOf(childView);
 
