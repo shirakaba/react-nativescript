@@ -205,13 +205,11 @@ export class PageWithActionBar extends React.Component<
 }
 
 export class FrameWithPageWithActionBarNew extends React.Component<
-    {
-        actionBarTitle?: string,
-    } & PageAttributes,
+    PageAttributes,
     {}
 > {
     render(){
-        const { children, actionBarTitle, ...rest } = this.props;
+        const { children, ...rest } = this.props;
 
         return (
             // Page expected to be auto-mounted by the Frame in the new React NativeScript.
@@ -226,18 +224,17 @@ export class FrameWithPageWithActionBarNew extends React.Component<
 
 
 export class PageWithActionBarNew extends React.Component<
-    {
-        actionBarTitle?: string,
-    } & PageAttributes,
+    PageAttributes,
     {}
 > {
     render(){
-        const { children, actionBarTitle, ...rest } = this.props;
+        const { children, ...rest } = this.props;
 
         return (
             <page actionBarHidden={false} {...rest} >
-                <actionBar {...{ title: actionBarTitle }} >
+                <actionBar>
                     <label nodeRole={"titleView"}>Hello Title View</label>
+                    
                     <actionItem nodeRole={"actionItems"}>
                         <button nodeRole={"actionView"}>One</button>
                     </actionItem>
