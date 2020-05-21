@@ -5,7 +5,7 @@ import { DockLayoutTest, HMRTest } from './layout';
 import { FormattedStringLabel, WebViewTest, SegmentedBarIssue, } from "./testComponents";
 import { GestureLoggingTest, PanGestureTest, PageGestureTest, StatefulPageGestureTest, StatefulPageGestureTest2 } from "./gestures";
 import { GameLoopTest, SwitchTest, SliderTest, TimePickerTest, DatePickerTest, ListPickerTest } from "./stateful";
-import { NestedHub, NestedModalTest, FramedHubTest, FramedPageWithComplexActionBarTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest } from "./navigation";
+import { NestedHub, NestedModalTest, FramedHubTest, FramedPageWithComplexActionBarTest, SimpleHub, ActionBarTest, TabViewTest, FrameTest, FramedLayoutTest, FrameWithPageWithActionBarNew } from "./navigation";
 import { SpriteKitGameTest } from "./spriteKitGame";
 import { ListViewTest, DynamicListViewWithImages } from "./list";
 import { DeletePropFromScrollViewTest } from "./propDeletion";
@@ -67,8 +67,12 @@ import { FormattedStringTest } from './text';
 //     </tabView>
 // );
 
+// const AppContainer = () => (
+//     <FormattedStringTest/>
+// );
+
 const AppContainer = () => (
-    <FormattedStringTest/>
+    <FrameWithPageWithActionBarNew/>
 );
 
 export default hot(AppContainer);

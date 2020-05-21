@@ -204,6 +204,57 @@ export class PageWithActionBar extends React.Component<
     }
 }
 
+export class FrameWithPageWithActionBarNew extends React.Component<
+    {
+        actionBarTitle?: string,
+    } & PageAttributes,
+    {}
+> {
+    render(){
+        const { children, actionBarTitle, ...rest } = this.props;
+
+        return (
+            // Page expected to be auto-mounted by the Frame in the new React NativeScript.
+            <frame>
+                <PageWithActionBarNew>
+                    <label>Hello Page</label>
+                </PageWithActionBarNew>
+            </frame>
+        );
+    }
+}
+
+
+export class PageWithActionBarNew extends React.Component<
+    {
+        actionBarTitle?: string,
+    } & PageAttributes,
+    {}
+> {
+    render(){
+        const { children, actionBarTitle, ...rest } = this.props;
+
+        return (
+            <page actionBarHidden={false} {...rest} >
+                <actionBar {...{ title: actionBarTitle }} >
+                    <label nodeRole={"titleView"}>Hello Title View</label>
+                    <actionItem nodeRole={"actionItems"}>
+                        <button nodeRole={"actionView"}>One</button>
+                    </actionItem>
+                    <actionItem nodeRole={"actionItems"}>
+                        <button nodeRole={"actionView"}>Two</button>
+                    </actionItem>
+                    <actionItem nodeRole={"actionItems"}>
+                        <button nodeRole={"actionView"}>Three</button>
+                    </actionItem>
+                </actionBar>
+                {children}
+            </page>
+        );
+    }
+}
+
+
 export class PageWithComplexActionBarTest extends React.Component<
     {
         actionBarTitle?: string,
