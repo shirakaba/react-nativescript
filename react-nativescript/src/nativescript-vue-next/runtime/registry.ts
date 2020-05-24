@@ -561,10 +561,12 @@ if (!__TEST__) {
                             return;
                         }
 
-                        if(typeof atIndex === "undefined" || atIndex === tabView.items.length){
-                            tabView.items = [...tabView.items, child.nativeView];
+                        const items = tabView.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
+
+                        if(typeof atIndex === "undefined" || atIndex === items.length){
+                            tabView.items = items.concat(child.nativeView);
                         } else {
-                            tabView.items = [...tabView.items].splice(
+                            tabView.items = items.slice().splice(
                                 atIndex,
                                 0,
                                 child.nativeView
@@ -589,7 +591,7 @@ if (!__TEST__) {
                     const tabView = parent.nativeView as TNSTabView;
 
                     if(child.nodeRole === "items"){
-                        tabView.items = tabView.items.filter(i => i !== child.nativeView);
+                        tabView.items = (tabView.items || []).filter(i => i !== child.nativeView);
                     } else if(child.nodeRole === "item"){
                         if (__DEV__) {
                             warn(
@@ -678,10 +680,12 @@ if (!__TEST__) {
                             return;
                         }
 
-                        if(typeof atIndex === "undefined" || atIndex === tabStrip.items.length){
-                            tabStrip.items = [...tabStrip.items, child.nativeView];
+                        const items = tabStrip.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
+
+                        if(typeof atIndex === "undefined" || atIndex === items.length){
+                            tabStrip.items = items.concat(child.nativeView);
                         } else {
-                            tabStrip.items = [...tabStrip.items].splice(
+                            tabStrip.items = items.slice().splice(
                                 atIndex,
                                 0,
                                 child.nativeView
@@ -706,7 +710,7 @@ if (!__TEST__) {
                     const tabs = parent.nativeView as TNSTabs;
 
                     if(child.nodeRole === "items"){
-                        tabs.items = tabs.items.filter(i => i !== child.nativeView);
+                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
                     } else if(child.nodeRole === "item"){
                         if (__DEV__) {
                             warn(
@@ -820,10 +824,11 @@ if (!__TEST__) {
                             return;
                         }
 
-                        if(typeof atIndex === "undefined" || atIndex === tabs.items.length){
-                            tabs.items = [...tabs.items, child.nativeView];
+                        const items = tabs.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
+                        if(typeof atIndex === "undefined" || atIndex === items.length){
+                            tabs.items = items.concat(child.nativeView);
                         } else {
-                            tabs.items = [...tabs.items].splice(
+                            tabs.items = items.slice().splice(
                                 atIndex,
                                 0,
                                 child.nativeView
@@ -850,7 +855,7 @@ if (!__TEST__) {
                     if(child.nodeRole === "tabStrip"){
                         tabs.tabStrip = null; // Anything falsy should work.
                     } else if(child.nodeRole === "items"){
-                        tabs.items = tabs.items.filter(i => i !== child.nativeView);
+                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
                     } else if(child.nodeRole === "item"){
                         if (__DEV__) {
                             warn(
@@ -905,10 +910,12 @@ if (!__TEST__) {
                             return;
                         }
 
-                        if(typeof atIndex === "undefined" || atIndex === bottomNavigation.items.length){
-                            bottomNavigation.items = [...bottomNavigation.items, child.nativeView];
+                        const items = bottomNavigation.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
+                        
+                        if(typeof atIndex === "undefined" || atIndex === items.length){
+                            bottomNavigation.items = items.concat(child.nativeView);
                         } else {
-                            bottomNavigation.items = [...bottomNavigation.items].splice(
+                            bottomNavigation.items = items.slice().splice(
                                 atIndex,
                                 0,
                                 child.nativeView
@@ -935,7 +942,7 @@ if (!__TEST__) {
                     if(child.nodeRole === "tabStrip"){
                         tabs.tabStrip = null; // Anything falsy should work.
                     } else if(child.nodeRole === "items"){
-                        tabs.items = tabs.items.filter(i => i !== child.nativeView);
+                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
                     } else if(child.nodeRole === "item"){
                         if (__DEV__) {
                             warn(
