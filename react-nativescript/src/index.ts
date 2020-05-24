@@ -9,8 +9,8 @@
  *
  * They have since moved to a MIT-style licence, which is reproduced in /LICENSE.
  */
-import { ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes } from "./lib/react-nativescript-jsx";
-import { ActionBar, ActionItem, ActivityIndicator, Button, ContentView, DatePicker, HtmlView, Label, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, StackLayout, WrapLayout, ListPicker, ListView, NavigationButton, Placeholder, Progress, ScrollView, SearchBar, SegmentedBar, Slider, Switch, TabView, TabViewItem, TextView, TextField, TimePicker, Frame, Page, FormattedString, SegmentedBarItem, Span, Image, WebView, View, Application } from "@nativescript/core";
+import { ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabContentItemAttributes } from "./lib/react-nativescript-jsx";
+import { ActionBar, ActionItem, ActivityIndicator, Button, ContentView, DatePicker, HtmlView, Label, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, StackLayout, WrapLayout, ListPicker, ListView, NavigationButton, Placeholder, Progress, ScrollView, SearchBar, SegmentedBar, Slider, Switch, TabView, TabViewItem, TextView, TextField, TimePicker, Frame, Page, FormattedString, SegmentedBarItem, Span, Image, WebView, View, Application, Tabs, BottomNavigation, TabContentItem } from "@nativescript/core";
 import { NativeScriptProps } from "./shared/NativeScriptJSXTypings";
 import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
@@ -144,6 +144,7 @@ declare global {
             actionItem: NativeScriptProps<ActionItemAttributes, ActionItem>,
             activityIndicator: NativeScriptProps<ActivityIndicatorAttributes, ActivityIndicator>,
             button: NativeScriptProps<ButtonAttributes, Button>,
+            bottomNavigation: NativeScriptProps<BottomNavigationAttributes, BottomNavigation>,
             contentView: NativeScriptProps<ContentViewAttributes, ContentView>,
             datePicker: NativeScriptProps<DatePickerAttributes, DatePicker>,
             dockLayout: NativeScriptProps<DockLayoutAttributes, DockLayout>,
@@ -168,6 +169,8 @@ declare global {
             span: NativeScriptProps<SpanAttributes, Span>,
             stackLayout: NativeScriptProps<StackLayoutAttributes, StackLayout>,
             switch: NativeScriptProps<SwitchAttributes, Switch>,
+            tabs: NativeScriptProps<TabsAttributes, Tabs>,
+            tabContentItem: NativeScriptProps<TabContentItemAttributes, TabContentItem>,
             tabView: NativeScriptProps<TabViewAttributes, TabView>,
             tabViewItem: NativeScriptProps<TabViewItemAttributes, TabViewItem>,
             textField: NativeScriptProps<TextFieldAttributes, TextField>,
