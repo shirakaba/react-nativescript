@@ -12,6 +12,9 @@ import {
     TabView as TNSTabView,
     TabViewItem as TNSTabViewItem,
     TabStrip as TNSTabStrip,
+    TabStripItem as TNSTabStripItem,
+    Label as TNSLabel,
+    Image as TNSImage,
     BottomNavigation as TNSBottomNavigation,
     TabContentItem as TNSTabContentItem,
 } from '@nativescript/core'
@@ -649,6 +652,137 @@ if (!__TEST__) {
                             warn(
                                 `Unable to remove child "${child.nativeView.constructor.name}" from <tabViewItem> as it does not have a nodeRole specified; ` +
                                 `please set a nodeRole of "view".`
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
+
+    registerElement(
+        'tabStrip',
+        () => require('@nativescript/core').TabStrip,
+        {
+            nodeOps: {
+                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    const tabStrip = parent.nativeView as TNSTabStrip;
+
+                    if(child.nodeRole === "items"){
+                        if(child.nativeView instanceof TNSTabStripItem === false){
+                            if (__DEV__) {
+                                warn(
+                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStrip> as it is not an instance of TabStripItem.`
+                                );
+                            };
+                            return;
+                        }
+
+                        if(typeof atIndex === "undefined" || atIndex === tabStrip.items.length){
+                            tabStrip.items = [...tabStrip.items, child.nativeView];
+                        } else {
+                            tabStrip.items = [...tabStrip.items].splice(
+                                atIndex,
+                                0,
+                                child.nativeView
+                            );
+                        }
+                    } else if(child.nodeRole === "item"){
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStrip> as it had the nodeRole "item"; please correct it to "items".`
+                            );
+                        }
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStrip> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "tabStrip", or "items".`
+                            )
+                        }
+                    }
+                },
+                remove(child: NSVElement, parent: NSVElement): void {
+                    const tabs = parent.nativeView as TNSTabs;
+
+                    if(child.nodeRole === "items"){
+                        tabs.items = tabs.items.filter(i => i !== child.nativeView);
+                    } else if(child.nodeRole === "item"){
+                        if (__DEV__) {
+                            warn(
+                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStrip> as it had the nodeRole "item"; please correct it to "items".`
+                            );
+                        }
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStrip> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "tabStrip", or "items"`
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
+
+
+    registerElement(
+        'tabStripItem',
+        () => require('@nativescript/core').TabStripItem,
+        {
+            nodeOps: {
+                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    const tabStripItem = parent.nativeView as TNSTabStripItem;
+
+                    // Note: The instanceof check, and nodeRole check, is technically redundant if you look at the implementation, but I'll
+                    //       keep these good practices in case it's ever refactored.
+
+                    if(child.nodeRole === "label"){
+                        if(child.nativeView instanceof TNSLabel === false){
+                            if (__DEV__) {
+                                warn(
+                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStripItem> as it is not an instance of Label.`
+                                );
+                            };
+                            return;
+                        }
+
+                        tabStripItem.label = child.nativeView;
+                    } else if(child.nodeRole === "image"){
+                        if(child.nativeView instanceof TNSImage === false){
+                            if (__DEV__) {
+                                warn(
+                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStripItem> as it is not an instance of Image.`
+                                );
+                            };
+                            return;
+                        }
+
+                        tabStripItem.image = child.nativeView;
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStripItem> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "label", or "image".`
+                            )
+                        }
+                    }
+                },
+                remove(child: NSVElement, parent: NSVElement): void {
+                    const tabStripItem = parent.nativeView as TNSTabStripItem;
+
+                    if(child.nodeRole === "label"){
+                        // WARNING: It is not evident from the implementation that TabStripItem supports removing label at all!
+                        tabStripItem.label = null;
+                    } else if(child.nodeRole === "image"){
+                        // WARNING: It is not evident from the implementation that TabStripItem supports removing image at all!
+                        tabStripItem.image = null;
+                    } else {
+                        if (__DEV__) {
+                            warn(
+                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStripItem> as it does not have a nodeRole specified; ` +
+                                `please set a nodeRole of "label", or "image"`
                             )
                         }
                     }
