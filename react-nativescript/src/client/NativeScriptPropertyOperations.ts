@@ -124,10 +124,17 @@ export function setValueForProperty(
         instance.setAttribute(name, value === rnsDeletedPropValue ? false : value);
     } else if(name.length > 2 && name.startsWith("on") && value === rnsDeletedPropValue || typeof value === "function") {
         const eventName: string = name[2].toLowerCase() + name.slice(3);
-        console.log(`[PropOp] got suspected event listener "${eventName}" (from name "${name}")`);
         if(value === rnsDeletedPropValue){
+            console.log(`[PropOp] REMOVE: ${instance}.removeEventListener("${eventName}", value)`);
             instance.removeEventListener(eventName, value);
         } else {
+            const existingEventListener = instance.eventListeners.get(eventName);
+            if(existingEventListener){
+                console.log(`[PropOp] REPLACE: ${instance}.addEventListener("${eventName}", value)`);
+                instance.removeEventListener(eventName, existingEventListener);
+            } else {
+                console.log(`[PropOp] ADD: ${instance}.addEventListener("${eventName}", value)`);
+            }
             instance.addEventListener(eventName, value);
         }
     } else {

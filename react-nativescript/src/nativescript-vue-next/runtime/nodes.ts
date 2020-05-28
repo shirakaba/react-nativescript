@@ -6,7 +6,7 @@ import {
 } from './registry'
 import { ELEMENT_REF } from './runtimeHelpers';
 import { debug } from '../shared';
-import { ViewBase, LayoutBase, Style, ObservableArray } from '@nativescript/core'
+import { ViewBase, LayoutBase, Style, ObservableArray, EventData } from '@nativescript/core'
 import { unsetValue } from '@nativescript/core/ui/core/properties'
 /* 
  * I had some difficulty importing this as:
@@ -63,6 +63,8 @@ export interface INSVElement extends INSVNode {
     tagName: string
     meta: NSVViewMeta
     style: Style | string
+
+    eventListeners: Map<string, (args: EventData) => void>;
 
     addEventListener(
         event: string,
@@ -169,6 +171,18 @@ export class NSVElement extends NSVNode implements INSVElement {
         return (this._meta = getViewMeta(this.tagName))
     }
 
+    /**
+     * We keep references to the event listeners so that the RNS HostConfig can remove any attached event listener if it needs to replace it.
+     */
+    private _eventListeners?: Map<string, (args: EventData) => void>;
+
+    get eventListeners() {
+        if(!this._eventListeners){
+            this._eventListeners = new Map();
+        }
+        return this._eventListeners!;
+    }
+
     addEventListener(
         event: string,
         handler: any,
@@ -190,9 +204,11 @@ export class NSVElement extends NSVNode implements INSVElement {
             }
         }
         this.nativeView.addEventListener(event, handler)
+        this.eventListeners.set(event, handler);
     }
 
     removeEventListener(event: string, handler?: any) {
+        this.eventListeners.delete(event);
         this.nativeView.removeEventListener(event, handler)
     }
 
