@@ -96,7 +96,7 @@ const hostConfig: ReactReconciler.HostConfig<
          * When type 'label' or 'button' passes into here, they will then find that
          * parentHostContext.isInAFlexboxLayout === true.
          */
-        console.log(`[getChildHostContext] type: ${type}`);
+        // console.log(`[getChildHostContext] type: ${type}`);
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
         const prevIsInAParentFormattedString: boolean = parentHostContext.isInAParentFormattedString;
@@ -182,7 +182,7 @@ const hostConfig: ReactReconciler.HostConfig<
                 ...rest,
             });
         })();
-        console.log(`[createInstance() 1b] type: ${type}. rootContainerInstance:`, rootContainerInstance);
+        console.log(`[createInstance() 1b] type: ${type}`);
 
         let view: Instance;
         
@@ -218,7 +218,7 @@ const hostConfig: ReactReconciler.HostConfig<
         return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendInitialChild()]`);
+        // console.log(`[appendInitialChild()] ${parentInstance.nativeView} > ${(child as Instance).nativeView || `"` + (child as TextInstance).text + `"`}`);
         hostConfig.appendChild(parentInstance, child);
     },
     /**
@@ -295,6 +295,7 @@ const hostConfig: ReactReconciler.HostConfig<
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
+        console.log(`[appendChild()] ${parentInstance} > ${child}`);
         if (parentInstance === null) {
             console.warn(
                 `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`

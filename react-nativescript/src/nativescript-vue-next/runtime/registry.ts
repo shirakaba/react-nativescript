@@ -21,7 +21,7 @@ import {
 import { NSVElement, NSVViewFlags } from './nodes'
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
-const warn = console.warn.bind(console);
+import { warn } from "../../shared/Logger";
 
 export type NSVElementResolver = () => TNSViewBase
 

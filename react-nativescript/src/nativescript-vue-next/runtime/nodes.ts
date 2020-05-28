@@ -117,6 +117,10 @@ export abstract class NSVNode implements INSVNode {
             ? this.childNodes[this.childNodes.length - 1]
             : null
     }
+
+    toString(): string {
+        return this.toString();
+    }
 }
 
 export class NSVElement extends NSVNode implements INSVElement {
@@ -296,6 +300,10 @@ export class NSVElement extends NSVNode implements INSVElement {
                 }, '')
         )
     }
+
+    toString(): string {
+        return "NSVElement:" + this.nativeView.toString();
+    }
 }
 
 export class NSVComment extends NSVNode {
@@ -304,6 +312,10 @@ export class NSVComment extends NSVNode {
 
         this.text = text
     }
+
+    toString(): string {
+        return "NSVComment:" + `"` + this.text + `"`;
+    }
 }
 
 export class NSVText extends NSVNode {
@@ -311,6 +323,10 @@ export class NSVText extends NSVNode {
         super(NSVNodeTypes.TEXT)
 
         this.text = text
+    }
+
+    toString(): string {
+        return "NSVText:" + `"` + this.text + `"`;
     }
 }
 
@@ -327,6 +343,14 @@ export class NSVRoot extends NSVNode {
             this.baseRef = el
         }
         // no-op
+    }
+
+    toString(): string {
+        if(this.baseRef){
+            return "NSVRoot:" + this.baseRef.toString();
+        } else {
+            return "NSVRoot:" + "null";
+        }
     }
 }
 
