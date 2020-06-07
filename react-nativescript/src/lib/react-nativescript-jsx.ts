@@ -152,6 +152,8 @@ export type ViewAttributes =  ViewBaseAttributes & {
     onRowSpanChange?: (args: PropertyChangeData) => void;
     onShowingModally?: (args: ShownModallyData) => void;
     onShownModally?: (args: ShownModallyData) => void;
+    /** Added manually. */
+    onLayoutChanged?: (args: EventData) => void;
     onSwipe?: (arg: SwipeGestureEventData) => any;
     onTap?: (arg: DoubleTapGestureEventData) => any;
     onTopChange?: (args: PropertyChangeData) => void;
@@ -168,6 +170,7 @@ export type ViewAttributes =  ViewBaseAttributes & {
     rowSpan?: string | number;
     scaleX?: string | number;
     scaleY?: string | number;
+    /** TODO: add RNS-synthesised "style" property. */
     textTransform?: "none" | "initial" | "capitalize" | "uppercase" | "lowercase";
     top?: string | number | "auto" | LengthDipUnit | LengthPxUnit;
     translateX?: string | number;
