@@ -226,6 +226,24 @@ export class NSVElement extends NSVNode implements INSVElement {
             return;
         }
 
+        /**
+         * The 'ios' and 'android' properties (e.g. on ActionItem)
+         * are readonly, so we need to assign one level lower.
+         */
+        if(name === "ios" && value){
+            Object.keys(value).forEach((key: string) => {
+                set(this.nativeView.ios, key, value);
+            });
+            return;
+        }
+
+        if(name === "android" && value){
+            Object.keys(value).forEach((key: string) => {
+                set(this.nativeView.android, key, value);
+            });
+            return;
+        }
+
         set(this.nativeView, name, value)
     }
 
