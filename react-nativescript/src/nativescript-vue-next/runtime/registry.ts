@@ -260,10 +260,12 @@ if (!__TEST__) {
     registerElement(
         'actionItem',
         () => require('@nativescript/core').ActionItem
+        // _addChildFromBuilder and removeChild both refer to actionView, so no strict need for nodeOps here.
     )
     registerElement(
         'navigationButton',
         () => require('@nativescript/core').NavigationButton
+        // _addChildFromBuilder and removeChild both refer to actionView, so no strict need for nodeOps here.
     )
 
     // navigation
