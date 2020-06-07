@@ -204,51 +204,41 @@ export class PageWithActionBar extends React.Component<
     }
 }
 
-export class FrameWithPageWithActionBarNew extends React.Component<
-    PageAttributes,
-    {}
-> {
-    render(){
-        const { children, ...rest } = this.props;
+export function FrameWithPageWithActionBarNew(props: PropsWithChildren<PageAttributes>){
+    const { children, ...rest } = props;
 
-        return (
-            // Page expected to be auto-mounted by the Frame in the new React NativeScript.
-            <frame>
-                <PageWithActionBarNew>
-                    <label>Hello Page</label>
-                </PageWithActionBarNew>
-            </frame>
-        );
-    }
+    return (
+        // Page expected to be auto-mounted by the Frame in the new React NativeScript.
+        <frame>
+            <PageWithActionBarNew>
+                <label>Hello Page</label>
+            </PageWithActionBarNew>
+        </frame>
+    );
 }
 
 
-export class PageWithActionBarNew extends React.Component<
-    PageAttributes,
-    {}
-> {
-    render(){
-        const { children, ...rest } = this.props;
+export function PageWithActionBarNew(props: PropsWithChildren<PageAttributes>){
+    const { children, ...rest } = props;
 
-        return (
-            <page actionBarHidden={false} {...rest} >
-                <actionBar>
-                    <label nodeRole={"titleView"}>Hello Title View</label>
-                    
-                    <actionItem nodeRole={"actionItems"}>
-                        <button nodeRole={"actionView"}>One</button>
-                    </actionItem>
-                    <actionItem nodeRole={"actionItems"}>
-                        <button nodeRole={"actionView"}>Two</button>
-                    </actionItem>
-                    <actionItem nodeRole={"actionItems"}>
-                        <button nodeRole={"actionView"}>Three</button>
-                    </actionItem>
-                </actionBar>
-                {children}
-            </page>
-        );
-    }
+    return (
+        <page actionBarHidden={false} {...rest}>
+            <actionBar>
+                <label nodeRole={"titleView"}>Hello Title View</label>
+                
+                <actionItem nodeRole={"actionItems"}>
+                    <button nodeRole={"actionView"}>One</button>
+                </actionItem>
+                <actionItem nodeRole={"actionItems"}>
+                    <button nodeRole={"actionView"}>Two</button>
+                </actionItem>
+                <actionItem nodeRole={"actionItems"}>
+                    <button nodeRole={"actionView"}>Three</button>
+                </actionItem>
+            </actionBar>
+            {children}
+        </page>
+    );
 }
 
 

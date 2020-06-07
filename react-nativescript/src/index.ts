@@ -21,6 +21,7 @@ import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
 import { NSVRoot } from "./nativescript-vue-next/runtime/nodes";
+const { version: ReactNativeScriptVersion } = require('../package.json');
 
 export {
     ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes,
@@ -133,6 +134,12 @@ export function start(app: ReactReconciler.ReactNodeList): void {
         // }
         return;
     }
+
+    reactReconcilerInst.injectIntoDevTools({
+        bundleType: __DEV__ ? 1 : 0,
+        rendererPackageName: 'react-nativescript',
+        version: ReactNativeScriptVersion,
+      });
 
     run({
         create: () => {
