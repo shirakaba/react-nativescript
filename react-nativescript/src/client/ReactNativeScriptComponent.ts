@@ -255,6 +255,7 @@ export function updateDOMProperties(
         const propKey = updatePayload[i];
         const propValue = updatePayload[i + 1];
         if (propKey === STYLE) {
+            console.log(`[updateDOMProperties] ${instance}.style`, propValue);
             setValueForStyles(instance, propValue);
             // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
             //     setInnerHTML(instance, propValue);
@@ -332,7 +333,7 @@ export function diffProperties(
 
     let propKey: string;
     let styleName: string;
-    let styleUpdates: Record<string, string> | null = null;
+    let styleUpdates: Record<string, string|typeof rnsDeletedPropValue> | null = null;
     for (propKey in lastProps) {
         if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] == null) {
             // console.log(`[diffProperties] skipping on lastProps key:`, propKey);
@@ -345,7 +346,8 @@ export function diffProperties(
                     if (!styleUpdates) {
                         styleUpdates = {};
                     }
-                    styleUpdates[styleName] = "";
+                    console.log(`[diffProperties.lastProps] style.${styleName} deleted!`);
+                    styleUpdates[styleName] = rnsDeletedPropValue;
                 }
             }
         } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) {
@@ -395,7 +397,8 @@ export function diffProperties(
                         if (!styleUpdates) {
                             styleUpdates = {};
                         }
-                        styleUpdates[styleName] = "";
+                        console.log(`[diffProperties.nextProps] style.${styleName} deleted!`);
+                        styleUpdates[styleName] = rnsDeletedPropValue;
                     }
                 }
                 // Update styles that changed since `lastProp`.

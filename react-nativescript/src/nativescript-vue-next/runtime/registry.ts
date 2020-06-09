@@ -17,6 +17,9 @@ import {
     Image as TNSImage,
     BottomNavigation as TNSBottomNavigation,
     TabContentItem as TNSTabContentItem,
+    NavigationContext as TNSNavigationContext,
+    NavigationEntry as TNSNavigationEntry,
+    BackstackEntry as TNSBackstackEntry,
 } from '@nativescript/core'
 import { NSVElement, NSVViewFlags } from './nodes'
 // import { actionBarNodeOps } from './components/ActionBar'
@@ -276,13 +279,23 @@ if (!__TEST__) {
             // todo: move into Frame.ts when we end up creating a component for Frame
             nodeOps: {
                 insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                    // console.log(`[frame.insert] ${parent}.childNodes updating to: [${parent.childNodes}]`);
                     const frame = parent.nativeView as TNSFrame
+                    const page = child.nativeView as TNSPage;
                     if (child.nativeView instanceof TNSPage) {
-                        frame.navigate({
-                            create() {
-                                return child.nativeView
+                        if(typeof atIndex === "undefined"){
+                            // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} √`);
+                            frame.navigate({
+                                create() {
+                                    return child.nativeView
+                                }
+                            })
+                            return;
+                        } else {
+                            if (__DEV__) {
+                                warn(`NativeScript Core does not support splicing pages into frames. Can't add page to index ${atIndex}.`);
                             }
-                        })
+                        }
                     } else {
                         if (__DEV__) {
                             warn(
@@ -291,17 +304,37 @@ if (!__TEST__) {
                             )
                         }
                     }
+                    // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} x`);
                 },
+                /**
+                 * This is a best-of-a-bad-job. NativeScript Core implements push & pop, and
+                 * replacement (but only of the topmost, currentEntry of the stack). The latter
+                 * was only implemented for HMR purposes.
+                 * 
+                 * We can splice frame._backStack (belonging to frame-common.ts), but it doesn't
+                 * update the logic of the frame.ios.ts and frame.android.ts native implementations.
+                 */
                 remove(child: NSVElement, parent: NSVElement): void {
-                    /*
-                     * ignore? warn? throw? navigate back?
-                     * Skimming over the implementation, I'm not confident that removal is supported by NativeScript Core.
-                     */
-                    if (__DEV__) {
-                        warn(
-                            `React NativeScript does not support removal of a <page> from a <frame>, ` +
-                            `as it is unclear how that would be handled in NativeScript Core. Skipping removal.`
-                        )
+                    // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
+                    type TNSFramePrivate = TNSFrame & {
+                        _navigationQueue: TNSNavigationContext[],
+                        _backStack: TNSBackstackEntry[], // backStack just returns a copy.
+                        _currentEntry: TNSBackstackEntry|undefined,
+                        isCurrent: (entry: TNSBackstackEntry) => boolean,
+                        _removeEntry: (entry: TNSBackstackEntry) => void,
+                    };
+
+                    const frame = parent.nativeView as TNSFramePrivate;
+                    const page = child.nativeView as TNSPage;
+
+                    if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
+                        // console.log(`[frame.remove] ${parent} x ${child} √`);
+                        frame.goBack();
+                    } else {
+                        /* There's actually valid reason to no-op here:
+                         * We might simply be trying to pop a child page in response to a native pop having occurred. */
+                        // console.log(`[frame.remove] ${parent} x ${child} x`);
+                        return;
                     }
                 }
             }
