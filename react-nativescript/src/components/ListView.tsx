@@ -1,11 +1,11 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-import { View, ContentView, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
-import { render as RNSRender, unmountComponentAtNode } from "../index";
+import { View, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
+import { render as RNSRender, unmountComponentAtNode, NSVRoot } from "../index";
 import { ListViewAttributes } from "../lib/react-nativescript-jsx";
 
-export type CellViewContainer = ContentView;
-type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
+export type CellViewContainer = View;
+type CellFactory = (item: any) => React.ReactElement;
 
 type OwnProps = {
     items: ItemsSource|any[];
@@ -29,7 +29,7 @@ type OwnProps = {
 type Props = OwnProps & { forwardedRef?: React.RefObject<NativeScriptListView> };
 
 type NumberKey = number | string;
-type RootKeyAndRef = { rootKey: string; ref: React.RefObject<any> };
+type RootKeyAndTNSView = { rootKey: string; nativeView: View };
 
 interface State {
     nativeCells: Record<NumberKey, CellViewContainer>;
@@ -63,7 +63,7 @@ export class _ListView extends React.Component<Props, State> {
     }
 
     private readonly myRef = React.createRef<NativeScriptListView>();
-    private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
+    private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndTNSView> = new Map();
     private roots: Set<string> = new Set();
 
     /**
@@ -100,31 +100,31 @@ export class _ListView extends React.Component<Props, State> {
 
         let view: View | undefined = args.view;
         if (!view) {
-            const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(item, cellFactory);
+            const rootKeyAndRef: RootKeyAndTNSView = this.renderNewRoot(item, cellFactory);
 
-            args.view = rootKeyAndRef.ref.current;
+            args.view = rootKeyAndRef.nativeView;
 
             /* Here we're re-using the ref - I assume this is best practice. If not, we can make a new one on each update instead. */
             this.argsViewToRootKeyAndRef.set(args.view, rootKeyAndRef);
 
-            if (onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.ref.current);
+            if (onCellFirstLoad) onCellFirstLoad(rootKeyAndRef.nativeView);
         } else {
             console.log(`[ListView] existing view: `, view);
             if (onCellRecycle) onCellRecycle(view as CellViewContainer);
 
-            const { rootKey, ref } = this.argsViewToRootKeyAndRef.get(view);
+            const { rootKey, nativeView } = this.argsViewToRootKeyAndRef.get(view);
             if (typeof rootKey === "undefined") {
                 console.error(`Unable to find root key that args.view corresponds to!`, view);
                 return;
             }
-            if (typeof ref === "undefined") {
+            if (!nativeView) {
                 console.error(`Unable to find ref that args.view corresponds to!`, view);
                 return;
             }
 
             // args.view = null;
             RNSRender(
-                cellFactory(item, ref),
+                cellFactory(item),
                 null,
                 () => {
                     // console.log(`Rendered into cell! detachedRootRef:`);
@@ -138,29 +138,29 @@ export class _ListView extends React.Component<Props, State> {
         return (this.props.forwardedRef || this.myRef).current;
     }
 
-    private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndRef => {
+    private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndTNSView => {
         const node: NativeScriptListView | null = this.getCurrentRef();
         if (!node) {
             throw new Error("Unable to get ref to ListView");
         }
 
         console.log(`[ListView] no existing view.`);
-        const ref: React.RefObject<any> = React.createRef<any>();
         const rootKey: string = `ListView-${node._domId}-${this.roots.size.toString()}`;
 
+        const root = new NSVRoot();
         RNSRender(
-            cellFactory(item, ref),
-            null,
-            () => {
+            cellFactory(item),
+            root, () => {
                 // console.log(`Rendered into cell! ref:`);
             },
             rootKey
         );
+
         this.roots.add(rootKey);
 
         return {
             rootKey,
-            ref,
+            nativeView: root.baseRef.nativeView
         };
     };
 
@@ -182,10 +182,10 @@ export class _ListView extends React.Component<Props, State> {
                     key,
                     createView: () => {
                         console.log(`[ListView] item template "${key}"`);
-                        const rootKeyAndRef: RootKeyAndRef = this.renderNewRoot(placeholderItem, cellFactory);
-                        this.argsViewToRootKeyAndRef.set(rootKeyAndRef.ref.current, rootKeyAndRef);
+                        const rootKeyAndRef: RootKeyAndTNSView = this.renderNewRoot(placeholderItem, cellFactory);
+                        this.argsViewToRootKeyAndRef.set(rootKeyAndRef.nativeView, rootKeyAndRef);
 
-                        return rootKeyAndRef.ref.current;
+                        return rootKeyAndRef.nativeView;
                     },
                 });
             });
