@@ -1,7 +1,6 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
-// import { updateListener } from "../client/EventHandling";
-import { View, EventData, ContentView, Observable, Color, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
+import { View, ContentView, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
 import { render as RNSRender, unmountComponentAtNode } from "../index";
 import { ListViewAttributes } from "../lib/react-nativescript-jsx";
 
@@ -10,10 +9,10 @@ type CellFactory = (item: any, ref: React.RefObject<any>) => React.ReactElement;
 
 type OwnProps = {
     items: ItemsSource|any[];
-    /* User may specify cellFactory for single-template or cellFactories for multi-template. */
+    /** User may specify cellFactory for single-template or cellFactories for multi-template. */
     cellFactory?: CellFactory;
     cellFactories?: Map<string, { placeholderItem: any; cellFactory: CellFactory }>;
-    /* For now, we don't support custom onItemLoading event handlers. */
+    /** For now, we don't support custom onItemLoading event handlers. */
     // onItemLoading?: (args: ItemEventData) => void,
     onItemTap?: (args: ItemEventData) => void;
     /**
@@ -41,9 +40,8 @@ interface State {
 
 /**
  * A React wrapper around the NativeScript ListView component.
- * Still under construction; needs to take React components as children.
- * https://docs.nativescript.org/ui/ns-ui-widgets/list-view
- * See: ui/list-view/list-view
+ * @see https://docs.nativescript.org/ui/ns-ui-widgets/list-view
+ * @module ui/list-view/list-view
  */
 export class _ListView extends React.Component<Props, State> {
     static readonly defaultProps = {
@@ -68,15 +66,16 @@ export class _ListView extends React.Component<Props, State> {
     private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndRef> = new Map();
     private roots: Set<string> = new Set();
 
-    /* ListView code-behind:
-     *   https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts
+    /**
+     * ListView code-behind:
+     * @see https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/code-behind/code-behind-ts-page.ts
      * ListView item templates:
-     *   https://medium.com/@alexander.vakrilov/faster-nativescript-listview-with-multiple-item-templates-8f903a32e48f
+     * @see https://medium.com/@alexander.vakrilov/faster-nativescript-listview-with-multiple-item-templates-8f903a32e48f
      * Cell state in ListView:
-     *   https://medium.com/@alexander.vakrilov/managing-component-state-in-nativescript-listview-b139e45d899b
-     *   https://github.com/NativeScript/nativescript-angular/issues/1245#issuecomment-393465035
+     * @see https://medium.com/@alexander.vakrilov/managing-component-state-in-nativescript-listview-b139e45d899b
+     * @see https://github.com/NativeScript/nativescript-angular/issues/1245#issuecomment-393465035
      * loadMoreItems:
-     *   https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/events/events-ts-page.ts
+     * @see https://github.com/NativeScript/nativescript-sdk-examples-js/blob/master/app/ns-ui-widgets-category/list-view/events/events-ts-page.ts
      */
     private readonly defaultOnItemLoading: (args: ItemEventData) => void = (args: ItemEventData) => {
         const { logLevel, onCellRecycle, onCellFirstLoad } = this.props._debug;
