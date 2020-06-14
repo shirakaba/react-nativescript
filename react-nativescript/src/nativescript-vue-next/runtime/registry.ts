@@ -483,7 +483,6 @@ if (!__TEST__) {
             }
         }
     )
-    /** TODO */
     registerElement(
         'internalListView',
         () => require('@nativescript/core').ListView,
