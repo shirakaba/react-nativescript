@@ -25,7 +25,7 @@ type OwnProps = {
         onCellFirstLoad?: (container: CellViewContainer) => void;
         onCellRecycle?: (container: CellViewContainer) => void;
     };
-} & ListViewAttributes;
+} & Omit<ListViewAttributes, "onItemLoading">;
 type Props = OwnProps & { forwardedRef?: React.RefObject<NativeScriptListView> };
 
 type NumberKey = number | string;
@@ -211,7 +211,6 @@ export class _ListView extends React.Component<Props, State> {
             children,
             _debug,
             cellFactories,
-            onItemLoading,
             cellFactory,
 
             ...rest
@@ -219,10 +218,6 @@ export class _ListView extends React.Component<Props, State> {
 
         if (children) {
             console.warn("Ignoring 'children' prop on ListView; not supported.");
-        }
-
-        if(onItemLoading){
-            console.warn("Ignoring 'onItemLoading' prop on ListView; handled internally.");
         }
 
         return (
