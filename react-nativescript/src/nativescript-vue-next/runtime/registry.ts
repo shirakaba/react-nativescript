@@ -484,7 +484,7 @@ if (!__TEST__) {
         }
     )
     registerElement(
-        'internalListView',
+        'listView',
         () => require('@nativescript/core').ListView,
         {
             viewFlags: NSVViewFlags.NO_CHILDREN
