@@ -28,6 +28,7 @@ export {
     NativeScriptProps
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
+export { ListView } from "./components/ListView";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
