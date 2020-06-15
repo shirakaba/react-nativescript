@@ -114,6 +114,14 @@ export function isKnownView(elementName: string): boolean {
     return elementMap.hasOwnProperty(normalizeElementName(elementName))
 }
 
+type TNSFramePrivate = TNSFrame & {
+    _navigationQueue: TNSNavigationContext[],
+    _backStack: TNSBackstackEntry[], // backStack just returns a copy.
+    _currentEntry: TNSBackstackEntry|undefined,
+    isCurrent: (entry: TNSBackstackEntry) => boolean,
+    _removeEntry: (entry: TNSBackstackEntry) => void,
+};
+
 // register built in elements
 // prettier-ignore
 if (!__TEST__) {
@@ -166,8 +174,8 @@ if (!__TEST__) {
         () => require('@nativescript/core').ActionBar,
         {
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const actionBar = parent.nativeView as TNSActionBar;
+                insert(child: NSVElement, parent: NSVElement<TNSActionBar>, atIndex?: number): void {
+                    const actionBar = parent.nativeView;
 
                     if(child.nodeRole === "navigationButton"){
                         if(child.nativeView instanceof TNSNavigationButton){
@@ -200,17 +208,16 @@ if (!__TEST__) {
                              * The implementation shows that addItem() acts as Array.prototype.push().
                              * @see action-bar-common.js
                              */
-                            actionBar.actionItems.addItem(child.nativeView);
+                            actionBar.actionItems.addItem(child.nativeView as TNSActionItem);
                         } else {
                             /**
                              * actionBar.actionItems doesn't publicly expose a splice() API, so we'll have to do things the hard way.
                              */
-    
                             const updatedItems: TNSActionItem[] = actionBar.actionItems.getItems();
                             updatedItems.splice(
                                 atIndex,
                                 0,
-                                child.nativeView
+                                child.nativeView as TNSActionItem
                             );
     
                             existingItems.forEach(actionItem => actionBar.actionItems.removeItem(actionItem));
@@ -223,7 +230,7 @@ if (!__TEST__) {
                             );
                         }
                     } else if(child.nodeRole === "titleView"){
-                        actionBar.titleView = child.nativeView;
+                        actionBar.titleView = child.nativeView as TNSView;
                     } else {
                         if (__DEV__) {
                             warn(
@@ -233,13 +240,13 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
+                remove(child: NSVElement, parent: NSVElement<TNSActionBar>): void {
                     const actionBar = parent.nativeView as TNSActionBar;
 
                     if(child.nodeRole === "navigationButton"){
                         actionBar.navigationButton = null; // Anything falsy should work.
                     } else if(child.nodeRole === "actionItems"){
-                        actionBar.actionItems.removeItem(child.nativeView);
+                        actionBar.actionItems.removeItem(child.nativeView as TNSActionItem);
                     } else if(child.nodeRole === "actionItem"){
                         if (__DEV__) {
                             warn(
@@ -278,16 +285,16 @@ if (!__TEST__) {
         {
             // todo: move into Frame.ts when we end up creating a component for Frame
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
+                insert(child: NSVElement, parent: NSVElement<TNSFrame>, atIndex?: number): void {
                     // console.log(`[frame.insert] ${parent}.childNodes updating to: [${parent.childNodes}]`);
-                    const frame = parent.nativeView as TNSFrame
+                    const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
                     if (child.nativeView instanceof TNSPage) {
                         if(typeof atIndex === "undefined"){
                             // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} √`);
                             frame.navigate({
                                 create() {
-                                    return child.nativeView
+                                    return child.nativeView as TNSView
                                 }
                             })
                             return;
@@ -314,15 +321,8 @@ if (!__TEST__) {
                  * We can splice frame._backStack (belonging to frame-common.ts), but it doesn't
                  * update the logic of the frame.ios.ts and frame.android.ts native implementations.
                  */
-                remove(child: NSVElement, parent: NSVElement): void {
+                remove(child: NSVElement, parent: NSVElement<TNSFramePrivate>): void {
                     // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
-                    type TNSFramePrivate = TNSFrame & {
-                        _navigationQueue: TNSNavigationContext[],
-                        _backStack: TNSBackstackEntry[], // backStack just returns a copy.
-                        _currentEntry: TNSBackstackEntry|undefined,
-                        isCurrent: (entry: TNSBackstackEntry) => boolean,
-                        _removeEntry: (entry: TNSBackstackEntry) => void,
-                    };
 
                     const frame = parent.nativeView as TNSFramePrivate;
                     const page = child.nativeView as TNSPage;
@@ -346,8 +346,8 @@ if (!__TEST__) {
         {
             viewFlags: NSVViewFlags.CONTENT_VIEW,
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const page = parent.nativeView as TNSPage;
+                insert(child: NSVElement, parent: NSVElement<TNSPage>, atIndex?: number): void {
+                    const page = parent.nativeView;
 
                     if(typeof atIndex === "number" && atIndex > 0){
                         if (__DEV__) {
@@ -360,13 +360,13 @@ if (!__TEST__) {
                     }
 
                     if (child.nodeRole === "actionBar" || child.nativeView instanceof TNSActionBar) {
-                        page.actionBar = child.nativeView;
+                        page.actionBar = child.nativeView as TNSActionBar;
                     } else {
-                        page.content = child.nativeView;
+                        page.content = child.nativeView as TNSView;
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const page = parent.nativeView as TNSPage;
+                remove(child: NSVElement, parent: NSVElement<TNSPage>): void {
+                    const page = parent.nativeView;
                     if (child.nodeRole === "actionBar" || child.nativeView instanceof TNSActionBar) {
                         /* Well we could technically do this, but it'd be better to just teach good practices. */
                         // page.actionBar = new TNSActionBar();
@@ -582,8 +582,8 @@ if (!__TEST__) {
         () => require('@nativescript/core').TabView,
         {
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const tabView = parent.nativeView as TNSTabView;
+                insert(child: NSVElement, parent: NSVElement<TNSTabView>, atIndex?: number): void {
+                    const tabView = parent.nativeView;
                     
                     if(child.nodeRole === "items"){
                         if(child.nativeView instanceof TNSTabViewItem === false){
@@ -598,12 +598,12 @@ if (!__TEST__) {
                         const items = tabView.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
 
                         if(typeof atIndex === "undefined" || atIndex === items.length){
-                            tabView.items = items.concat(child.nativeView);
+                            tabView.items = items.concat(child.nativeView as TNSTabViewItem);
                         } else {
                             tabView.items = items.slice().splice(
                                 atIndex,
                                 0,
-                                child.nativeView
+                                child.nativeView as TNSTabViewItem
                             );
                         }
                     } else if(child.nodeRole === "item"){
@@ -621,8 +621,8 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabView = parent.nativeView as TNSTabView;
+                remove(child: NSVElement, parent: NSVElement<TNSTabView>): void {
+                    const tabView = parent.nativeView;
 
                     if(child.nodeRole === "items"){
                         tabView.items = (tabView.items || []).filter(i => i !== child.nativeView);
@@ -650,8 +650,8 @@ if (!__TEST__) {
         () => require('@nativescript/core').TabViewItem,
         {
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const tabViewItem = parent.nativeView as TNSTabViewItem;
+                insert(child: NSVElement, parent: NSVElement<TNSTabViewItem>, atIndex?: number): void {
+                    const tabViewItem = parent.nativeView;
 
                     if(child.nodeRole === "view"){
                         if(child.nativeView instanceof TNSView){
@@ -672,8 +672,8 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabViewItem = parent.nativeView as TNSTabViewItem;
+                remove(child: NSVElement, parent: NSVElement<TNSTabViewItem>): void {
+                    const tabViewItem = parent.nativeView;
 
                     if(child.nodeRole === "view"){
                         // tabViewItem.view = null; // Anything falsy should work.
@@ -701,8 +701,8 @@ if (!__TEST__) {
         () => require('@nativescript/core').TabStrip,
         {
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const tabStrip = parent.nativeView as TNSTabStrip;
+                insert(child: NSVElement, parent: NSVElement<TNSTabStrip>, atIndex?: number): void {
+                    const tabStrip = parent.nativeView;
 
                     if(child.nodeRole === "items"){
                         if(child.nativeView instanceof TNSTabStripItem === false){
@@ -717,12 +717,12 @@ if (!__TEST__) {
                         const items = tabStrip.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
 
                         if(typeof atIndex === "undefined" || atIndex === items.length){
-                            tabStrip.items = items.concat(child.nativeView);
+                            tabStrip.items = items.concat(child.nativeView as TNSTabStripItem);
                         } else {
                             tabStrip.items = items.slice().splice(
                                 atIndex,
                                 0,
-                                child.nativeView
+                                child.nativeView as TNSTabStripItem
                             );
                         }
                     } else if(child.nodeRole === "item"){
@@ -740,8 +740,8 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabs = parent.nativeView as TNSTabs;
+                remove(child: NSVElement, parent: NSVElement<TNSTabStrip>): void {
+                    const tabs = parent.nativeView;
 
                     if(child.nodeRole === "items"){
                         tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
@@ -770,8 +770,8 @@ if (!__TEST__) {
         () => require('@nativescript/core').TabStripItem,
         {
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const tabStripItem = parent.nativeView as TNSTabStripItem;
+                insert(child: NSVElement, parent: NSVElement<TNSTabStripItem>, atIndex?: number): void {
+                    const tabStripItem = parent.nativeView;
 
                     // Note: The instanceof check, and nodeRole check, is technically redundant if you look at the implementation, but I'll
                     //       keep these good practices in case it's ever refactored.
@@ -786,7 +786,7 @@ if (!__TEST__) {
                             return;
                         }
 
-                        tabStripItem.label = child.nativeView;
+                        tabStripItem.label = child.nativeView as TNSLabel;
                     } else if(child.nodeRole === "image"){
                         if(child.nativeView instanceof TNSImage === false){
                             if (__DEV__) {
@@ -797,7 +797,7 @@ if (!__TEST__) {
                             return;
                         }
 
-                        tabStripItem.image = child.nativeView;
+                        tabStripItem.image = child.nativeView as TNSImage;
                     } else {
                         if (__DEV__) {
                             warn(
@@ -807,8 +807,8 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabStripItem = parent.nativeView as TNSTabStripItem;
+                remove(child: NSVElement, parent: NSVElement<TNSTabStripItem>): void {
+                    const tabStripItem = parent.nativeView;
 
                     if(child.nodeRole === "label"){
                         // WARNING: It is not evident from the implementation that TabStripItem supports removing label at all!
@@ -835,8 +835,8 @@ if (!__TEST__) {
         {
             // TODO: share the same NodeOps for both BottomNavigation and Tabs; they're identical as they both extend TabNavigationBase.
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const tabs = parent.nativeView as TNSTabs;
+                insert(child: NSVElement, parent: NSVElement<TNSTabs>, atIndex?: number): void {
+                    const tabs = parent.nativeView;
 
                     if(child.nodeRole === "tabStrip"){
                         if(child.nativeView instanceof TNSTabStrip){
@@ -860,12 +860,12 @@ if (!__TEST__) {
 
                         const items = tabs.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
                         if(typeof atIndex === "undefined" || atIndex === items.length){
-                            tabs.items = items.concat(child.nativeView);
+                            tabs.items = items.concat(child.nativeView as TNSTabContentItem);
                         } else {
                             tabs.items = items.slice().splice(
                                 atIndex,
                                 0,
-                                child.nativeView
+                                child.nativeView as TNSTabContentItem
                             );
                         }
                     } else if(child.nodeRole === "item"){
@@ -921,8 +921,8 @@ if (!__TEST__) {
         {
             // TODO: share the same NodeOps for both BottomNavigation and Tabs; they're identical as they both extend TabNavigationBase.
             nodeOps: {
-                insert(child: NSVElement, parent: NSVElement, atIndex?: number): void {
-                    const bottomNavigation = parent.nativeView as TNSBottomNavigation;
+                insert(child: NSVElement, parent: NSVElement<TNSBottomNavigation>, atIndex?: number): void {
+                    const bottomNavigation = parent.nativeView;
 
                     if(child.nodeRole === "tabStrip"){
                         if(child.nativeView instanceof TNSTabStrip){
@@ -947,12 +947,12 @@ if (!__TEST__) {
                         const items = bottomNavigation.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
                         
                         if(typeof atIndex === "undefined" || atIndex === items.length){
-                            bottomNavigation.items = items.concat(child.nativeView);
+                            bottomNavigation.items = items.concat(child.nativeView as TNSTabContentItem);
                         } else {
                             bottomNavigation.items = items.slice().splice(
                                 atIndex,
                                 0,
-                                child.nativeView
+                                child.nativeView as TNSTabContentItem
                             );
                         }
                     } else if(child.nodeRole === "item"){
@@ -970,8 +970,8 @@ if (!__TEST__) {
                         }
                     }
                 },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabs = parent.nativeView as TNSTabs;
+                remove(child: NSVElement, parent: NSVElement<TNSTabs>): void {
+                    const tabs = parent.nativeView;
 
                     if(child.nodeRole === "tabStrip"){
                         tabs.tabStrip = null; // Anything falsy should work.

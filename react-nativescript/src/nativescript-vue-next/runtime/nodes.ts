@@ -6,7 +6,8 @@ import {
 } from './registry'
 import { ELEMENT_REF } from './runtimeHelpers';
 import { debug } from '../shared';
-import { ViewBase, LayoutBase, Style, ObservableArray, EventData } from '@nativescript/core'
+import { ViewBase, View, TextBase, LayoutBase, ContentView, Style, ObservableArray, EventData } from '@nativescript/core'
+import { AddChildFromBuilder } from '@nativescript/core/ui/core/view/view';
 import { unsetValue } from '@nativescript/core/ui/core/properties'
 /* 
  * I had some difficulty importing this as:
@@ -59,7 +60,7 @@ export interface INSVNode {
     nextSibling: INSVNode | null
 }
 
-export interface INSVElement extends INSVNode {
+export interface INSVElement<T extends ViewBase = any> extends INSVNode {
     tagName: string
     meta: NSVViewMeta
     style: Style | string
@@ -76,7 +77,7 @@ export interface INSVElement extends INSVNode {
 
     dispatchEvent(event: string): void
 
-    nativeView: (ViewBase | LayoutBase) & { [ELEMENT_REF]: INSVElement }
+    nativeView: (T) & { [ELEMENT_REF]: INSVElement<T> }
 
     getAttribute(name: string): unknown
 
@@ -125,9 +126,9 @@ export abstract class NSVNode implements INSVNode {
     }
 }
 
-export class NSVElement extends NSVNode implements INSVElement {
+export class NSVElement<T extends ViewBase = ViewBase> extends NSVNode implements INSVElement {
     private readonly _tagName: string
-    private readonly _nativeView: any
+    private readonly _nativeView: T
     private _meta: NSVViewMeta | undefined
 
     constructor(tagName: string) {
@@ -152,15 +153,15 @@ export class NSVElement extends NSVNode implements INSVElement {
     }
 
     set style(inlineStyle: Style | string) {
-        this.nativeView.style = inlineStyle
+        (this.nativeView as any).style = inlineStyle
     }
 
     get text(): string | undefined {
-        return this.nativeView.text
+        return (this.nativeView as ViewBase as TextBase).text
     }
 
     set text(t: string | undefined) {
-        this.nativeView.text = t
+        (this.nativeView as ViewBase as TextBase).text = t
     }
 
     get meta() {
@@ -418,14 +419,14 @@ function addChild(child: NSVElement, parent: NSVElement, atIndex?: number) {
 
     if (parent.meta.viewFlags & NSVViewFlags.LAYOUT_VIEW) {
         if (atIndex) {
-            parentView.insertChild(childView, atIndex)
+            (parentView as LayoutBase).insertChild(childView as View, atIndex)
         } else {
-            parentView.addChild(childView)
+            (parentView as LayoutBase).addChild(childView as View)
         }
     } else if (parent.meta.viewFlags & NSVViewFlags.CONTENT_VIEW) {
-        parentView.content = childView
+        (parentView as ContentView).content = childView as View;
     } else {
-        parentView._addChildFromBuilder(childView.constructor.name, childView)
+        (parentView as unknown as AddChildFromBuilder)._addChildFromBuilder(childView.constructor.name, childView)
     }
 }
 
@@ -458,9 +459,9 @@ function removeChild(child: NSVElement, parent: NSVElement) {
     }
 
     if (parent.meta.viewFlags & NSVViewFlags.LAYOUT_VIEW) {
-        parentView.removeChild(childView)
+        (parentView as LayoutBase).removeChild(childView as View)
     } else if (parent.meta.viewFlags & NSVViewFlags.CONTENT_VIEW) {
-        parentView.content = null
+        (parentView as ContentView).content = null
     } else {
         // Removing a child span takes us down here
         parentView._removeView(childView)
