@@ -20,12 +20,12 @@ const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
-import { NSVRoot } from "./nativescript-vue-next/runtime/nodes";
+import { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags } from "./nativescript-vue-next/runtime/nodes";
+export { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags };
 const { version: ReactNativeScriptVersion } = require('../package.json');
 
 export {
     ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes,
-    NSVRoot,
     NativeScriptProps
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
@@ -143,10 +143,10 @@ export function start(app: ReactReconciler.ReactNodeList): void {
 
     run({
         create: () => {
-            const root = new NSVRoot();
+            const root = new NSVRoot<View>();
             render(app, root, () => console.log(`Container updated!`), "__APP_ROOT__");
 
-            return root.baseRef.nativeView as View;
+            return root.baseRef.nativeView;
         },
     });
 }

@@ -365,8 +365,8 @@ export class NSVText extends NSVNode {
     }
 }
 
-export class NSVRoot extends NSVNode {
-    baseRef?: NSVElement
+export class NSVRoot<T extends ViewBase = ViewBase> extends NSVNode {
+    baseRef?: NSVElement<T>
 
     constructor() {
         super(NSVNodeTypes.ROOT)

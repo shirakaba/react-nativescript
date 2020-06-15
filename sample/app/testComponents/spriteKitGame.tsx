@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Page, Frame } from "@nativescript/core";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
+import { PageAttributes, NSVElement } from "react-nativescript";
 
 const BattlefieldScene = (SKScene as any).extend(
     {
@@ -329,7 +329,7 @@ function downloadFileFromURL(url: NSURL): Promise<NSURL> {
 }
 
 
-export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps, { audioLoaded: boolean }> {
+export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, { audioLoaded: boolean }> {
     private playerStrongRef: { player?: AVAudioPlayer } = {};
     private readonly gameVC: UIViewController = GameViewController.alloc().init();
 
@@ -364,7 +364,7 @@ export class SpriteKitGameTest extends React.Component<{ forwardedRef: React.Ref
                         onTap={() => {
                             if(this.playerStrongRef.player) this.playerStrongRef.player.play();
 
-                            const currentPage: Page = forwardedRef.current!;
+                            const currentPage: Page = forwardedRef.current!.nativeView;
                             const currentFrame: Frame = currentPage.frame;
                             const nc: UINavigationController = currentFrame.ios.controller;
                             (this.gameVC as any).willPopCb = () => this.playerStrongRef.player && this.playerStrongRef.player.stop();

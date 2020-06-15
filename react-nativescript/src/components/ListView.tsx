@@ -2,6 +2,7 @@ import * as console from "../shared/Logger";
 import * as React from "react";
 import { View, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
 import { render as RNSRender, unmountComponentAtNode, NSVRoot } from "../index";
+import { NSVElement } from "../nativescript-vue-next/runtime/nodes";
 import { ListViewAttributes } from "../lib/react-nativescript-jsx";
 
 export type CellViewContainer = View;
@@ -26,7 +27,7 @@ type OwnProps = {
         onCellRecycle?: (container: CellViewContainer) => void;
     };
 } & Omit<ListViewAttributes, "onItemLoading">;
-type Props = OwnProps & { forwardedRef?: React.RefObject<NativeScriptListView> };
+type Props = OwnProps & { forwardedRef?: React.RefObject<NSVElement<NativeScriptListView>> };
 
 type NumberKey = number | string;
 type RootKeyAndTNSView = { rootKey: string; nativeView: View };
@@ -62,7 +63,7 @@ export class _ListView extends React.Component<Props, State> {
         };
     }
 
-    private readonly myRef = React.createRef<NativeScriptListView>();
+    private readonly myRef = React.createRef<NSVElement<NativeScriptListView>>();
     private readonly argsViewToRootKeyAndRef: Map<View, RootKeyAndTNSView> = new Map();
     private roots: Set<string> = new Set();
 
@@ -134,12 +135,13 @@ export class _ListView extends React.Component<Props, State> {
         }
     };
 
-    protected getCurrentRef(): NativeScriptListView | null {
-        return (this.props.forwardedRef || this.myRef).current;
+    protected getNativeView(): NativeScriptListView | null {
+        const ref = (this.props.forwardedRef || this.myRef);
+        return ref.current ? ref.current.nativeView : null;
     }
 
     private readonly renderNewRoot = (item: any, cellFactory: CellFactory): RootKeyAndTNSView => {
-        const node: NativeScriptListView | null = this.getCurrentRef();
+        const node: NativeScriptListView | null = this.getNativeView();
         if (!node) {
             throw new Error("Unable to get ref to ListView");
         }
@@ -147,7 +149,7 @@ export class _ListView extends React.Component<Props, State> {
         console.log(`[ListView] no existing view.`);
         const rootKey: string = `ListView-${node._domId}-${this.roots.size.toString()}`;
 
-        const root = new NSVRoot();
+        const root = new NSVRoot<View>();
         RNSRender(
             cellFactory(item),
             root, () => {
@@ -167,7 +169,7 @@ export class _ListView extends React.Component<Props, State> {
     componentDidMount() {
         super.componentDidMount();
 
-        const node: NativeScriptListView | null = this.getCurrentRef();
+        const node: NativeScriptListView | null = this.getNativeView();
         if (!node) {
             console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
             return;
@@ -230,8 +232,8 @@ export class _ListView extends React.Component<Props, State> {
     }
 }
 
-export const ListView = React.forwardRef<NativeScriptListView, OwnProps>(
-    (props: OwnProps, ref: React.RefObject<NativeScriptListView>) => {
+export const ListView = React.forwardRef<NSVElement<NativeScriptListView>, OwnProps>(
+    (props: OwnProps, ref: React.RefObject<NSVElement<NativeScriptListView>>) => {
         return <_ListView {...props} forwardedRef={ref}/>;
     }
 );
