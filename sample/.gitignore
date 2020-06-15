@@ -6,8 +6,6 @@ platforms/
 # NativeScript Template
 *.js.map
 *.js
-!errorOverlay.js
-!errorOverlayEntry.js
 !webpack.config.js
 !react-nativescript.webpack.config.js
 
