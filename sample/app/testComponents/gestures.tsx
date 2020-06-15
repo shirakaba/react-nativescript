@@ -1,47 +1,47 @@
 import * as React from "react";
-import { Color, Page, EventData } from "@nativescript/core";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
+import { Page, EventData } from "@nativescript/core";
+import { NSVElement, PageAttributes } from "react-nativescript";
 import { PortalToPageWithActionBar, StatefulPortalToPageWithActionBar } from "./navigation";
 import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "tns-core-modules/ui/gestures/gestures";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){
         return (
-                <contentView
-                    style={{
-                        backgroundColor: new Color("yellow"),
-                        width: { unit: "%", value: 100 },
-                        height: { unit: "%", value: 100 },
-                    }}
+            <contentView
+                style={{
+                    backgroundColor: "yellow",
+                    width: { unit: "%", value: 100 },
+                    height: { unit: "%", value: 100 },
+                }}
 
-                    onTap={(args: GestureEventData) => console.log(`[onTap] yellow`)}
-                    onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] yellow`)}
-                    onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] yellow`)}
-                    onPan={(args: PanGestureEventData) => console.log(`[onPan] yellow`)}
-                    onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] yellow`)}
-                    onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] yellow`)}
-                    onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
-                    onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
-                >
-                    <flexboxLayout justifyContent="center" alignItems="center">
-                        <contentView
-                            style={{
-                                backgroundColor: new Color("orange"),
-                                width: { unit: "px", value: 300 },
-                                height: { unit: "px", value: 300 },
-                            }}
+                onTap={(args: GestureEventData) => console.log(`[onTap] yellow`)}
+                onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] yellow`)}
+                onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] yellow`)}
+                onPan={(args: PanGestureEventData) => console.log(`[onPan] yellow`)}
+                onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] yellow`)}
+                onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] yellow`)}
+                onLongPress={(args: GestureEventData) => console.log(`[onLongPress] yellow`)}
+                onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] yellow`)}
+            >
+                <flexboxLayout justifyContent="center" alignItems="center">
+                    <contentView
+                        style={{
+                            backgroundColor: "orange",
+                            width: { unit: "px", value: 300 },
+                            height: { unit: "px", value: 300 },
+                        }}
 
-                            onTap={(args: GestureEventData) => console.log(`[onTap] orange`)}
-                            onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] orange`)}
-                            onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] orange`)}
-                            onPan={(args: PanGestureEventData) => console.log(`[onPan] orange`)}
-                            onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] orange`)}
-                            onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] orange`)}
-                            onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
-                            onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
-                        />
-                    </flexboxLayout>
-                </contentView>
+                        onTap={(args: GestureEventData) => console.log(`[onTap] orange`)}
+                        onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] orange`)}
+                        onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] orange`)}
+                        onPan={(args: PanGestureEventData) => console.log(`[onPan] orange`)}
+                        onSwipe={(args: SwipeGestureEventData) => console.log(`[onSwipe] orange`)}
+                        onRotation={(args: RotationGestureEventData) => console.log(`[onRotation] orange`)}
+                        onLongPress={(args: GestureEventData) => console.log(`[onLongPress] orange`)}
+                        onTouch={(args: TouchGestureEventData) => console.log(`[onTouch] orange`)}
+                    />
+                </flexboxLayout>
+            </contentView>
         );
     }
 }
@@ -94,7 +94,7 @@ export class PanGestureTest extends React.Component<
         return (
                 <contentView
                     style={{
-                        backgroundColor: new Color("yellow"),
+                        backgroundColor: "yellow",
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
@@ -104,7 +104,7 @@ export class PanGestureTest extends React.Component<
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
-                                backgroundColor: new Color("orange"),
+                                backgroundColor: "orange",
                                 width: { unit: "px", value: 300 },
                                 height: { unit: "px", value: 300 },
                             }}
@@ -117,8 +117,8 @@ export class PanGestureTest extends React.Component<
     }
 }
 
-export class PageGestureTest extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>, {}> {
-    private readonly yellowPageRef = React.createRef<Page>();
+export class PageGestureTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, {}> {
+    private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
     render(){
         const { forwardedRef, ...rest } = this.props;
 
@@ -134,10 +134,10 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                     <button
                         text={"Navigate to yellow page"}
                         onTap={() => {
-                            const currentPage: Page = forwardedRef.current!;
+                            const currentPage: Page = forwardedRef.current!.nativeView;
                             currentPage.frame.navigate({
                                 create: () => {
-                                    return this.yellowPageRef.current;
+                                    return this.yellowPageRef.current!.nativeView;
                                 }
                             });
                         }}
@@ -151,7 +151,7 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                     onSwipe={(args: SwipeGestureEventData) => {
                         if(args.direction === SwipeDirection.right){
                             console.log(`[onSwipe] yellow Page, rightwards (so shall go back)`);
-                            this.yellowPageRef.current!.frame.goBack();
+                            this.yellowPageRef.current!.nativeView.frame.goBack();
                         } else {
                             console.log(`[onSwipe] yellow Page, not rightwards (so shan't go back). direction: ${args.direction}`);
                         }
@@ -172,21 +172,21 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
  * Expected result: app doesn't crash (any more)
  */
 export class StatefulPageGestureTest extends React.Component<
-    { forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>,
+    { forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {}
 > {
-    private readonly yellowPageRef = React.createRef<Page>();
+    private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
 
     private readonly onSwipeBasePage = (args: GestureEventData) => {
         console.log(`[onSwipe] onSwipeBasePage`);
     };
 
     private readonly onTapBasePage = (args: EventData) => {
-        const currentPage: Page = this.props.forwardedRef.current!;
+        const currentPage: Page = this.props.forwardedRef.current!.nativeView;
         // currentPage.frame.page
         currentPage.frame.navigate({
             create: () => {
-                return this.yellowPageRef.current;
+                return this.yellowPageRef.current!.nativeView;
             }
         });
     }
@@ -202,8 +202,8 @@ export class StatefulPageGestureTest extends React.Component<
     render(){
         const { forwardedRef, ...rest } = this.props;
 
-        console.log(`[StatefulPageGestureTest.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current.frame.currentPage}`);
-        // const yellowPageRef = React.createRef<Page>();
+        console.log(`[StatefulPageGestureTest.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`);
+        // const yellowPageRef = React.createRef<NSVElement<Page>>();
 
         return (
             <page
@@ -232,7 +232,7 @@ export class StatefulPageGestureTest extends React.Component<
  * as it will re-reconcile the DOM tree incorrectly.
  */
 export class PortalToStatefulPage extends React.Component<
-    { yellowPageRef: React.RefObject<Page> } & PageComponentProps<Page>,
+    { yellowPageRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {
         xBeforePan: number,
         yBeforePan: number,
@@ -273,7 +273,7 @@ export class PortalToStatefulPage extends React.Component<
 
         if(args.direction === SwipeDirection.right){
             console.log(`[onSwipe] yellow Page, rightwards (so shall go back)`);
-            this.props.yellowPageRef.current!.frame.goBack();
+            this.props.yellowPageRef.current!.nativeView.frame.goBack();
         } else {
             console.log(`[onSwipe] yellow Page, not rightwards (so shan't go back). direction: ${args.direction}`);
         }
@@ -301,7 +301,7 @@ export class PortalToStatefulPage extends React.Component<
         const { x, y } = this.state;
 
         console.log(`[StatefulPage.render()] yellowPageRef.current: ${this.props.yellowPageRef.current}`);
-        // const yellowPageRef = React.createRef<Page>();
+        // const yellowPageRef = React.createRef<NSVElement<Page>>();
 
 
         return (
@@ -313,7 +313,7 @@ export class PortalToStatefulPage extends React.Component<
             >
                 <contentView
                     style={{
-                        backgroundColor: new Color("yellow"),
+                        backgroundColor: "yellow",
                         width: { unit: "%", value: 100 },
                         height: { unit: "%", value: 100 },
                     }}
@@ -323,7 +323,7 @@ export class PortalToStatefulPage extends React.Component<
                             left={{ unit: "px", value: x }}
                             top={{ unit: "px", value: y }}
                             style={{
-                                backgroundColor: new Color("orange"),
+                                backgroundColor: "orange",
                                 width: { unit: "px", value: 300 },
                                 height: { unit: "px", value: 300 },
                             }}
@@ -348,17 +348,17 @@ export class PortalToStatefulPage extends React.Component<
  * Expected: doesn't crash.
  */
 export class StatefulPageGestureTest2 extends React.Component<
-    { forwardedRef: React.RefObject<Page> } & PageComponentProps<Page>,
+    { forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {}
 > {
-    private readonly yellowPageRef = React.createRef<Page>();
+    private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
 
     private readonly onTapBasePage = (args: EventData) => {
-        const currentPage: Page = this.props.forwardedRef.current!;
+        const currentPage: Page = this.props.forwardedRef.current!.nativeView;
         // currentPage.frame.page
         currentPage.frame.navigate({
             create: () => {
-                return this.yellowPageRef.current;
+                return this.yellowPageRef.current!.nativeView;
             }
         });
     }
@@ -374,7 +374,7 @@ export class StatefulPageGestureTest2 extends React.Component<
     render(){
         const { forwardedRef, ...rest } = this.props;
 
-        console.log(`[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current.frame.currentPage}`);
+        console.log(`[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`);
 
         return (
             <page
@@ -400,7 +400,7 @@ export class StatefulPageGestureTest2 extends React.Component<
  * A portal with a child (StatefulContentView) that can update state internally upon clicking a button.
  */
 export class PortalToPageWithStatefulContentView extends React.Component<
-    { yellowPageRef: React.RefObject<Page> } & PageComponentProps<Page>,
+    { yellowPageRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {}
 > {
     shouldComponentUpdate(
@@ -414,7 +414,7 @@ export class PortalToPageWithStatefulContentView extends React.Component<
     render(){
         const { yellowPageRef, ...rest } = this.props;
 
-        console.log(`[PortalToPage.render()] yellowPageRef.current: ${this.props.yellowPageRef.current}`);
+        console.log(`[PortalToPage.render()] yellowPageRef.current: ${this.props.yellowPageRef.current!.nativeView}`);
 
         return (
             <PortalToPageWithActionBar
@@ -432,7 +432,7 @@ export class PortalToPageWithStatefulContentView extends React.Component<
  * A class component whose state will update upon clicking a button.
  */
 export class StatefulContentView extends React.Component<
-    {} & PageComponentProps<Page>,
+    {} & PageAttributes,
     {
         xBeforePan: number,
         yBeforePan: number,
@@ -475,7 +475,7 @@ export class StatefulContentView extends React.Component<
         return (
             <contentView
                 style={{
-                    backgroundColor: new Color("yellow"),
+                    backgroundColor: "yellow",
                     width: { unit: "%", value: 100 },
                     height: { unit: "%", value: 100 },
                 }}
@@ -485,7 +485,7 @@ export class StatefulContentView extends React.Component<
                         left={{ unit: "px", value: x }}
                         top={{ unit: "px", value: y }}
                         style={{
-                            backgroundColor: new Color("orange"),
+                            backgroundColor: "orange",
                             width: { unit: "px", value: 300 },
                             height: { unit: "px", value: 300 },
                         }}

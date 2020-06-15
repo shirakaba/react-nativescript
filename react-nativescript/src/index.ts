@@ -9,9 +9,10 @@
  *
  * They have since moved to a MIT-style licence, which is reproduced in /LICENSE.
  */
-import { ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes } from "./lib/react-nativescript-jsx";
+import { ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes, ViewBaseAttributes, ViewAttributes, } from "./lib/react-nativescript-jsx";
 import { ActionBar, ActionItem, ActivityIndicator, Button, ContentView, DatePicker, HtmlView, Label, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, StackLayout, WrapLayout, ListPicker, ListView, NavigationButton, Placeholder, Progress, ScrollView, SearchBar, SegmentedBar, Slider, Switch, TabView, TabViewItem, TextView, TextField, TimePicker, Frame, Page, FormattedString, SegmentedBarItem, Span, Image, WebView, View, Application, Tabs, TabStrip, TabStripItem, BottomNavigation, TabContentItem } from "@nativescript/core";
-import { NativeScriptProps } from "./shared/NativeScriptJSXTypings";
+import { RNSStyle, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
+export { RNSStyle, NativeScriptAttributes, NativeScriptProps };
 import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
@@ -23,13 +24,11 @@ import { createPortal as _createPortal } from "./client/ReactPortal";
 import { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags } from "./nativescript-vue-next/runtime/nodes";
 export { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags };
 const { version: ReactNativeScriptVersion } = require('../package.json');
-
 export {
-    ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes,
-    NativeScriptProps
+    ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes, ViewBaseAttributes, ViewAttributes,
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
-export { ListView } from "./components/ListView";
+export { ListView, CellViewContainer } from "./components/ListView";
 
 // declare global {
 //     var __DEV__: boolean|undefined;

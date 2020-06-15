@@ -1,11 +1,12 @@
 import * as React from "react";
-import { ScrollView } from "@nativescript/core";
+import { ScrollView, StackLayout } from "@nativescript/core";
 import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { NSVElement } from "react-nativescript";
 
-export class DeletePropFromScrollViewTest extends React.Component<{ forwardedRef: React.Ref<any> }, {}> {
+export class DeletePropFromScrollViewTest extends React.Component<{ forwardedRef: React.Ref<NSVElement<StackLayout>> }, {}> {
     render(){
         return (
-            <stackLayout ref={this.props.forwardedRef} backgroundColor={"gray"} height={"100%" as any} width={"100%" as any}>
+            <stackLayout ref={this.props.forwardedRef} backgroundColor={"gray"} height={"100%"} width={"100%"}>
                 <DeletePropFromScrollViewTestContent/>
             </stackLayout>
         );

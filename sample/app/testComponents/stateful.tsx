@@ -1,13 +1,6 @@
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, Switch, Slider } from "react-nativescript/dist/client/ElementRegistry";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem } from "tns-core-modules/ui/tab-view/tab-view";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
+import { RNSStyle } from "react-nativescript";
+import { Color } from "@nativescript/core";
 
 export class GameLoop {
     private readonly subscribers = [];
@@ -51,7 +44,7 @@ export class GameLoop {
 }
 
 const GameLoopContext = React.createContext(new GameLoop(1000 / 60));
-export class GameLoopComponent extends React.Component<{ frameRateMs?: number, style?: Partial<StylePropContents> }, {}> {
+export class GameLoopComponent extends React.Component<{ frameRateMs?: number, style?: Partial<RNSStyle> }, {}> {
 	render() {
         const loop: GameLoop = this.context;
         console.log(`[GameLoopContext] render - current loop:`, loop); // logs: {}

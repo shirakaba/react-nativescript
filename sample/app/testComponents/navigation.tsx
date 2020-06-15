@@ -1,25 +1,25 @@
 import * as React from "react";
-import { Page, Frame } from "@nativescript/core";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import * as ReactNativeScript from "react-nativescript/dist/index";
+import { PropsWithChildren } from "react";
+import * as ReactNativeScript from "react-nativescript";
+import { NSVElement, FrameAttributes, PageAttributes } from "react-nativescript";
+import { Page, Frame, NavigationButton } from "@nativescript/core";
 import { DockLayoutTest, FlexboxLayoutTest, AbsoluteLayoutTest } from "./layout";
-import { FrameAttributes, PageAttributes } from "react-nativescript/dist/lib/react-nativescript-jsx";
 
 export class NestedHub extends React.Component<{
-    forwardedRef: React.RefObject<Page>;
+    forwardedRef: React.RefObject<NSVElement<Page>>;
 } & PageAttributes, {}> {
     render() {
         const { forwardedRef, ...rest } = this.props;
-        const greenPageRef = React.createRef<Page>();
-        const redPageRef = React.createRef<Page>();
+        const greenPageRef = React.createRef<NSVElement<Page>>();
+        const redPageRef = React.createRef<NSVElement<Page>>();
         return (<page ref={forwardedRef} actionBarHidden={false} {...rest}>
             <actionBar title="Hub" className="action-bar" />
             <stackLayout>
                 <button text={"Navigate to green page"} onTap={() => {
-                    const currentPage: Page = forwardedRef.current!;
+                    const currentPage: Page = forwardedRef.current!.nativeView;
                     currentPage.frame.navigate({
                         create: () => {
-                            return greenPageRef.current;
+                            return greenPageRef.current.nativeView;
                         }
                     });
                 }} />
@@ -29,10 +29,10 @@ export class NestedHub extends React.Component<{
                 <stackLayout>
                     <label>You're viewing the green page!</label>
                     <button text={"Navigate to red page"} onTap={() => {
-                        const currentPage: Page = greenPageRef.current!;
+                        const currentPage: Page = greenPageRef.current!.nativeView;
                         currentPage.frame.navigate({
                             create: () => {
-                                return redPageRef.current;
+                                return redPageRef.current.nativeView;
                             }
                         });
                     }} />
@@ -49,18 +49,18 @@ export class NestedHub extends React.Component<{
     }
 }
 export class NestedModalTest extends React.Component<{
-    forwardedRef: React.RefObject<Page>;
+    forwardedRef: React.RefObject<NSVElement<Page>>;
 } & PageAttributes, {}> {
     render() {
         const { forwardedRef, ...rest } = this.props;
-        const yellowPageRef = React.createRef<Page>();
-        const greenPageRef = React.createRef<Page>();
+        const yellowPageRef = React.createRef<NSVElement<Page>>();
+        const greenPageRef = React.createRef<NSVElement<Page>>();
         return (<page ref={forwardedRef} actionBarHidden={false} {...rest}>
             <actionBar title="Navigation Hub" className="action-bar" />
             <stackLayout>
                 <button text={"Open yellow modal"} onTap={() => {
-                    const currentPage: Page = forwardedRef.current!;
-                    currentPage.showModal(yellowPageRef.current!, {
+                    const currentPage: Page = forwardedRef.current!.nativeView;
+                    currentPage.showModal(yellowPageRef.current!.nativeView, {
                         context: {},
                         closeCallback: () => { },
                         animated: true,
@@ -73,8 +73,8 @@ export class NestedModalTest extends React.Component<{
                 <stackLayout>
                     <label>You're viewing the yellow page!</label>
                     <button text={"Open green modal"} onTap={() => {
-                        const currentPage: Page = yellowPageRef.current!;
-                        currentPage.showModal(greenPageRef.current!, {
+                        const currentPage: Page = yellowPageRef.current!.nativeView;
+                        currentPage.showModal(greenPageRef.current!.nativeView, {
                             context: {},
                             closeCallback: () => { },
                             animated: true,
@@ -82,7 +82,7 @@ export class NestedModalTest extends React.Component<{
                         });
                     }} />
                     <button text={"Close yellow modal"} onTap={() => {
-                        const currentPage: Page = yellowPageRef.current!;
+                        const currentPage: Page = yellowPageRef.current!.nativeView;
                         currentPage.closeModal({});
                     }} />
                 </stackLayout>
@@ -92,7 +92,7 @@ export class NestedModalTest extends React.Component<{
                 <stackLayout>
                     <label>You're viewing the green page!</label>
                     <button text={"Close green modal"} onTap={() => {
-                        const currentPage: Page = greenPageRef.current!;
+                        const currentPage: Page = greenPageRef.current!.nativeView;
                         currentPage.closeModal({});
                     }} />
                 </stackLayout>
@@ -188,7 +188,7 @@ export class TabViewTest extends React.Component<{}, {}> {
 export class PageWithActionBar extends React.Component<
     {
         actionBarTitle?: string,
-        forwardedRef: React.RefObject<Page>,
+        forwardedRef: React.RefObject<NSVElement<Page>>,
     } & PageAttributes,
     {}
 > {
@@ -245,7 +245,7 @@ export function PageWithActionBarNew(props: PropsWithChildren<PageAttributes>){
 export class PageWithComplexActionBarTest extends React.Component<
     {
         actionBarTitle?: string,
-        forwardedRef: React.RefObject<Page>,
+        forwardedRef: React.RefObject<NSVElement<Page>>,
     },
     {}
 > {
@@ -268,8 +268,8 @@ export class PageWithComplexActionBarTest extends React.Component<
     }
 }
 
-export class FramedPageWithComplexActionBarTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
-    private readonly pageWithActionBarRef = React.createRef<Page>();
+export class FramedPageWithComplexActionBarTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, {}> {
+    private readonly pageWithActionBarRef = React.createRef<NSVElement<Page>>();
 
     render(){
         const { forwardedRef, children, ...rest } = this.props;
@@ -284,7 +284,7 @@ export class FramedPageWithComplexActionBarTest extends React.Component<{ forwar
     }
 }
 
-const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<Page>, actionBarTitle: string }> = (props) => {
+const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string }> = (props) => {
     const { forwardedRef, actionBarTitle, children } = props;
     return ReactNativeScript.createPortal(
         (
@@ -297,13 +297,13 @@ const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<Page>, actionBarTi
     );
 }
 
-export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Page> }, {}> {
-    private readonly absoluteLayoutPageRef = React.createRef<Page>();
-    private readonly dockLayoutPageRef = React.createRef<Page>();
-    private readonly flexboxLayoutPageRef = React.createRef<Page>();
+export class HubTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> }, {}> {
+    private readonly absoluteLayoutPageRef = React.createRef<NSVElement<Page>>();
+    private readonly dockLayoutPageRef = React.createRef<NSVElement<Page>>();
+    private readonly flexboxLayoutPageRef = React.createRef<NSVElement<Page>>();
 
     private navigateToPage(targetPage: Page, title: string){
-        const page: Page = this.props.forwardedRef.current!;
+        const page: Page = this.props.forwardedRef.current!.nativeView;
         const frame: Frame|undefined = page.frame;
         if(!frame){
             console.error(`No frame found for page ${page}. Ensure that HubTest is embedded in a Frame (e.g. via FramedHubTest).`);
@@ -327,19 +327,19 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
                     <button
                         text={"Navigate to AbsoluteLayout"}
                         onTap={() => {
-                            this.navigateToPage(this.absoluteLayoutPageRef.current, "AbsoluteLayout");
+                            this.navigateToPage(this.absoluteLayoutPageRef.current!.nativeView, "AbsoluteLayout");
                         }}
                     />
                     <button
                         text={"Navigate to DockLayout"}
                         onTap={() => {
-                            this.navigateToPage(this.dockLayoutPageRef.current, "DockLayout");
+                            this.navigateToPage(this.dockLayoutPageRef.current!.nativeView, "DockLayout");
                         }}
                     />
                     <button
                         text={"Navigate to FlexboxLayout"}
                         onTap={() => {
-                            this.navigateToPage(this.flexboxLayoutPageRef.current, "FlexboxLayout");
+                            this.navigateToPage(this.flexboxLayoutPageRef.current!.nativeView, "FlexboxLayout");
                         }}
                     />
                 </stackLayout>
@@ -374,7 +374,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<Pag
  * because null is not regarded as a ReactNode to begin with.
  */
 export const PortalToPageWithActionBar: React.SFC<
-    { forwardedRef: React.RefObject<Page>, actionBarTitle: string } & PageAttributes
+    { forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes
 > =
 (props) => {
     const { forwardedRef, actionBarTitle, children, ...rest } = props;
@@ -400,7 +400,7 @@ export const PortalToPageWithActionBar: React.SFC<
  * An explicit shouldComponentUpdate() is purely there to help me follow the logs. It's not needed otherwise.
  */
 export class StatefulPortalToPageWithActionBar extends React.Component<
-    { forwardedRef: React.RefObject<Page>, actionBarTitle: string } & PageAttributes,
+    { forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes,
     {}
 > {
     shouldComponentUpdate(
@@ -428,8 +428,8 @@ export class StatefulPortalToPageWithActionBar extends React.Component<
     }
 }
 
-export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<Page> } & PageAttributes, {}> {
-    private readonly bluePageRef = React.createRef<Page>();
+export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, {}> {
+    private readonly bluePageRef = React.createRef<NSVElement<Page>>();
     render(){
         const { forwardedRef, ...rest } = this.props;
 
@@ -440,10 +440,10 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
                     <button
                         text={"Navigate to blue page"}
                         onTap={() => {
-                            const currentPage: Page = forwardedRef.current!;
+                            const currentPage: Page = forwardedRef.current!.nativeView;
                             currentPage.frame.navigate({
                                 create: () => {
-                                    return this.bluePageRef.current;
+                                    return this.bluePageRef.current.nativeView;
                                 }
                             });
                         }}
@@ -458,15 +458,15 @@ export class SimpleHub extends React.Component<{ forwardedRef: React.RefObject<P
     }
 }
 
-export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<Frame> } & FrameAttributes, {}> {
-    private readonly bluePageRef = React.createRef<Page>();
+export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> } & FrameAttributes, {}> {
+    private readonly bluePageRef = React.createRef<NSVElement<Page>>();
 
     componentDidMount(){
-        const node: Frame|null = this.props.forwardedRef.current;
+        const node: Frame|null = this.props.forwardedRef.current.nativeView;
         if(node){
             node.navigate({
                 create: () => {
-                    return this.bluePageRef.current;
+                    return this.bluePageRef.current.nativeView;
                 }
             });
         } else {
@@ -489,14 +489,14 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<F
 
 export class FramedChildTest extends React.Component<
     {
-        forwardedRef: React.RefObject<Frame>,
-        childPageRef: React.RefObject<Page>,
+        forwardedRef: React.RefObject<NSVElement<Frame>>,
+        childPageRef: React.RefObject<NSVElement<Page>>,
     },
     {}
 >
 {
     componentDidMount(){
-        const node: Frame|null = this.props.forwardedRef.current;
+        const node: Frame|null = this.props.forwardedRef.current.nativeView;
         if(!node){
             console.warn(`[FramedChildTest] React ref to NativeScript View lost, so unable to update event listeners.`);
             return;
@@ -505,7 +505,7 @@ export class FramedChildTest extends React.Component<
         console.log(`[FramedChildTest] componentDidMount; shall navigate to page within.`);
         node.navigate({
             create: () => {
-                const childPage: Page|undefined = this.props.childPageRef.current
+                const childPage: Page|undefined = this.props.childPageRef.current!.nativeView;
                 console.log(`[FramedChildTest] create(); shall return ref to page: ${childPage}`);
                 return childPage;
             }
@@ -533,8 +533,8 @@ export class FramedChildTest extends React.Component<
     }
 }
 
-export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
-    private readonly hubTestPageRef = React.createRef<Page>();
+export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, {}> {
+    private readonly hubTestPageRef = React.createRef<NSVElement<Page>>();
 
     render(){
         const { forwardedRef, children, ...rest } = this.props;
@@ -547,15 +547,15 @@ export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObje
     }
 }
 
-export class FramedLayoutTest extends React.Component<{ forwardedRef: React.RefObject<Frame> }, {}> {
-    private readonly layoutTestPageRef = React.createRef<Page>();
+export class FramedLayoutTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, {}> {
+    private readonly layoutTestPageRef = React.createRef<NSVElement<Page>>();
 
     componentDidMount(){
-        const node: Frame|null = this.props.forwardedRef.current;
+        const node: Frame|null = this.props.forwardedRef.current.nativeView;
         if(node){
             node.navigate({
                 create: () => {
-                    return this.layoutTestPageRef.current;
+                    return this.layoutTestPageRef.current.nativeView;
                 }
             });
         } else {

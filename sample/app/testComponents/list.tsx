@@ -10,11 +10,8 @@
 // }
 
 import * as React from "react";
-import { Color } from "tns-core-modules/color";
-import { CellViewContainer } from "react-nativescript/dist/components/ListView";
-import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
-import { ItemEventData } from "tns-core-modules/ui/list-view/list-view";
-import { ObservableArray } from "tns-core-modules/data/observable-array/observable-array";
+import { Color, ItemSpec, ItemEventData, ObservableArray } from "@nativescript/core";
+import { ListView, CellViewContainer } from "react-nativescript";
 
 export class ListViewTest extends React.Component<{}, {}> {
     render(){
@@ -24,7 +21,7 @@ export class ListViewTest extends React.Component<{}, {}> {
         /* There may be an argument for nesting the ListView within a LayoutBase once
          * dealing with the Safe Area (shall have to find out and see!). */
         return (
-            <listView
+            <ListView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -36,10 +33,10 @@ export class ListViewTest extends React.Component<{}, {}> {
                 }}
                 height={{ unit: "%", value: 100 }}
                 items={[...items.map((val: Item) => val)]}
-                // cellFactory={(item: Item, ref: React.RefObject<any>) => {
+                // cellFactory={(item: Item) => {
                 //     return (
                 //         <label
-                //             ref={ref}
+            
                 //             // key={container._domId}
                 //             fontSize={24}
                 //         >
@@ -55,10 +52,9 @@ export class ListViewTest extends React.Component<{}, {}> {
                         "odd",
                         {
                             placeholderItem: 1,
-                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                            cellFactory: (item: Item) => {
                                 return (
                                     <label
-                                        ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
@@ -72,10 +68,9 @@ export class ListViewTest extends React.Component<{}, {}> {
                         "even",
                         {
                             placeholderItem: 0,
-                            cellFactory: (item: Item, ref: React.RefObject<any>) => {
+                            cellFactory: (item: Item) => {
                                 return (
                                     <textView
-                                        ref={ref}
                                         // key={container._domId}
                                         fontSize={24}
                                     >
@@ -87,7 +82,7 @@ export class ListViewTest extends React.Component<{}, {}> {
                     ],
                 ])}
             >
-            </listView>
+            </ListView>
         );
     }
 }
@@ -213,7 +208,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
 
     render(){
         return (
-            <listView
+            <ListView
                 _debug={{
                     logLevel: "info",
                     onCellFirstLoad: (container: CellViewContainer) => {
@@ -237,13 +232,12 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                         "even",
                         {
                             placeholderItem: { index: 1, content: "PLACEHOLDER" },
-                            cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
+                            cellFactory: (item: IndexToContentItem) => {
                                 const rowHash: number = Math.abs(hashCode(item.index.toString()));
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
                                     <gridLayout
-                                        ref={ref}
                                         rows={"*"}
                                         columns={"64 *"}
                                     >
@@ -273,13 +267,12 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                         "odd",
                         {
                             placeholderItem: { index: 1, content: "PLACEHOLDER" },
-                            cellFactory: (item: IndexToContentItem, ref: React.RefObject<any>) => {
+                            cellFactory: (item: IndexToContentItem) => {
                                 const rowHash: number = Math.abs(hashCode(item.index.toString()));
                                 const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
             
                                 return (
                                     <gridLayout
-                                        ref={ref}
                                         backgroundColor={new Color("yellow")}
                                         rows={"*"}
                                         columns={"* 64"}
@@ -308,12 +301,12 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                     ]
                 ])}
 
-                // cellFactory={(item: IndexToContentItem, ref: React.RefObject<any>) => {
+                // cellFactory={(item: IndexToContentItem) => {
                 //     const rowHash: number = Math.abs(hashCode(item.index.toString()));
                 //     const imgSource: string = THUMB_URLS[rowHash % THUMB_URLS.length];
                 //     return (
                 //         <gridLayout
-                //             ref={ref}
+            
                 //             rows={[new ItemSpec(1, "star")]}
                 //             columns={[new ItemSpec(64, "pixel"), new ItemSpec(1, "star")]}
                 //         >

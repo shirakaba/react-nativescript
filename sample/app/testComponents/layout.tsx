@@ -1,12 +1,4 @@
 import * as React from "react";
-import { PercentLength, FormattedString } from "tns-core-modules/ui/text-base/text-base";
-import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { TabViewItem } from "@nativescript/core";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
 
 export class DockLayoutTest extends React.Component<{}, {}> {
     render(){
@@ -20,7 +12,7 @@ export class DockLayoutTest extends React.Component<{}, {}> {
                 <button dock={"top"} backgroundColor={"#AA0078"}>Top</button>
                 <button dock={"right"} backgroundColor={"#8C489F"}>Right</button>
                 <button dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</button>
-                <button backgroundColor={"#CCFFFF"} color={new Color("gray")}>Fill</button>
+                <button backgroundColor={"#CCFFFF"} color={"gray"}>Fill</button>
             </dockLayout>
         );
     }

@@ -3,11 +3,10 @@ import { PercentLength, FormattedString, EventData } from "tns-core-modules/ui/t
 import { Color } from "tns-core-modules/color";
 import { Span } from "tns-core-modules/text/span";
 import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView, Frame } from "@nativescript/core";
-import { ViewProps, StylePropContents } from "react-nativescript/dist/shared/NativeScriptComponentTypings";
+import { ViewAttributes, RNSStyle, PageAttributes, NSVElement } from "react-nativescript";
 import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
-import { PageComponentProps } from "react-nativescript/dist/components/Page";
 import { PortalToPageWithActionBar } from "./navigation";
 
 type ViewBaseProp<T extends ViewBase> = {
@@ -87,7 +86,7 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                         (wv.ios as WKWebView).reload();
                     }}
                     onSrcChange={(args) => {
-                        const src: string = args.object.src;
+                        const src: string = (args.object as WebView).src;
                         console.log(`[onUrlChange]`, src);
                         this.setState({ src });
                     }}
@@ -186,8 +185,8 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
     }
 }
 
-export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<Frame> }, { selectedIndex: number }> { 
-    private readonly pageRef: React.RefObject<Page> = React.createRef<Page>();
+export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, { selectedIndex: number }> { 
+    private readonly pageRef: React.RefObject<NSVElement<Page>> = React.createRef<NSVElement<Page>>();
 
     constructor(props){
         super(props);
@@ -202,9 +201,9 @@ export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.Ref
     };
 
     componentDidMount() {
-        this.props.forwardedRef.current.navigate({
+        this.props.forwardedRef.current!.nativeView.navigate({
             create:() => {
-                return this.pageRef.current;
+                return this.pageRef.current!.nativeView;
             }
         });
     }

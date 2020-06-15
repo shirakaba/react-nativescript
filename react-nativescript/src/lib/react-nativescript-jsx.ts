@@ -706,6 +706,8 @@ export type WebViewAttributes =  ViewAttributes & {
     canGoBack?: false | true;
     canGoForward?: false | true;
     ios?: any;
+    /* AddedManually */
+    onSrcChange?: (args: PropertyChangeData) => void;
     onLoadFinished?: (args: LoadEventData) => void;
     onLoadStarted?: (args: LoadEventData) => void;
     src?: string;
