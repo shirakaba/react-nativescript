@@ -34,7 +34,7 @@
   "peerDependencies": {
     "@types/react": "16.9.34",
     "react": "^16.9.0",
-    "tns-core-modules": "^6.5.0"
+    "tns-core-modules": "^6.5.5"
   },
   "dependencies": {
     "react-reconciler": "^0.25.1",
