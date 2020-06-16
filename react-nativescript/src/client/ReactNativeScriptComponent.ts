@@ -333,7 +333,7 @@ export function diffProperties(
 
     let propKey: string;
     let styleName: string;
-    let styleUpdates: Record<string, string|typeof rnsDeletedPropValue> | null = null;
+    let styleUpdates: Record<string, string | typeof rnsDeletedPropValue> | null = null;
     for (propKey in lastProps) {
         if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] == null) {
             // console.log(`[diffProperties] skipping on lastProps key:`, propKey);

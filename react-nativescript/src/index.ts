@@ -9,8 +9,96 @@
  *
  * They have since moved to a MIT-style licence, which is reproduced in /LICENSE.
  */
-import { ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes, ViewBaseAttributes, ViewAttributes, } from "./lib/react-nativescript-jsx";
-import { ActionBar, ActionItem, ActivityIndicator, Button, ContentView, DatePicker, HtmlView, Label, AbsoluteLayout, DockLayout, FlexboxLayout, GridLayout, StackLayout, WrapLayout, ListPicker, ListView, NavigationButton, Placeholder, Progress, ScrollView, SearchBar, SegmentedBar, Slider, Switch, TabView, TabViewItem, TextView, TextField, TimePicker, Frame, Page, FormattedString, SegmentedBarItem, Span, Image, WebView, View, Application, Tabs, TabStrip, TabStripItem, BottomNavigation, TabContentItem } from "@nativescript/core";
+import {
+    ActionBarAttributes,
+    ActionItemAttributes,
+    ActivityIndicatorAttributes,
+    ButtonAttributes,
+    ContentViewAttributes,
+    DatePickerAttributes,
+    FormattedStringAttributes,
+    SpanAttributes,
+    HtmlViewAttributes,
+    ImageAttributes,
+    LabelAttributes,
+    AbsoluteLayoutAttributes,
+    DockLayoutAttributes,
+    FlexboxLayoutAttributes,
+    GridLayoutAttributes,
+    StackLayoutAttributes,
+    WrapLayoutAttributes,
+    ListPickerAttributes,
+    ListViewAttributes,
+    NavigationButtonAttributes,
+    PlaceholderAttributes,
+    ProgressAttributes,
+    ScrollViewAttributes,
+    SearchBarAttributes,
+    SegmentedBarAttributes,
+    SegmentedBarItemAttributes,
+    SliderAttributes,
+    SwitchAttributes,
+    TabViewAttributes,
+    TabViewItemAttributes,
+    TextViewAttributes,
+    TextFieldAttributes,
+    TimePickerAttributes,
+    WebViewAttributes,
+    FrameAttributes,
+    PageAttributes,
+    TabsAttributes,
+    BottomNavigationAttributes,
+    TabStripAttributes,
+    TabStripItemAttributes,
+    TabContentItemAttributes,
+    ViewBaseAttributes,
+    ViewAttributes,
+} from "./lib/react-nativescript-jsx";
+import {
+    ActionBar,
+    ActionItem,
+    ActivityIndicator,
+    Button,
+    ContentView,
+    DatePicker,
+    HtmlView,
+    Label,
+    AbsoluteLayout,
+    DockLayout,
+    FlexboxLayout,
+    GridLayout,
+    StackLayout,
+    WrapLayout,
+    ListPicker,
+    ListView,
+    NavigationButton,
+    Placeholder,
+    Progress,
+    ScrollView,
+    SearchBar,
+    SegmentedBar,
+    Slider,
+    Switch,
+    TabView,
+    TabViewItem,
+    TextView,
+    TextField,
+    TimePicker,
+    Frame,
+    Page,
+    FormattedString,
+    SegmentedBarItem,
+    Span,
+    Image,
+    WebView,
+    View,
+    Application,
+    Tabs,
+    TabStrip,
+    TabStripItem,
+    BottomNavigation,
+    TabContentItem,
+} from "@nativescript/core";
 import { RNSStyle, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
 export { RNSStyle, NativeScriptAttributes, NativeScriptProps };
 import * as ReactReconciler from "react-reconciler";
@@ -21,11 +109,61 @@ const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
-import { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags } from "./nativescript-vue-next/runtime/nodes";
+import {
+    NSVRoot,
+    NSVElement,
+    NSVNode,
+    NSVComment,
+    NSVText,
+    NSVNodeTypes,
+    NSVViewFlags,
+} from "./nativescript-vue-next/runtime/nodes";
 export { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags };
-const { version: ReactNativeScriptVersion } = require('../package.json');
+const { version: ReactNativeScriptVersion } = require("../package.json");
 export {
-    ActionBarAttributes, ActionItemAttributes, ActivityIndicatorAttributes, ButtonAttributes, ContentViewAttributes, DatePickerAttributes, FormattedStringAttributes, SpanAttributes, HtmlViewAttributes, ImageAttributes, LabelAttributes, AbsoluteLayoutAttributes, DockLayoutAttributes, FlexboxLayoutAttributes, GridLayoutAttributes, StackLayoutAttributes, WrapLayoutAttributes, ListPickerAttributes, ListViewAttributes, NavigationButtonAttributes, PlaceholderAttributes, ProgressAttributes, ScrollViewAttributes, SearchBarAttributes, SegmentedBarAttributes, SegmentedBarItemAttributes, SliderAttributes, SwitchAttributes, TabViewAttributes, TabViewItemAttributes, TextViewAttributes, TextFieldAttributes, TimePickerAttributes, WebViewAttributes, FrameAttributes, PageAttributes, TabsAttributes, BottomNavigationAttributes, TabStripAttributes, TabStripItemAttributes, TabContentItemAttributes, ViewBaseAttributes, ViewAttributes,
+    ActionBarAttributes,
+    ActionItemAttributes,
+    ActivityIndicatorAttributes,
+    ButtonAttributes,
+    ContentViewAttributes,
+    DatePickerAttributes,
+    FormattedStringAttributes,
+    SpanAttributes,
+    HtmlViewAttributes,
+    ImageAttributes,
+    LabelAttributes,
+    AbsoluteLayoutAttributes,
+    DockLayoutAttributes,
+    FlexboxLayoutAttributes,
+    GridLayoutAttributes,
+    StackLayoutAttributes,
+    WrapLayoutAttributes,
+    ListPickerAttributes,
+    ListViewAttributes,
+    NavigationButtonAttributes,
+    PlaceholderAttributes,
+    ProgressAttributes,
+    ScrollViewAttributes,
+    SearchBarAttributes,
+    SegmentedBarAttributes,
+    SegmentedBarItemAttributes,
+    SliderAttributes,
+    SwitchAttributes,
+    TabViewAttributes,
+    TabViewItemAttributes,
+    TextViewAttributes,
+    TextFieldAttributes,
+    TimePickerAttributes,
+    WebViewAttributes,
+    FrameAttributes,
+    PageAttributes,
+    TabsAttributes,
+    BottomNavigationAttributes,
+    TabStripAttributes,
+    TabStripItemAttributes,
+    TabContentItemAttributes,
+    ViewBaseAttributes,
+    ViewAttributes,
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
 export { ListView, CellViewContainer } from "./components/ListView";
@@ -136,9 +274,9 @@ export function start(app: ReactReconciler.ReactNodeList): void {
 
     reactReconcilerInst.injectIntoDevTools({
         bundleType: __DEV__ ? 1 : 0,
-        rendererPackageName: 'react-nativescript',
+        rendererPackageName: "react-nativescript",
         version: ReactNativeScriptVersion,
-      });
+    });
 
     run({
         create: () => {
@@ -151,53 +289,53 @@ export function start(app: ReactReconciler.ReactNodeList): void {
 }
 
 declare global {
-	module JSX {
-		interface IntrinsicElements {
-            absoluteLayout: NativeScriptProps<AbsoluteLayoutAttributes, AbsoluteLayout>,
-            actionBar: NativeScriptProps<ActionBarAttributes, ActionBar>,
-            actionItem: NativeScriptProps<ActionItemAttributes, ActionItem>,
-            activityIndicator: NativeScriptProps<ActivityIndicatorAttributes, ActivityIndicator>,
-            button: NativeScriptProps<ButtonAttributes, Button>,
-            bottomNavigation: NativeScriptProps<BottomNavigationAttributes, BottomNavigation>,
-            contentView: NativeScriptProps<ContentViewAttributes, ContentView>,
-            datePicker: NativeScriptProps<DatePickerAttributes, DatePicker>,
-            dockLayout: NativeScriptProps<DockLayoutAttributes, DockLayout>,
-            flexboxLayout: NativeScriptProps<FlexboxLayoutAttributes, FlexboxLayout>,
-            formattedString: NativeScriptProps<FormattedStringAttributes, FormattedString>,
-            frame: NativeScriptProps<FrameAttributes, Frame>,
-            gridLayout: NativeScriptProps<GridLayoutAttributes, GridLayout>,
-            htmlView: NativeScriptProps<HtmlViewAttributes, HtmlView>,
-            image: NativeScriptProps<ImageAttributes, Image>,
-            label: NativeScriptProps<LabelAttributes, Label>,
-            listPicker: NativeScriptProps<ListPickerAttributes, ListPicker>,
-            listView: NativeScriptProps<ListViewAttributes, ListView>,
-            navigationButton: NativeScriptProps<NavigationButtonAttributes, NavigationButton>,
-            page: NativeScriptProps<PageAttributes, Page>,
-            placeholder: NativeScriptProps<PlaceholderAttributes, Placeholder>,
-            progress: NativeScriptProps<ProgressAttributes, Progress>,
-            scrollView: NativeScriptProps<ScrollViewAttributes, ScrollView>,
-            searchBar: NativeScriptProps<SearchBarAttributes, SearchBar>,
-            segmentedBar: NativeScriptProps<SegmentedBarAttributes, SegmentedBar>,
-            segmentedBarItem: NativeScriptProps<SegmentedBarItemAttributes, SegmentedBarItem>,
-            slider: NativeScriptProps<SliderAttributes, Slider>,
-            span: NativeScriptProps<SpanAttributes, Span>,
-            stackLayout: NativeScriptProps<StackLayoutAttributes, StackLayout>,
-            switch: NativeScriptProps<SwitchAttributes, Switch>,
-            tabs: NativeScriptProps<TabsAttributes, Tabs>,
-            tabStrip: NativeScriptProps<TabStripAttributes, TabStrip>,
-            tabStripItem: NativeScriptProps<TabStripItemAttributes, TabStripItem>,
-            tabContentItem: NativeScriptProps<TabContentItemAttributes, TabContentItem>,
-            tabView: NativeScriptProps<TabViewAttributes, TabView>,
-            tabViewItem: NativeScriptProps<TabViewItemAttributes, TabViewItem>,
-            textField: NativeScriptProps<TextFieldAttributes, TextField>,
-            textView: NativeScriptProps<TextViewAttributes, TextView>,
-            timePicker: NativeScriptProps<TimePickerAttributes, TimePicker>,
-            webView: NativeScriptProps<WebViewAttributes, WebView>,
-            wrapLayout: NativeScriptProps<WrapLayoutAttributes, WrapLayout>,
-		}
+    module JSX {
+        interface IntrinsicElements {
+            absoluteLayout: NativeScriptProps<AbsoluteLayoutAttributes, AbsoluteLayout>;
+            actionBar: NativeScriptProps<ActionBarAttributes, ActionBar>;
+            actionItem: NativeScriptProps<ActionItemAttributes, ActionItem>;
+            activityIndicator: NativeScriptProps<ActivityIndicatorAttributes, ActivityIndicator>;
+            button: NativeScriptProps<ButtonAttributes, Button>;
+            bottomNavigation: NativeScriptProps<BottomNavigationAttributes, BottomNavigation>;
+            contentView: NativeScriptProps<ContentViewAttributes, ContentView>;
+            datePicker: NativeScriptProps<DatePickerAttributes, DatePicker>;
+            dockLayout: NativeScriptProps<DockLayoutAttributes, DockLayout>;
+            flexboxLayout: NativeScriptProps<FlexboxLayoutAttributes, FlexboxLayout>;
+            formattedString: NativeScriptProps<FormattedStringAttributes, FormattedString>;
+            frame: NativeScriptProps<FrameAttributes, Frame>;
+            gridLayout: NativeScriptProps<GridLayoutAttributes, GridLayout>;
+            htmlView: NativeScriptProps<HtmlViewAttributes, HtmlView>;
+            image: NativeScriptProps<ImageAttributes, Image>;
+            label: NativeScriptProps<LabelAttributes, Label>;
+            listPicker: NativeScriptProps<ListPickerAttributes, ListPicker>;
+            listView: NativeScriptProps<ListViewAttributes, ListView>;
+            navigationButton: NativeScriptProps<NavigationButtonAttributes, NavigationButton>;
+            page: NativeScriptProps<PageAttributes, Page>;
+            placeholder: NativeScriptProps<PlaceholderAttributes, Placeholder>;
+            progress: NativeScriptProps<ProgressAttributes, Progress>;
+            scrollView: NativeScriptProps<ScrollViewAttributes, ScrollView>;
+            searchBar: NativeScriptProps<SearchBarAttributes, SearchBar>;
+            segmentedBar: NativeScriptProps<SegmentedBarAttributes, SegmentedBar>;
+            segmentedBarItem: NativeScriptProps<SegmentedBarItemAttributes, SegmentedBarItem>;
+            slider: NativeScriptProps<SliderAttributes, Slider>;
+            span: NativeScriptProps<SpanAttributes, Span>;
+            stackLayout: NativeScriptProps<StackLayoutAttributes, StackLayout>;
+            switch: NativeScriptProps<SwitchAttributes, Switch>;
+            tabs: NativeScriptProps<TabsAttributes, Tabs>;
+            tabStrip: NativeScriptProps<TabStripAttributes, TabStrip>;
+            tabStripItem: NativeScriptProps<TabStripItemAttributes, TabStripItem>;
+            tabContentItem: NativeScriptProps<TabContentItemAttributes, TabContentItem>;
+            tabView: NativeScriptProps<TabViewAttributes, TabView>;
+            tabViewItem: NativeScriptProps<TabViewItemAttributes, TabViewItem>;
+            textField: NativeScriptProps<TextFieldAttributes, TextField>;
+            textView: NativeScriptProps<TextViewAttributes, TextView>;
+            timePicker: NativeScriptProps<TimePickerAttributes, TimePicker>;
+            webView: NativeScriptProps<WebViewAttributes, WebView>;
+            wrapLayout: NativeScriptProps<WrapLayoutAttributes, WrapLayout>;
+        }
 
-		interface ElementChildrenAttribute {
-			children: {};
-		}
-	}
+        interface ElementChildrenAttribute {
+            children: {};
+        }
+    }
 }

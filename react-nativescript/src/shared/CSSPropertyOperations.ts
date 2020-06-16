@@ -4,7 +4,12 @@ import * as console from "./Logger";
 import { rnsDeletedPropValue } from "../client/magicValues";
 import { Style } from "@nativescript/core";
 import { CssProperty } from "@nativescript/core/ui/core/properties";
-import { visibilityProperty, horizontalAlignmentProperty, verticalAlignmentProperty, backgroundRepeatProperty } from "@nativescript/core/ui/styling/style-properties";
+import {
+    visibilityProperty,
+    horizontalAlignmentProperty,
+    verticalAlignmentProperty,
+    backgroundRepeatProperty,
+} from "@nativescript/core/ui/styling/style-properties";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/master/packages/react-dom/src/shared/CSSPropertyOperations.js which carries the following copyright:
@@ -13,15 +18,15 @@ import { visibilityProperty, horizontalAlignmentProperty, verticalAlignmentPrope
  * This source code is licensed under the MIT license found in /LICENSE.
  */
 
- /**
-  * @see https://github.com/NativeScript/NativeScript/blob/e649a6cfd618c86a1dc7fa84e3197dfb78c3bc74/nativescript-core/ui/styling/style-properties.ts
-  */
- const propertiesWhoseValidatorsDoNotAcceptUnsetValue = new Map<string, CssProperty<Style, any>>([
+/**
+ * @see https://github.com/NativeScript/NativeScript/blob/e649a6cfd618c86a1dc7fa84e3197dfb78c3bc74/nativescript-core/ui/styling/style-properties.ts
+ */
+const propertiesWhoseValidatorsDoNotAcceptUnsetValue = new Map<string, CssProperty<Style, any>>([
     [visibilityProperty.name, visibilityProperty],
     [horizontalAlignmentProperty.name, horizontalAlignmentProperty],
     [verticalAlignmentProperty.name, verticalAlignmentProperty],
     [backgroundRepeatProperty.name, backgroundRepeatProperty],
- ]);
+]);
 
 /**
  * Sets the value for multiple styles on a node.  If a value is specified as
@@ -62,12 +67,12 @@ export function setValueForStyles(instance: Instance, styles: Style): void {
     Object.keys(styles).forEach((styleName: string) => {
         // console.log(`Setting style:`, styleName);
         const styleValue: any = styles[styleName];
-        if(styleValue === rnsDeletedPropValue){
+        if (styleValue === rnsDeletedPropValue) {
             console.log(`[setValueForStyles] ${instance}.removeAttribute(${styleName});`);
             const matchingProperty = propertiesWhoseValidatorsDoNotAcceptUnsetValue.get(styleName);
-            if(matchingProperty){
+            if (matchingProperty) {
                 instance.setAttribute(styleName, matchingProperty.defaultValue);
-            } else{
+            } else {
                 // const defaultValueForStyle: unknown = (instance as any).__proto__[styleName];
                 // instance.setAttribute(styleName, defaultValueForStyle);
                 instance.removeAttribute(styleName);

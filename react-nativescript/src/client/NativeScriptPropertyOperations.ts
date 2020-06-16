@@ -88,12 +88,12 @@ export function setValueForProperty(
     // if (name === "ref"){
     //     (value as MutableRefObject<Instance>).current = instance;
     // }
-    
+
     if (name === "class") {
-        if(value === rnsDeletedPropValue){
+        if (value === rnsDeletedPropValue) {
             instance.removeAttribute("className");
         } else {
-            instance.setAttribute("className", value)
+            instance.setAttribute("className", value);
         }
     } else if ((name === "ios" && isIOS) || (name === "android" && isAndroid)) {
         /* These props, at least in ActionItem, are read-only, so must be set recursively instead. */
@@ -122,18 +122,21 @@ export function setValueForProperty(
     } else if (name === "__rns__nodeTreeRole") {
         console.log(`[PropOp] got node-tree role`);
         instance.setAttribute(name, value === rnsDeletedPropValue ? false : value);
-    } else if(name.length > 2 && name.startsWith("on") && value === rnsDeletedPropValue || typeof value === "function") {
+    } else if (
+        (name.length > 2 && name.startsWith("on") && value === rnsDeletedPropValue) ||
+        typeof value === "function"
+    ) {
         const eventName: string = name[2].toLowerCase() + name.slice(3);
         const existingEventListener = instance.eventListeners.get(eventName);
-        if(value === rnsDeletedPropValue){
-            if(existingEventListener){
+        if (value === rnsDeletedPropValue) {
+            if (existingEventListener) {
                 console.log(`[PropOp] REMOVE: ${instance}.removeEventListener("${eventName}", existingEventListener)`);
                 instance.removeEventListener(eventName, existingEventListener);
             } else {
                 console.log(`[PropOp] NO-OP: ${instance}.removeEventListener("${eventName}", ?)`);
             }
         } else {
-            if(existingEventListener){
+            if (existingEventListener) {
                 console.log(`[PropOp] REPLACE: ${instance}.addEventListener("${eventName}", existingEventListener)`);
                 instance.removeEventListener(eventName, existingEventListener);
             } else {

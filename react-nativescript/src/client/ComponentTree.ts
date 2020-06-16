@@ -85,7 +85,7 @@ export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instanc
 }
 
 export function getFiberCurrentPropsFromNode(node: Instance): object | null {
-    return node.getAttribute(internalEventHandlersKey) as object || null;
+    return (node.getAttribute(internalEventHandlersKey) as object) || null;
 }
 
 export function updateFiberProps(node: Instance, props: object): void {

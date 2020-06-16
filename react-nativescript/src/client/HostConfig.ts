@@ -185,7 +185,7 @@ const hostConfig: ReactReconciler.HostConfig<
         console.log(`[createInstance() 1b] type: ${type}`);
 
         let view: Instance;
-        
+
         // const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
         if (typeof type === "string" && isKnownView(type)) {
             view = new NSVElement(type);
@@ -306,7 +306,7 @@ const hostConfig: ReactReconciler.HostConfig<
         parentInstance.appendChild(child);
     },
     appendChildToContainer(container: Container, child: Instance | TextInstance): void {
-        if(container instanceof NSVRoot){
+        if (container instanceof NSVRoot) {
             console.log(`[appendChildToContainer()] deferring to appendChild(): ${container} > ${child}`);
             container.setBaseRef(child);
             return;
@@ -437,13 +437,17 @@ const hostConfig: ReactReconciler.HostConfig<
         child: Instance | TextInstance,
         beforeChild: Instance | TextInstance
     ): void {
-        if(container instanceof NSVRoot){
-            console.log(`[insertInContainerBefore()] performing no-op for insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`);
+        if (container instanceof NSVRoot) {
+            console.log(
+                `[insertInContainerBefore()] performing no-op for insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`
+            );
             container.setBaseRef(child); // Unsure what else to do here..!
             return;
         }
 
-        console.log(`[insertInContainerBefore()] performing insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`);
+        console.log(
+            `[insertInContainerBefore()] performing insertBefore(): ${container} > ${child} beforeChild ${beforeChild}`
+        );
         container.insertBefore(child, beforeChild);
     },
     removeChild(parent: Instance, child: Instance | TextInstance): void {
@@ -458,7 +462,7 @@ const hostConfig: ReactReconciler.HostConfig<
         parent.removeChild(child);
     },
     removeChildFromContainer(container: Container, child: Instance | TextInstance): void {
-        if(container instanceof NSVRoot){
+        if (container instanceof NSVRoot) {
             container.setBaseRef(null);
             return;
         }
