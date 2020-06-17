@@ -1,6 +1,6 @@
 {
   "name": "react-nativescript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React renderer for NativeScript",
   "main": "dist/index.js",
   "files": [
@@ -48,6 +48,6 @@
     "prettier": "1.18.2",
     "react": "^16.13.1",
     "tns-core-modules": "6.5.0",
-    "typescript": "3.7.2"
+    "typescript": "^3.9.5"
   }
 }
