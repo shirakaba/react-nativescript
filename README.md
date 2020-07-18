@@ -21,7 +21,7 @@
     </a>
 </p>
 
-**React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style. *Very* under construction; expect swathing refactors!
+**React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style.
 
 I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
 
@@ -54,13 +54,9 @@ tns run android
 
 ## Example real-world app
 
-*Note: the real-world app described below is not the same app as the one in this repository, `sample/app`, which is merely used for manually testing React NativeScript features.*
+See the [Apps](https://react-nativescript.netlify.app/docs/samples/apps) showcase in the docs to see various apps built with React NativeScript.
 
-I've ported [Shiva Prasad](https://github.com/shiv19)'s TypeScript NativeScript Core port of [Alex Ziskind](https://github.com/alexziskind1)'s issue-tracking app to React NativeScript. It's called `rpstrackerrns` and you can find it [here](https://github.com/shirakaba/rpstrackerrns).
-
-The app is based on React NativeScript v0.11.0, so may have some minor differences to the latest version, but the general patterns should be the same.
-
-### Example UI screenshots
+One example is my `rpstrackerrns` issue-tracking example app, which demonstrates how you can make fully native, professional-looking UIs with RNS:
 
 <table>
     <tbody>
@@ -77,22 +73,24 @@ The app is based on React NativeScript v0.11.0, so may have some minor differenc
         </tr>
         <tr>
             <td align="center" valign="middle">
-                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/tree/master/app/views/pages/login/LoginPage.tsx">Login Page</a></b></p>
+                <p><b>Login Page</b></p>
             </td>
             <td align="center" valign="middle">
-                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/tree/master/app/views/pages/backlog/BacklogPage.tsx">Backlog Page</a></b></p>
+                <p><b>Backlog Page</b></p>
             </td>
             <td align="center" valign="middle">
-                <p><b><a href="https://github.com/shirakaba/rpstrackerrns/blob/master/app/views/pages/detail/DetailPage.tsx">Detail Page</a></b></p>
+                <p><b>Detail Page</b></p>
             </td>
         </tr>
     </tbody>
 </table>
 
 
-### Example UI plugins
+## Plugins
 
-The repo also includes some example plugins (React components for native UI components) – I'll likely be changing the APIs for making those, however, so don't assume that approach to remain supported.
+Although NativeScript lets you write native code inline as JavaScript, you can also write modules purely using native code (e.g. Objective-C and Java), and access the code directly in NativeScript via JavaScript. When a common, cross-platform JavaScript API is provided for such modules, it is called a "plugin", and can be thought of as equivalent to a React Native "native module". NativeScript has a rich ecosystem of these plugins – see the [NativeScript Marketplace](https://market.nativescript.org/?tab=plugins).
+
+React NativeScript uses the same plugins API as NativeScript Vue and NativeScript Angular, so all those plugins should be compatible (although generally needing to be consumed with `any` type, as most plugins are only typed for NativeScript Core). Instructions on how to integrate plugins, and provide typings for React, can be found in the [React NativeScript plugins documentation](https://react-nativescript.netlify.app/docs/core-concepts/plugins).
 
 ## Why not just use React Native? 🤷‍♂️
 
@@ -174,23 +172,84 @@ React NativeScript shares most of the good parts of React Native, but above all 
             <td align="center" valign="middle">
                 <strong>Native API access</strong>
             </td>
-            <td align="left" valign="middle">
-                <em>"The Bridge"</em>
-                <ul>
-                    <li>asynchronous</li>
-                    <li>JS Interface (JSI) is very limited and lacks typings</li>
-                    <li>API calls must take JSON-serialisable arguments</li>
-                    <li>developer must set up bindings themself</li>
-                </ul>
+            <td align="center" valign="middle" colspan="2">
             </td>
-            <td align="left" valign="middle">
-                <em>"The platform runtime"</em>
-                <ul>
-                    <li>synchronous</li>
-                    <li>JS VM has bindings to 100% of the platform APIs with full TypeScript typings</li>
-                    <li>API calls can take native variables marshalled into JS</li>
-                    <li>developer doesn't have to write any bindings at all</li>
-                </ul>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Synchronicity
+            </td>
+            <td align="center" valign="middle">
+                <p>Mostly <strong>asynchronous.</strong> Typically involves sending JSON-serialisable messages back-and-forth over a native-to-JS bridge. Synchronous only in advanced cases such as JSI and C++ TurboModules, and static values from native modules.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p><strong>Synchronous:</strong> The JS VM has direct bindings to the native context, and sits on the main (UI) thread.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Type marshalling
+            </td>
+            <td align="center" valign="middle">
+                <p>Only supports JSON-serialisable types<sup><a href="https://reactnative.dev/docs/native-modules-ios.html#argument-types">[iOS]</a></sup><sup><a href="https://reactnative.dev/docs/native-modules-android#argument-types">[Android]</a></sup>, and only passes by value rather than by reference.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Can marshal nearly any data type<sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/marshalling-overview">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/marshalling/overview">[Android]</a></sup> back and forth between the JS and native contexts, and even passes by reference from native to JS, allowing APIs to be called on a native class instances from the JS context. Memory management of native references held by JS is <a href="https://docs.nativescript.org/core-concepts/memory-management">very</a> clever.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Bindings
+            </td>
+            <td align="center" valign="middle">
+                <p>Users must write their own bindings<sup><a href="https://reactnative.dev/docs/native-modules-ios.html#argument-types">[iOS]</a></sup><sup><a href="https://reactnative.dev/docs/native-modules-android#argument-types">[Android]</a></sup> (except possibly for the advanced feature of C++ TurboModules) and try not to get anything wrong.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Bindings between the Objective-C/Java runtimes and JavaScript will be automatically generated<sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/metadata/overview">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/overview#metadata">[Android]</a></sup> for any source code included in your app.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Typings
+            </td>
+            <td align="center" valign="middle">
+                <p>Users must write the typings for their native modules manually<sup><a href="https://reactnative.dev/docs/native-modules-ios.html#argument-types">[iOS]</a></sup><sup><a href="https://reactnative.dev/docs/native-modules-android#argument-types">[Android]</a></sup> (except possibly for the advanced feature of C++ TurboModules) and try not to get anything wrong!</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Typings can be automatically generated for bindings<sup><a href="https://docs.nativescript.org/plugins/use-native-ios-libraries#generating-typescript-typings">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/metadata/generating-typescript-declarations">[Android]</a></sup>, and typings for the whole platform SDK are <a href="https://docs.nativescript.org/core-concepts/accessing-native-apis-with-javascript#intellisense-and-access-to-the-native-apis-via-typescript">already provided</a>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Swift and Kotlin support
+            </td>
+            <td align="center" valign="middle">
+                <p>For Swift, can write implementation but <a href="https://reactnative.dev/docs/native-modules-ios.html#exporting-swift">must expose to React Native via an accompanying Obj-C file</a> and manually-written bindings. Documentation also very limited. Not sure what's involved for Kotlin, but it <a href="https://callstack.com/blog/writing-a-native-module-for-react-native-using-kotlin/">is supported</a>.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>For Swift, just <a href="https://docs.nativescript.org/plugins/use-native-ios-libraries#apis-written-in-swift">follow a few steps</a> such as adding the <code>@objc</code> tag to the methods, and you're good to go! Not sure what's involved for Kotlin, but it <a href="https://nativescript.org/blog/nativescript-6.1-kotlin-support-is-here">is supported</a>.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                UI access
+            </td>
+            <td align="center" valign="middle">
+                <p>Very limited access to the underlying UI components (e.g. with a ref to a View component, you cannot do much – you can't traverse the UI tree, make synchronous measurements, or call the underlying APIs of the UI component). Exceptions may include the advanced case of Reanimated 2 worklets.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>All NativeScript UI elements provide full, synchronous API access to the underlying UI component. e.g. on iOS, with a ref to a React NativeScript <code>&lt;frame&gt;</code> component, you can access the underlying UINavigationController along with all of its APIs and make synchronous UI measurements.</p>
+            </td>
+        </tr>
+        <tr>
+            <td align="center" valign="middle">
+                Hot reloading
+            </td>
+            <td align="center" valign="middle">
+                <p>All native code changes (except possibly JSI and worklets) require app recompilation.</p>
+            </td>
+            <td align="center" valign="middle">
+                <p>Any native API accesses via JS <strong>can be hot reloaded</strong>. Native code written in Obj-C / Java does, however, still require an app recompile upon change.</p>
             </td>
         </tr>
     </tbody>
@@ -198,17 +257,9 @@ React NativeScript shares most of the good parts of React Native, but above all 
 
 ## FAQ
 
-**How far along is it?**
-
-It's feature-equivalent with NativeScript Core!
-
 **Is it production-ready?**
 
-It's based on React and NativeScript Core, which are both individually production-ready. However, it needs to be used a bit more before we'll understand whether there are any weaknesses in my implementation.
-
-**What about plugins?**
-
-Very few UI plugins have been adapted for use with React NativeScript so far, and I'm still altering the API for making UI plugins, so expect there to be relatively few UI plugins for a while. But any non-UI plugins will work just fine!
+It's based on React, NativeScript Core, and NativeScript Vue, which are each individually production-ready. Make of that what you will.
 
 **Can this consume React Native projects?**
 
@@ -219,23 +270,6 @@ No, but it *could* with a lot of hard work. Allowing React NativeScript to run p
 Certainly not UI-based native modules. But all flavours of NativeScript can consume native code, so it can probably consume React Native native modules, though may take a small bit of refactoring 🤔
 
 Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [proof-of-concept](https://gist.github.com/sjchmiela/e1fcb7ca255e77e92bb2c64bc63b7fee) for importing Expo Unimodules into NativeScript that could be used as a basis for this effort. Original discussion [here](https://twitter.com/sjchmiela/status/1158402590499057665?s=20).
-
-## Roadmap 🛣
-
-A quick list of my own plans (not necessarily in execution order):
-
-* Migrate to hooks
-* Build a navigation library (possibly by supporting React Navigation)
-* Finalise the plugins API
-* Conference talk 🤞
-
-Wishes:
-
-* Demo apps
-* Translated docs
-* Lots and lots of plugins
-* API compatibility with React Native (very long-term goal)
-* Compatibility with major React packages like React Navigation (may depend upon above)
 
 ## Contributing 🙋‍♀️
 
