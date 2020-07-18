@@ -194,7 +194,7 @@ React NativeScript shares most of the good parts of React Native, but above all 
                 <p>Only supports JSON-serialisable types<sup><a href="https://reactnative.dev/docs/native-modules-ios.html#argument-types">[iOS]</a></sup><sup><a href="https://reactnative.dev/docs/native-modules-android#argument-types">[Android]</a></sup>, and only passes by value rather than by reference.</p>
             </td>
             <td align="center" valign="middle">
-                <p>Can marshal nearly any data type<sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/marshalling-overview">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/marshalling/overview">[Android]</a></sup> back and forth between the JS and native contexts, and even passes by reference from native to JS, allowing APIs to be called on a native class instances from the JS context. Memory management of native references held by JS is <a href="https://docs.nativescript.org/core-concepts/memory-management">very</a> clever.</p>
+                <p>Can marshal nearly any data type<sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/marshalling-overview">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/marshalling/overview">[Android]</a></sup> back and forth between the JS and native contexts, and even passes by reference from native to JS, allowing APIs to be called on native class instances from the JS context. Memory management of native references held by JS is <a href="https://docs.nativescript.org/core-concepts/memory-management">very</a> clever.</p>
             </td>
         </tr>
         <tr>
