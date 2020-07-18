@@ -205,7 +205,7 @@ React NativeScript shares most of the good parts of React Native, but above all 
                 <p>Users must write their own bindings<sup><a href="https://reactnative.dev/docs/native-modules-ios.html#argument-types">[iOS]</a></sup><sup><a href="https://reactnative.dev/docs/native-modules-android#argument-types">[Android]</a></sup> (except possibly for the advanced feature of C++ TurboModules) and try not to get anything wrong.</p>
             </td>
             <td align="center" valign="middle">
-                <p>Bindings between the Objective-C/Java runtimes and JavaScript will be automatically generated<sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/metadata/overview">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/overview#metadata">[Android]</a></sup> for any source code included in your app.</p>
+                <p>Bindings between the Objective-C/Java runtimes and JavaScript will be automatically generated<sup><a href="https://docs.nativescript.org/core-concepts/ios-runtime/overview#metadata">[iOS]</a></sup><sup><a href="https://docs.nativescript.org/core-concepts/android-runtime/metadata/overview">[Android]</a></sup> for any source code included in your app.</p>
             </td>
         </tr>
         <tr>
