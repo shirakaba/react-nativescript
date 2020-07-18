@@ -249,7 +249,7 @@ React NativeScript shares most of the good parts of React Native, but above all 
                 <p>All native code changes (except possibly JSI and worklets) require app recompilation.</p>
             </td>
             <td align="center" valign="middle">
-                <p>Any native API accesses via JS <strong>can be hot reloaded</strong>. Native code written in Obj-C / Java does, however, still require an app recompile upon change.</p>
+                <p>Any native API accesses via JS can be hot reloaded. Native code written in Obj-C / Java does, however, still require an app recompile upon change.</p>
             </td>
         </tr>
     </tbody>
