@@ -167,8 +167,6 @@ export class _ListView extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        super.componentDidMount();
-
         const node: NativeScriptListView | null = this.getNativeView();
         if (!node) {
             console.warn(`React ref to NativeScript View lost, so unable to set item templates.`);
@@ -196,7 +194,6 @@ export class _ListView extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
-        super.componentWillUnmount();
         this.roots.forEach(root => unmountComponentAtNode(root));
     }
 
