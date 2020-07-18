@@ -36,7 +36,11 @@ tns create myApp --template tns-template-blank-react
 cd myApp
 npm install
 
-tns preview
+# The Preview and Playground apps are awaiting an update from
+# RNS v0 to v1, so the `tns preview` workflow isn't supported
+# yet. We're working on it. – 18th July 2020
+#
+# tns preview
 # or
 tns run ios
 # or
