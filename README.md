@@ -31,7 +31,7 @@ I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://
 # Make sure that you have `tns` (the NativeScript CLI) installed:
 #   https://docs.nativescript.org/start/quick-setup
 
-tns create myApp --template tns-template-blank-react
+tns create myApp --react
 
 cd myApp
 npm install
