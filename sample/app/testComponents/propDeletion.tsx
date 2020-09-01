@@ -1,6 +1,5 @@
 import * as React from "react";
-import { ScrollView, StackLayout } from "@nativescript/core";
-import { ItemSpec } from "tns-core-modules/ui/layouts/grid-layout/grid-layout";
+import { StackLayout } from "@nativescript/core";
 import { NSVElement } from "react-nativescript";
 
 export class DeletePropFromScrollViewTest extends React.Component<{ forwardedRef: React.Ref<NSVElement<StackLayout>> }, {}> {

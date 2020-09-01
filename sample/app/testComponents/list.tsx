@@ -1,16 +1,5 @@
-//@ts-nocheck
-
-// if((module as any).hot) {
-//     // self accept.
-//     (module as any).hot.accept(
-//         function() {
-//             console.log(`Error in accepting self update for list.tsx.`);
-//         }
-//     );
-// }
-
 import * as React from "react";
-import { Color, ItemSpec, ItemEventData, ObservableArray } from "@nativescript/core";
+import { Color, ItemEventData, ObservableArray } from "@nativescript/core";
 import { ListView, CellViewContainer } from "react-nativescript";
 
 export class ListViewTest extends React.Component<{}, {}> {
@@ -81,8 +70,7 @@ export class ListViewTest extends React.Component<{}, {}> {
                         }
                     ],
                 ])}
-            >
-            </ListView>
+            />
         );
     }
 }

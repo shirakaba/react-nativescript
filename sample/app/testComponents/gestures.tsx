@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Page, EventData } from "@nativescript/core";
 import { NSVElement, PageAttributes } from "react-nativescript";
 import { PortalToPageWithActionBar, StatefulPortalToPageWithActionBar } from "./navigation";
-import { GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "tns-core-modules/ui/gestures/gestures";
+import { Page, EventData, GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "@nativescript/core";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
     render(){

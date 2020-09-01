@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ScrollView, GestureEventData } from "@nativescript/core";
+import { GestureEventData } from "@nativescript/core";
 
 export function UpdateEventHandlerTest() {
     function handleTap(args: GestureEventData) {

@@ -1,13 +1,6 @@
 import * as React from "react";
-import { PercentLength, FormattedString, EventData } from "tns-core-modules/ui/text-base/text-base";
-import { Color } from "tns-core-modules/color";
-import { Span } from "tns-core-modules/text/span";
-import { ContentView, TextBase, ViewBase, StackLayout, Label, TabView, Page, ProxyViewContainer, SearchBar, WebView, Frame } from "@nativescript/core";
+import { Span, ViewBase, Page, SearchBar, WebView, Frame, FormattedString, EventData, Color, SelectedIndexChangedEventData } from "@nativescript/core";
 import { ViewAttributes, RNSStyle, PageAttributes, NSVElement } from "react-nativescript";
-import { NavigationButton } from "tns-core-modules/ui/action-bar/action-bar";
-import * as ReactNativeScript from "react-nativescript/dist/index";
-import { TabViewItem, SelectedIndexChangedEventData } from "tns-core-modules/ui/tab-view/tab-view";
-import { PortalToPageWithActionBar } from "./navigation";
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
