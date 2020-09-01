@@ -9,14 +9,12 @@ In many cases you may want to use the NativeScript core theme instead
 of writing your own CSS rules. For a full list of class names in the theme
 refer to http://docs.nativescript.org/ui/theme.
 The imported CSS rules must precede all other types of rules.
-*/
-@import "~@nativescript/theme/css/core.css";
-@import "~@nativescript/theme/css/blue.css";
 
-/*
-The following CSS rule changes the font size of all UI
-components that have the btn class name.
+@example 
+  @import "~@nativescript/theme/css/core.css";
+  @import "~@nativescript/theme/css/blue.css";
+
+Jamie: I'll leave theming up to the consumer instead in RNS; it's too much
+       of a black-box to me.
 */
-.btn {
-    font-size: 18;
-}
+
