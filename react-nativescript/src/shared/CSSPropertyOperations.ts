@@ -1,5 +1,4 @@
 import { Instance } from "../shared/HostConfigTypes";
-// import { Style } from "tns-core-modules/ui/styling/style/style";
 import * as console from "./Logger";
 import { rnsDeletedPropValue } from "../client/magicValues";
 import { Style } from "@nativescript/core";
