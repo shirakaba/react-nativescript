@@ -198,7 +198,10 @@ export class _ListView extends React.Component<Props, State> {
     }
 
     public static isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
-        // Same implementation as: https://github.com/NativeScript/NativeScript/blob/b436ecde3605b695a0ffa1757e38cc094e2fe311/tns-core-modules/ui/list-picker/list-picker-common.ts#L74
+        /**
+         * Same implementation as used in official ListPicker component:
+         * @see https://github.com/NativeScript/NativeScript/blob/b436ecde3605b695a0ffa1757e38cc094e2fe311/tns-core-modules/ui/list-picker/list-picker-common.ts#L74
+         */
         return typeof (arr as ItemsSource).getItem === "function";
     }
 
