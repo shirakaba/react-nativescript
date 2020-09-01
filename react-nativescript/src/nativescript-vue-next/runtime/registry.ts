@@ -20,7 +20,7 @@ import {
     NavigationContext as TNSNavigationContext,
     NavigationEntry as TNSNavigationEntry,
     BackstackEntry as TNSBackstackEntry,
-} from '@nativescript/core'
+} from '@nativescript/core';
 import { NSVElement, NSVViewFlags } from './nodes'
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
@@ -114,7 +114,7 @@ export function isKnownView(elementName: string): boolean {
     return elementMap.hasOwnProperty(normalizeElementName(elementName))
 }
 
-type TNSFramePrivate = TNSFrame & {
+type TNSFramePrivate = any & TNSFrame & {
     _navigationQueue: TNSNavigationContext[],
     _backStack: TNSBackstackEntry[], // backStack just returns a copy.
     _currentEntry: TNSBackstackEntry|undefined,
