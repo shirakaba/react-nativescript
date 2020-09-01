@@ -1,3 +1,7 @@
+/**
+ * @see https://github.com/NativeScript/NativeScript/tree/feat/ns7-finishing-touches/packages/webpack/templates
+ * @see https://github.com/NativeScript/NativeScript/pull/8801/files
+ */
 const webpackConfig = require("./webpack.config");
 const webpack = require("webpack");
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -42,7 +46,7 @@ module.exports = (env) => {
     baseConfig.module.rules.some(rule => {
         const isNativeScriptDevWebpackHotLoader = rule.use === "nativescript-dev-webpack/hmr/hot-loader";
 
-        if(isNativeScriptDevWebpackHotLoader){
+        if (isNativeScriptDevWebpackHotLoader) {
             rule.test = /\.(ts|tsx|js|jsx|css|scss|html|xml)$/;
         }
 
@@ -90,12 +94,12 @@ module.exports = (env) => {
         "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
     };
     baseConfig.plugins.unshift(new webpack.DefinePlugin(newDefinitions));
-    
+
     /**
      * Set forceEnable to `true` if you want to use HMR on a production build.
      */
     const forceEnable = false;
-    if(hmr && (!production || forceEnable)){
+    if (hmr && (!production || forceEnable)) {
         baseConfig.plugins.push(new ReactRefreshWebpackPlugin({
             /**
              * Maybe one day we'll implement an Error Overlay, but the work involved is too daunting for now.
