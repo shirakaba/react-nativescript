@@ -1,6 +1,6 @@
 {
   "name": "react-nativescript",
-  "version": "1.0.6",
+  "version": "2.0.0-aplha.0",
   "description": "React renderer for NativeScript",
   "main": "dist/index.js",
   "files": [
@@ -33,7 +33,7 @@
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
     "react": "^16.9.0",
-    "tns-core-modules": "^6.5.0"
+    "@nativescript/core": "~7.0.0"
   },
   "dependencies": {
     "react-reconciler": "^0.25.1",
@@ -41,12 +41,13 @@
     "set-value": "3.0.2"
   },
   "devDependencies": {
+    "@nativescript/core": "7.0.0",
     "@types/react": "16.9.34",
     "@types/react-reconciler": "0.18.0",
+    "@types/webpack-env": "^1.15.2",
     "patch-package": "^6.2.2",
     "prettier": "1.18.2",
     "react": "^16.13.1",
-    "tns-core-modules": "6.5.0",
     "typescript": "^3.9.5"
   }
 }
