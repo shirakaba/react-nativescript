@@ -2,7 +2,7 @@
  * @see https://github.com/NativeScript/NativeScript/tree/feat/ns7-finishing-touches/packages/webpack/templates
  * @see https://github.com/NativeScript/NativeScript/pull/8801/files
  */
-const webpackConfig = require("./webpack.config");
+const webpackConfig = require("./webpack.typescript");
 const webpack = require("webpack");
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
