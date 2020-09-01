@@ -2,6 +2,7 @@ node_modules
 src/*.js*
 src/*.d.ts
 sample/**/*.d.ts
+!sample/app/references.d.ts
 react-nativescript/dist
 react-nativescript/src/*.js
 react-nativescript/src/**/*.js
