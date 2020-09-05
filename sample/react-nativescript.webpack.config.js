@@ -18,6 +18,7 @@ module.exports = (env) => {
         presets: [
             // https://github.com/Microsoft/TypeScript-Babel-Starter
             "@babel/env",
+            "@babel/typescript",
             "@babel/react"
         ],
         plugins: [
