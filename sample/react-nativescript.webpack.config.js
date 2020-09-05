@@ -34,6 +34,18 @@ module.exports = (env) => {
 
     const baseConfig = webpackConfig(env);
 
+    // Modify "ts-loader" to test for .tsx files
+    // (and also js(x) files, which it should have been doing to begin with!)
+    baseConfig.module.rules.some(rule => {
+        const isTsLoader = rule.use && rule.use.loader === "ts-loader";
+
+        if (isTsLoader) {
+            rule.test = /\.(ts|tsx)$/;
+        }
+
+        return isTsLoader; // Break loop once we've found the one.
+    });
+
     // Modify "nativescript-dev-webpack/hmr/hot-loader" to test for .tsx files
     // (and also js(x) files, which it should have been doing to begin with!)
     baseConfig.module.rules.some(rule => {
