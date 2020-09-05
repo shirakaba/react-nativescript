@@ -12,74 +12,59 @@ module.exports = (env) => {
     const production = env.production;
     const isAnySourceMapEnabled = !!env.sourceMap || !!env.hiddenSourceMap;
 
-    const babelOptions = {
-        sourceMaps: isAnySourceMapEnabled ? "inline" : false,
-        babelrc: false,
-        plugins: ['react-refresh/babel']
-    };
-
     const baseConfig = webpackConfig(env);
 
-    let tsxRule;
-    // Find the rule for transpiling ts files ("ts-loader"), and modify it to test for .tsx files too
-    baseConfig.module.rules.some(rule => {
-        const isTsLoader = rule.use && rule.use.loader === "ts-loader";
-
-        if (isTsLoader) {
-            rule.test = /\.(ts|tsx)$/;
-            tsxRule = rule;
-        }
-
-        return isTsLoader;
-    });
+    /** Find the rule for transpiling ts files ("ts-loader"), and modify it to test for .tsx files too. */
+    const tsxRule = baseConfig.module.rules.find(rule => rule.use && rule.use.loader === "ts-loader");
+    tsxRule.test = /\.(ts|tsx)$/;
     tsxRule.use = [
         /**
+         * Add React Refresh HMR support.
          * @see https://github.com/pmmmwh/react-refresh-webpack-plugin/blob/55028c6355b31e697e21bf3e9a48613a7b94bee7/examples/typescript-without-babel/webpack.config.js#L18-L21
          */
         hmr && !production && {
             loader: "babel-loader",
-            options: babelOptions
+            options: {
+                sourceMaps: isAnySourceMapEnabled ? "inline" : false,
+                babelrc: false,
+                plugins: ['react-refresh/babel']
+            }
         },
         tsxRule.use,
     ].filter(Boolean);
 
-    // Modify "nativescript-dev-webpack/hmr/hot-loader" to test for .tsx files
-    // (and also js files, which it should have been doing to begin with!)
-    baseConfig.module.rules.some(rule => {
-        const isNativeScriptDevWebpackHotLoader = rule.use === "@nativescript/webpack/hmr/hot-loader";
+    /**
+     * Modify "nativescript-dev-webpack/hmr/hot-loader" to test for .tsx files
+     * (and also js files, which it should have been doing to begin with!)
+     */
+    const nativeScriptDevWebpackHotLoader = baseConfig.module.rules.find(rule =>
+        rule.use === "@nativescript/webpack/hmr/hot-loader"
+    );
+    nativeScriptDevWebpackHotLoader.test = /\.(ts|tsx|js|css|scss|html|xml)$/;
 
-        if (isNativeScriptDevWebpackHotLoader) {
-            rule.test = /\.(ts|tsx|js|css|scss|html|xml)$/;
-        }
-
-        return isNativeScriptDevWebpackHotLoader;
-    });
-
-    // We don't officially support JSX. Makes the webpack config rather more complicated to set up.
+    /** We don't officially support JSX. Makes the webpack config rather more complicated to set up. */
     baseConfig.resolve.extensions = [".tsx", ...baseConfig.resolve.extensions];
     baseConfig.resolve.alias["react-dom"] = "react-nativescript";
 
-    // Augment NativeScript's existing DefinePlugin definitions with a few more of our own.
-    let existingDefinePlugin;
-    baseConfig.plugins = baseConfig.plugins.filter(plugin => {
-        const isDefinePlugin = plugin && plugin.constructor && plugin.constructor.name === "DefinePlugin";
-        if(isDefinePlugin){
-            existingDefinePlugin = plugin;
-        }
-        return !isDefinePlugin;
-    });
-    const newDefinitions = {
-        ...existingDefinePlugin.definitions,
-        /* For various libraries in the React ecosystem. */
-        "__DEV__": production ? "false" : "true",
-        "__TEST__": "false",
-        /*
-         * Primarily for React Fast Refresh plugin, but technically the allowHmrInProduction option could be used instead.
-         * Worth including anyway, as there are plenty of Node libraries that use this flag.
-         */
-        "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
-    };
-    baseConfig.plugins.unshift(new webpack.DefinePlugin(newDefinitions));
+    /** Augment NativeScript's existing DefinePlugin definitions with a few more of our own. */
+    const existingDefinePlugin = baseConfig.plugins.find(plugin =>
+        plugin && plugin.constructor && plugin.constructor.name === "DefinePlugin"
+    );
+    baseConfig.plugins.splice(
+        baseConfig.plugins.indexOf(existingDefinePlugin),
+        1,
+        new webpack.DefinePlugin({
+            ...existingDefinePlugin.definitions,
+            /** For various libraries in the React ecosystem. */
+            "__DEV__": production ? "false" : "true",
+            "__TEST__": "false",
+            /**
+             * Primarily for React Fast Refresh plugin, but technically the allowHmrInProduction option could be used instead.
+             * Worth including anyway, as there are plenty of Node libraries that use this flag.
+             */
+            "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
+        }),
+    );
 
     if(hmr && !production){
         baseConfig.plugins.push(new ReactRefreshWebpackPlugin({
