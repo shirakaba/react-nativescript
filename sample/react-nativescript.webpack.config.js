@@ -18,7 +18,6 @@ module.exports = (env) => {
         presets: [
             // https://github.com/Microsoft/TypeScript-Babel-Starter
             "@babel/env",
-            "@babel/typescript",
             "@babel/react"
         ],
         plugins: [
@@ -35,16 +34,10 @@ module.exports = (env) => {
 
     const baseConfig = webpackConfig(env);
 
-    // Remove ts-loader as we'll be using Babel to transpile the TypeScript instead.
-    baseConfig.module.rules = baseConfig.module.rules.filter((rule) => {
-        const isTsLoader = rule.use && rule.use.loader === "ts-loader";
-        return !isTsLoader;
-    });
-
     // Modify "nativescript-dev-webpack/hmr/hot-loader" to test for .tsx files
     // (and also js(x) files, which it should have been doing to begin with!)
     baseConfig.module.rules.some(rule => {
-        const isNativeScriptDevWebpackHotLoader = rule.use === "nativescript-dev-webpack/hmr/hot-loader";
+        const isNativeScriptDevWebpackHotLoader = rule.use === "@nativescript/webpack/hmr/hot-loader";
 
         if (isNativeScriptDevWebpackHotLoader) {
             rule.test = /\.(ts|tsx|js|jsx|css|scss|html|xml)$/;
@@ -68,12 +61,6 @@ module.exports = (env) => {
 
     baseConfig.resolve.extensions = [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"];
     baseConfig.resolve.alias["react-dom"] = "react-nativescript";
-
-    // Remove ForkTsCheckerWebpackPlugin because, now that we're using Babel, we'll leave type-checking to the IDE instead.
-    baseConfig.plugins = baseConfig.plugins.filter(plugin => {
-        const isForkTsCheckerWebpackPlugin = plugin && plugin.constructor && plugin.constructor.name === "ForkTsCheckerWebpackPlugin";
-        return !isForkTsCheckerWebpackPlugin;
-    });
 
     // Augment NativeScript's existing DefinePlugin definitions with a few more of our own.
     let existingDefinePlugin;
