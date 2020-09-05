@@ -1,4 +1,5 @@
 {
+  "name": "rns-sample-app",
   "main": "app.js",
   "scripts": {
     "postinstall": "patch-package",
@@ -13,12 +14,7 @@
     "@nativescript/core": "~7.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.4.5",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/preset-env": "^7.9.5",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^7.9.0",
     "@nativescript/ios": "7.0.0",
     "@nativescript/types": "7.0.1",
     "@nativescript/webpack": "~3.0.0",
