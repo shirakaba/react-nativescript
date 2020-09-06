@@ -13,7 +13,7 @@ Here is an example of starting up a minimal app without JSX nor HMR:
 import * as React from "react";
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import { $StackLayout, $Label } from "react-nativescript/dist/index";
-import { Color } from "tns-core-modules/color";
+import { Color } from "@nativescript/core";
 
 const rootRef: React.RefObject<any> = React.createRef<any>();
 

@@ -13,17 +13,17 @@ I configured the `package.json` for the `react-nativescript` repo as follows:
     // ...
     "peerDependencies": {
         "react": "",
-        "tns-core-modules": "" 
+        "@nativescript/core": "" 
     }
 }
 ```
 
 ## Installation of library's dependencies
 
-Now I must manually install react and tns-core-modules:
+Now I must manually install react and @nativescript/core:
 
 ```sh
-npm install react tns-core-modules
+npm install react @nativescript/core
 ```
 
 ## Building the TypeScript source
