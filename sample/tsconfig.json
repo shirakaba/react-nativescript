@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "esnext",
         "moduleResolution": "node",
-        "target": "es2015",
+        "target": "es2017",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "noEmitHelpers": true,

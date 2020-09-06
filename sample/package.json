@@ -3,7 +3,7 @@
   "main": "app.js",
   "scripts": {
     "postinstall": "patch-package",
-    "tsc": "tsc --project ./tsconfig.tns.json"
+    "tsc": "tsc"
   },
   "description": "NativeScript Application",
   "license": "SEE LICENSE IN <your-license-filename>",
