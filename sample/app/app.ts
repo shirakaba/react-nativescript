@@ -11,6 +11,24 @@ purpose of the file is to pass control to the app’s first module.
 
 import * as ReactNativeScript from "react-nativescript/dist/index";
 import AppContainer from "./testComponents/AppContainer";
+import { Trace, TraceErrorHandler } from "@nativescript/core";
+
+
+const errorHandler: TraceErrorHandler = {
+    handlerError(err) {
+        // Option 1 (development) - throw the error
+        // throw err;
+        
+
+        // Option 2 (development) - logging the error via write method provided from trace module
+        Trace.write(err, "unhandled-error", Trace.messageType.error);
+
+        // (production) - custom functionality for error handling
+        // reportToAnalytics(err)
+    }
+}
+
+Trace.setErrorHandler(errorHandler)
 
 ReactNativeScript.start(React.createElement(AppContainer, {}, null));
 

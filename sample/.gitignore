@@ -6,8 +6,8 @@ platforms/
 # NativeScript Template
 *.js.map
 *.js
+!webpack.typescript.js
 !webpack.config.js
-!react-nativescript.webpack.config.js
 
 # Logs
 logs

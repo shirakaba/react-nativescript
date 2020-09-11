@@ -1,5 +1,5 @@
 import { Instance, HostContext } from "../shared/HostConfigTypes";
-import { isIOS, isAndroid } from "tns-core-modules/platform/platform";
+import { isIOS, isAndroid } from "@nativescript/core";
 import * as console from "../shared/Logger";
 import { rnsDeletedPropValue } from "./magicValues";
 import { MutableRefObject } from "react";

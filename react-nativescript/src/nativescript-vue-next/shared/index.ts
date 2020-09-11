@@ -1,11 +1,11 @@
-import * as trace from '@nativescript/core/trace'
+import { Trace } from '@nativescript/core';
 
-type DebugCategory = string | typeof trace.categories
+type DebugCategory = string | typeof Trace.categories
 export function debug(
   s: any,
-  category: DebugCategory = trace.categories.Debug
+  category: DebugCategory = Trace.categories.Debug
 ) {
-  trace.write(s, category as string, trace.messageType.log)
+  Trace.write(s, category as string, Trace.messageType.log)
 }
 
 export const isOn = (key: string) => key.startsWith('on')
