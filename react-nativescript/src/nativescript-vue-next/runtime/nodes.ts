@@ -7,7 +7,7 @@ import {
 import { ELEMENT_REF } from './runtimeHelpers';
 import { debug } from '../shared';
 import { ViewBase, View, TextBase, LayoutBase, ContentView, Style, ObservableArray, EventData } from '@nativescript/core'
-import { AddChildFromBuilder } from '@nativescript/core/ui/core/view/index';
+import { AddChildFromBuilder } from '@nativescript/core/ui/core/view';
 import { unsetValue } from '@nativescript/core/ui/core/properties'
 /* 
  * I had some difficulty importing this as:
