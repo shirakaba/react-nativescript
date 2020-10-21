@@ -35,6 +35,7 @@ export type NSVModelDescriptor = {
 
 export interface NSVViewMeta {
     viewFlags: NSVViewFlags
+    stackDepth?: number;
     nodeOps?: {
         insert(child: NSVElement, parent: NSVElement, atIndex?: number): void
         remove(child: NSVElement, parent: NSVElement): void
@@ -114,7 +115,7 @@ export function isKnownView(elementName: string): boolean {
     return elementMap.hasOwnProperty(normalizeElementName(elementName))
 }
 
-type TNSFramePrivate = any & TNSFrame & {
+type TNSFramePrivate = {
     _navigationQueue: TNSNavigationContext[],
     _backStack: TNSBackstackEntry[], // backStack just returns a copy.
     _currentEntry: TNSBackstackEntry|undefined,
@@ -292,11 +293,17 @@ if (!__TEST__) {
                     if (child.nativeView instanceof TNSPage) {
                         if(typeof atIndex === "undefined"){
                             // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} √`);
+                            const stackDepth = parent.meta.stackDepth;
+
                             frame.navigate({
+                                animated: stackDepth > 0,
+                                clearHistory: stackDepth === 0,
+                                backstackVisible: stackDepth > 0,
                                 create() {
                                     return child.nativeView as TNSView
                                 }
-                            })
+                            });
+                            parent.meta.stackDepth++;
                             return;
                         } else {
                             if (__DEV__) {
@@ -321,16 +328,31 @@ if (!__TEST__) {
                  * We can splice frame._backStack (belonging to frame-common.ts), but it doesn't
                  * update the logic of the frame.ios.ts and frame.android.ts native implementations.
                  */
-                remove(child: NSVElement, parent: NSVElement<TNSFramePrivate>): void {
                     // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
+                remove(child: NSVElement, parent: NSVElement<TNSFrame>): void {
 
-                    const frame = parent.nativeView as TNSFramePrivate;
+                    const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
 
                     if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
                         // console.log(`[frame.remove] ${parent} x ${child} √`);
-                        frame.goBack();
+                        if(frame.canGoBack()){
+                            console.log(`[frame.remove] ${parent} x ${child} √; canGoBack() is TRUE`);
+                            frame.goBack();
+                            parent.meta.stackDepth--;
+                        } else {
+                            /**
+                             * NativeScript Core does not support transitioning a Frame back to Pageless state.
+                             * It's simply not possible, whether by `frame.removeEntry()`, `frame._updateBackstack()`,
+                             * or `frame.setCurrent()`.
+                             * 
+                             * ... So the best we can do is indicate that the stack is conceptually empty.
+                             * This means that, on next navigation, we should call clearHistory.
+                             */
+                            parent.meta.stackDepth = 0;
+                        }
                     } else {
+                        parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1); // Not too sure about this..!
                         /* There's actually valid reason to no-op here:
                          * We might simply be trying to pop a child page in response to a native pop having occurred. */
                         // console.log(`[frame.remove] ${parent} x ${child} x`);
