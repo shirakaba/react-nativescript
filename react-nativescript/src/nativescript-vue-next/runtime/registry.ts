@@ -22,6 +22,8 @@ import {
     BackstackEntry as TNSBackstackEntry,
 } from '@nativescript/core';
 import { NSVElement, NSVViewFlags } from './nodes'
+import { forwardNavOpts } from "./navigation";
+import type { RNSNavigationOptions } from "./navigation";
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
 import { warn } from "../../shared/Logger";
@@ -284,6 +286,7 @@ if (!__TEST__) {
         'frame',
         () => require('@nativescript/core').Frame,
         {
+            stackDepth: 0,
             // todo: move into Frame.ts when we end up creating a component for Frame
             nodeOps: {
                 insert(child: NSVElement, parent: NSVElement<TNSFrame>, atIndex?: number): void {
@@ -294,11 +297,19 @@ if (!__TEST__) {
                         if(typeof atIndex === "undefined"){
                             // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} √`);
                             const stackDepth = parent.meta.stackDepth;
+                            const resolvedNavOpts: RNSNavigationOptions = Object.assign(
+                                {},
+                                forwardNavOpts.defaultOptions,
+                                {
+                                    animated: stackDepth > -1,
+                                    clearHistory: stackDepth === -1,
+                                    backstackVisible: stackDepth > -1,
+                                },
+                                forwardNavOpts.pop() || {}
+                            );
 
                             frame.navigate({
-                                animated: stackDepth > 0,
-                                clearHistory: stackDepth === 0,
-                                backstackVisible: stackDepth > 0,
+                                ...resolvedNavOpts,
                                 create() {
                                     return child.nativeView as TNSView
                                 }
@@ -339,7 +350,7 @@ if (!__TEST__) {
                         if(frame.canGoBack()){
                             console.log(`[frame.remove] ${parent} x ${child} √; canGoBack() is TRUE`);
                             frame.goBack();
-                            parent.meta.stackDepth--;
+                            parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
                         } else {
                             /**
                              * NativeScript Core does not support transitioning a Frame back to Pageless state.
@@ -349,7 +360,7 @@ if (!__TEST__) {
                              * ... So the best we can do is indicate that the stack is conceptually empty.
                              * This means that, on next navigation, we should call clearHistory.
                              */
-                            parent.meta.stackDepth = 0;
+                            parent.meta.stackDepth = -1;
                         }
                     } else {
                         parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1); // Not too sure about this..!

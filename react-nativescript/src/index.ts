@@ -101,6 +101,8 @@ import {
 } from "@nativescript/core";
 import { RNSStyle, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
 export { RNSStyle, NativeScriptAttributes, NativeScriptProps };
+import { forwardNavOpts } from "./nativescript-vue-next/runtime/navigation";
+export { forwardNavOpts };
 import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
