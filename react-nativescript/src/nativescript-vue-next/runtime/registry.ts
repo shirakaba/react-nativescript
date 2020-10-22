@@ -27,6 +27,7 @@ import type { RNSNavigationOptions } from "./navigation";
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
 import { warn } from "../../shared/Logger";
+import { NavigationType } from '@nativescript/core/ui/frame';
 
 export type NSVElementResolver = () => TNSViewBase
 
@@ -363,10 +364,34 @@ if (!__TEST__) {
                             parent.meta.stackDepth = -1;
                         }
                     } else {
-                        parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1); // Not too sure about this..!
-                        /* There's actually valid reason to no-op here:
-                         * We might simply be trying to pop a child page in response to a native pop having occurred. */
                         // console.log(`[frame.remove] ${parent} x ${child} x`);
+                        
+                        /**
+                         * When React Navigation pops back to the top, it removes from the root of the stack rather than the face. This has some sense, as
+                         * it avoids rendering and animating every pop on the way, but it's very problematic for NativeScript Core, which cannot splice
+                         * Pages from the Frame's stack.
+                         * 
+                         */
+
+                        let indexOfBackstackEntry: number = -1;
+                        const backstackEntry: TNSBackstackEntry | undefined = (frame as unknown as TNSFramePrivate)._backStack.find((entry, i) => {
+                            if(entry.resolvedPage === page){
+                                indexOfBackstackEntry = i;
+                                return true;
+                            }
+                            return false;
+                        });
+
+                        if(backstackEntry){
+                            const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
+                            frame._removeEntry(backstackEntry);
+                            (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
+                        } else {
+                            /* There's actually valid reason to no-op here:
+                             * We might simply be trying to pop a child page in response to a native pop having occurred. */
+                        }
+
+                        parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
                         return;
                     }
                 }
