@@ -304,9 +304,9 @@ if (!__TEST__) {
                                 {
                                     animated: stackDepth > -1,
                                     clearHistory: stackDepth === -1,
-                                    backstackVisible: stackDepth > -1,
+                                    backstackVisible: true,
                                 },
-                                forwardNavOpts.pop() || {}
+                                forwardNavOpts.pop() || {},
                             );
 
                             console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
