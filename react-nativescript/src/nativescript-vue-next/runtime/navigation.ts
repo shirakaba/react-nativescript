@@ -24,7 +24,7 @@ class RNSNavigationOptionsManager {
     }
 }
 
-export const forwardNavOpts = new RNSNavigationOptionsManager();
+export const __unstable__forwardNavOpts = new RNSNavigationOptionsManager();
 /**
   * TODO: Implement. The goBack() API is a bit more annoying to work with, as it requires you
   * to specify the target BackStackEntry that you're trying to navigate back to.

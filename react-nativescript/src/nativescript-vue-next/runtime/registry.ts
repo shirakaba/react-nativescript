@@ -22,12 +22,11 @@ import {
     BackstackEntry as TNSBackstackEntry,
 } from '@nativescript/core';
 import { NSVElement, NSVViewFlags } from './nodes'
-import { forwardNavOpts } from "./navigation";
+import { __unstable__forwardNavOpts } from "./navigation";
 import type { RNSNavigationOptions } from "./navigation";
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
 import { warn } from "../../shared/Logger";
-import { NavigationType } from '@nativescript/core/ui/frame';
 
 export type NSVElementResolver = () => TNSViewBase
 
@@ -291,7 +290,6 @@ if (!__TEST__) {
             // todo: move into Frame.ts when we end up creating a component for Frame
             nodeOps: {
                 insert(child: NSVElement, parent: NSVElement<TNSFrame>, atIndex?: number): void {
-                    // console.log(`[frame.insert] ${parent}.childNodes updating to: [${parent.childNodes}]`);
                     const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
                     if (child.nativeView instanceof TNSPage) {
@@ -300,16 +298,17 @@ if (!__TEST__) {
 
                             const resolvedNavOpts: RNSNavigationOptions = Object.assign(
                                 {},
-                                forwardNavOpts.defaultOptions,
+                                __unstable__forwardNavOpts.defaultOptions,
                                 {
                                     animated: stackDepth > -1,
                                     clearHistory: stackDepth === -1,
                                     backstackVisible: true,
                                 },
-                                forwardNavOpts.pop() || {},
+                                __unstable__forwardNavOpts.pop() || {},
                             );
 
                             console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
+                            console.log(`[frame.insert.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
 
                             frame.navigate({
                                 ...resolvedNavOpts,
@@ -318,7 +317,11 @@ if (!__TEST__) {
                                 }
                             });
 
-                            console.log(`[frame.insert.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // At least on forward navigations, need to wait for the animation to complete before the backstack will reflect the update.
+                            setTimeout(() => {
+                                console.log(`[frame.insert.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            }, 1000);
+
                             parent.meta.stackDepth++;
                             return;
                         } else {
@@ -334,7 +337,6 @@ if (!__TEST__) {
                             )
                         }
                     }
-                    // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} x`);
                 },
                 /**
                  * This is a best-of-a-bad-job. NativeScript Core implements push & pop, and
@@ -353,6 +355,10 @@ if (!__TEST__) {
                     if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
                         if(frame.canGoBack()){
                             console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
+
+                            console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+
+                            /** { animated: false } is ignored even if you pass in a backStackEntry that explicitly specifies it. */
                             frame.goBack();
                             console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
@@ -391,10 +397,11 @@ if (!__TEST__) {
                         if(backstackEntry){
                             // console.log(`[frame.remove] Found backStackEntry for ${child} at index ${indexOfBackstackEntry}, so it's a splice.`);
                             // const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
+                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
+                            console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             frame._removeEntry(backstackEntry);
                             (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
                             // console.log(`[frame.remove] backStackLengthBefore ${backStackLengthBefore} => backStackLengthAfter ${(frame as unknown as TNSFramePrivate)._backStack.length}`);
-                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
                             console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                         } else {
                             /* There's actually valid reason to no-op here:
