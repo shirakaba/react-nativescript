@@ -296,8 +296,8 @@ if (!__TEST__) {
                     const page = child.nativeView as TNSPage;
                     if (child.nativeView instanceof TNSPage) {
                         if(typeof atIndex === "undefined"){
-                            // console.log(`[frame.insert] ${parent} > ${child} @${atIndex} √`);
                             const stackDepth = parent.meta.stackDepth;
+
                             const resolvedNavOpts: RNSNavigationOptions = Object.assign(
                                 {},
                                 forwardNavOpts.defaultOptions,
@@ -308,6 +308,8 @@ if (!__TEST__) {
                                 },
                                 forwardNavOpts.pop() || {}
                             );
+
+                            console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
 
                             frame.navigate({
                                 ...resolvedNavOpts,
@@ -340,16 +342,15 @@ if (!__TEST__) {
                  * We can splice frame._backStack (belonging to frame-common.ts), but it doesn't
                  * update the logic of the frame.ios.ts and frame.android.ts native implementations.
                  */
-                    // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
                 remove(child: NSVElement, parent: NSVElement<TNSFrame>): void {
+                    // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
 
                     const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
 
                     if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
-                        // console.log(`[frame.remove] ${parent} x ${child} √`);
                         if(frame.canGoBack()){
-                            console.log(`[frame.remove] ${parent} x ${child} √; canGoBack() is TRUE`);
+                            console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
                             frame.goBack();
                             parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
                         } else {
@@ -362,9 +363,10 @@ if (!__TEST__) {
                              * This means that, on next navigation, we should call clearHistory.
                              */
                             parent.meta.stackDepth = -1;
+                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on currentEntry page; stackDepth ${parent.meta.stackDepth} -> -1`);
                         }
                     } else {
-                        // console.log(`[frame.remove] ${parent} x ${child} x`);
+                        // console.log(`[frame.remove] ${parent} x ${child}, but child isn't the currentEntry (which is ${frame._currentEntry?.resolvedPage}). May involve a splice or a no-op.`);
                         
                         /**
                          * When React Navigation pops back to the top, it removes from the root of the stack rather than the face. This has some sense, as
@@ -383,12 +385,17 @@ if (!__TEST__) {
                         });
 
                         if(backstackEntry){
-                            const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
+                            // console.log(`[frame.remove] Found backStackEntry for ${child} at index ${indexOfBackstackEntry}, so it's a splice.`);
+                            // const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
                             frame._removeEntry(backstackEntry);
                             (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
+                            // console.log(`[frame.remove] backStackLengthBefore ${backStackLengthBefore} => backStackLengthAfter ${(frame as unknown as TNSFramePrivate)._backStack.length}`);
+                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
                         } else {
                             /* There's actually valid reason to no-op here:
                              * We might simply be trying to pop a child page in response to a native pop having occurred. */
+                            // console.log(`[frame.remove] Didn't find a backStackEntry for ${child} at so it must have been handled by Core already. No-op. `);
+                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
                         }
 
                         parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
