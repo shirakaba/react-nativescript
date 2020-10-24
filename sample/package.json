@@ -9,9 +9,9 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "@nativescript/core": "^7.0.12",
     "react": "^16.13.1",
-    "react-nativescript": "file:../react-nativescript",
-    "@nativescript/core": "~7.0.0"
+    "react-nativescript": "file:../react-nativescript"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",

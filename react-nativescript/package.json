@@ -34,7 +34,7 @@
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
     "react": "^16.9.0",
-    "@nativescript/core": "~7.0.0"
+    "@nativescript/core": "^7.0.12"
   },
   "dependencies": {
     "react-reconciler": "^0.25.1",
@@ -42,7 +42,7 @@
     "set-value": "3.0.2"
   },
   "devDependencies": {
-    "@nativescript/core": "7.0.0",
+    "@nativescript/core": "^7.0.12",
     "@types/react": "16.9.34",
     "@types/react-reconciler": "0.18.0",
     "@types/webpack-env": "^1.15.2",

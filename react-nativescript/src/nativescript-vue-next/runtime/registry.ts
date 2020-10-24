@@ -352,7 +352,7 @@ if (!__TEST__) {
                     const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
 
-                    if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
+                    if((frame as unknown as TNSFramePrivate)._currentEntry?.resolvedPage === page){
                         if(frame.canGoBack()){
                             // console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
 
@@ -399,7 +399,7 @@ if (!__TEST__) {
                             // const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
                             // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
                             // console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
-                            frame._removeEntry(backstackEntry);
+                            (frame as unknown as TNSFramePrivate)._removeEntry(backstackEntry);
                             (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
                             // console.log(`[frame.remove] backStackLengthBefore ${backStackLengthBefore} => backStackLengthAfter ${(frame as unknown as TNSFramePrivate)._backStack.length}`);
                             // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
