@@ -23,7 +23,7 @@ import {
 } from '@nativescript/core';
 import { NSVElement, NSVViewFlags } from './nodes'
 import { __unstable__forwardNavOpts } from "./navigation";
-import type { RNSNavigationOptions } from "./navigation";
+import { RNSNavigationOptions } from "./navigation";
 // import { actionBarNodeOps } from './components/ActionBar'
 // import { warn } from '@vue/runtime-core'
 import { warn } from "../../shared/Logger";
