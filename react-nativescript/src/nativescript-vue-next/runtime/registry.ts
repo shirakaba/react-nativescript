@@ -307,8 +307,8 @@ if (!__TEST__) {
                                 __unstable__forwardNavOpts.pop() || {},
                             );
 
-                            console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
-                            console.log(`[frame.insert.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
+                            // console.log(`[frame.insert.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
 
                             frame.navigate({
                                 ...resolvedNavOpts,
@@ -318,9 +318,9 @@ if (!__TEST__) {
                             });
 
                             // At least on forward navigations, need to wait for the animation to complete before the backstack will reflect the update.
-                            setTimeout(() => {
-                                console.log(`[frame.insert.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
-                            }, 1000);
+                            // setTimeout(() => {
+                            //     console.log(`[frame.insert.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // }, 1000);
 
                             parent.meta.stackDepth++;
                             return;
@@ -354,13 +354,13 @@ if (!__TEST__) {
 
                     if(frame._currentEntry && frame._currentEntry.resolvedPage === page){
                         if(frame.canGoBack()){
-                            console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
+                            // console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
 
-                            console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
 
                             /** { animated: false } is ignored even if you pass in a backStackEntry that explicitly specifies it. */
                             frame.goBack();
-                            console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
                         } else {
                             /**
@@ -371,8 +371,8 @@ if (!__TEST__) {
                              * ... So the best we can do is indicate that the stack is conceptually empty.
                              * This means that, on next navigation, we should call clearHistory.
                              */
-                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on currentEntry page; stackDepth ${parent.meta.stackDepth} -> -1`);
-                            console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on currentEntry page; stackDepth ${parent.meta.stackDepth} -> -1`);
+                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             parent.meta.stackDepth = -1;
                         }
                     } else {
@@ -397,18 +397,18 @@ if (!__TEST__) {
                         if(backstackEntry){
                             // console.log(`[frame.remove] Found backStackEntry for ${child} at index ${indexOfBackstackEntry}, so it's a splice.`);
                             // const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
-                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
-                            console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
+                            // console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             frame._removeEntry(backstackEntry);
                             (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
                             // console.log(`[frame.remove] backStackLengthBefore ${backStackLengthBefore} => backStackLengthAfter ${(frame as unknown as TNSFramePrivate)._backStack.length}`);
-                            console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                         } else {
                             /* There's actually valid reason to no-op here:
                              * We might simply be trying to pop a child page in response to a native pop having occurred. */
                             // console.log(`[frame.remove] Didn't find a backStackEntry for ${child} at so it must have been handled by Core already. No-op. `);
-                            console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
-                            console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
+                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                         }
 
                         parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);

@@ -101,15 +101,15 @@ export function setValueForProperty(
             /* FIXME: support setting back to defaultValue if value is rnsDeletedPropValue! */
             const keys: string[] = Object.keys(value);
             if (keys.length === 0) return;
-            console.log(`[PropOp] got platform-specific prop of type object`);
+            // console.log(`[PropOp] got platform-specific prop of type object`);
             keys.forEach((key: string) => {
                 /* FIXME: support setting back to defaultValue if any subValue is rnsDeletedPropValue! */
                 const subValue: any = value[key];
                 if (name === "ios") {
-                    console.log(`[PropOp] Setting ${instance}.ios.${key} = ${subValue}`);
+                    // console.log(`[PropOp] Setting ${instance}.ios.${key} = ${subValue}`);
                     instance.setAttribute("ios." + key, subValue);
                 } else if (name === "android") {
-                    console.log(`[PropOp] Setting ${instance}.android.${key} = ${subValue}`);
+                    // console.log(`[PropOp] Setting ${instance}.android.${key} = ${subValue}`);
                     instance.setAttribute("android." + key, subValue);
                 }
             });
@@ -120,7 +120,7 @@ export function setValueForProperty(
             return;
         }
     } else if (name === "__rns__nodeTreeRole") {
-        console.log(`[PropOp] got node-tree role`);
+        // console.log(`[PropOp] got node-tree role`);
         instance.setAttribute(name, value === rnsDeletedPropValue ? false : value);
     } else if (
         (name.length > 2 && name.startsWith("on") && value === rnsDeletedPropValue) ||
@@ -130,17 +130,17 @@ export function setValueForProperty(
         const existingEventListener = instance.eventListeners.get(eventName);
         if (value === rnsDeletedPropValue) {
             if (existingEventListener) {
-                console.log(`[PropOp] REMOVE: ${instance}.removeEventListener("${eventName}", existingEventListener)`);
+                // console.log(`[PropOp] REMOVE: ${instance}.removeEventListener("${eventName}", existingEventListener)`);
                 instance.removeEventListener(eventName, existingEventListener);
             } else {
-                console.log(`[PropOp] NO-OP: ${instance}.removeEventListener("${eventName}", ?)`);
+                // console.log(`[PropOp] NO-OP: ${instance}.removeEventListener("${eventName}", ?)`);
             }
         } else {
             if (existingEventListener) {
-                console.log(`[PropOp] REPLACE: ${instance}.addEventListener("${eventName}", existingEventListener)`);
+                // console.log(`[PropOp] REPLACE: ${instance}.addEventListener("${eventName}", existingEventListener)`);
                 instance.removeEventListener(eventName, existingEventListener);
             } else {
-                console.log(`[PropOp] ADD: ${instance}.addEventListener("${eventName}", newEventListener)`);
+                // console.log(`[PropOp] ADD: ${instance}.addEventListener("${eventName}", newEventListener)`);
             }
             instance.addEventListener(eventName, value);
         }

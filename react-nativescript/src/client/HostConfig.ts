@@ -176,13 +176,15 @@ const hostConfig: ReactReconciler.HostConfig<
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): Instance {
-        (() => {
-            const { children, ...rest } = props;
-            console.log(`[createInstance() 1a] type: ${type}. props:`, {
-                ...rest,
-            });
-        })();
-        console.log(`[createInstance() 1b] type: ${type}`);
+        // if(type === "page" || type === "frame"){
+        //     (() => {
+        //         const { children, ...rest } = props;
+        //         console.log(`[createInstance() 1a] type: ${type}. props:`, {
+        //             ...rest,
+        //         });
+        //     })();
+        //     console.log(`[createInstance() 1b] type: ${type}`);
+        // }
 
         let view: Instance;
 
@@ -237,7 +239,7 @@ const hostConfig: ReactReconciler.HostConfig<
         rootContainerInstance: Container,
         hostContext: HostContext
     ): boolean {
-        console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
+        // console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         setInitialProperties(parentInstance, type, props, rootContainerInstance, hostContext);
 
         return false;
@@ -295,7 +297,7 @@ const hostConfig: ReactReconciler.HostConfig<
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        console.log(`[appendChild()] ${parentInstance} > ${child}`);
+        // console.log(`[appendChild()] ${parentInstance} > ${child}`);
         if (parentInstance === null) {
             console.warn(
                 `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`
@@ -356,7 +358,7 @@ const hostConfig: ReactReconciler.HostConfig<
         rootContainerInstance: Container,
         hostContext: HostContext
     ): null | UpdatePayload {
-        console.log(`prepareUpdate() with type: ${type}`, instance);
+        // console.log(`prepareUpdate() with type: ${type}`, instance);
 
         // if ((global as any).__DEV__) {
         //     const hostContextDev: HostContextDev = hostContext as HostContextDev;
