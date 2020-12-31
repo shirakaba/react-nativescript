@@ -2,7 +2,9 @@ import * as React from "react";
 
 function AppContainer(){
     return (
-        <stackLayout backgroundColor="yellow"/>
+        <stackLayout>
+            <label>Hello world!</label>
+        </stackLayout>
     );
 }
 
