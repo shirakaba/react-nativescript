@@ -169,6 +169,7 @@ export {
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
 export { ListView, CellViewContainer } from "./components/ListView";
+export { StyleSheet } from "./client/StyleSheet";
 
 // declare global {
 //     var __DEV__: boolean|undefined;
