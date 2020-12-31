@@ -269,7 +269,15 @@ const hostConfig: ReactReconciler.HostConfig<
         }
 
         const textNode = new NSVText(text);
-        precacheFiberNode(internalInstanceHandle, textNode as Instance);
+        /**
+         * I'm not too sure what precacheFiberNode does, but I think it sets a bunch of attributes on the node.
+         * As NSVText never implemented node.setAttribute() in the first place, this line of code (now commented
+         * out) could only ever have led to a crash before. So I'm now omitting it.
+         * 
+         * In any case, I guess in normal usage, developers don't end up going down this path, maybe because of
+         * the above guard.
+         */
+        // precacheFiberNode(internalInstanceHandle, textNode as Instance);
 
         return textNode;
     },

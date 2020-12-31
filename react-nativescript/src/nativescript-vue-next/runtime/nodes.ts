@@ -105,7 +105,13 @@ export abstract class NSVNode implements INSVNode {
     nodeRole?: string
     nodeId: number
     nodeType: NSVNodeTypes
-    text: string | undefined
+    protected _text: string | undefined;
+    get text(): string | undefined {
+        return this._text;
+    }
+    set text(t: string | undefined) {
+        this._text = t;
+    }
 
     parentNode: INSVElement | null = null
     childNodes: INSVNode[] = []
@@ -163,6 +169,7 @@ export class NSVElement<T extends ViewBase = ViewBase> extends NSVNode implement
     }
 
     set text(t: string | undefined) {
+        super.text = t;
         (this.nativeView as ViewBase as TextBase).text = t
     }
 

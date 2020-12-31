@@ -5,7 +5,7 @@
  * This source code is licensed under the MIT license found in /LICENSE.
  */
 import * as ReactReconciler from "react-reconciler";
-import { Instance } from "../shared/HostConfigTypes";
+import { Instance, TextInstance } from "../shared/HostConfigTypes";
 import * as console from "../shared/Logger";
 
 const randomKey: string = Math.random()
