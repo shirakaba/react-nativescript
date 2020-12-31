@@ -2,6 +2,7 @@ import { Instance } from "../shared/HostConfigTypes";
 import * as console from "./Logger";
 import { rnsDeletedPropValue } from "../client/magicValues";
 import { Style } from "@nativescript/core";
+import { RNSStyle } from "../shared/NativeScriptJSXTypings";
 import { CssProperty } from "@nativescript/core/ui/core/properties";
 import {
     visibilityProperty,
@@ -27,6 +28,10 @@ const propertiesWhoseValidatorsDoNotAcceptUnsetValue = new Map<string, CssProper
     [backgroundRepeatProperty.name, backgroundRepeatProperty],
 ]);
 
+export type StyleUpdates = {
+    [P in keyof RNSStyle]: RNSStyle[P] | typeof rnsDeletedPropValue;
+};
+
 /**
  * Sets the value for multiple styles on a node.  If a value is specified as
  * '' (empty string), the corresponding style property will be unset.
@@ -34,7 +39,7 @@ const propertiesWhoseValidatorsDoNotAcceptUnsetValue = new Map<string, CssProper
  * @param {DOMElement} instance
  * @param {object} styles
  */
-export function setValueForStyles(instance: Instance, styles: Style): void {
+export function setValueForStyles(instance: Instance, styles: StyleUpdates): void {
     // const style = instance.style;
     // for (let styleName in styles) {
     //     if (!styles.hasOwnProperty(styleName)) {

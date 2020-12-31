@@ -6,20 +6,21 @@
  */
 import assertValidProps from "../shared/assertValidProps";
 import { Type, Instance, Container, HostContext } from "../shared/HostConfigTypes";
-import { TextBase, ViewBase, Span } from "@nativescript/core";
-import { setValueForStyles } from "../shared/CSSPropertyOperations";
+import { TextBase } from "@nativescript/core";
+import { setValueForStyles, StyleUpdates } from "../shared/CSSPropertyOperations";
 import { setValueForProperty } from "./NativeScriptPropertyOperations";
 import * as console from "../shared/Logger";
 import { rnsDeletedPropValue } from "./magicValues";
+import type { NativeScriptAttributes } from "../shared/NativeScriptJSXTypings";
 
-const DANGEROUSLY_SET_INNER_HTML: string = "dangerouslySetInnerHTML";
-const SUPPRESS_CONTENT_EDITABLE_WARNING: string = "suppressContentEditableWarning";
-const SUPPRESS_HYDRATION_WARNING: string = "suppressHydrationWarning";
-const AUTOFOCUS: string = "autoFocus";
-const CHILDREN: string = "children";
-const TEXT: string = "text";
-const STYLE: string = "style";
-const HTML: string = "__html";
+const DANGEROUSLY_SET_INNER_HTML = "dangerouslySetInnerHTML";
+const SUPPRESS_CONTENT_EDITABLE_WARNING = "suppressContentEditableWarning";
+const SUPPRESS_HYDRATION_WARNING = "suppressHydrationWarning";
+const AUTOFOCUS = "autoFocus";
+const CHILDREN = "children";
+const TEXT = "text";
+const STYLE = "style";
+const HTML = "__html";
 // const TEXT_NODE: string = '';
 
 function setTextContent(node: Instance, text: string): void {
@@ -202,7 +203,7 @@ export function setInitialDOMProperties(
                 }
             }
             // Relies on `updateStylesByID` not mutating `styleUpdates`.
-            setValueForStyles(domElement, nextProp);
+            setValueForStyles(domElement, nextProp as StyleUpdates);
             // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
             // 	const nextHtml = nextProp ? nextProp[HTML] : undefined;
             // 	if (nextHtml != null) {
@@ -255,8 +256,17 @@ export function updateDOMProperties(
         const propKey = updatePayload[i];
         const propValue = updatePayload[i + 1];
         if (propKey === STYLE) {
-            console.log(`[updateDOMProperties] ${instance}.style`, propValue);
-            setValueForStyles(instance, propValue);
+            if(propValue !== null){
+                /* 
+                 * When a React element updates from having no style prop at all to having one, the Host Config's commitUpdate()
+                 * the diffProperties() update payload will consist of e.g. ["style", null, "style", { color: "red" }].
+                 * As far as I can tell, we can just no-op for the ["style", null] update. Alternatively, we could pass in an
+                 * empty object, but it'd be a little less efficient. So instead, I just skip the null case via the above
+                 * conditional check.
+                 */
+                console.log(`[updateDOMProperties] ${instance}.style`, propValue);
+                setValueForStyles(instance, propValue as StyleUpdates);
+            }
             // } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
             //     setInnerHTML(instance, propValue);
         } else if (propKey === CHILDREN) {
@@ -333,21 +343,23 @@ export function diffProperties(
 
     let propKey: string;
     let styleName: string;
-    let styleUpdates: Record<string, string | typeof rnsDeletedPropValue> | null = null;
+    let styleUpdates: StyleUpdates|null = null;
     for (propKey in lastProps) {
         if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] == null) {
             // console.log(`[diffProperties] skipping on lastProps key:`, propKey);
             continue;
         }
         if (propKey === STYLE) {
-            const lastStyle = lastProps[propKey];
-            for (styleName in lastStyle) {
-                if (lastStyle.hasOwnProperty(styleName)) {
-                    if (!styleUpdates) {
-                        styleUpdates = {};
+            const lastStyle: NativeScriptAttributes["style"] = lastProps[propKey];
+            if(lastStyle){
+                for (styleName in lastStyle) {
+                    if (lastStyle.hasOwnProperty(styleName)) {
+                        if (!styleUpdates) {
+                            styleUpdates = {};
+                        }
+                        console.log(`[diffProperties.lastProps] style.${styleName} found in last update's style object.`);
+                        styleUpdates[styleName] = rnsDeletedPropValue; // Will be deleted by default, unless updated.
                     }
-                    console.log(`[diffProperties.lastProps] style.${styleName} deleted!`);
-                    styleUpdates[styleName] = rnsDeletedPropValue;
                 }
             }
         } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) {
@@ -416,7 +428,8 @@ export function diffProperties(
                     if (!updatePayload) {
                         updatePayload = [];
                     }
-                    updatePayload.push(propKey, styleUpdates);
+                    // This is where we get the update ["style", null] from.
+                    updatePayload.push(STYLE, styleUpdates);
                 }
                 styleUpdates = nextProp;
             }
