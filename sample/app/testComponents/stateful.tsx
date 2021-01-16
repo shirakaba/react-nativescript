@@ -1,10 +1,11 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import { RNSStyle } from "react-nativescript";
 import { Color } from "@nativescript/core";
 
 export class GameLoop {
     private readonly subscribers = [];
-    private loopID: number|null = null;
+    private loopID: NodeJS.Timeout|null = null;
 
 	constructor(private readonly frameRateMs: number = 1000 / 60){
 		this.loop = this.loop.bind(this);
@@ -158,7 +159,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
 // ),
 
 export class Clock extends React.Component<{}, { date: Date }> {
-    private timerID!: number;
+    private timerID!: NodeJS.Timeout;
 
     constructor(props) {
         super(props);
@@ -205,6 +206,44 @@ export class Clock extends React.Component<{}, { date: Date }> {
             this.state.date.toLocaleTimeString()
         );
     }
+}
+
+export function ClockFC(){
+    const [date, setDate] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDate(new Date());
+        }, 1000);
+
+        return () => {
+            clearInterval(interval);
+        };
+    }, []);
+
+    return <textView>{date.toLocaleTimeString()}</textView>;
+}
+
+export function Counter(){
+    const [count, setCount] = useState(0);
+
+    return (
+        <>
+            <label>{count}</label>
+            <button
+                onTap={(eventData) => {
+                    setCount((currentCount: number) => {
+                        const nextCount = currentCount + 1;
+                        console.log(`Increasing count from ${currentCount} -> ${nextCount}`);
+
+                        return nextCount;
+                    });
+                }}
+            >
+                Increment
+            </button>
+        </>
+    );
 }
 
 export class GameLoopTest extends React.Component<{}, {}> {
