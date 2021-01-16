@@ -1,6 +1,6 @@
 import * as React from "react";
 import { StyleSheet } from "react-nativescript";
-import { Clock, ClockFC, Counter } from "./stateful";
+import { Clock, ClockFC, Counter, MarqueeFC } from "./stateful";
 
 function AppContainer(){
     return (
@@ -9,6 +9,7 @@ function AppContainer(){
             <Clock/>
             <ClockFC/>
             <Counter/>
+            <MarqueeFC text="The quick brown fox jumps over the lazy dog."/>
         </stackLayout>
     );
 }

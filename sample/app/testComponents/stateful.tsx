@@ -138,6 +138,26 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
     }
 }
 
+export function MarqueeFC({ text }: { text: string }){
+    const [index, setIndex] = useState(0);
+
+    useEffect(() => {
+        let frame;
+        function retry(){
+            frame = requestAnimationFrame(() => {
+                setIndex(prevIndex => (prevIndex + 1) % text.length);
+
+                retry();
+            });
+        }
+        retry();
+
+        return () => cancelAnimationFrame(frame);
+    }, []);
+
+    return <label>{text.slice(index, text.length)}</label>;
+}
+
 // React.createElement(
 //     MyButton,
 //     {
@@ -232,6 +252,12 @@ export function Counter(){
             <label>{count}</label>
             <button
                 onTap={(eventData) => {
+                    /**
+                     * The useState() hook can take a callback (just like the setState() API
+                     * of Class components) which allows you to do a state update based on the
+                     * current state value.
+                     * @see https://reactjs.org/docs/hooks-reference.html#functional-updates
+                     */
                     setCount((currentCount: number) => {
                         const nextCount = currentCount + 1;
                         console.log(`Increasing count from ${currentCount} -> ${nextCount}`);
