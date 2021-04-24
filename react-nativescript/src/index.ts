@@ -93,11 +93,6 @@ import {
     WebView,
     View,
     Application,
-    Tabs,
-    TabStrip,
-    TabStripItem,
-    BottomNavigation,
-    TabContentItem,
 } from "@nativescript/core";
 import { RNSStyle, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
 export { RNSStyle, NativeScriptAttributes, NativeScriptProps };
@@ -299,7 +294,6 @@ declare global {
             actionItem: NativeScriptProps<ActionItemAttributes, ActionItem>;
             activityIndicator: NativeScriptProps<ActivityIndicatorAttributes, ActivityIndicator>;
             button: NativeScriptProps<ButtonAttributes, Button>;
-            bottomNavigation: NativeScriptProps<BottomNavigationAttributes, BottomNavigation>;
             contentView: NativeScriptProps<ContentViewAttributes, ContentView>;
             datePicker: NativeScriptProps<DatePickerAttributes, DatePicker>;
             dockLayout: NativeScriptProps<DockLayoutAttributes, DockLayout>;
@@ -324,10 +318,6 @@ declare global {
             span: NativeScriptProps<SpanAttributes, Span>;
             stackLayout: NativeScriptProps<StackLayoutAttributes, StackLayout>;
             switch: NativeScriptProps<SwitchAttributes, Switch>;
-            tabs: NativeScriptProps<TabsAttributes, Tabs>;
-            tabStrip: NativeScriptProps<TabStripAttributes, TabStrip>;
-            tabStripItem: NativeScriptProps<TabStripItemAttributes, TabStripItem>;
-            tabContentItem: NativeScriptProps<TabContentItemAttributes, TabContentItem>;
             tabView: NativeScriptProps<TabViewAttributes, TabView>;
             tabViewItem: NativeScriptProps<TabViewItemAttributes, TabViewItem>;
             textField: NativeScriptProps<TextFieldAttributes, TextField>;
