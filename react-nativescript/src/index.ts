@@ -46,11 +46,6 @@ import {
     WebViewAttributes,
     FrameAttributes,
     PageAttributes,
-    TabsAttributes,
-    BottomNavigationAttributes,
-    TabStripAttributes,
-    TabStripItemAttributes,
-    TabContentItemAttributes,
     ViewBaseAttributes,
     ViewAttributes,
 } from "./lib/react-nativescript-jsx";
@@ -154,11 +149,6 @@ export {
     WebViewAttributes,
     FrameAttributes,
     PageAttributes,
-    TabsAttributes,
-    BottomNavigationAttributes,
-    TabStripAttributes,
-    TabStripItemAttributes,
-    TabContentItemAttributes,
     ViewBaseAttributes,
     ViewAttributes,
 };
