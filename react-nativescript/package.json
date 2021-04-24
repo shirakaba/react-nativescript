@@ -1,6 +1,6 @@
 {
   "name": "react-nativescript",
-  "version": "2.2.0",
+  "version": "3.0.0-beta.1",
   "description": "React renderer for NativeScript",
   "main": "dist/index.js",
   "files": [
