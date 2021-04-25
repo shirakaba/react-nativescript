@@ -192,19 +192,6 @@ export class Clock extends React.Component<{}, { date: Date }> {
           1000
       );
     }
-
-    shouldComponentUpdate(){
-        console.log(`[Clock] shouldComponentUpdate`);
-        return true;
-    }
-
-    componentWillUpdate(){
-        console.log(`[Clock] componentWillUpdate`);
-    }
-
-    componentDidUpdate(){
-        console.log(`[Clock] componentDidUpdate`);
-    }
   
     componentWillUnmount() {
         clearInterval(this.timerID);
@@ -217,7 +204,6 @@ export class Clock extends React.Component<{}, { date: Date }> {
     }
   
     render() {
-        console.log(`[Clock] render()!`);
         
         return React.createElement(
             "textView",
