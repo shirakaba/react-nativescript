@@ -1,6 +1,6 @@
 {
   "name": "rns-sample-app",
-  "main": "app.js",
+  "main": "app/app.ts",
   "scripts": {
     "postinstall": "patch-package",
     "tsc": "tsc"
