@@ -9,16 +9,16 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "@nativescript/core": "~8.0.0",
+    "@nativescript/ios": "^8.0.0",
     "react": "^16.13.1",
     "react-nativescript": "file:../react-nativescript",
-    "react-refresh": "^0.8.3",
-    "@nativescript/core": "^7.1.0",
-    "@nativescript/ios": "7.1.0"
+    "react-refresh": "^0.8.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@nativescript/types": "^7.1.0",
-    "@nativescript/webpack": "~4.0.0",
+    "@nativescript/webpack": "^5.0.0-beta.9",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.0-beta.5",
     "@types/react": "16.9.34",
     "babel-loader": "8.0.6",
