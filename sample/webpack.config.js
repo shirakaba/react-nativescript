@@ -1,88 +1,77 @@
+const { merge } = require("webpack-merge");
+const { configs } = require("@nativescript/webpack/dist/configuration");
+const { getPlatformName } = require("@nativescript/webpack/dist/helpers/platform");
+const { env: _env } = require("@nativescript/webpack");
+
 /**
- * @see https://github.com/NativeScript/NativeScript/tree/feat/ns7-finishing-touches/packages/webpack/templates
- * @see https://github.com/NativeScript/NativeScript/pull/8801/files
+ * @param config {import("webpack-chain").Config}
+ * @param env {import("@nativescript/webpack").IWebpackEnv}
+ * @returns {import("webpack-chain").Config}
  */
-const webpackConfig = require("./webpack.typescript");
-const webpack = require("webpack");
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+module.exports = function (config, env = _env){
+	configs.base(config, env);
 
-module.exports = (env) => {
-    env = env || {};
-    const hmr = env.hmr;
-    const production = env.production;
-    const isAnySourceMapEnabled = !!env.sourceMap || !!env.hiddenSourceMap;
+	const platform = getPlatformName();
+	const mode = env.production ? 'production' : 'development';
+	const production = mode === 'production';
 
-    const baseConfig = webpackConfig(env);
+	// todo: use env
+	let isAnySourceMapEnabled = true;
 
-    /** Find the rule for transpiling ts files ("ts-loader"), and modify it to test for .tsx files too. */
-    const tsxRule = baseConfig.module.rules.find(rule => rule.use && rule.use.loader === "ts-loader");
-    tsxRule.test = /\.(ts|tsx)$/;
-    tsxRule.use = [
-        /**
-         * Add React Refresh HMR support.
-         * @see https://github.com/pmmmwh/react-refresh-webpack-plugin/blob/55028c6355b31e697e21bf3e9a48613a7b94bee7/examples/typescript-without-babel/webpack.config.js#L18-L21
-         */
-        hmr && !production && {
-            loader: "babel-loader",
-            options: {
-                sourceMaps: isAnySourceMapEnabled ? "inline" : false,
-                babelrc: false,
-                plugins: ['react-refresh/babel']
-            }
-        },
-        tsxRule.use,
-    ].filter(Boolean);
+	config.resolve.extensions.prepend('.tsx').prepend(`.${platform}.tsx`);
+	config.resolve.alias.set('react-dom', 'react-nativescript');
 
-    /**
-     * Modify "nativescript-dev-webpack/hmr/hot-loader" to test for .tsx files
-     * (and also js files, which it should have been doing to begin with!)
-     */
-    const nativeScriptDevWebpackHotLoader = baseConfig.module.rules.find(rule =>
-        rule.use === "@nativescript/webpack/hmr/hot-loader"
-    );
-    nativeScriptDevWebpackHotLoader.test = /\.(ts|tsx|js|css|scss|html|xml)$/;
+	config.module
+		.rule('ts')
+		.test([...config.module.rule('ts').get('test'), /\.tsx$/]);
 
-    /** We don't officially support JSX. Makes the webpack config rather more complicated to set up. */
-    baseConfig.resolve.extensions = [".tsx", ...baseConfig.resolve.extensions];
-    baseConfig.resolve.alias["react-dom"] = "react-nativescript";
+	config.plugin('DefinePlugin').tap((args) => {
+		args[0] = merge(args[0], {
+			/** For various libraries in the React ecosystem. */
+			__TEST__: false,
+			/**
+			 * Primarily for React Fast Refresh plugin, but technically the allowHmrInProduction option could be used instead.
+			 * Worth including anyway, as there are plenty of Node libraries that use this flag.
+			 */
+			'process.env.NODE_ENV': JSON.stringify(mode),
+		});
 
-    /** Augment NativeScript's existing DefinePlugin definitions with a few more of our own. */
-    const existingDefinePlugin = baseConfig.plugins.find(plugin =>
-        plugin && plugin.constructor && plugin.constructor.name === "DefinePlugin"
-    );
-    baseConfig.plugins.splice(
-        baseConfig.plugins.indexOf(existingDefinePlugin),
-        1,
-        new webpack.DefinePlugin({
-            ...existingDefinePlugin.definitions,
-            /** For various libraries in the React ecosystem. */
-            "__DEV__": production ? "false" : "true",
-            "__TEST__": "false",
-            /**
-             * Primarily for React Fast Refresh plugin, but technically the allowHmrInProduction option could be used instead.
-             * Worth including anyway, as there are plenty of Node libraries that use this flag.
-             */
-            "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development"),
-        }),
-    );
+		return args;
+	});
 
-    if(hmr && !production){
-        baseConfig.plugins.push(new ReactRefreshWebpackPlugin({
-            /**
-             * Maybe one day we'll implement an Error Overlay, but the work involved is too daunting for now.
-             * @see https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/79#issuecomment-644324557
-             */
-            overlay: false,
-            /**
-             * If you (temporarily) want to enable HMR on a production build:
-             *   1) Set `forceEnable` to `true` 
-             *   2) Remove the `!production` condition on `tsxRule` to ensure that babel-loader gets used.
-             */
-            forceEnable: false,
-        }));
-    } else {
-        baseConfig.plugins = baseConfig.plugins.filter(p => !(p && p.constructor && p.constructor.name === "HotModuleReplacementPlugin"));
-    }
+	// todo: env flag to forceEnable?
+	config.when(env.hmr && !production, (config) => {
+		config.module
+			.rule('ts')
+			.use('babel-loader|react-refresh')
+			.loader('babel-loader')
+			.before('ts-loader')
+			.options({
+				sourceMaps: isAnySourceMapEnabled ? 'inline' : false,
+				babelrc: false,
+				plugins: ['react-refresh/babel'],
+			});
 
-    return baseConfig;
-};
+		config
+			.plugin('ReactRefreshPlugin')
+			.use(require('@pmmmwh/react-refresh-webpack-plugin'), [
+				{
+					/**
+					 * Maybe one day we'll implement an Error Overlay, but the work involved is too daunting for now.
+					 * @see https://github.com/pmmmwh/react-refresh-webpack-plugin/issues/79#issuecomment-644324557
+					 */
+					overlay: false,
+					/**
+					 * If you (temporarily) want to enable HMR on a production build:
+					 *   1) Set `forceEnable` to `true`
+					 *   2) Remove the `!production` condition on `tsxRule` to ensure that babel-loader gets used.
+					 */
+					forceEnable: false,
+				},
+			]);
+	});
+
+	console.log(`Webpack 5 config:`, config);
+
+	return config;
+}
