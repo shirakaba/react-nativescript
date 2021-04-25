@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Span, ViewBase, Page, SearchBar, WebView, Frame, FormattedString, EventData, Color, SelectedIndexChangedEventData } from "@nativescript/core";
+import { Span, ViewBase, Page, SearchBar, WebView, Frame, FormattedString, EventData, Color } from "@nativescript/core";
 import { ViewAttributes, RNSStyle, PageAttributes, NSVElement } from "react-nativescript";
+import { SelectedIndexChangedEventData } from "@nativescript/core/ui/segmented-bar";
 
 type ViewBaseProp<T extends ViewBase> = {
     [P in keyof T]: T[P]
