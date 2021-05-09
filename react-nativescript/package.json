@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
-    "react": "^16.9.0",
+    "react": "^16.13.1",
     "@nativescript/core": "~8.0.0"
   },
   "dependencies": {
