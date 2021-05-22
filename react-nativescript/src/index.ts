@@ -89,8 +89,8 @@ import {
     View,
     Application,
 } from "@nativescript/core";
-import { RNSStyle, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
-export { RNSStyle, NativeScriptAttributes, NativeScriptProps };
+import { RNSStyle, OptionalStyleAllowingString, NativeScriptAttributes, NativeScriptProps } from "./shared/NativeScriptJSXTypings";
+export { RNSStyle, OptionalStyleAllowingString, NativeScriptAttributes, NativeScriptProps };
 import { __unstable__forwardNavOpts } from "./nativescript-vue-next/runtime/navigation";
 export { __unstable__forwardNavOpts };
 import * as ReactReconciler from "react-reconciler";
