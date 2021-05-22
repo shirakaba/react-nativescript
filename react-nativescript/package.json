@@ -13,7 +13,7 @@
     "setup": "npm install && npm run pp",
     "pp": "patch-package",
     "prettier": "prettier --print-width 120 --tab-width 4 --trailing-comma es5 --end-of-line lf --write \"src/**/*.ts\"",
-    "build": "tsc --project ./tsconfig.json",
+    "build": "node node_modules/.bin/rimraf ./dist/* && tsc --project ./tsconfig.json",
     "dev": "tsc --watch --project ./tsconfig.json",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -49,6 +49,7 @@
     "patch-package": "^6.2.2",
     "prettier": "1.18.2",
     "react": "^16.13.1",
+    "rimraf": "^3.0.2",
     "typescript": "~4.0.3"
   }
 }
