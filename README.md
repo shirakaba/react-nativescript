@@ -148,17 +148,6 @@ React NativeScript shares most of the good parts of React Native, but above all 
         </tr>
         <tr>
             <td align="center" valign="middle">
-                <strong>Codebase</strong>
-            </td>
-            <td align="center" valign="middle">
-                <p>Absolutely unfathomable</p>
-            </td>
-            <td align="center" valign="middle">
-                <p>Very approachable to new contributors</p>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" valign="middle">
                 <strong>Javascript VM threading</strong>
             </td>
             <td align="center" valign="middle">
