@@ -39,7 +39,7 @@
   "dependencies": {
     "react-reconciler": "^0.25.1",
     "scheduler": "0.18.0",
-    "set-value": "3.0.2"
+    "set-value": "4.0.1"
   },
   "devDependencies": {
     "@nativescript/core": "^7.1.0",
