@@ -9,7 +9,7 @@ export type CellViewContainer = View;
 type CellFactory = (item: any) => React.ReactElement;
 
 type OwnProps = {
-    items: ItemsSource|any[];
+    items: ItemsSource | any[];
     /** User may specify cellFactory for single-template or cellFactories for multi-template. */
     cellFactory?: CellFactory;
     cellFactories?: Map<string, { placeholderItem: any; cellFactory: CellFactory }>;
@@ -27,7 +27,9 @@ type OwnProps = {
         onCellRecycle?: (container: CellViewContainer) => void;
     };
 } & Omit<ListViewAttributes, "onItemLoading">;
-type Props = OwnProps & { forwardedRef?: React.RefObject<NSVElement<NativeScriptListView>> };
+type Props = OwnProps & {
+    forwardedRef?: React.RefObject<NSVElement<NativeScriptListView>>;
+};
 
 type NumberKey = number | string;
 type RootKeyAndTNSView = { rootKey: string; nativeView: View };
@@ -85,7 +87,7 @@ export class _ListView extends React.Component<Props, State> {
         const template: string | null = itemTemplateSelector
             ? typeof itemTemplateSelector === "string"
                 ? itemTemplateSelector
-                : (itemTemplateSelector as ((item: any, index: number, items: any) => string))(item, args.index, items)
+                : (itemTemplateSelector as (item: any, index: number, items: any) => string)(item, args.index, items)
             : null;
         const cellFactory: CellFactory | undefined =
             template === null
@@ -123,20 +125,12 @@ export class _ListView extends React.Component<Props, State> {
                 return;
             }
 
-            // args.view = null;
-            RNSRender(
-                cellFactory(item),
-                null,
-                () => {
-                    // console.log(`Rendered into cell! detachedRootRef:`);
-                },
-                rootKey
-            );
+            RNSRender(cellFactory(item), null, () => {}, rootKey);
         }
     };
 
     protected getNativeView(): NativeScriptListView | null {
-        const ref = (this.props.forwardedRef || this.myRef);
+        const ref = this.props.forwardedRef || this.myRef;
         return ref.current ? ref.current.nativeView : null;
     }
 
@@ -152,7 +146,8 @@ export class _ListView extends React.Component<Props, State> {
         const root = new NSVRoot<View>();
         RNSRender(
             cellFactory(item),
-            root, () => {
+            root,
+            () => {
                 // console.log(`Rendered into cell! ref:`);
             },
             rootKey
@@ -162,7 +157,7 @@ export class _ListView extends React.Component<Props, State> {
 
         return {
             rootKey,
-            nativeView: root.baseRef.nativeView
+            nativeView: root.baseRef.nativeView,
         };
     };
 
@@ -194,7 +189,7 @@ export class _ListView extends React.Component<Props, State> {
     }
 
     componentWillUnmount() {
-        this.roots.forEach(root => unmountComponentAtNode(root));
+        this.roots.forEach((root) => unmountComponentAtNode(root));
     }
 
     public static isItemsSource(arr: any[] | ItemsSource): arr is ItemsSource {
@@ -210,7 +205,7 @@ export class _ListView extends React.Component<Props, State> {
         const {
             // Only used by the class component; not the JSX element.
             forwardedRef,
-            children,
+
             _debug,
             cellFactories,
             cellFactory,
@@ -218,22 +213,12 @@ export class _ListView extends React.Component<Props, State> {
             ...rest
         } = this.props;
 
-        if (children) {
-            console.warn("Ignoring 'children' prop on ListView; not supported.");
-        }
-
-        return (
-            <listView
-                {...rest}
-                onItemLoading={this.defaultOnItemLoading}
-                ref={forwardedRef || this.myRef}
-            />
-        );
+        return <listView {...rest} onItemLoading={this.defaultOnItemLoading} ref={forwardedRef || this.myRef} />;
     }
 }
 
 export const ListView = React.forwardRef<NSVElement<NativeScriptListView>, OwnProps>(
     (props: OwnProps, ref: React.RefObject<NSVElement<NativeScriptListView>>) => {
-        return <_ListView {...props} forwardedRef={ref}/>;
+        return <_ListView {...props} forwardedRef={ref} />;
     }
 );

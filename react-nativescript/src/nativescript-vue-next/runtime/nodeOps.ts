@@ -1,11 +1,4 @@
-import {
-    INSVElement,
-    INSVNode,
-    NSVComment,
-    NSVElement,
-    NSVRoot,
-    NSVText
-} from './nodes';
+import { INSVElement, INSVNode, NSVComment, NSVElement, NSVRoot, NSVText } from "./nodes";
 
 /**
  * An implementation of RendererOptions from '@vue/runtime-core'.
@@ -24,13 +17,13 @@ export const nodeOps = {
     createText(text: string): INSVNode {
         return new NSVText(text);
     },
-    nextSibling(node: INSVNode): INSVNode|null {
+    nextSibling(node: INSVNode): INSVNode | null {
         return node.nextSibling;
     },
-    parentNode(node: INSVNode): INSVElement|null {
+    parentNode(node: INSVNode): INSVElement | null {
         return node.parentNode;
     },
-    insert(child: INSVNode, parent: INSVElement, anchor: INSVNode|null = null): void {
+    insert(child: INSVNode, parent: INSVElement, anchor: INSVNode | null = null): void {
         if (anchor !== null) {
             parent.insertBefore(child, anchor);
         } else {
@@ -49,8 +42,8 @@ export const nodeOps = {
         node.text = text;
     },
     setScopeId(el: INSVElement, id: string): void {
-        el.setAttribute(id, '');
-    }
+        el.setAttribute(id, "");
+    },
 } as const;
 
 export type NSVNodeOps = typeof nodeOps;

@@ -13,7 +13,7 @@ function assertValidProps(tag: Type, props?: any): void | never {
         return;
     }
 
-    if ((global as any).__DEV__) {
+    if ((globalThis as any).__DEV__) {
         if (!(props.suppressContentEditableWarning || !props.contentEditable || props.children == null)) {
             console.warn(
                 "A component is `contentEditable` and contains `children` managed by " +

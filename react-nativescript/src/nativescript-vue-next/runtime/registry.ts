@@ -8,121 +8,109 @@ import {
     ActionBar as TNSActionBar,
     ActionItem as TNSActionItem,
     NavigationButton as TNSNavigationButton,
-    Tabs as TNSTabs,
     TabView as TNSTabView,
     TabViewItem as TNSTabViewItem,
-    TabStrip as TNSTabStrip,
-    TabStripItem as TNSTabStripItem,
     Label as TNSLabel,
     Image as TNSImage,
-    BottomNavigation as TNSBottomNavigation,
-    TabContentItem as TNSTabContentItem,
     NavigationContext as TNSNavigationContext,
-    NavigationEntry as TNSNavigationEntry,
     BackstackEntry as TNSBackstackEntry,
-} from '@nativescript/core';
-import { NSVElement, NSVViewFlags } from './nodes'
+} from "@nativescript/core";
+import { NSVElement, NSVViewFlags } from "./nodes";
 import { __unstable__forwardNavOpts } from "./navigation";
 import { RNSNavigationOptions } from "./navigation";
-// import { actionBarNodeOps } from './components/ActionBar'
-// import { warn } from '@vue/runtime-core'
+
 import { warn } from "../../shared/Logger";
 
-export type NSVElementResolver = () => TNSViewBase
+export type NSVElementResolver = () => TNSViewBase;
 
 export type NSVModelDescriptor = {
-    prop: string
-    event: string
-}
+    prop: string;
+    event: string;
+};
 
 export interface NSVViewMeta {
-    viewFlags: NSVViewFlags
+    viewFlags: NSVViewFlags;
     stackDepth?: number;
     nodeOps?: {
-        insert(child: NSVElement, parent: NSVElement, atIndex?: number): void
-        remove(child: NSVElement, parent: NSVElement): void
-    }
-    model?: NSVModelDescriptor
-    overwriteExisting?: boolean
+        insert(child: NSVElement, parent: NSVElement, atIndex?: number): void;
+        remove(child: NSVElement, parent: NSVElement): void;
+    };
+    model?: NSVModelDescriptor;
+    overwriteExisting?: boolean;
 }
 
 export interface NSVElementDescriptor {
-    meta: NSVViewMeta
-    resolver?: NSVElementResolver
+    meta: NSVViewMeta;
+    resolver?: NSVElementResolver;
 }
 
 export let defaultViewMeta: NSVViewMeta = {
     viewFlags: NSVViewFlags.NONE,
-}
+};
 
-let elementMap: Record<string, NSVElementDescriptor> = {}
+let elementMap: Record<string, NSVElementDescriptor> = {};
 
 export function getViewMeta(elementName: string): NSVViewMeta {
     // console.log(`->getViewMeta(${elementName})`)
 
-    const normalizedName = normalizeElementName(elementName)
+    const normalizedName = normalizeElementName(elementName);
 
-    const entry = elementMap[normalizedName]
+    const entry = elementMap[normalizedName];
 
     if (!entry) {
-        throw new Error(`No known component for element ${elementName}.`)
+        throw new Error(`No known component for element ${elementName}.`);
     }
 
-    return entry.meta
+    return entry.meta;
 }
 
 export function getViewClass(elementName: string): any {
     // console.log(`->getViewClass(${elementName})`)
-    const normalizedName = normalizeElementName(elementName)
-    const entry = elementMap[normalizedName]
+    const normalizedName = normalizeElementName(elementName);
+    const entry = elementMap[normalizedName];
 
     if (!entry) {
-        throw new Error(`No known component for element ${elementName}.`)
+        throw new Error(`No known component for element ${elementName}.`);
     }
 
     try {
-        return entry.resolver!()
+        return entry.resolver!();
     } catch (e) {
-        throw new Error(`Could not load view for: ${elementName}. ${e}`)
+        throw new Error(`Could not load view for: ${elementName}. ${e}`);
     }
 }
 
 export function normalizeElementName(elementName: string): string {
-    return elementName.replace(/-/g, '').toLowerCase()
+    return elementName.replace(/-/g, "").toLowerCase();
 }
 
-export function registerElement(
-    elementName: string,
-    resolver?: NSVElementResolver,
-    meta?: Partial<NSVViewMeta>
-) {
-    const normalizedName = normalizeElementName(elementName)
-    const mergedMeta = Object.assign({}, defaultViewMeta, meta)
+export function registerElement(elementName: string, resolver?: NSVElementResolver, meta?: Partial<NSVViewMeta>) {
+    const normalizedName = normalizeElementName(elementName);
+    const mergedMeta = Object.assign({}, defaultViewMeta, meta);
 
     if (elementMap[normalizedName] && !mergedMeta.overwriteExisting) {
         throw new Error(
-            `Element for ${elementName} already registered.\n` +
-                `If this is intentional set 'overwriteExisting: true' in 'meta'`
-        )
+            `Element for ${elementName} already registered.\n` + `If this is intentional set 'overwriteExisting: true' in 'meta'`
+        );
     }
 
     elementMap[normalizedName] = {
         meta: mergedMeta,
         resolver,
-    }
+    };
     // console.log(`->registerElement(${elementName})`)
 }
 
 export function isKnownView(elementName: string): boolean {
-    return elementMap.hasOwnProperty(normalizeElementName(elementName))
+    return elementMap.hasOwnProperty(normalizeElementName(elementName));
 }
 
 type TNSFramePrivate = {
-    _navigationQueue: TNSNavigationContext[],
-    _backStack: TNSBackstackEntry[], // backStack just returns a copy.
-    _currentEntry: TNSBackstackEntry|undefined,
-    isCurrent: (entry: TNSBackstackEntry) => boolean,
-    _removeEntry: (entry: TNSBackstackEntry) => void,
+    _navigationQueue: TNSNavigationContext[];
+    _backStack: TNSBackstackEntry[]; // backStack just returns a copy.
+    _currentEntry: TNSBackstackEntry | undefined;
+    isCurrent: (entry: TNSBackstackEntry) => boolean;
+    _removeEntry: (entry: TNSBackstackEntry) => void;
 };
 
 // register built in elements
@@ -222,7 +210,7 @@ if (!__TEST__) {
                                 0,
                                 child.nativeView as TNSActionItem
                             );
-    
+
                             existingItems.forEach(actionItem => actionBar.actionItems.removeItem(actionItem));
                             updatedItems.forEach(actionItem => actionBar.actionItems.addItem(actionItem));
                         }
@@ -307,9 +295,6 @@ if (!__TEST__) {
                                 __unstable__forwardNavOpts.pop() || {},
                             );
 
-                            // console.log(`[frame.insert] [${parent} > ${child} @${atIndex}] => [${parent.childNodes}] via ${parent}.navigate(${child}) (clearHistory ${resolvedNavOpts.clearHistory}); stackDepth ${stackDepth} -> ${stackDepth + 1}`);
-                            // console.log(`[frame.insert.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
-
                             frame.navigate({
                                 ...resolvedNavOpts,
                                 create() {
@@ -318,10 +303,6 @@ if (!__TEST__) {
                             });
 
                             // At least on forward navigations, need to wait for the animation to complete before the backstack will reflect the update.
-                            // setTimeout(() => {
-                            //     console.log(`[frame.insert.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
-                            // }, 1000);
-
                             parent.meta.stackDepth++;
                             return;
                         } else {
@@ -342,47 +323,38 @@ if (!__TEST__) {
                  * This is a best-of-a-bad-job. NativeScript Core implements push & pop, and
                  * replacement (but only of the topmost, currentEntry of the stack). The latter
                  * was only implemented for HMR purposes.
-                 * 
+                 *
                  * We can splice frame._backStack (belonging to frame-common.ts), but it doesn't
                  * update the logic of the frame.ios.ts and frame.android.ts native implementations.
                  */
                 remove(child: NSVElement, parent: NSVElement<TNSFrame>): void {
-                    // console.log(`[frame.remove] ${parent}.childNodes updating to: [${parent.childNodes}]`);
-
                     const frame = parent.nativeView;
                     const page = child.nativeView as TNSPage;
 
                     if((frame as unknown as TNSFramePrivate)._currentEntry?.resolvedPage === page){
                         if(frame.canGoBack()){
-                            // console.log(`[frame.remove] [${parent} x ${child}] => [${parent.childNodes}] via ${parent}.goBack() on currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
-
-                            // console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
-
                             /** { animated: false } is ignored even if you pass in a backStackEntry that explicitly specifies it. */
                             frame.goBack();
-                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
                         } else {
                             /**
                              * NativeScript Core does not support transitioning a Frame back to Pageless state.
                              * It's simply not possible, whether by `frame.removeEntry()`, `frame._updateBackstack()`,
                              * or `frame.setCurrent()`.
-                             * 
+                             *
                              * ... So the best we can do is indicate that the stack is conceptually empty.
                              * This means that, on next navigation, we should call clearHistory.
                              */
-                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on currentEntry page; stackDepth ${parent.meta.stackDepth} -> -1`);
-                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+
                             parent.meta.stackDepth = -1;
                         }
                     } else {
-                        // console.log(`[frame.remove] ${parent} x ${child}, but child isn't the currentEntry (which is ${frame._currentEntry?.resolvedPage}). May involve a splice or a no-op.`);
-                        
+
                         /**
                          * When React Navigation pops back to the top, it removes from the root of the stack rather than the face. This has some sense, as
                          * it avoids rendering and animating every pop on the way, but it's very problematic for NativeScript Core, which cannot splice
                          * Pages from the Frame's stack.
-                         * 
+                         *
                          */
 
                         let indexOfBackstackEntry: number = -1;
@@ -395,20 +367,13 @@ if (!__TEST__) {
                         });
 
                         if(backstackEntry){
-                            // console.log(`[frame.remove] Found backStackEntry for ${child} at index ${indexOfBackstackEntry}, so it's a splice.`);
-                            // const backStackLengthBefore = (frame as unknown as TNSFramePrivate)._backStack.length;
-                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via splice@${indexOfBackstackEntry} of non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
-                            // console.log(`[frame.remove.pending] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
                             (frame as unknown as TNSFramePrivate)._removeEntry(backstackEntry);
                             (frame as unknown as TNSFramePrivate)._backStack.splice(indexOfBackstackEntry, 1);
-                            // console.log(`[frame.remove] backStackLengthBefore ${backStackLengthBefore} => backStackLengthAfter ${(frame as unknown as TNSFramePrivate)._backStack.length}`);
-                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+
                         } else {
                             /* There's actually valid reason to no-op here:
                              * We might simply be trying to pop a child page in response to a native pop having occurred. */
-                            // console.log(`[frame.remove] Didn't find a backStackEntry for ${child} at so it must have been handled by Core already. No-op. `);
-                            // console.log(`[frame.remove] [${parent} x ${child}] = [${parent.childNodes}] via no-op on non-currentEntry page; stackDepth ${parent.meta.stackDepth} -> ${Math.max(0, parent.meta.stackDepth - 1)}`);
-                            // console.log(`[frame.remove.done] backstack is now: [${(frame as unknown as TNSFramePrivate)._backStack.map(entry => entry.resolvedPage)}]`);
+
                         }
 
                         parent.meta.stackDepth = Math.max(0, parent.meta.stackDepth - 1);
@@ -448,7 +413,7 @@ if (!__TEST__) {
                     if (child.nodeRole === "actionBar" || child.nativeView instanceof TNSActionBar) {
                         /* Well we could technically do this, but it'd be better to just teach good practices. */
                         // page.actionBar = new TNSActionBar();
-                        
+
                         if (__DEV__) {
                             warn(
                                 `Unable to remove ActionBar from Page; not supported by NativeScript Core. ` +
@@ -507,7 +472,7 @@ if (!__TEST__) {
                     if (child.nativeView instanceof TNSSpan) {
                         const spansLength: number = formattedString.spans.length;
                         formattedString.spans.splice(
-                            typeof atIndex === "undefined" ? 
+                            typeof atIndex === "undefined" ?
                                 spansLength :
                                 atIndex,
                             0,
@@ -662,7 +627,7 @@ if (!__TEST__) {
             nodeOps: {
                 insert(child: NSVElement, parent: NSVElement<TNSTabView>, atIndex?: number): void {
                     const tabView = parent.nativeView;
-                    
+
                     if(child.nodeRole === "items"){
                         if(child.nativeView instanceof TNSTabViewItem === false){
                             if (__DEV__) {
@@ -750,313 +715,6 @@ if (!__TEST__) {
                             `Unable to remove child "${child.nativeView.constructor.name}" from <tabViewItem> as NativeScript Core does not support it; ` +
                             `please re-use and modify the existing TabViewItem instead.`
                         )
-                    }
-                }
-            }
-        }
-    )
-
-    registerElement(
-        'tabStrip',
-        () => require('@nativescript/core').TabStrip,
-        {
-            nodeOps: {
-                insert(child: NSVElement, parent: NSVElement<TNSTabStrip>, atIndex?: number): void {
-                    const tabStrip = parent.nativeView;
-                    
-                    if(child.nodeRole === "items"){
-                        if(child.nativeView instanceof TNSTabStripItem === false){
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStrip> as it is not an instance of TabStripItem.`
-                                );
-                            };
-                            return;
-                        }
-
-                        // console.log(`[tabStrip.insert] 1 [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-
-                        const items = tabStrip.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
-
-                        if(typeof atIndex === "undefined" || atIndex === items.length){
-                            // console.log(`[tabStrip.insert] 2a [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-                            tabStrip.items = items.concat(child.nativeView as TNSTabStripItem);
-                        } else {
-                            // console.log(`[tabStrip.insert] 2b [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-                            tabStrip.items = items.slice().splice(
-                                atIndex,
-                                0,
-                                child.nativeView as TNSTabStripItem
-                            );
-                        }
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStrip> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStrip> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items".`
-                            )
-                        }
-                    }
-                },
-                remove(child: NSVElement, parent: NSVElement<TNSTabStrip>): void {
-                    const tabs = parent.nativeView;
-
-                    if(child.nodeRole === "items"){
-                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStrip> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStrip> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items"`
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    )
-
-
-    registerElement(
-        'tabStripItem',
-        () => require('@nativescript/core').TabStripItem,
-        {
-            nodeOps: {
-                insert(child: NSVElement, parent: NSVElement<TNSTabStripItem>, atIndex?: number): void {
-                    const tabStripItem = parent.nativeView;
-
-                    // Note: The instanceof check, and nodeRole check, is technically redundant if you look at the implementation, but I'll
-                    //       keep these good practices in case it's ever refactored.
-
-                    if(child.nodeRole === "label"){
-                        console.log(`[tabStrip.insert] LABEL [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-                        if(child.nativeView instanceof TNSLabel === false){
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStripItem> as it is not an instance of Label.`
-                                );
-                            };
-                            return;
-                        }
-
-                        tabStripItem.label = child.nativeView as TNSLabel;
-                    } else if(child.nodeRole === "image"){
-                        console.log(`[tabStrip.insert] IMAGE [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-                        if(child.nativeView instanceof TNSImage === false){
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabStripItem> as it is not an instance of Image.`
-                                );
-                            };
-                            return;
-                        }
-
-                        tabStripItem.image = child.nativeView as TNSImage;
-                    } else {
-                        console.log(`[tabStrip.insert] OTHER [${parent} > ${child} @${atIndex}] => [${parent.childNodes}]`);
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <tabStripItem> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "label", or "image".`
-                            )
-                        }
-                    }
-                },
-                remove(child: NSVElement, parent: NSVElement<TNSTabStripItem>): void {
-                    const tabStripItem = parent.nativeView;
-
-                    if(child.nodeRole === "label"){
-                        // WARNING: It is not evident from the implementation that TabStripItem supports removing label at all!
-                        tabStripItem.label = null;
-                    } else if(child.nodeRole === "image"){
-                        // WARNING: It is not evident from the implementation that TabStripItem supports removing image at all!
-                        tabStripItem.image = null;
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabStripItem> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "label", or "image"`
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    )
-
-    registerElement(
-        'tabs',
-        () => require('@nativescript/core').Tabs,
-        {
-            // TODO: share the same NodeOps for both BottomNavigation and Tabs; they're identical as they both extend TabNavigationBase.
-            nodeOps: {
-                insert(child: NSVElement, parent: NSVElement<TNSTabs>, atIndex?: number): void {
-                    const tabs = parent.nativeView;
-
-                    if(child.nodeRole === "tabStrip"){
-                        if(child.nativeView instanceof TNSTabStrip){
-                            tabs.tabStrip = child.nativeView;
-                        } else {
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" as the tabStrip of <tabs> as it is not an instance of TabStrip.`
-                                );
-                            }
-                        }
-                    } else if(child.nodeRole === "items"){
-                        if(child.nativeView instanceof TNSTabContentItem === false){
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <tabs> as it is not an instance of TabContentItem.`
-                                );
-                            };
-                            return;
-                        }
-
-                        const items = tabs.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
-                        if(typeof atIndex === "undefined" || atIndex === items.length){
-                            tabs.items = items.concat(child.nativeView as TNSTabContentItem);
-                        } else {
-                            tabs.items = items.slice().splice(
-                                atIndex,
-                                0,
-                                child.nativeView as TNSTabContentItem
-                            );
-                        }
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <tabs> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <tabs> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items".`
-                            )
-                        }
-                    }
-                },
-                remove(child: NSVElement, parent: NSVElement): void {
-                    const tabs = parent.nativeView as TNSTabs;
-
-                    if(child.nodeRole === "tabStrip"){
-                        tabs.tabStrip = null; // Anything falsy should work.
-                    } else if(child.nodeRole === "items"){
-                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabs> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <tabs> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items"`
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    )
-
-    registerElement(
-        'tabContentItem',
-        () => require('@nativescript/core').TabContentItem,
-        { viewFlags: NSVViewFlags.CONTENT_VIEW }
-    )
-
-    registerElement(
-        'bottomNavigation',
-        () => require('@nativescript/core').BottomNavigation,
-        {
-            // TODO: share the same NodeOps for both BottomNavigation and Tabs; they're identical as they both extend TabNavigationBase.
-            nodeOps: {
-                insert(child: NSVElement, parent: NSVElement<TNSBottomNavigation>, atIndex?: number): void {
-                    const bottomNavigation = parent.nativeView;
-
-                    if(child.nodeRole === "tabStrip"){
-                        if(child.nativeView instanceof TNSTabStrip){
-                            bottomNavigation.tabStrip = child.nativeView;
-                        } else {
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" as the tabStrip of <bottomNavigation> as it is not an instance of TabStrip.`
-                                );
-                            }
-                        }
-                    } else if(child.nodeRole === "items"){
-                        if(child.nativeView instanceof TNSTabContentItem === false){
-                            if (__DEV__) {
-                                warn(
-                                    `Unable to add child "${child.nativeView.constructor.name}" to the items of <bottomNavigation> as it is not an instance of TabContentItem.`
-                                );
-                            };
-                            return;
-                        }
-
-                        const items = bottomNavigation.items || []; // Annoyingly, it's the consumer's responsibility to ensure there's an array there!
-                        
-                        if(typeof atIndex === "undefined" || atIndex === items.length){
-                            bottomNavigation.items = items.concat(child.nativeView as TNSTabContentItem);
-                        } else {
-                            bottomNavigation.items = items.slice().splice(
-                                atIndex,
-                                0,
-                                child.nativeView as TNSTabContentItem
-                            );
-                        }
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <bottomNavigation> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to add child "${child.nativeView.constructor.name}" to <bottomNavigation> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items".`
-                            )
-                        }
-                    }
-                },
-                remove(child: NSVElement, parent: NSVElement<TNSTabs>): void {
-                    const tabs = parent.nativeView;
-
-                    if(child.nodeRole === "tabStrip"){
-                        tabs.tabStrip = null; // Anything falsy should work.
-                    } else if(child.nodeRole === "items"){
-                        tabs.items = (tabs.items || []).filter(i => i !== child.nativeView);
-                    } else if(child.nodeRole === "item"){
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <bottomNavigation> as it had the nodeRole "item"; please correct it to "items".`
-                            );
-                        }
-                    } else {
-                        if (__DEV__) {
-                            warn(
-                                `Unable to remove child "${child.nativeView.constructor.name}" from <bottomNavigation> as it does not have a nodeRole specified; ` +
-                                `please set a nodeRole of "tabStrip", or "items"`
-                            )
-                        }
                     }
                 }
             }
