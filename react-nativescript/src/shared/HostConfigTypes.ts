@@ -6,8 +6,14 @@ export type Container = NSVRoot | INSVElement; // The root node of the app. Typi
 /* Of which only LayoutBase|ContentView can take child Views (e.g. TextBase can't, but CAN take child texts; and there are special cases like ActionBar). */
 export type Instance = INSVElement;
 export type TextInstance = NSVText;
-export type HydratableInstance = any;
-export type PublicInstance = any;
+
+export interface SuspenseInstance {
+    state: "pending" | "complete" | "client-render";
+    children: Array<Instance | TextInstance | SuspenseInstance>;
+}
+
+export type HydratableInstance = Instance | TextInstance | SuspenseInstance;
+export type PublicInstance = Instance | TextInstance;
 export type HostContext = {
     isInAParentText: boolean;
     isInAParentSpan: boolean;

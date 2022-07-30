@@ -1,10 +1,21 @@
 import * as React from "react";
 import { NSVElement, PageAttributes } from "react-nativescript";
 import { PortalToPageWithActionBar, StatefulPortalToPageWithActionBar } from "./navigation";
-import { Page, EventData, GestureEventData, PinchGestureEventData, PanGestureEventData, SwipeGestureEventData, RotationGestureEventData, TouchGestureEventData, GestureStateTypes, SwipeDirection } from "@nativescript/core";
+import {
+    Page,
+    EventData,
+    GestureEventData,
+    PinchGestureEventData,
+    PanGestureEventData,
+    SwipeGestureEventData,
+    RotationGestureEventData,
+    TouchGestureEventData,
+    GestureStateTypes,
+    SwipeDirection,
+} from "@nativescript/core";
 
 export class GestureLoggingTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         return (
             <contentView
                 style={{
@@ -12,7 +23,6 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                     width: { unit: "%", value: 100 },
                     height: { unit: "%", value: 100 },
                 }}
-
                 onTap={(args: GestureEventData) => console.log(`[onTap] yellow`)}
                 onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] yellow`)}
                 onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] yellow`)}
@@ -29,7 +39,6 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
                             width: { unit: "px", value: 300 },
                             height: { unit: "px", value: 300 },
                         }}
-
                         onTap={(args: GestureEventData) => console.log(`[onTap] orange`)}
                         onDoubleTap={(args: GestureEventData) => console.log(`[onDoubleTap] orange`)}
                         onPinch={(args: PinchGestureEventData) => console.log(`[onPinch] orange`)}
@@ -48,13 +57,13 @@ export class GestureLoggingTest extends React.Component<{}, {}> {
 export class PanGestureTest extends React.Component<
     {},
     {
-        xBeforePan: number,
-        yBeforePan: number,
-        x: number,
-        y: number,
+        xBeforePan: number;
+        yBeforePan: number;
+        x: number;
+        y: number;
     }
 > {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -62,7 +71,7 @@ export class PanGestureTest extends React.Component<
             y: 0,
             xBeforePan: 0,
             yBeforePan: 0,
-        }
+        };
     }
 
     onPan = (args: PanGestureEventData) => {
@@ -85,40 +94,39 @@ export class PanGestureTest extends React.Component<
             x: pointBeforePan.xBeforePan + deltaX * 2,
             y: pointBeforePan.yBeforePan + deltaY * 2,
         });
-    }
+    };
 
-    render(){
+    render() {
         const { x, y } = this.state;
 
         return (
-                <contentView
-                    style={{
-                        backgroundColor: "yellow",
-                        width: { unit: "%", value: 100 },
-                        height: { unit: "%", value: 100 },
-                    }}
-                >
-                    <absoluteLayout>
-                        <contentView
-                            left={{ unit: "px", value: x }}
-                            top={{ unit: "px", value: y }}
-                            style={{
-                                backgroundColor: "orange",
-                                width: { unit: "px", value: 300 },
-                                height: { unit: "px", value: 300 },
-                            }}
-
-                            onPan={this.onPan}
-                        />
-                    </absoluteLayout>
-                </contentView>
+            <contentView
+                style={{
+                    backgroundColor: "yellow",
+                    width: { unit: "%", value: 100 },
+                    height: { unit: "%", value: 100 },
+                }}
+            >
+                <absoluteLayout>
+                    <contentView
+                        left={{ unit: "px", value: x }}
+                        top={{ unit: "px", value: y }}
+                        style={{
+                            backgroundColor: "orange",
+                            width: { unit: "px", value: 300 },
+                            height: { unit: "px", value: 300 },
+                        }}
+                        onPan={this.onPan}
+                    />
+                </absoluteLayout>
+            </contentView>
         );
     }
 }
 
 export class PageGestureTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, {}> {
     private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
-    render(){
+    render() {
         const { forwardedRef, ...rest } = this.props;
 
         return (
@@ -137,18 +145,18 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
                             currentPage.frame.navigate({
                                 create: () => {
                                     return this.yellowPageRef.current!.nativeView;
-                                }
+                                },
                             });
                         }}
                     />
                 </stackLayout>
-                
+
                 <PortalToPageWithActionBar
                     forwardedRef={this.yellowPageRef}
                     actionBarTitle={"Yellow page"}
                     backgroundColor={"yellow"}
                     onSwipe={(args: SwipeGestureEventData) => {
-                        if(args.direction === SwipeDirection.right){
+                        if (args.direction === SwipeDirection.right) {
                             console.log(`[onSwipe] yellow Page, rightwards (so shall go back)`);
                             this.yellowPageRef.current!.nativeView.frame.goBack();
                         } else {
@@ -167,13 +175,10 @@ export class PageGestureTest extends React.Component<{ forwardedRef: React.RefOb
  * Navigates to a Page (via a Portal) that holds an inlined child that can update state upon clicking a button.
  * App will crash upon button click if the portal is rendering into an incorrect container,
  * as it will re-reconcile the DOM tree incorrectly.
- * 
+ *
  * Expected result: app doesn't crash (any more)
  */
-export class StatefulPageGestureTest extends React.Component<
-    { forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
-    {}
-> {
+export class StatefulPageGestureTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, {}> {
     private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
 
     private readonly onSwipeBasePage = (args: GestureEventData) => {
@@ -186,39 +191,32 @@ export class StatefulPageGestureTest extends React.Component<
         currentPage.frame.navigate({
             create: () => {
                 return this.yellowPageRef.current!.nativeView;
-            }
+            },
         });
-    }
+    };
 
-    shouldComponentUpdate(
-        nextProps: StatefulPageGestureTest["props"],
-        nextState: StatefulPageGestureTest["state"]
-    ): boolean {
+    shouldComponentUpdate(nextProps: StatefulPageGestureTest["props"], nextState: StatefulPageGestureTest["state"]): boolean {
         console.log(`[StatefulPageGestureTest.shouldComponentUpdate]`);
         return true;
     }
-    
-    render(){
+
+    render() {
         const { forwardedRef, ...rest } = this.props;
 
-        console.log(`[StatefulPageGestureTest.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`);
+        console.log(
+            `[StatefulPageGestureTest.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${
+                this.yellowPageRef.current
+            }; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`
+        );
         // const yellowPageRef = React.createRef<NSVElement<Page>>();
 
         return (
-            <page
-                ref={forwardedRef}
-                actionBarHidden={false}
-                {...rest}
-                onSwipe={this.onSwipeBasePage}
-            >
+            <page ref={forwardedRef} actionBarHidden={false} {...rest} onSwipe={this.onSwipeBasePage}>
                 <actionBar title="Navigation Hub" className="action-bar" />
                 <stackLayout>
-                    <button
-                        text={"Navigate to yellow page"}
-                        onTap={this.onTapBasePage}
-                    />
+                    <button text={"Navigate to yellow page"} onTap={this.onTapBasePage} />
                 </stackLayout>
-                
+
                 <PortalToStatefulPage yellowPageRef={this.yellowPageRef} />
             </page>
         );
@@ -233,13 +231,13 @@ export class StatefulPageGestureTest extends React.Component<
 export class PortalToStatefulPage extends React.Component<
     { yellowPageRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {
-        xBeforePan: number,
-        yBeforePan: number,
-        x: number,
-        y: number,
+        xBeforePan: number;
+        yBeforePan: number;
+        x: number;
+        y: number;
     }
 > {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -247,36 +245,19 @@ export class PortalToStatefulPage extends React.Component<
             y: 0,
             xBeforePan: 0,
             yBeforePan: 0,
-        }
+        };
     }
-
-    // private readonly onPan = (args: PanGestureEventData) => {
-    //     const { x, y, xBeforePan, yBeforePan } = this.state;
-    //     const { deltaX, deltaY, state } = args;
-    //     console.log(`[onPan] state: ${state}, deltaX: ${deltaX}, deltaY ${deltaY}`);
-
-    //     const pointBeforePan = {
-    //         xBeforePan: state === GestureStateTypes.began ? x : xBeforePan,
-    //         yBeforePan: state === GestureStateTypes.began ? y : yBeforePan,
-    //     };
-
-    //     this.setState({
-    //         ...pointBeforePan,
-    //         x: pointBeforePan.xBeforePan + deltaX * 2,
-    //         y: pointBeforePan.yBeforePan + deltaY * 2,
-    //     });
-    // }
 
     private readonly onSwipeYellowPage = (args: SwipeGestureEventData) => {
         console.log(`[onSwipe] orange`);
 
-        if(args.direction === SwipeDirection.right){
+        if (args.direction === SwipeDirection.right) {
             console.log(`[onSwipe] yellow Page, rightwards (so shall go back)`);
             this.props.yellowPageRef.current!.nativeView.frame.goBack();
         } else {
             console.log(`[onSwipe] yellow Page, not rightwards (so shan't go back). direction: ${args.direction}`);
         }
-    }
+    };
 
     private readonly onTap = (args: GestureEventData) => {
         console.log(`[onTap] yellow`);
@@ -287,21 +268,17 @@ export class PortalToStatefulPage extends React.Component<
         }));
     };
 
-    shouldComponentUpdate(
-        nextProps: PortalToStatefulPage["props"],
-        nextState: PortalToStatefulPage["state"]
-    ): boolean {
+    shouldComponentUpdate(nextProps: PortalToStatefulPage["props"], nextState: PortalToStatefulPage["state"]): boolean {
         console.log(`[PortalToStatefulPage.shouldComponentUpdate]`);
         return true;
     }
 
-    render(){
+    render() {
         const { yellowPageRef, ...rest } = this.props;
         const { x, y } = this.state;
 
         console.log(`[StatefulPage.render()] yellowPageRef.current: ${this.props.yellowPageRef.current}`);
         // const yellowPageRef = React.createRef<NSVElement<Page>>();
-
 
         return (
             <StatefulPortalToPageWithActionBar
@@ -338,18 +315,15 @@ export class PortalToStatefulPage extends React.Component<
 
 /**
  * A hub that navigates to a portal with a child that can update state internally upon clicking a button.
- * 
+ *
  * Unlike StatefulPageGestureTest, the app will NOT crash upon button click if the portal is rendering
- * into an incorrect container. This is because the state change is isolated to the 
+ * into an incorrect container. This is because the state change is isolated to the
  * PortalToPageWithStatefulContentView component, so does not cause the whole component tree to be
  * re-reconciled.
- * 
+ *
  * Expected: doesn't crash.
  */
-export class StatefulPageGestureTest2 extends React.Component<
-    { forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
-    {}
-> {
+export class StatefulPageGestureTest2 extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Page>> } & PageAttributes, {}> {
     private readonly yellowPageRef = React.createRef<NSVElement<Page>>();
 
     private readonly onTapBasePage = (args: EventData) => {
@@ -358,37 +332,31 @@ export class StatefulPageGestureTest2 extends React.Component<
         currentPage.frame.navigate({
             create: () => {
                 return this.yellowPageRef.current!.nativeView;
-            }
+            },
         });
-    }
+    };
 
-    shouldComponentUpdate(
-        nextProps: StatefulPageGestureTest2["props"],
-        nextState: StatefulPageGestureTest2["state"]
-    ): boolean {
+    shouldComponentUpdate(nextProps: StatefulPageGestureTest2["props"], nextState: StatefulPageGestureTest2["state"]): boolean {
         console.log(`[StatefulPageGestureTest2.shouldComponentUpdate]`);
         return true;
     }
-    
-    render(){
+
+    render() {
         const { forwardedRef, ...rest } = this.props;
 
-        console.log(`[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${this.yellowPageRef.current}; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`);
+        console.log(
+            `[StatefulPageGestureTest2.render()] forwardedRef.current: ${forwardedRef.current}; this.yellowPageRef.current: ${
+                this.yellowPageRef.current
+            }; currentPage: ${forwardedRef.current && forwardedRef.current!.nativeView.frame.currentPage}`
+        );
 
         return (
-            <page
-                ref={forwardedRef}
-                actionBarHidden={false}
-                {...rest}
-            >
+            <page ref={forwardedRef} actionBarHidden={false} {...rest}>
                 <actionBar title="Navigation Hub" className="action-bar" />
                 <stackLayout>
-                    <button
-                        text={"Navigate to yellow page"}
-                        onTap={this.onTapBasePage}
-                    />
+                    <button text={"Navigate to yellow page"} onTap={this.onTapBasePage} />
                 </stackLayout>
-                
+
                 <PortalToPageWithStatefulContentView yellowPageRef={this.yellowPageRef} />
             </page>
         );
@@ -402,26 +370,19 @@ export class PortalToPageWithStatefulContentView extends React.Component<
     { yellowPageRef: React.RefObject<NSVElement<Page>> } & PageAttributes,
     {}
 > {
-    shouldComponentUpdate(
-        nextProps: PortalToStatefulPage["props"],
-        nextState: PortalToStatefulPage["state"]
-    ): boolean {
+    shouldComponentUpdate(nextProps: PortalToStatefulPage["props"], nextState: PortalToStatefulPage["state"]): boolean {
         console.log(`[PortalToStatefulPage.shouldComponentUpdate]`);
         return true;
     }
 
-    render(){
+    render() {
         const { yellowPageRef, ...rest } = this.props;
 
         console.log(`[PortalToPage.render()] yellowPageRef.current: ${this.props.yellowPageRef.current!.nativeView}`);
 
         return (
-            <PortalToPageWithActionBar
-                forwardedRef={this.props.yellowPageRef}
-                actionBarTitle={"Yellow page"}
-                backgroundColor={"yellow"}
-            >
-                <StatefulContentView/>
+            <PortalToPageWithActionBar forwardedRef={this.props.yellowPageRef} actionBarTitle={"Yellow page"} backgroundColor={"yellow"}>
+                <StatefulContentView />
             </PortalToPageWithActionBar>
         );
     }
@@ -433,13 +394,13 @@ export class PortalToPageWithStatefulContentView extends React.Component<
 export class StatefulContentView extends React.Component<
     {} & PageAttributes,
     {
-        xBeforePan: number,
-        yBeforePan: number,
-        x: number,
-        y: number,
+        xBeforePan: number;
+        yBeforePan: number;
+        x: number;
+        y: number;
     }
 > {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -447,7 +408,7 @@ export class StatefulContentView extends React.Component<
             y: 0,
             xBeforePan: 0,
             yBeforePan: 0,
-        }
+        };
     }
 
     private readonly onTap = (args: GestureEventData) => {
@@ -459,15 +420,12 @@ export class StatefulContentView extends React.Component<
         }));
     };
 
-    shouldComponentUpdate(
-        nextProps: StatefulContentView["props"],
-        nextState: StatefulContentView["state"]
-    ): boolean {
+    shouldComponentUpdate(nextProps: StatefulContentView["props"], nextState: StatefulContentView["state"]): boolean {
         console.log(`[StatefulContentView.shouldComponentUpdate]`);
         return true;
     }
 
-    render(){
+    render() {
         const { ...rest } = this.props;
         const { x, y } = this.state;
 

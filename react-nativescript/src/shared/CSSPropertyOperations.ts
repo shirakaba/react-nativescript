@@ -40,36 +40,7 @@ export type StyleUpdates = {
  * @param {object} styles
  */
 export function setValueForStyles(instance: Instance, styles: StyleUpdates): void {
-    // const style = instance.style;
-    // for (let styleName in styles) {
-    //     if (!styles.hasOwnProperty(styleName)) {
-    //         continue;
-    //     }
-    //     const isCustomProperty = styleName.indexOf('--') === 0;
-    //     if ((global as any).__DEV__) {
-    //         if (!isCustomProperty) {
-    //             // TODO
-    //             // warnValidStyle(styleName, styles[styleName]);
-    //         }
-    //     }
-    //     const styleValue = dangerousStyleValue(
-    //         styleName,
-    //         styles[styleName],
-    //         isCustomProperty,
-    //     );
-    //     if (styleName === 'float') {
-    //         styleName = 'cssFloat';
-    //     }
-    //     if (isCustomProperty) {
-    //         // style.setProperty(styleName, styleValue);
-    //         style[styleName] = styleValue;
-    //     } else {
-    //         style[styleName] = styleValue;
-    //     }
-    // }
-
     Object.keys(styles).forEach((styleName: string) => {
-        // console.log(`Setting style:`, styleName);
         const styleValue: any = styles[styleName];
         if (styleValue === rnsDeletedPropValue) {
             console.log(`[setValueForStyles] ${instance}.removeAttribute(${styleName});`);
@@ -77,8 +48,6 @@ export function setValueForStyles(instance: Instance, styles: StyleUpdates): voi
             if (matchingProperty) {
                 instance.setAttribute(styleName, matchingProperty.defaultValue);
             } else {
-                // const defaultValueForStyle: unknown = (instance as any).__proto__[styleName];
-                // instance.setAttribute(styleName, defaultValueForStyle);
                 instance.removeAttribute(styleName);
             }
         } else {

@@ -10,11 +10,15 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-// import ReactReconciler = require('react-reconciler');
 import * as ReactReconciler from "react-reconciler";
-import * as scheduler from "scheduler";
+import { DefaultEventPriority } from "react-reconciler/constants";
 import { isKnownView } from "../nativescript-vue-next/runtime/registry";
-import { precacheFiberNode, updateFiberProps } from "./ComponentTree";
+import {
+    precacheFiberNode,
+    updateFiberProps,
+    getInternalInstance,
+    getInternalContainerInstance,
+} from "./ComponentTree";
 import { diffProperties, updateProperties, setInitialProperties } from "./ReactNativeScriptComponent";
 import * as console from "../shared/Logger";
 import {
@@ -26,7 +30,9 @@ import {
     TextInstance,
     HydratableInstance,
     PublicInstance,
+    SuspenseInstance,
 } from "../shared/HostConfigTypes";
+import { HostComponent, HostRoot, HostText, SuspenseComponent } from "../shared/ReactWorkTags";
 import { NSVElement, NSVText, NSVRoot } from "../nativescript-vue-next/runtime/nodes";
 
 type UpdatePayload = {
@@ -38,6 +44,8 @@ type TimeoutHandle = number; // Actually strictly should be Node-style timeout
 type NoTimeout = any;
 const noTimeoutValue: NoTimeout = undefined;
 
+let currentEventPriority = DefaultEventPriority;
+
 // https://medium.com/@agent_hunt/hello-world-custom-react-renderer-9a95b7cd04bc
 const hostConfig: ReactReconciler.HostConfig<
     Type,
@@ -45,6 +53,7 @@ const hostConfig: ReactReconciler.HostConfig<
     Container,
     Instance,
     TextInstance,
+    SuspenseInstance,
     HydratableInstance,
     PublicInstance,
     HostContext,
@@ -53,18 +62,6 @@ const hostConfig: ReactReconciler.HostConfig<
     TimeoutHandle,
     NoTimeout
 > = {
-    //https://github.com/sencha/ext-react/issues/306#issuecomment-521906095
-
-    scheduleDeferredCallback: scheduler.unstable_scheduleCallback,
-    cancelDeferredCallback: scheduler.unstable_cancelCallback,
-
-    // @ts-ignore not in typings
-    schedulePassiveEffects: scheduler.unstable_scheduleCallback,
-    cancelPassiveEffects: scheduler.unstable_cancelCallback,
-
-    // @ts-ignore not in typings
-    shouldYield: scheduler.unstable_shouldYield,
-    now: scheduler.unstable_now,
     getPublicInstance(instance: Instance | TextInstance): PublicInstance {
         // TODO (this was a complete guess).
         return instance;
@@ -82,21 +79,20 @@ const hostConfig: ReactReconciler.HostConfig<
     },
     getChildHostContext(parentHostContext: HostContext, type: Type, rootContainerInstance: Container): HostContext {
         /*
-         * Given the following, wrapped in a Page: 
+         * Given the following, wrapped in a Page:
             <RCTFlexboxLayout flexDirection={"row"}>
                 <RCTLabel text={"LABEL"}/>
                 <RCTButton text={"BUTTON"}/>
             </RCTFlexboxLayout>
-         * 
+         *
          * 'type' evidently refers to the type of the child:
-         * 
+         *
          * When type 'flexboxLayout' passes into here, it will have parentHostContext.isInAFlexboxLayout: false.
          * We return a HostContext with `"isInAFlexboxLayout": true`.
-         * 
+         *
          * When type 'label' or 'button' passes into here, they will then find that
          * parentHostContext.isInAFlexboxLayout === true.
          */
-        // console.log(`[getChildHostContext] type: ${type}`);
         const prevIsInAParentText: boolean = parentHostContext.isInAParentText;
         const prevIsInAParentSpan: boolean = parentHostContext.isInAParentSpan;
         const prevIsInAParentFormattedString: boolean = parentHostContext.isInAParentFormattedString;
@@ -157,8 +153,9 @@ const hostConfig: ReactReconciler.HostConfig<
      * For example: In the case of react-dom, it keeps track of all the currently focused elements, disabled events temporarily, etc.
      * @param rootContainerInstance - root dom node you specify while calling render. This is most commonly <div id="root"></div>
      */
-    prepareForCommit(rootContainerInstance: Container): void {
+    prepareForCommit(rootContainerInstance: Container): Record<string, any> | null {
         // TODO
+        return null;
     },
     /**
      * This function gets executed after the inmemory tree has been attached to the root dom element. Here we can do any post attach operations that needs to be done.
@@ -176,19 +173,8 @@ const hostConfig: ReactReconciler.HostConfig<
         hostContext: HostContext,
         internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): Instance {
-        // if(type === "page" || type === "frame"){
-        //     (() => {
-        //         const { children, ...rest } = props;
-        //         console.log(`[createInstance() 1a] type: ${type}. props:`, {
-        //             ...rest,
-        //         });
-        //     })();
-        //     console.log(`[createInstance() 1b] type: ${type}`);
-        // }
-
         let view: Instance;
 
-        // const viewConstructor: InstanceCreator | null = typeof type === "string" ? elementMap[type] : null;
         if (typeof type === "string" && isKnownView(type)) {
             view = new NSVElement(type);
             precacheFiberNode(internalInstanceHandle, view);
@@ -220,7 +206,6 @@ const hostConfig: ReactReconciler.HostConfig<
         return view;
     },
     appendInitialChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        // console.log(`[appendInitialChild()] ${parentInstance.nativeView} > ${(child as Instance).nativeView || `"` + (child as TextInstance).text + `"`}`);
         hostConfig.appendChild(parentInstance, child);
     },
     /**
@@ -239,7 +224,6 @@ const hostConfig: ReactReconciler.HostConfig<
         rootContainerInstance: Container,
         hostContext: HostContext
     ): boolean {
-        // console.log(`finalizeInitialChildren() with parentInstance type: ${type}`, parentInstance);
         setInitialProperties(parentInstance, type, props, rootContainerInstance, hostContext);
 
         return false;
@@ -247,14 +231,7 @@ const hostConfig: ReactReconciler.HostConfig<
     shouldSetTextContent(type: Type, props: Props): boolean {
         return typeof props.children === "string" || typeof props.children === "number";
     },
-    /**
-     * This function is used to deprioritize rendering of some subtrees. Mostly used in cases where the subtree is hidden or offscreen.
-     * @param type - the DOM type of the element, e.g. "div"
-     * @param props - the props to be passed to the Element.
-     */
-    shouldDeprioritizeSubtree(type: Type, props: Props): boolean {
-        return !!props.hidden; // Purely based on React-DOM.
-    },
+
     createTextInstance(
         text: string,
         rootContainerInstance: Container,
@@ -269,35 +246,20 @@ const hostConfig: ReactReconciler.HostConfig<
         }
 
         const textNode = new NSVText(text);
-        /**
-         * I'm not too sure what precacheFiberNode does, but I think it sets a bunch of attributes on the node.
-         * As NSVText never implemented node.setAttribute() in the first place, this line of code (now commented
-         * out) could only ever have led to a crash before. So I'm now omitting it.
-         * 
-         * In any case, I guess in normal usage, developers don't end up going down this path, maybe because of
-         * the above guard.
-         */
-        // precacheFiberNode(internalInstanceHandle, textNode as Instance);
+        precacheFiberNode(internalInstanceHandle, textNode);
 
         return textNode;
     },
-    // scheduleDeferredCallback(callback: () => any, options?: { timeout: number }): any {
-    //     // TODO: check whether default timeout should be 0.
-    //     if (!options) options = { timeout: 0 };
 
-    //     return setTimeout(callback, options.timeout);
-    // },
-    // cancelDeferredCallback(callbackID: any): void {
-    //     clearTimeout(callbackID);
-    // },
-    setTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
+    scheduleTimeout(handler: (...args: any[]) => void, timeout: number): TimeoutHandle | NoTimeout {
         return setTimeout(handler, timeout);
     },
-    clearTimeout(handle: TimeoutHandle | NoTimeout): void {
+
+    cancelTimeout(handle: TimeoutHandle | NoTimeout): void {
         clearTimeout(handle);
     },
+
     noTimeout: noTimeoutValue,
-    // now: Date.now,
     isPrimaryRenderer: true,
     supportsMutation: true, // TODO
     supportsPersistence: false,
@@ -305,7 +267,6 @@ const hostConfig: ReactReconciler.HostConfig<
 
     /* Mutation (optional) */
     appendChild(parentInstance: Instance, child: Instance | TextInstance): void {
-        // console.log(`[appendChild()] ${parentInstance} > ${child}`);
         if (parentInstance === null) {
             console.warn(
                 `[appendChild()] parent is null (this is a typical occurrence when rendering a child into a detached tree); shall no-op here: ${parentInstance} > ${child}`
@@ -343,10 +304,7 @@ const hostConfig: ReactReconciler.HostConfig<
         type: Type,
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle
-    ): void {
-        console.log(`commitMount() with type: ${type}`, instance);
-        // (instance as View).focus();
-    },
+    ): void {},
     /**
      * From: https://blog.atulr.com/react-custom-renderer-3/
      * Expanded on in: https://hackernoon.com/learn-you-some-custom-react-renderers-aed7164a4199
@@ -366,33 +324,6 @@ const hostConfig: ReactReconciler.HostConfig<
         rootContainerInstance: Container,
         hostContext: HostContext
     ): null | UpdatePayload {
-        // console.log(`prepareUpdate() with type: ${type}`, instance);
-
-        // if ((global as any).__DEV__) {
-        //     const hostContextDev: HostContextDev = hostContext as HostContextDev;
-        //     if (
-        //         typeof newProps.children !== typeof oldProps.children &&
-        //         (typeof newProps.children === 'string' ||
-        //             typeof newProps.children === 'number')
-        //     ) {
-        //         const str: string = '' + newProps.children;
-        //         const ownAncestorInfo = updatedAncestorInfo(
-        //             hostContextDev.ancestorInfo,
-        //             type as string,
-        //         );
-        //         validateDOMNesting(null, str, ownAncestorInfo);
-        //     }
-        // }
-
-        // (()=>{
-        //     const { children, ...rest } = oldProps;
-        //     console.log(`About to run diffProperties on ${instance}. oldProps:`, { ...rest });
-        // })();
-        // (()=>{
-        //     const { children, ...rest } = newProps;
-        //     console.log(`About to run diffProperties on ${instance}. newProps:`, { ...rest });
-        // })();
-
         const diffed: null | UpdatePayload["updates"] = diffProperties(
             instance,
             type,
@@ -401,17 +332,12 @@ const hostConfig: ReactReconciler.HostConfig<
             rootContainerInstance
         );
 
-        // console.log(`[prepareUpdate] for ${instance}, diffed:`, diffed);
-
         return diffed === null
             ? null
             : {
                   hostContext,
                   updates: diffed,
               };
-
-        // return {}; // Simply return a non-null value to permit commitUpdate();
-        // return null;
     },
     commitUpdate(
         instance: Instance,
@@ -421,8 +347,6 @@ const hostConfig: ReactReconciler.HostConfig<
         newProps: Props,
         internalInstanceHandle: ReactReconciler.OpaqueHandle
     ): void {
-        // console.log(`commitUpdate() with type: ${type}`, instance);
-
         // Update the props handle so that we know which props are the ones with
         // with current event handlers.
         updateFiberProps(instance, newProps);
@@ -483,6 +407,55 @@ const hostConfig: ReactReconciler.HostConfig<
     resetTextContent(instance: Instance): void {
         instance.text = "";
     },
+
+    getCurrentEventPriority: () => {
+        return currentEventPriority;
+    },
+
+    preparePortalMount: () => {},
+
+    getInstanceFromNode: (instance: Instance) => {
+        const internalInstance = getInternalInstance(instance) ?? getInternalContainerInstance(instance);
+
+        if (internalInstance) {
+            if (
+                internalInstance.tag === HostComponent ||
+                internalInstance.tag === HostText ||
+                internalInstance.tag === SuspenseComponent ||
+                internalInstance.tag === HostRoot
+            ) {
+                return internalInstance;
+            } else {
+                return null;
+            }
+        }
+
+        return null;
+    },
+
+    clearContainer: (container) => {
+        if ("removeChild" in container) {
+            container.childNodes.forEach((child) => {
+                container.removeChild(child);
+            });
+        }
+    },
+
+    getInstanceFromScope: () => {
+        // TODO: Update when Scope API is introduced
+        return null;
+    },
+
+    prepareScopeUpdate: () => {
+        // TODO: Update when Scope API is introduced
+    },
+
+    /**
+     * Noops
+     */
+    afterActiveInstanceBlur: () => {},
+    beforeActiveInstanceBlur: () => {},
+    detachDeletedInstance: () => {},
 };
 
 export const reactReconcilerInst = ReactReconciler<
@@ -491,6 +464,7 @@ export const reactReconcilerInst = ReactReconciler<
     Container,
     Instance,
     TextInstance,
+    SuspenseInstance,
     HydratableInstance,
     PublicInstance,
     HostContext,

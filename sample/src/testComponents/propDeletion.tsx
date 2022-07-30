@@ -3,23 +3,21 @@ import { StackLayout } from "@nativescript/core";
 import { NSVElement } from "react-nativescript";
 
 export class DeletePropFromScrollViewTest extends React.Component<{ forwardedRef: React.Ref<NSVElement<StackLayout>> }, {}> {
-    render(){
+    render() {
         return (
             <stackLayout ref={this.props.forwardedRef} backgroundColor={"gray"} height={"100%"} width={"100%"}>
-                <DeletePropFromScrollViewTestContent/>
+                <DeletePropFromScrollViewTestContent />
             </stackLayout>
         );
     }
 }
 
 class DeletePropFromScrollViewTestContent extends React.Component<{}, {}> {
-    render(){
+    render() {
         return (
             <scrollView orientation="vertical">
                 {/* <gridLayout rows="200 200 200 200 200 200 200 200 200 200"> */}
-                <gridLayout
-                    rows={"200 200 200 200 200 200 200 200 200 200"}
-                >
+                <gridLayout rows={"200 200 200 200 200 200 200 200 200 200"}>
                     <label className="m-10" row={0} text="Some text content follows here..." textWrap={true} />
                     <label className="m-10" row={1} text="Some text content follows here..." textWrap={true} />
                     <label className="m-10" row={2} text="Some text content follows here..." textWrap={true} />

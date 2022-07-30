@@ -1,5 +1,5 @@
-import { ReactNodeList } from "react-reconciler";
 import { ReactPortal } from "react";
+import { ReactNodeList } from "../shared/ReactTypings";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/shared/ReactPortal.js which carries the following copyright:
@@ -20,7 +20,6 @@ export function createPortal(
     return {
         // This tag allow us to uniquely identify this as a React Portal
         //@ts-ignore
-        // $$typeof: (global as any).REACT_PORTAL_TYPE,
         $$typeof: hasSymbol ? Symbol.for("react.portal") : 0xeaca,
         key: key == null ? null : "" + key,
         children,

@@ -1,7 +1,6 @@
 import { GestureTypes, Observable, EventData } from "@nativescript/core";
 import * as console from "../shared/Logger";
 
-// type GenericListener = (...args: any[]) => void;
 type GenericListener = (data: EventData) => void;
 
 export function updateListener<T extends Observable>(
@@ -17,21 +16,18 @@ export function updateListener<T extends Observable>(
                 console.log(
                     `Replacing '${eventLogName}' currentListener ${currentListener.toString()} with an incomingListener ${incomingListener.toString()}.`
                 );
-                node.off((eventName as any) as string, currentListener);
-                node.on((eventName as any) as string, incomingListener);
+                node.off(eventName as string, currentListener);
+                node.on(eventName as string, incomingListener);
             } else {
-                // console.log(`No change to '${eventLogName}' incomingListener.`);
             }
         } else {
-            console.log(
-                `Removing '${eventLogName}' listener as there is a currentListener without an incomingListener.`
-            );
-            node.off((eventName as any) as string, currentListener);
+            console.log(`Removing '${eventLogName}' listener as there is a currentListener without an incomingListener.`);
+            node.off(eventName as string, currentListener);
         }
     } else {
         if (incomingListener) {
             console.log(`Adding '${eventLogName}' incomingListener; currentListener was falsy.`);
-            node.on((eventName as any) as string, incomingListener);
+            node.on(eventName as string, incomingListener);
         }
     }
 }
