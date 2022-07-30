@@ -49,8 +49,8 @@ tns run android
 
 ## Documentation
 
-* [React NativeScript docs](https://react-nativescript.netlify.com)
-* [NativeScript docs](https://docs.nativescript.org/start/introduction)
+- [React NativeScript docs](https://react-nativescript.netlify.com)
+- [NativeScript docs](https://docs.nativescript.org/introduction.html)
 
 ## Example real-world app
 
@@ -84,7 +84,6 @@ One example is my `rpstrackerrns` issue-tracking example app, which demonstrates
         </tr>
     </tbody>
 </table>
-
 
 ## Plugins
 
@@ -252,7 +251,7 @@ It's based on React, NativeScript Core, and NativeScript Vue, which are each ind
 
 **Can this consume React Native projects?**
 
-No, but it *could* with a lot of hard work. Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible – it would be a project on exactly the same scale as [React Native Web](https://github.com/necolas/react-native-web). See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
+No, but it _could_ with a lot of hard work. Allowing React NativeScript to run projects that were written for React Native is a huge project, but it's theoretically very possible – it would be a project on exactly the same scale as [React Native Web](https://github.com/necolas/react-native-web). See [react-nativescript-compat-react-native](https://github.com/shirakaba/react-nativescript-compat-react-native) for work towards this, where I've ported part of RNTester as a proof-of-concept... 👩‍🔬👨‍🔬
 
 **Can this consume React Native native modules?**
 
@@ -262,4 +261,4 @@ Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [pro
 
 ## Contributing 🙋‍♀️
 
-Ideally get in contact via the [Slack channel](https://nativescriptcommunity.slack.com/messages/CJ2B77CJ1/) before starting any PRs!
+Ideally get in contact via the [Discord chanel](https://discord.gg/kcTwmBUuTE) before starting any PRs!
