@@ -1,27 +1,36 @@
 import * as React from "react";
-import { Span, ViewBase, Page, SearchBar, WebView, Frame, FormattedString, EventData, Color, SelectedIndexChangedEventData } from "@nativescript/core";
-import { ViewAttributes, RNSStyle, PageAttributes, NSVElement } from "react-nativescript";
+import { Span, Page, SearchBar, WebView, Frame, FormattedString, EventData, Color, SegmentedBar } from "@nativescript/core";
+import { NSVElement } from "react-nativescript";
 
-type ViewBaseProp<T extends ViewBase> = {
-    [P in keyof T]: T[P]
-};
+/**
+ * Defines the data for the SegmentedBar.selectedIndexChanged event.
+ */
+interface SelectedIndexChangedEventData extends EventData {
+    /**
+     * The old selected index.
+     */
+    oldIndex: number;
+
+    /**
+     * The new selected index.
+     */
+    newIndex: number;
+}
 
 export class TextFieldTest extends React.Component<{ toWhat: string }, {}> {
-    render(){
-        return React.createElement('textField', null, `Hello ${this.props.toWhat}`);
-        // { type: "textField", props: { toWhat: string, children: string } }
+    render() {
+        return React.createElement("textField", null, `Hello ${this.props.toWhat}`);
     }
 }
 
 export class TextViewTest extends React.Component<{ toWhat: string }, {}> {
-    render(){
-        // return (<ReactTextView text={`Hello ${this.props.toWhat}`}/>);
-        return (<textView>{`Hello ${this.props.toWhat}`}</textView>);
+    render() {
+        return <textView>{`Hello ${this.props.toWhat}`}</textView>;
     }
 }
 
-export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject<any> }, { src: string, searchText: string }> {
-    constructor(props){
+export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject<any> }, { src: string; searchText: string }> {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -30,7 +39,7 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
         };
     }
 
-    render(){
+    render() {
         return (
             <stackLayout ref={this.props.forwardedRef}>
                 <searchBar
@@ -73,7 +82,7 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
                                 document.body.classList.add("infiniteRotateAnim");
                                 `,
                                 WKUserScriptInjectionTime.AtDocumentEnd,
-                                false,
+                                false
                             )
                         );
                         (wv.ios as WKWebView).reload();
@@ -90,19 +99,19 @@ export class WebViewTest extends React.Component<{ forwardedRef: React.RefObject
 }
 
 export class LabelTest extends React.Component<{ toWhat: string }, {}> {
-    render(){
-        return (<label>{`Hello ${this.props.toWhat}`}</label>);
+    render() {
+        return <label>{`Hello ${this.props.toWhat}`}</label>;
     }
 }
 
 class MyRootView extends React.Component<{}, {}> {
-    render(){
-        return React.createElement('frame', null);
+    render() {
+        return React.createElement("frame", null);
     }
 }
 
 export class NestedContentView extends React.Component<{}, {}> {
-    render(){
+    render() {
         return React.createElement(
             "contentView",
             {
@@ -110,22 +119,19 @@ export class NestedContentView extends React.Component<{}, {}> {
                     /* Note that "75%" and "yellow" also work at run-time; it's just that the typings disallow it. */
                     backgroundColor: new Color("yellow"),
                     width: { unit: "%", value: 75 },
-                    height: { unit: "%", value: 75 }
+                    height: { unit: "%", value: 75 },
                 },
                 // backgroundColor: "yellow",
                 // width: 75,
             },
-            React.createElement(
-                "contentView",
-                {
-                    /* Seems that these props are totally untyped (deep 'any'). */
-                    style: {
-                        backgroundColor: new Color("orange"),
-                        width: 50,
-                        height: 50
-                    },
-                }
-            )
+            React.createElement("contentView", {
+                /* Seems that these props are totally untyped (deep 'any'). */
+                style: {
+                    backgroundColor: new Color("orange"),
+                    width: 50,
+                    height: 50,
+                },
+            })
         );
     }
 }
@@ -137,7 +143,7 @@ export class NestedContentView extends React.Component<{}, {}> {
  */
 
 export class FormattedStringLabel extends React.Component<{}, {}> {
-    render(){
+    render() {
         const formattedString = new FormattedString();
 
         const firstSpan: Span = new Span();
@@ -159,29 +165,18 @@ export class FormattedStringLabel extends React.Component<{}, {}> {
         const fourthSpan: Span = new Span();
         fourthSpan.text = " framework";
 
-        [firstSpan, secondSpan, thirdSpan, fourthSpan]
-        .forEach((span) => {
+        [firstSpan, secondSpan, thirdSpan, fourthSpan].forEach((span) => {
             formattedString.spans.push(span);
-        })
+        });
 
-        // return React.createElement(
-        //     ReactLabel,
-        //     {
-        //         formattedText: formattedString
-        //     },
-        //     null
-        // );
-
-        return (
-            <label formattedText={formattedString} />
-        )
+        return <label formattedText={formattedString} />;
     }
 }
 
-export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, { selectedIndex: number }> { 
+export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, { selectedIndex: number }> {
     private readonly pageRef: React.RefObject<NSVElement<Page>> = React.createRef<NSVElement<Page>>();
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -195,9 +190,9 @@ export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.Ref
 
     componentDidMount() {
         this.props.forwardedRef.current!.nativeView.navigate({
-            create:() => {
+            create: () => {
                 return this.pageRef.current!.nativeView;
-            }
+            },
         });
     }
 
@@ -205,19 +200,15 @@ export class SegmentedBarIssue extends React.Component<{ forwardedRef: React.Ref
         const { forwardedRef } = this.props;
         const { selectedIndex } = this.state;
 
-        return(
+        return (
             <frame ref={forwardedRef}>
                 <page ref={this.pageRef}>
                     <stackLayout>
-                        <label text={"HelloWorld"}/>
-                        <segmentedBar
-                            className={"m-5"}
-                            selectedIndex={selectedIndex}
-                            onSelectedIndexChanged={this.onSelectedIndexChanged}
-                        >
-                            <segmentedBarItem title={"Item 1"}/>
-                            <segmentedBarItem title={"Item 2"}/>
-                            <segmentedBarItem title={"Item 3"}/>
+                        <label text={"HelloWorld"} />
+                        <segmentedBar className={"m-5"} selectedIndex={selectedIndex} onSelectedIndexChanged={this.onSelectedIndexChanged}>
+                            <segmentedBarItem title={"Item 1"} />
+                            <segmentedBarItem title={"Item 2"} />
+                            <segmentedBarItem title={"Item 3"} />
                         </segmentedBar>
                     </stackLayout>
                 </page>

@@ -1,32 +1,30 @@
 {
   "name": "rns-sample-app",
-  "main": "app.js",
+  "main": "src/app.ts",
+  "private": true,
   "scripts": {
     "postinstall": "patch-package",
-    "tsc": "tsc"
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch"
   },
   "description": "NativeScript Application",
-  "license": "SEE LICENSE IN <your-license-filename>",
-  "repository": "<fill-your-repository-here>",
   "dependencies": {
-    "react": "^16.13.1",
+    "react": "^18.2.0",
     "react-nativescript": "file:../react-nativescript",
-    "react-refresh": "^0.8.3",
-    "@nativescript/core": "^7.1.0",
-    "@nativescript/ios": "7.1.0"
+    "react-refresh": "^0.14.0",
+    "@nativescript/core": "^8.3.1",
+    "@nativescript/ios": "8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.5",
-    "@nativescript/types": "^7.1.0",
-    "@nativescript/webpack": "~4.0.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.0-beta.5",
-    "@types/react": "16.9.34",
-    "babel-loader": "8.0.6",
-    "copy-webpack-plugin": "4.6.0",
-    "fork-ts-checker-webpack-plugin": "^5.1.0",
-    "patch-package": "^6.2.2",
-    "typescript": "~4.0.3"
-  },
-  "gitHead": "f548ec926e75201ab1b7c4a3a7ceefe7a4db15af",
-  "readme": "NativeScript Application"
+    "@babel/core": "^7.18.9",
+    "@nativescript/types": "^8.3.1",
+    "@nativescript/webpack": "~5.0.8",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
+    "@types/react": "18.0.15",
+    "babel-loader": "8.2.5",
+    "copy-webpack-plugin": "11.0.0",
+    "fork-ts-checker-webpack-plugin": "^7.2.13",
+    "patch-package": "^6.4.7",
+    "typescript": "~4.7.4"
+  }
 }

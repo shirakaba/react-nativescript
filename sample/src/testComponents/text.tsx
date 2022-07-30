@@ -2,7 +2,7 @@ import * as React from "react";
 import { Color } from "@nativescript/core";
 
 export class FormattedStringTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         return (
             <stackLayout
                 style={{

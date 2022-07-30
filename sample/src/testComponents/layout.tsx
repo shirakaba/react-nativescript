@@ -1,29 +1,34 @@
 import * as React from "react";
 
 export class DockLayoutTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         return (
-            <dockLayout
-                width={{ value: 100, unit: "%" }}
-                height={{ value: 100, unit: "%" }}
-                stretchLastChild={true}
-            >
-                <button dock={"left"} backgroundColor={"#0099CC"}>Left</button>
-                <button dock={"top"} backgroundColor={"#AA0078"}>Top</button>
-                <button dock={"right"} backgroundColor={"#8C489F"}>Right</button>
-                <button dock={"bottom"} backgroundColor={"#B3B3D7"}>Bottom</button>
-                <button backgroundColor={"#CCFFFF"} color={"gray"}>Fill</button>
+            <dockLayout width={{ value: 100, unit: "%" }} height={{ value: 100, unit: "%" }} stretchLastChild={true}>
+                <button dock={"left"} backgroundColor={"#0099CC"}>
+                    Left
+                </button>
+                <button dock={"top"} backgroundColor={"#AA0078"}>
+                    Top
+                </button>
+                <button dock={"right"} backgroundColor={"#8C489F"}>
+                    Right
+                </button>
+                <button dock={"bottom"} backgroundColor={"#B3B3D7"}>
+                    Bottom
+                </button>
+                <button backgroundColor={"#CCFFFF"} color={"gray"}>
+                    Fill
+                </button>
             </dockLayout>
         );
     }
 }
 
 export class AbsoluteLayoutTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         return React.createElement(
             "absoluteLayout",
-            {
-            },
+            {},
             React.createElement(
                 "button",
                 {
@@ -32,7 +37,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 10,
                     top: 5,
                     backgroundColor: "#0099CC",
-                    onTap: () => {}
+                    onTap: () => {},
                 },
                 null
             ),
@@ -44,7 +49,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 30,
                     top: 80,
                     backgroundColor: "#C3C3E5",
-                    onTap: () => {}
+                    onTap: () => {},
                 },
                 null
             ),
@@ -56,7 +61,7 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 150,
                     top: 25,
                     backgroundColor: "#CCFFFF",
-                    onTap: () => {}
+                    onTap: () => {},
                 },
                 null
             ),
@@ -68,24 +73,24 @@ export class AbsoluteLayoutTest extends React.Component<{}, {}> {
                     left: 70,
                     top: 150,
                     backgroundColor: "#8C489F",
-                    onTap: () => {}
+                    onTap: () => {},
                 },
                 null
-            ),
+            )
         );
     }
 }
 
 export class HMRTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         // return <DockLayoutTest/>;
-        return <FlexboxLayoutTest/>;
+        return <FlexboxLayoutTest />;
         // return <AbsoluteLayoutTest/>;
     }
 }
 
 export class FlexboxLayoutTest extends React.Component<{}, {}> {
-    render(){
+    render() {
         return React.createElement(
             "flexboxLayout",
             {
@@ -96,7 +101,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                 // width: 300,
                 width: { value: 100, unit: "%" },
                 height: { value: 100, unit: "%" },
-                backgroundColor: "lightGray"
+                backgroundColor: "lightGray",
             },
             React.createElement(
                 "label",
@@ -139,7 +144,7 @@ export class FlexboxLayoutTest extends React.Component<{}, {}> {
                     backgroundColor: "yellow",
                 },
                 null
-            ),
+            )
         );
     }
 }
