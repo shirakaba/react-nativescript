@@ -46,7 +46,7 @@ export function setValueForStyles(instance: Instance, styles: StyleUpdates): voi
     //         continue;
     //     }
     //     const isCustomProperty = styleName.indexOf('--') === 0;
-    //     if ((global as any).__DEV__) {
+    //     if ((globalThis as any).__DEV__) {
     //         if (!isCustomProperty) {
     //             // TODO
     //             // warnValidStyle(styleName, styles[styleName]);

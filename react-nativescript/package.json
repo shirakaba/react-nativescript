@@ -34,22 +34,22 @@
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
     "react": "^16.13.1",
-    "@nativescript/core": "~8.0.0"
+    "@nativescript/core": "^8.3.1"
   },
   "dependencies": {
     "react-reconciler": "^0.25.1",
     "scheduler": "0.18.0",
-    "set-value": "3.0.2"
+    "set-value": "4.1.0"
   },
   "devDependencies": {
-    "@nativescript/core": "~8.0.0",
-    "@types/node": "^14.14.41",
+    "@nativescript/core": "^8.3.1",
+    "@types/webpack-env": "^1.17.0",
     "@types/react": "16.9.34",
     "@types/react-reconciler": "0.18.0",
-    "patch-package": "^6.2.2",
-    "prettier": "1.18.2",
+    "patch-package": "^6.4.7",
+    "prettier": "2.7.1",
     "react": "^16.13.1",
     "rimraf": "^3.0.2",
-    "typescript": "~4.0.3"
+    "typescript": "~4.7.4"
   }
 }

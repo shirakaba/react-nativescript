@@ -368,7 +368,7 @@ const hostConfig: ReactReconciler.HostConfig<
     ): null | UpdatePayload {
         // console.log(`prepareUpdate() with type: ${type}`, instance);
 
-        // if ((global as any).__DEV__) {
+        // if ((globalThis as any).__DEV__) {
         //     const hostContextDev: HostContextDev = hostContext as HostContextDev;
         //     if (
         //         typeof newProps.children !== typeof oldProps.children &&

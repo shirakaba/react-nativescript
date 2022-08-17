@@ -149,7 +149,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
         console.log(`[onLoadMoreItems] permitted.`);
 
         this.loadMoreTimeout = setTimeout(() => {
-            const itemsToPush = [];
+            const itemsToPush: IndexToContentItem[] = [];
     
             for(let i = this.items.length; i < + this.items.length + this.itemsToLoad; i++){
                 const lastValueIncremented: number = i;
@@ -160,7 +160,7 @@ export class DynamicListViewWithImages extends React.Component<{}, {}> {
                 });
             }
     
-            this.items.push(itemsToPush);
+            this.items.push(...itemsToPush);
             this.loadMore = true;
         }, 750);
         /* Ample time for a (typical) scroll action's inertia to settle, to avoid list jumpiness. */

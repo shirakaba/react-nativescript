@@ -40,7 +40,7 @@ interface AncestorInfo {
     dlItemTagAutoclosing: null | AncestorInfoTagObj;
 }
 
-if ((global as any).__DEV__) {
+if ((globalThis as any).__DEV__) {
     // This validation code was written based on the HTML5 parsing spec:
     // https://html.spec.whatwg.org/multipage/syntax.html#has-an-element-in-scope
     //

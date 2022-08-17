@@ -62,7 +62,7 @@ export function setInitialProperties(
     hostContext: HostContext
 ): void {
     // const isCustomComponentTag = isCustomComponent(tag, rawProps);
-    // if ((global as any).__DEV__) {
+    // if ((globalThis as any).__DEV__) {
     // 	validatePropertiesInDevelopment(tag, rawProps);
     // 	if (
     // 		isCustomComponentTag &&
@@ -195,7 +195,7 @@ export function setInitialDOMProperties(
         }
         const nextProp = nextProps[propKey];
         if (propKey === STYLE) {
-            if ((global as any).__DEV__) {
+            if ((globalThis as any).__DEV__) {
                 if (nextProp) {
                     // Freeze the next style object so that we can assume it won't be
                     // mutated. We have already warned for this in the past.
@@ -395,7 +395,7 @@ export function diffProperties(
             continue;
         }
         if (propKey === STYLE) {
-            if ((global as any).__DEV__) {
+            if ((globalThis as any).__DEV__) {
                 if (nextProp) {
                     // Freeze the next style object so that we can assume it won't be
                     // mutated. We have already warned for this in the past.

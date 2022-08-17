@@ -1,13 +1,12 @@
 diff --git a/node_modules/@types/react/index.d.ts b/node_modules/@types/react/index.d.ts
-index 72c43ea..c4271cc 100644
+index 72c43ea..8dcc32e 100644
 --- a/node_modules/@types/react/index.d.ts
 +++ b/node_modules/@types/react/index.d.ts
-@@ -2963,186 +2963,8 @@ declare global {
+@@ -2963,186 +2963,6 @@ declare global {
          // tslint:disable-next-line:no-empty-interface
          interface IntrinsicClassAttributes<T> extends React.ClassAttributes<T> { }
-         
-+        // tslint:disable-next-line:no-empty-interface
-         interface IntrinsicElements {
+ 
+-        interface IntrinsicElements {
 -            // HTML
 -            a: React.DetailedHTMLProps<React.AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>;
 -            abbr: React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
@@ -187,6 +186,7 @@ index 72c43ea..c4271cc 100644
 -            tspan: React.SVGProps<SVGTSpanElement>;
 -            use: React.SVGProps<SVGUseElement>;
 -            view: React.SVGProps<SVGViewElement>;
-         }
+-        }
++        interface IntrinsicElements {}
      }
  }

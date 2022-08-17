@@ -20,7 +20,7 @@ export function createPortal(
     return {
         // This tag allow us to uniquely identify this as a React Portal
         //@ts-ignore
-        // $$typeof: (global as any).REACT_PORTAL_TYPE,
+        // $$typeof: (globalThis as any).REACT_PORTAL_TYPE,
         $$typeof: hasSymbol ? Symbol.for("react.portal") : 0xeaca,
         key: key == null ? null : "" + key,
         children,

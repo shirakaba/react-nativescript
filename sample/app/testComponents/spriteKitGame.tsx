@@ -1,3 +1,6 @@
+// I'll import just the types I need, to avoid slowing down TypeScript with too many ambient types.
+/// <reference path="../../node_modules/@nativescript/types-ios/lib/ios/objc-x86_64/objc!Foundation.d.ts" />
+/// <reference path="../../node_modules/@nativescript/types-ios/lib/ios/objc-x86_64/objc!SpriteKit.d.ts" />
 import * as React from "react";
 import { Page, Frame } from "@nativescript/core";
 import { PageAttributes, NSVElement } from "react-nativescript";

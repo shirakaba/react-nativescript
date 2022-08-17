@@ -50,7 +50,7 @@ tns run android
 ## Documentation
 
 * [React NativeScript docs](https://react-nativescript.netlify.com)
-* [NativeScript docs](https://docs.nativescript.org/start/introduction)
+* [NativeScript docs](https://docs.nativescript.org/introduction.html)
 
 ## Example real-world app
 
@@ -273,4 +273,4 @@ Stanisław Chmiela ([@sjchmiela](https://twitter.com/sjchmiela)) produced a [pro
 
 ## Contributing 🙋‍♀️
 
-Ideally get in contact via the [Slack channel](https://nativescriptcommunity.slack.com/messages/CJ2B77CJ1/) before starting any PRs!
+Ideally get in contact via the [Discord channel](https://discord.gg/kcTwmBUuTE) before starting any PRs!
