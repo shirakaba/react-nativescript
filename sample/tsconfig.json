@@ -8,6 +8,7 @@
         "noEmitHelpers": true,
         "noEmitOnError": true,
         "jsx": "react",
+        "jsxFactory": "RNS.createElement",
         "lib": [
             "es6",
             "dom"

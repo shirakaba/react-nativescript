@@ -9,6 +9,43 @@
         "noLib": false,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
+
+        // == Option 1 ==
+        // - "jsxFactory": "RNS.createElement",
+        // - declare namespace RNS.JSX {
+        // - import * as RNS from "react-nativescript"
+        // - import * as React from "react"
+        // - React.useEffect, React.ReactElement
+        //   ... unless we re-export all of React from RNS.
+        // I think this is close, but ultimately unacceptable due to the amount
+        // of typing it entails.
+
+        // == Option 2 ==
+        // - "jsxFactory": "h",
+        // - declare namespace h.JSX {
+        // - import { createElement as h } from "react";
+        // Not sure how to apply this to RNS, but along these lines. Hard to
+        // type.
+
+        // == Option 3 ==
+        // - "jsxFactory": "createElement",
+        // - declare namespace createElement.JSX {
+        // - import { createElement } from "react";
+
+        // ... in all cases, users would have to change their usual
+        // `import * as React from "react"` imports.
+
+        // The only other options would be:
+        // 1) Give up on JSX intrinsic elements altogether (cumbersome like
+        //    React Native - but a relief for community plugins)
+        // 2) Rename the intrinsics that name-clash with HTML (dangerous because
+        //    users will be doomed to auto-complete HTML ones)
+        // 3) Use some package.json thing to swap @types/react with our own
+        //    version. Perhaps this: https://stackoverflow.com/a/61246743/5951226
+        // I think option 3 is the least bad option, though it remains to be
+        // seen whether tooling like ts-loader respects it in practice.
+
+        "jsxFactory": "RNS.createElement",
         "skipLibCheck": true,
         "lib": ["es6", "dom"],
         "baseUrl": ".",

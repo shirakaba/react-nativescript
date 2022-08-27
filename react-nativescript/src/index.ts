@@ -1,3 +1,5 @@
+/// <reference path="./jsx.d.ts" />
+
 /**
  * Code in here referenced from: https://github.com/gaearon/react/blob/1c7af862246e24574540f05c459f5fac0fad7086/src/renderers/dom/fiber/ReactDOMFiberEntry.js which carries the following copyright:
  * Copyright 2013-present, Facebook, Inc.
@@ -50,42 +52,6 @@ import {
     ViewAttributes,
 } from "./lib/react-nativescript-jsx";
 import {
-    ActionBar,
-    ActionItem,
-    ActivityIndicator,
-    Button,
-    ContentView,
-    DatePicker,
-    HtmlView,
-    Label,
-    AbsoluteLayout,
-    DockLayout,
-    FlexboxLayout,
-    GridLayout,
-    StackLayout,
-    WrapLayout,
-    ListPicker,
-    ListView,
-    NavigationButton,
-    Placeholder,
-    Progress,
-    ScrollView,
-    SearchBar,
-    SegmentedBar,
-    Slider,
-    Switch,
-    TabView,
-    TabViewItem,
-    TextView,
-    TextField,
-    TimePicker,
-    Frame,
-    Page,
-    FormattedString,
-    SegmentedBarItem,
-    Span,
-    Image,
-    WebView,
     View,
     Application,
 } from "@nativescript/core";
@@ -95,7 +61,7 @@ import { __unstable__forwardNavOpts } from "./nativescript-vue-next/runtime/navi
 export { __unstable__forwardNavOpts };
 import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
-import { ReactPortal, createElement, createRef } from "react";
+import { ReactPortal } from "react";
 import * as console from "./shared/Logger";
 const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
@@ -275,50 +241,4 @@ export function start(app: ReactReconciler.ReactNodeList): void {
         },
     });
 }
-
-declare global {
-    module JSX {
-        interface IntrinsicElements {
-            absoluteLayout: NativeScriptProps<AbsoluteLayoutAttributes, AbsoluteLayout>;
-            actionBar: NativeScriptProps<ActionBarAttributes, ActionBar>;
-            actionItem: NativeScriptProps<ActionItemAttributes, ActionItem>;
-            activityIndicator: NativeScriptProps<ActivityIndicatorAttributes, ActivityIndicator>;
-            button: NativeScriptProps<ButtonAttributes, Button>;
-            contentView: NativeScriptProps<ContentViewAttributes, ContentView>;
-            datePicker: NativeScriptProps<DatePickerAttributes, DatePicker>;
-            dockLayout: NativeScriptProps<DockLayoutAttributes, DockLayout>;
-            flexboxLayout: NativeScriptProps<FlexboxLayoutAttributes, FlexboxLayout>;
-            formattedString: NativeScriptProps<FormattedStringAttributes, FormattedString>;
-            frame: NativeScriptProps<FrameAttributes, Frame>;
-            gridLayout: NativeScriptProps<GridLayoutAttributes, GridLayout>;
-            htmlView: NativeScriptProps<HtmlViewAttributes, HtmlView>;
-            image: NativeScriptProps<ImageAttributes, Image>;
-            label: NativeScriptProps<LabelAttributes, Label>;
-            listPicker: NativeScriptProps<ListPickerAttributes, ListPicker>;
-            listView: NativeScriptProps<ListViewAttributes, ListView>;
-            navigationButton: NativeScriptProps<NavigationButtonAttributes, NavigationButton>;
-            page: NativeScriptProps<PageAttributes, Page>;
-            placeholder: NativeScriptProps<PlaceholderAttributes, Placeholder>;
-            progress: NativeScriptProps<ProgressAttributes, Progress>;
-            scrollView: NativeScriptProps<ScrollViewAttributes, ScrollView>;
-            searchBar: NativeScriptProps<SearchBarAttributes, SearchBar>;
-            segmentedBar: NativeScriptProps<SegmentedBarAttributes, SegmentedBar>;
-            segmentedBarItem: NativeScriptProps<SegmentedBarItemAttributes, SegmentedBarItem>;
-            slider: NativeScriptProps<SliderAttributes, Slider>;
-            span: NativeScriptProps<SpanAttributes, Span>;
-            stackLayout: NativeScriptProps<StackLayoutAttributes, StackLayout>;
-            switch: NativeScriptProps<SwitchAttributes, Switch>;
-            tabView: NativeScriptProps<TabViewAttributes, TabView>;
-            tabViewItem: NativeScriptProps<TabViewItemAttributes, TabViewItem>;
-            textField: NativeScriptProps<TextFieldAttributes, TextField>;
-            textView: NativeScriptProps<TextViewAttributes, TextView>;
-            timePicker: NativeScriptProps<TimePickerAttributes, TimePicker>;
-            webView: NativeScriptProps<WebViewAttributes, WebView>;
-            wrapLayout: NativeScriptProps<WrapLayoutAttributes, WrapLayout>;
-        }
-
-        interface ElementChildrenAttribute {
-            children: {};
-        }
-    }
-}
+export const createElement = React.createElement;

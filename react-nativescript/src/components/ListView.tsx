@@ -1,5 +1,6 @@
 import * as console from "../shared/Logger";
 import * as React from "react";
+import * as RNS from "..";
 import { View, KeyedTemplate, ItemsSource, ItemEventData, ListView as NativeScriptListView } from "@nativescript/core";
 import { render as RNSRender, unmountComponentAtNode, NSVRoot } from "../index";
 import { NSVElement } from "../nativescript-vue-next/runtime/nodes";
