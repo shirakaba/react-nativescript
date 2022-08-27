@@ -10,8 +10,7 @@
   ],
   "types": "dist/index.d.ts",
   "scripts": {
-    "setup": "npm install && npm run pp",
-    "pp": "patch-package",
+    "setup": "npm install",
     "prettier": "prettier --print-width 120 --tab-width 4 --trailing-comma es5 --end-of-line lf --write \"src/**/*.ts\"",
     "build": "node node_modules/.bin/rimraf ./dist/* && tsc --project ./tsconfig.json",
     "dev": "tsc --watch --project ./tsconfig.json",
@@ -33,8 +32,8 @@
   },
   "homepage": "https://github.com/shirakaba/react-nativescript#readme",
   "peerDependencies": {
-    "react": "^16.13.1",
-    "@nativescript/core": "^8.3.1"
+    "@nativescript/core": "^8.3.1",
+    "react": "^16.13.1"
   },
   "dependencies": {
     "react-reconciler": "^0.25.1",
@@ -43,10 +42,9 @@
   },
   "devDependencies": {
     "@nativescript/core": "^8.3.1",
-    "@types/webpack-env": "^1.17.0",
-    "@types/react": "16.9.34",
+    "@types/react": "npm:types-react-without-jsx-intrinsics@^16.9.49",
     "@types/react-reconciler": "0.18.0",
-    "patch-package": "^6.4.7",
+    "@types/webpack-env": "^1.17.0",
     "prettier": "2.7.1",
     "react": "^16.13.1",
     "rimraf": "^3.0.2",

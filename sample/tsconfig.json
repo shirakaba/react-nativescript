@@ -5,6 +5,7 @@
         "target": "es2017",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
+        "noEmit": true,
         "noEmitHelpers": true,
         "noEmitOnError": true,
         "jsx": "react",
