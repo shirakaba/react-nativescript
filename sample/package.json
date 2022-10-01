@@ -8,21 +8,21 @@
   "description": "React NativeScript sample app",
   "license": "Apache-2.0",
   "dependencies": {
-    "@nativescript/core": "^8.3.1",
+    "@nativescript/core": "^8.3.5",
     "@nativescript/ios": "^8.3.3",
-    "react": "^16.13.1",
+    "react": "^16.14.0",
     "react-nativescript": "file:../react-nativescript",
-    "react-refresh": "^0.14.0"
+    "react-refresh": "~0.14.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.9",
+    "@babel/core": "^7.19.3",
     "@nativescript/types": "^8.3.1",
     "@nativescript/webpack": "~5.0.8",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",
-    "@types/react": "npm:types-react-without-jsx-intrinsics@^16.9.49",
-    "babel-loader": "8.2.5",
-    "copy-webpack-plugin": "11.0.0",
+    "@pmmmwh/react-refresh-webpack-plugin": "~0.5.7",
+    "@types/react": "npm:types-react-without-jsx-intrinsics@^16.14.30",
+    "babel-loader": "^8.2.5",
+    "copy-webpack-plugin": "^11.0.0",
     "fork-ts-checker-webpack-plugin": "^7.2.13",
-    "typescript": "~4.7.4"
+    "typescript": "~4.8.4"
   }
 }

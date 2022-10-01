@@ -1,11 +1,11 @@
 /**
- * Modified from react-nativescript-jsx.ts, generated from source `8.3.3-core`
+ * Modified from react-nativescript-jsx.ts, generated from source `8.3.5-core`
  * by commit `d774c1f` of David Perhouse's nativescript-source-to-jsx-def, on
- * 17th Aug 2022.
+ * 1st Oct 2022 via `cd exporter && npm run getsource`.
  * Licence in /LICENSE.
  * Modifications:
  * - Addition of whole new lines are preceded by a block comment.
- * - I needed the *Attributes interfaces weren't exported, so I exported them.
+ * - The *Attributes interfaces weren't exported, so I exported them.
  * - For all *color properties that only accepted Color, I allowed string, too.
  * - For all length properties (e.g. LengthPxUnit), I allowed string, too.
  */
