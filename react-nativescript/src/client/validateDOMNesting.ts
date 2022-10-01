@@ -178,7 +178,7 @@ if ((globalThis as any).__DEV__) {
         dlItemTagAutoclosing: null,
     };
 
-    updatedAncestorInfo = function(oldInfo: AncestorInfo | undefined | null, tag: string): AncestorInfo {
+    updatedAncestorInfo = function (oldInfo: AncestorInfo | undefined | null, tag: string): AncestorInfo {
         let ancestorInfo: AncestorInfo = { ...(oldInfo || emptyAncestorInfo) };
         let info: AncestorInfoTagObj = { tag };
 
@@ -228,7 +228,7 @@ if ((globalThis as any).__DEV__) {
     /**
      * Returns whether
      */
-    const isTagValidWithParent = function(tag: string | undefined | null, parentTag: string | undefined | null) {
+    const isTagValidWithParent = function (tag: string | undefined | null, parentTag: string | undefined | null) {
         // First, let's check if we're in an unusual parsing mode...
         switch (parentTag) {
             // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inselect
@@ -342,7 +342,7 @@ if ((globalThis as any).__DEV__) {
     /**
      * Returns whether
      */
-    const findInvalidAncestorForTag = function(tag: string, ancestorInfo: AncestorInfo) {
+    const findInvalidAncestorForTag = function (tag: string, ancestorInfo: AncestorInfo) {
         switch (tag) {
             case "address":
             case "article":
@@ -408,7 +408,7 @@ if ((globalThis as any).__DEV__) {
 
     const didWarn = {};
 
-    validateDOMNesting = function(
+    validateDOMNesting = function (
         childTag: string | undefined | null,
         childText: string | undefined | null,
         ancestorInfo: AncestorInfo | undefined | null

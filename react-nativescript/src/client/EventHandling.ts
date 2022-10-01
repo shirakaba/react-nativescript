@@ -17,8 +17,8 @@ export function updateListener<T extends Observable>(
                 console.log(
                     `Replacing '${eventLogName}' currentListener ${currentListener.toString()} with an incomingListener ${incomingListener.toString()}.`
                 );
-                node.off((eventName as any) as string, currentListener);
-                node.on((eventName as any) as string, incomingListener);
+                node.off(eventName as any as string, currentListener);
+                node.on(eventName as any as string, incomingListener);
             } else {
                 // console.log(`No change to '${eventLogName}' incomingListener.`);
             }
@@ -26,12 +26,12 @@ export function updateListener<T extends Observable>(
             console.log(
                 `Removing '${eventLogName}' listener as there is a currentListener without an incomingListener.`
             );
-            node.off((eventName as any) as string, currentListener);
+            node.off(eventName as any as string, currentListener);
         }
     } else {
         if (incomingListener) {
             console.log(`Adding '${eventLogName}' incomingListener; currentListener was falsy.`);
-            node.on((eventName as any) as string, incomingListener);
+            node.on(eventName as any as string, incomingListener);
         }
     }
 }

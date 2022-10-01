@@ -256,8 +256,8 @@ export function updateDOMProperties(
         const propKey = updatePayload[i];
         const propValue = updatePayload[i + 1];
         if (propKey === STYLE) {
-            if(propValue !== null){
-                /* 
+            if (propValue !== null) {
+                /*
                  * When a React element updates from having no style prop at all to having one, the Host Config's commitUpdate()
                  * the diffProperties() update payload will consist of e.g. ["style", null, "style", { color: "red" }].
                  * As far as I can tell, we can just no-op for the ["style", null] update. Alternatively, we could pass in an
@@ -343,7 +343,7 @@ export function diffProperties(
 
     let propKey: string;
     let styleName: string;
-    let styleUpdates: StyleUpdates|null = null;
+    let styleUpdates: StyleUpdates | null = null;
     for (propKey in lastProps) {
         if (nextProps.hasOwnProperty(propKey) || !lastProps.hasOwnProperty(propKey) || lastProps[propKey] == null) {
             // console.log(`[diffProperties] skipping on lastProps key:`, propKey);
@@ -351,13 +351,15 @@ export function diffProperties(
         }
         if (propKey === STYLE) {
             const lastStyle: NativeScriptAttributes["style"] = lastProps[propKey];
-            if(lastStyle){
+            if (lastStyle) {
                 for (styleName in lastStyle) {
                     if (lastStyle.hasOwnProperty(styleName)) {
                         if (!styleUpdates) {
                             styleUpdates = {};
                         }
-                        console.log(`[diffProperties.lastProps] style.${styleName} found in last update's style object.`);
+                        console.log(
+                            `[diffProperties.lastProps] style.${styleName} found in last update's style object.`
+                        );
                         styleUpdates[styleName] = rnsDeletedPropValue; // Will be deleted by default, unless updated.
                     }
                 }

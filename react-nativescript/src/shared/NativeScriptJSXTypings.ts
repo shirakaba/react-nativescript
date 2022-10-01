@@ -10,7 +10,7 @@ import { NSVElement } from "../nativescript-vue-next/runtime/nodes";
  * - FlexboxLayout: e.g. 'flexDirection'
  * ... yet in most cases the typings do not fully match the implementation (the typings typically do not accept
  * string even though the implementation does – in fact, it's key to how NativeScript Core parses XML).
- * 
+ *
  * Plugins may find need to implement new styles to NativeScript Core (e.g. as YogaLayout does, introducing
  * 'maxWidth' and more), so we expose RNSStyle as an interface rather than a type to allow augmentation of it.
  */

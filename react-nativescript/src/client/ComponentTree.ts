@@ -8,9 +8,7 @@ import * as ReactReconciler from "react-reconciler";
 import { Instance, TextInstance } from "../shared/HostConfigTypes";
 import * as console from "../shared/Logger";
 
-const randomKey: string = Math.random()
-    .toString(36)
-    .slice(2);
+const randomKey: string = Math.random().toString(36).slice(2);
 const internalInstanceKey: string = "__reactInternalInstance$" + randomKey;
 const internalEventHandlersKey: string = "__reactEventHandlers$" + randomKey;
 
