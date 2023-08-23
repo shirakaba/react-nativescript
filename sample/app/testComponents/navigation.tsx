@@ -186,10 +186,10 @@ export class TabViewTest extends React.Component<{}, {}> {
 }
 
 export class PageWithActionBar extends React.Component<
-    {
+    PropsWithChildren<{
         actionBarTitle?: string,
         forwardedRef: React.RefObject<NSVElement<Page>>,
-    } & PageAttributes,
+    } & PageAttributes>,
     {}
 > {
     render(){
@@ -243,10 +243,10 @@ export function PageWithActionBarNew(props: PropsWithChildren<PageAttributes>){
 
 
 export class PageWithComplexActionBarTest extends React.Component<
-    {
+    PropsWithChildren<{
         actionBarTitle?: string,
         forwardedRef: React.RefObject<NSVElement<Page>>,
-    },
+    }>,
     {}
 > {
     render(){
@@ -268,7 +268,7 @@ export class PageWithComplexActionBarTest extends React.Component<
     }
 }
 
-export class FramedPageWithComplexActionBarTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, {}> {
+export class FramedPageWithComplexActionBarTest extends React.Component<PropsWithChildren<{ forwardedRef: React.RefObject<NSVElement<Frame>> }>, {}> {
     private readonly pageWithActionBarRef = React.createRef<NSVElement<Page>>();
 
     render(){
@@ -284,7 +284,7 @@ export class FramedPageWithComplexActionBarTest extends React.Component<{ forwar
     }
 }
 
-const PortalToPage: React.SFC<{ forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string }> = (props) => {
+const PortalToPage= (props: PropsWithChildren<{ forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string }>) => {
     const { forwardedRef, actionBarTitle, children } = props;
     return ReactNativeScript.createPortal(
         (
@@ -373,10 +373,7 @@ export class HubTest extends React.Component<{ forwardedRef: React.RefObject<NSV
  * The converse case of outerparent.removeChild(null) (when we unmount the Portal) might not need special handling,
  * because null is not regarded as a ReactNode to begin with.
  */
-export const PortalToPageWithActionBar: React.SFC<
-    { forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes
-> =
-(props) => {
+export const PortalToPageWithActionBar = (props: PropsWithChildren<{ forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes>) => {
     const { forwardedRef, actionBarTitle, children, ...rest } = props;
     console.log(`[PortalToPageWithActionBar - "${actionBarTitle}"] createPortal() forwardedRef.current: ${forwardedRef.current}`);
     return ReactNativeScript.createPortal(
@@ -400,7 +397,7 @@ export const PortalToPageWithActionBar: React.SFC<
  * An explicit shouldComponentUpdate() is purely there to help me follow the logs. It's not needed otherwise.
  */
 export class StatefulPortalToPageWithActionBar extends React.Component<
-    { forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes,
+    PropsWithChildren<{ forwardedRef: React.RefObject<NSVElement<Page>>, actionBarTitle: string } & PageAttributes>,
     {}
 > {
     shouldComponentUpdate(
@@ -488,10 +485,12 @@ export class FrameTest extends React.Component<{ forwardedRef: React.RefObject<N
 }
 
 export class FramedChildTest extends React.Component<
-    {
-        forwardedRef: React.RefObject<NSVElement<Frame>>,
-        childPageRef: React.RefObject<NSVElement<Page>>,
-    },
+    PropsWithChildren<
+      {
+          forwardedRef: React.RefObject<NSVElement<Frame>>,
+          childPageRef: React.RefObject<NSVElement<Page>>,
+      }
+    >,
     {}
 >
 {
@@ -533,7 +532,7 @@ export class FramedChildTest extends React.Component<
     }
 }
 
-export class FramedHubTest extends React.Component<{ forwardedRef: React.RefObject<NSVElement<Frame>> }, {}> {
+export class FramedHubTest extends React.Component<PropsWithChildren<{ forwardedRef: React.RefObject<NSVElement<Frame>> }>, {}> {
     private readonly hubTestPageRef = React.createRef<NSVElement<Page>>();
 
     render(){

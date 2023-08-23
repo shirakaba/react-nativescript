@@ -27,7 +27,7 @@ type OwnProps = {
         onCellRecycle?: (container: CellViewContainer) => void;
     };
 } & Omit<ListViewAttributes, "onItemLoading">;
-type Props = OwnProps & { forwardedRef?: React.RefObject<NSVElement<NativeScriptListView>> };
+type Props = React.PropsWithChildren<OwnProps & { forwardedRef?: React.RefObject<NSVElement<NativeScriptListView>> }>;
 
 type NumberKey = number | string;
 type RootKeyAndTNSView = { rootKey: string; nativeView: View };

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, PropsWithChildren } from "react";
 import { RNSStyle } from "react-nativescript";
 import { Color } from "@nativescript/core";
 
@@ -45,9 +45,9 @@ export class GameLoop {
 }
 
 const GameLoopContext = React.createContext(new GameLoop(1000 / 60));
-export class GameLoopComponent extends React.Component<{ frameRateMs?: number, style?: Partial<RNSStyle> }, {}> {
+export class GameLoopComponent extends React.Component<PropsWithChildren<{ frameRateMs?: number, style?: Partial<RNSStyle> }>, {}> {
 	render() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[GameLoopContext] render - current loop:`, loop); // logs: {}
         const { children, frameRateMs, ...rest } = this.props;
 
@@ -73,19 +73,19 @@ export class GameLoopManager extends React.Component<{}, {}> {
     static contextType: React.Context<GameLoop> = GameLoopContext;
 
 	componentDidMount() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[GameLoopManager] componentDidMount - starting loop.`, loop);
         loop.start();
 	}
 
 	componentWillUnmount() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[GameLoopManager] componentWillUnmount - stopping loop.`, loop);
 		loop.stop();
 	}
 
 	render() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[GameLoopManager] render - current loop:`, loop);
         return null;
 	}
@@ -105,13 +105,13 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
     }
   
     componentDidMount() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[Marquee] componentDidMount - subscribing to loop.`, loop);
         this.loopID = loop.subscribe(this.tick.bind(this));
     }
   
     componentWillUnmount() {
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         console.log(`[Marquee] componentWillUnmount - unsubscribing from loop.`, loop);
         loop.unsubscribe(this.loopID);
     }
@@ -123,7 +123,7 @@ export class Marquee extends React.Component<{ text: string }, { index: number }
     }
 
     render(){
-        const loop: GameLoop = this.context;
+        const loop = this.context as GameLoop;
         // console.log(`[Marquee] render - current loop:`, loop);
         const { text } = this.props;
         const { index } = this.state;
