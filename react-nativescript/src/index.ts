@@ -102,7 +102,6 @@ import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
 import * as console from "./shared/Logger";
-const { run, hasLaunched, getRootView } = Application;
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
 import { createPortal as _createPortal } from "./client/ReactPortal";
@@ -247,8 +246,8 @@ export const unstable_batchedUpdates = reactReconcilerInst.batchedUpdates;
  * @param app - Your <App/> component.
  */
 export function start(app: ReactReconciler.ReactNodeList): void {
-    const existingRootView: View | undefined = getRootView();
-    const _hasLaunched: boolean = hasLaunched();
+    const existingRootView: View | undefined = Application.getRootView();
+    const _hasLaunched: boolean = Application.hasLaunched();
     console.log(
         `[ReactNativeScript.ts] start(). hasLaunched(): ${_hasLaunched} existing rootView was: ${existingRootView}`
     );
@@ -271,7 +270,7 @@ export function start(app: ReactReconciler.ReactNodeList): void {
         version: ReactNativeScriptVersion,
     });
 
-    run({
+    Application.run({
         create: () => {
             const root = new NSVRoot<View>();
             render(app, root, () => console.log(`Container updated!`), "__APP_ROOT__");

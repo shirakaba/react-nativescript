@@ -8,8 +8,8 @@
   "description": "React NativeScript sample app",
   "license": "Apache-2.0",
   "dependencies": {
-    "@nativescript/core": "^8.3.5",
-    "@nativescript/ios": "^8.3.3",
+    "@nativescript/core": "^8.5.9",
+    "@nativescript/ios": "^8.5.2",
     "react": "^16.14.0",
     "react-nativescript": "file:../react-nativescript",
     "react-refresh": "~0.14.0"

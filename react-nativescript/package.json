@@ -41,7 +41,7 @@
     "set-value": "^4.1.0"
   },
   "devDependencies": {
-    "@nativescript/core": "^8.3.5",
+    "@nativescript/core": "^8.5.9",
     "@types/react": "npm:types-react-without-jsx-intrinsics@^16.14.30",
     "@types/react-reconciler": "~0.18.0",
     "@types/scheduler": "^0.12.1",
