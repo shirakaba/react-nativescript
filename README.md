@@ -23,7 +23,7 @@
 
 **React NativeScript** is A React renderer for NativeScript, allowing you to write a NativeScript app using the familiar React style.
 
-I'm always hanging out in the `#react` chat of the [NativeScript Slack](https://nativescriptcommunity.slack.com) if you'd like to talk about this project.
+I'm always hanging out in the `#react` chat of the [NativeScript Discord](https://discord.gg/kcTwmBUuTE) if you'd like to talk about this project.
 
 ## Setup
 
