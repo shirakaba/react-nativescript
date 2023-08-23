@@ -1,5 +1,5 @@
-import { ReactNodeList } from "react-reconciler";
 import { ReactPortal } from "react";
+import { ReactNodeList } from "../shared/ReactTypings";
 
 /**
  * Code in here referenced from: https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/shared/ReactPortal.js which carries the following copyright:

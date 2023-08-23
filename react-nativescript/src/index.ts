@@ -101,6 +101,7 @@ export { __unstable__forwardNavOpts };
 import * as ReactReconciler from "react-reconciler";
 import * as React from "react";
 import { ReactPortal, createElement, createRef } from "react";
+import { LegacyRoot } from "react-reconciler/constants";
 import * as console from "./shared/Logger";
 import { reactReconcilerInst } from "./client/HostConfig";
 import { Container } from "./shared/HostConfigTypes";
@@ -114,6 +115,8 @@ import {
     NSVNodeTypes,
     NSVViewFlags,
 } from "./nativescript-vue-next/runtime/nodes";
+import { ReactNodeList } from "./shared/ReactTypings";
+import { markContainerAsRoot } from "./client/ComponentTree";
 export { NSVRoot, NSVElement, NSVNode, NSVComment, NSVText, NSVNodeTypes, NSVViewFlags };
 const { version: ReactNativeScriptVersion } = require("../package.json");
 export {
@@ -157,6 +160,7 @@ export {
     ViewAttributes,
 };
 export { registerElement } from "./nativescript-vue-next/runtime/registry";
+
 export { ListView, CellViewContainer } from "./components/ListView";
 export { StyleSheet } from "./client/StyleSheet";
 
@@ -168,7 +172,7 @@ export { StyleSheet } from "./client/StyleSheet";
 
 // https://blog.atulr.com/react-custom-renderer-1/
 export function createPortal(
-    children: ReactReconciler.ReactNodeList,
+    children: ReactNodeList,
     // ReactFabric passes in a containerTag rather than a container; hope it can figure out how to re-use a root when the container is null :/
     container: Container,
     key: string | null = null
@@ -186,6 +190,17 @@ export function createPortal(
 type RootKey = Container | string | null;
 const roots = new Map<RootKey, ReactReconciler.FiberRoot>();
 
+const defaultOnRecoverableError =
+    typeof reportError === "function"
+        ? // In modern browsers, reportError will dispatch an error event,
+          // emulating an uncaught JavaScript error.
+          reportError
+        : (error: unknown) => {
+              // In older browsers and test environments, fallback to console.error.
+              // eslint-disable-next-line react-internal/no-production-logging, react-internal/warning-args
+              console.error(error);
+          };
+
 /**
  * React NativeScript can render into any container that extends View,
  * but it makes sense to use the Frame > Page model if your whole app
@@ -199,15 +214,35 @@ const roots = new Map<RootKey, ReactReconciler.FiberRoot>();
  * @returns a ref to the container.
  */
 export function render(
-    reactElement: ReactReconciler.ReactNodeList,
+    reactElement: ReactNodeList,
     domElement: Container | null,
     callback: () => void | null | undefined = () => undefined,
-    containerTag: string | null = null
+    containerTag: string | null = null,
+    strictMode?: boolean,
 ) {
     const key: RootKey = containerTag || domElement;
     let root: ReactReconciler.FiberRoot = roots.get(key);
+
     if (!root) {
-        root = reactReconcilerInst.createContainer(domElement, false, false);
+        const hydrationCallbacks = null;
+        const identifierPrefix = "";
+        const concurrentUpdatesByDefaultOverride = null;
+        const onRecoverableError = defaultOnRecoverableError;
+        const transitionCallbacks = null;
+
+        root = reactReconcilerInst.createContainer(
+            domElement,
+            // TODO: Update to ConcurrentRoot
+            LegacyRoot,
+            hydrationCallbacks,
+            !!strictMode,
+            concurrentUpdatesByDefaultOverride,
+            identifierPrefix,
+            onRecoverableError,
+            transitionCallbacks
+        );
+
+        markContainerAsRoot(root.current, domElement);
         roots.set(key, root);
     }
 
@@ -245,7 +280,7 @@ export const unstable_batchedUpdates = reactReconcilerInst.batchedUpdates;
  *
  * @param app - Your <App/> component.
  */
-export function start(app: ReactReconciler.ReactNodeList): void {
+export function start(app: ReactNodeList): void {
     const existingRootView: View | undefined = Application.getRootView();
     const _hasLaunched: boolean = Application.hasLaunched();
     console.log(

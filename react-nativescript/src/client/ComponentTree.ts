@@ -5,15 +5,19 @@
  * This source code is licensed under the MIT license found in /LICENSE.
  */
 import * as ReactReconciler from "react-reconciler";
-import { Instance, TextInstance } from "../shared/HostConfigTypes";
+import { Container, Instance, TextInstance } from "../shared/HostConfigTypes";
 import * as console from "../shared/Logger";
 
-const randomKey: string = Math.random().toString(36).slice(2);
-const internalInstanceKey: string = "__reactInternalInstance$" + randomKey;
-const internalEventHandlersKey: string = "__reactEventHandlers$" + randomKey;
+const internalInstanceKey = Symbol("__reactFiber$");
+const internalContainerInstanceKey = Symbol("__reactContainer$");
+const internalEventHandlersKey = Symbol("__reactEventHandlers$");
 
-export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance): void {
-    node.setAttribute(internalInstanceKey, hostInst);
+export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: Instance | TextInstance): void {
+    node[internalInstanceKey] = hostInst;
+}
+
+export function getInternalInstance(node: Instance): ReactReconciler.OpaqueHandle | null {
+    return node[internalInstanceKey] ?? null;
 }
 
 /**
@@ -21,11 +25,11 @@ export function precacheFiberNode(hostInst: ReactReconciler.OpaqueHandle, node: 
  * ReactDOMTextComponent instance ancestor.
  */
 export function getClosestInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-    if (node.getAttribute(internalInstanceKey)) {
-        return node.getAttribute(internalInstanceKey) as ReactReconciler.OpaqueHandle;
+    if (node[internalInstanceKey]) {
+        return node[internalInstanceKey] as ReactReconciler.OpaqueHandle;
     }
 
-    while (!node.getAttribute(internalInstanceKey)) {
+    while (!node[internalInstanceKey]) {
         if (node.parentNode) {
             // if(!node.parent){
             //   console.warn(`node.parent was null; meanwhile, node.parentNode was:`, node.parentNode);
@@ -38,7 +42,7 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
         }
     }
 
-    const inst = node.getAttribute(internalInstanceKey) as ReactReconciler.OpaqueHandle;
+    const inst = node[internalInstanceKey] as ReactReconciler.OpaqueHandle;
     // if (inst.tag === HostComponent || inst.tag === HostText) {
     // In Fiber, this will always be the deepest root.
     return inst;
@@ -52,7 +56,7 @@ export function getClosestInstanceFromNode(node: Instance): ReactReconciler.Opaq
  * instance, or null if the node was not rendered by this React.
  */
 export function getInstanceFromNode(node: Instance): ReactReconciler.OpaqueHandle {
-    const inst = node.getAttribute(internalInstanceKey) as ReactReconciler.OpaqueHandle;
+    const inst = node[internalInstanceKey] as ReactReconciler.OpaqueHandle;
     if (inst) {
         return inst;
         // if (inst.tag === HostComponent || inst.tag === HostText) {
@@ -83,9 +87,21 @@ export function getNodeFromInstance(inst: ReactReconciler.OpaqueHandle): Instanc
 }
 
 export function getFiberCurrentPropsFromNode(node: Instance): object | null {
-    return (node.getAttribute(internalEventHandlersKey) as object) || null;
+    return (node[internalEventHandlersKey] as object) || null;
 }
 
 export function updateFiberProps(node: Instance, props: object): void {
-    node.setAttribute(internalEventHandlersKey, props);
+    node[internalEventHandlersKey] = props;
+}
+
+export function markContainerAsRoot(hostRoot: ReactReconciler.Fiber, node: Container) {
+    node[internalContainerInstanceKey] = hostRoot;
+}
+
+export function unmarkContainerAsRoot(node: Container): void {
+    node[internalContainerInstanceKey] = null;
+}
+
+export function getInternalContainerInstance(node: Container) {
+    return node[internalContainerInstanceKey] ?? null;
 }
